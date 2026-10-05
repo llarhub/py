@@ -97,6 +97,8 @@ func PyImport_ImportFrozenModule(name *c.Char) c.Int
 //go:linkname PyImport_AppendInittab C.PyImport_AppendInittab
 func PyImport_AppendInittab(name *c.Char, initfunc func() *PyObject) c.Int
 
+// This is not used after Py_Initialize() is called.
+//
 //go:linkname PyImport_Inittab C.PyImport_Inittab
 var PyImport_Inittab *X_inittab
 
@@ -105,6 +107,9 @@ func (self *X_inittab) PyImport_ExtendInittab() c.Int {
 	return 0
 }
 
+// Embedding apps may change this pointer to point to their favorite
+// collection of frozen modules:
+//
 //go:linkname PyImport_FrozenModules C.PyImport_FrozenModules
 var PyImport_FrozenModules *X_frozen
 

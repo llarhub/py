@@ -19,5 +19,7 @@ func PyOS_AfterFork_Parent()
 //go:linkname PyOS_AfterFork_Child C.PyOS_AfterFork_Child
 func PyOS_AfterFork_Child()
 
+// Deprecated, please use PyOS_AfterFork_Child() instead
+//
 //go:linkname PyOS_AfterFork C.PyOS_AfterFork
 func PyOS_AfterFork()

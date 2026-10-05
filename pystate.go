@@ -72,6 +72,8 @@ type X_ts struct {
 	DatastackCachedChunk         *X_PyStackChunk
 }
 
+// Py_tracefunc return -1 when raising an exception, or 0 for success.
+//
 // llgo:type C
 type PyTracefunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyFrameObject, _llcppg_param3 c.Int, _llcppg_param4 *PyObject) c.Int
 type X_PyRemoteDebuggerSupport struct {
@@ -102,6 +104,8 @@ type _llcppg_anon_5 struct {
 	X             c.Uint
 }
 
+// Frame evaluation API
+//
 // llgo:type C
 type X_PyFrameEvalFunction = func(_llcppg_param1 *PyThreadState, _llcppg_param2 *X_PyInterpreterFrame, _llcppg_param3 c.Int) *PyObject
 
@@ -116,19 +120,33 @@ func (self *PyInterpreterState) Clear() {
 func (self *PyInterpreterState) Delete() {
 }
 
+// New in 3.9 */
+// /* Get the current interpreter state.
+//
+// Issue a fatal error if there no current Python thread state or no current
+// interpreter. It cannot return NULL.
+//
+// The caller must hold the GIL.
+//
 //go:linkname PyInterpreterState_Get C.PyInterpreterState_Get
 func PyInterpreterState_Get() *PyInterpreterState
 
+// New in 3.8
+//
 // llgo:link (*PyInterpreterState).Dict C.PyInterpreterState_GetDict
 func (self *PyInterpreterState) Dict() *PyObject {
 	return nil
 }
 
+// New in 3.7
+//
 // llgo:link (*PyInterpreterState).ID C.PyInterpreterState_GetID
 func (self *PyInterpreterState) ID() c.Int64T {
 	return 0
 }
 
+// New in 3.3
+//
 // llgo:link (*PyObject).PyState_AddModule C.PyState_AddModule
 func (self *PyObject) PyState_AddModule(_llcppg_param2 *PyModuleDef) c.Int {
 	return 0
@@ -157,6 +175,15 @@ func (self *PyThreadState) Clear() {
 func (self *PyThreadState) Delete() {
 }
 
+// Get the current thread state.
+//
+// When the current thread state is NULL, this issues a fatal error (so that
+// the caller needn't check for NULL).
+//
+// The caller must hold the GIL.
+//
+// See also PyThreadState_GetUnchecked() and _PyThreadState_GET().
+//
 //go:linkname PyThreadState_Get C.PyThreadState_Get
 func PyThreadState_Get() *PyThreadState
 
@@ -171,6 +198,8 @@ func PyThreadState_GetDict() *PyObject
 //go:linkname PyThreadState_SetAsyncExc C.PyThreadState_SetAsyncExc
 func PyThreadState_SetAsyncExc(_llcppg_param1 c.Ulong, _llcppg_param2 *PyObject) c.Int
 
+// New in 3.9
+//
 // llgo:link (*PyThreadState).Interpreter C.PyThreadState_GetInterpreter
 func (self *PyThreadState) Interpreter() *PyInterpreterState {
 	return nil
@@ -186,16 +215,53 @@ func (self *PyThreadState) ID() c.Uint64T {
 	return 0
 }
 
+// Ensure that the current thread is ready to call the Python
+// C API, regardless of the current state of Python, or of its
+// thread lock.  This may be called as many times as desired
+// by a thread so long as each call is matched with a call to
+// PyGILState_Release().  In general, other thread-state APIs may
+// be used between _Ensure() and _Release() calls, so long as the
+// thread-state is restored to its previous state before the Release().
+// For example, normal use of the Py_BEGIN_ALLOW_THREADS/
+// Py_END_ALLOW_THREADS macros are acceptable.
+//
+// The return value is an opaque "handle" to the thread state when
+// PyGILState_Ensure() was called, and must be passed to
+// PyGILState_Release() to ensure Python is left in the same state. Even
+// though recursive calls are allowed, these handles can *not* be shared -
+// each unique call to PyGILState_Ensure must save the handle for its
+// call to PyGILState_Release.
+//
+// When the function returns, the current thread will hold the GIL.
+//
+// Failure is a fatal error.
+//
 //go:linkname PyGILState_Ensure C.PyGILState_Ensure
 func PyGILState_Ensure() PyGILState_STATE
 
+// Release any resources previously acquired.  After this call, Python's
+// state will be the same as it was prior to the corresponding
+// PyGILState_Ensure() call (but generally this state will be unknown to
+// the caller, hence the use of the GILState API.)
+//
+// Every call to PyGILState_Ensure must be matched by a call to
+// PyGILState_Release on the same thread.
+//
 // llgo:link PyGILState_STATE.PyGILState_Release C.PyGILState_Release
 func (self PyGILState_STATE) PyGILState_Release() {
 }
 
+// Helper/diagnostic function - get the current thread state for
+// this thread.  May return NULL if no GILState API has been used
+// on the current thread.  Note that the main thread always has such a
+// thread-state, even if no auto-thread-state call has been made
+// on the main thread.
+//
 //go:linkname PyGILState_GetThisThreadState C.PyGILState_GetThisThreadState
 func PyGILState_GetThisThreadState() *PyThreadState
 
+// private interpreter helpers
+//
 // llgo:link (*PyInterpreterState).X_PyInterpreterState_RequiresIDRef C._PyInterpreterState_RequiresIDRef
 func (self *PyInterpreterState) X_PyInterpreterState_RequiresIDRef() c.Int {
 	return 0
@@ -205,32 +271,57 @@ func (self *PyInterpreterState) X_PyInterpreterState_RequiresIDRef() c.Int {
 func (self *PyInterpreterState) X_PyInterpreterState_RequireIDRef(_llcppg_param2 c.Int) {
 }
 
+// Similar to PyThreadState_Get(), but don't issue a fatal error
+// if it is NULL.
+//
 //go:linkname PyThreadState_GetUnchecked C.PyThreadState_GetUnchecked
 func PyThreadState_GetUnchecked() *PyThreadState
 
+// Disable tracing and profiling.
+//
 // llgo:link (*PyThreadState).EnterTracing C.PyThreadState_EnterTracing
 func (self *PyThreadState) EnterTracing() {
 }
 
+// Reset tracing and profiling: enable them if a trace function or a profile
+// function is set, otherwise disable them.
+//
 // llgo:link (*PyThreadState).LeaveTracing C.PyThreadState_LeaveTracing
 func (self *PyThreadState) LeaveTracing() {
 }
 
+// Helper/diagnostic function - return 1 if the current thread
+// currently holds the GIL, 0 otherwise.
+//
+// The function returns 1 if _PyGILState_check_enabled is non-zero.
+//
 //go:linkname PyGILState_Check C.PyGILState_Check
 func PyGILState_Check() c.Int
 
+// The implementation of sys._current_frames()  Returns a dict mapping
+// thread id to that thread's current frame.
+//
 //go:linkname X_PyThread_CurrentFrames C._PyThread_CurrentFrames
 func X_PyThread_CurrentFrames() *PyObject
 
+// Set the stack protection start address and stack protection size
+// of a Python thread state
+//
 // llgo:link (*PyThreadState).PyUnstable_ThreadState_SetStackProtection C.PyUnstable_ThreadState_SetStackProtection
 func (self *PyThreadState) PyUnstable_ThreadState_SetStackProtection(stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int {
 	return 0
 }
 
+// Reset the stack protection start address and stack protection size
+// of a Python thread state
+//
 // llgo:link (*PyThreadState).PyUnstable_ThreadState_ResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
 func (self *PyThreadState) PyUnstable_ThreadState_ResetStackProtection() {
 }
 
+// Routines for advanced debuggers, requested by David Beazley.
+// Don't use unless you know what you are doing!
+//
 //go:linkname PyInterpreterState_Main C.PyInterpreterState_Main
 func PyInterpreterState_Main() *PyInterpreterState
 

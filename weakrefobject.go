@@ -7,6 +7,8 @@ import (
 	_ "unsafe"
 )
 
+// PyWeakReference is the base struct for the Python ReferenceType, ProxyType,
+// and CallableProxyType.
 type X_PyWeakReference struct {
 	ObBase     PyObject
 	WrObject   *PyObject
@@ -51,6 +53,8 @@ func (self *PyObject) PyWeakref_GetRef(pobj **PyObject) c.Int {
 func (self *PyWeakReference) X_PyWeakref_ClearRef() {
 }
 
+// Test if a weak reference is dead.
+//
 // llgo:link (*PyObject).PyWeakref_IsDead C.PyWeakref_IsDead
 func (self *PyObject) PyWeakref_IsDead() c.Int {
 	return 0

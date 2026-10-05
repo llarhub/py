@@ -13,6 +13,15 @@ type Setentry struct {
 	Key  *PyObject
 	Hash PyHashT
 }
+
+// The SetObject data structure is shared by set and frozenset objects.
+//
+// Invariant for sets:
+// - hash is -1
+//
+// Invariants for frozensets:
+// - data is immutable.
+// - hash is the hash of the frozenset or -1 if not computed yet.
 type PySetObject struct {
 	ObBase      PyObject
 	Fill        PySsizeT

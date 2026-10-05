@@ -27,6 +27,16 @@ type PyFrameConstructor struct {
 	FcKwdefaults *PyObject
 	FcClosure    *PyObject
 }
+
+// Function objects and code objects should not be confused with each other:
+//
+// Function objects are created by the execution of the 'def' statement.
+// They reference a code object in their __code__ attribute, which is a
+// purely syntactic object, i.e. nothing more than a compiled version of some
+// source code lines.  There is one code object per source code "fragment",
+// but each code object can be referenced by zero or many function objects
+// depending only on how many times the 'def' statement in the source was
+// executed so far.
 type PyFunctionObject struct {
 	ObBase          PyObject
 	FuncGlobals     *PyObject
@@ -48,6 +58,20 @@ type PyFunctionObject struct {
 	FuncVersion     c.Uint32T
 }
 
+// A callback that is invoked for different events in a function's lifecycle.
+//
+// The callback is invoked with a borrowed reference to func, after it is
+// created and before it is modified or destroyed. The callback should not
+// modify func.
+//
+// When a function's code object, defaults, or kwdefaults are modified the
+// callback will be invoked with the respective event and new_value will
+// contain a borrowed reference to the new value that is about to be stored in
+// the function. Otherwise the third argument is NULL.
+//
+// If the callback returns with an exception set, it must return -1. Otherwise
+// it should return 0.
+//
 // llgo:type C
 type PyFunction_WatchCallback = func(_llcppg_param1 PyFunction_WatchEvent, _llcppg_param2 *PyFunctionObject, _llcppg_param3 *PyObject) c.Int
 
@@ -123,6 +147,8 @@ func (self *PyObject) PyFunction_SetAnnotations(_llcppg_param2 *PyObject) c.Int 
 	return 0
 }
 
+// The classmethod and staticmethod types lives here, too
+//
 //go:linkname PyClassMethod_Type C.PyClassMethod_Type
 var PyClassMethod_Type PyTypeObject
 
@@ -139,8 +165,18 @@ func (self *PyObject) PyStaticMethod_New() *PyObject {
 	return self
 }
 
+// Register a per-interpreter callback that will be invoked for function lifecycle
+// events.
+//
+// Returns a handle that may be passed to PyFunction_ClearWatcher on success,
+// or -1 and sets an error if no more handles are available.
+//
 //go:linkname PyFunction_AddWatcher C.PyFunction_AddWatcher
 func PyFunction_AddWatcher(callback PyFunction_WatchCallback) c.Int
 
+// Clear the watcher associated with the watcher_id handle.
+//
+// Returns 0 on success or -1 if no watcher exists for the supplied id.
+//
 //go:linkname PyFunction_ClearWatcher C.PyFunction_ClearWatcher
 func PyFunction_ClearWatcher(watcher_id c.Int) c.Int

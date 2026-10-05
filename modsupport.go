@@ -13,6 +13,8 @@ const PYTHON_API_STRING = "1013"
 const PYTHON_ABI_VERSION = 3
 const PYTHON_ABI_STRING = "3"
 
+// A data structure that can be used to run initialization code once in a
+// thread-safe manner. The C++11 equivalent is std::call_once.
 type X_PyOnceFlag struct {
 	V c.Uint8T
 }
@@ -71,16 +73,26 @@ func Py_BuildValue(_llcppg_param1 *c.Char, __llgo_va_list ...any) *PyObject
 //go:linkname Py_VaBuildValue C.Py_VaBuildValue
 func Py_VaBuildValue(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *PyObject
 
+// Add an attribute with name 'name' and value 'obj' to the module 'mod.
+// On success, return 0.
+// On error, raise an exception and return -1.
+//
 // llgo:link (*PyObject).PyModule_AddObjectRef C.PyModule_AddObjectRef
 func (self *PyObject) PyModule_AddObjectRef(name *c.Char, value *PyObject) c.Int {
 	return 0
 }
 
+// Similar to PyModule_AddObjectRef() but steal a reference to 'value'.
+//
 // llgo:link (*PyObject).PyModule_Add C.PyModule_Add
 func (self *PyObject) PyModule_Add(name *c.Char, value *PyObject) c.Int {
 	return 0
 }
 
+// Similar to PyModule_AddObjectRef() and PyModule_Add() but steal
+// a reference to 'value' on success and only on success.
+// Errorprone. Should not be used in new code.
+//
 // llgo:link (*PyObject).PyModule_AddObject C.PyModule_AddObject
 func (self *PyObject) PyModule_AddObject(_llcppg_param2 *c.Char, value *PyObject) c.Int {
 	return 0
@@ -96,11 +108,15 @@ func (self *PyObject) PyModule_AddStringConstant(_llcppg_param2 *c.Char, _llcppg
 	return 0
 }
 
+// New in 3.9
+//
 // llgo:link (*PyObject).PyModule_AddType C.PyModule_AddType
 func (self *PyObject) PyModule_AddType(type_ *PyTypeObject) c.Int {
 	return 0
 }
 
+// New in 3.5
+//
 // llgo:link (*PyObject).PyModule_SetDocString C.PyModule_SetDocString
 func (self *PyObject) PyModule_SetDocString(_llcppg_param2 *c.Char) c.Int {
 	return 0
@@ -121,6 +137,8 @@ func (self *PyModuleDef) PyModule_Create2(apiver c.Int) *PyObject {
 	return nil
 }
 
+// New in 3.5
+//
 // llgo:link (*PyModuleDef).PyModule_FromDefAndSpec2 C.PyModule_FromDefAndSpec2
 func (self *PyModuleDef) PyModule_FromDefAndSpec2(spec *PyObject, module_api_version c.Int) *PyObject {
 	return nil

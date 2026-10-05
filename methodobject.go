@@ -39,8 +39,15 @@ type PyCFunctionFastWithKeywords = func(_llcppg_param1 *PyObject, _llcppg_param2
 
 // llgo:type C
 type PyCMethod = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyTypeObject, _llcppg_param3 **PyObject, _llcppg_param4 PySsizeT, _llcppg_param5 *PyObject) *PyObject
+
+// For backwards compatibility. `METH_FASTCALL` was added to the stable API in
+// 3.10 alongside `_PyCFunctionFastWithKeywords` and `_PyCFunctionFast`.
+// Note that the underscore-prefixed names were documented in public docs;
+// people may be using them.
 type X_PyCFunctionFast = PyCFunctionFast
 type X_PyCFunctionFastWithKeywords = PyCFunctionFastWithKeywords
+
+// PyCFunctionObject structure
 type PyCFunctionObject struct {
 	ObBase       PyObject
 	MMl          *PyMethodDef
@@ -49,11 +56,17 @@ type PyCFunctionObject struct {
 	MWeakreflist *PyObject
 	Vectorcall   Vectorcallfunc
 }
+
+// PyCMethodObject structure
 type PyCMethodObject struct {
 	Func    PyCFunctionObject
 	MmClass *PyTypeObject
 }
 
+// This is about the type 'builtin_function_or_method',
+// not Python methods in user-defined classes.  See classobject.h
+// for the latter.
+//
 //go:linkname PyCFunction_Type C.PyCFunction_Type
 var PyCFunction_Type PyTypeObject
 
@@ -72,11 +85,17 @@ func (self *PyObject) PyCFunction_GetFlags() c.Int {
 	return 0
 }
 
+// PyCFunction_New is declared as a function for stable ABI (declaration is
+// needed for e.g. GCC with -fvisibility=hidden), but redefined as a macro
+// that calls PyCFunction_NewEx.
+//
 // llgo:link (*PyMethodDef).PyCFunction_New C.PyCFunction_New
 func (self *PyMethodDef) PyCFunction_New(_llcppg_param2 *PyObject) *PyObject {
 	return nil
 }
 
+// PyCFunction_NewEx is similar: on 3.9+, this calls PyCMethod_New.
+//
 // llgo:link (*PyMethodDef).PyCFunction_NewEx C.PyCFunction_NewEx
 func (self *PyMethodDef) PyCFunction_NewEx(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
 	return nil

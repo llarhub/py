@@ -7,15 +7,78 @@ import (
 	"unsafe"
 )
 
+// This example code implements an object constructor with a custom
+// allocator, where PyObject_New is inlined, and shows the important
+// distinction between two steps (at least):
+// 1) the actual allocation of the object storage;
+// 2) the initialization of the Python specific fields
+// in this storage with PyObject_{Init, InitVar}.
+//
+// PyObject *
+// YourObject_New(...)
+// {
+// PyObject *op;
+//
+// op = (PyObject *) Your_Allocator(_PyObject_SIZE(YourTypeStruct));
+// if (op == NULL) {
+// return PyErr_NoMemory();
+// }
+//
+// PyObject_Init(op, &YourTypeStruct);
+//
+// op->ob_field = value;
+// ...
+// return op;
+// }
+//
+// Note that in C++, the use of the new operator usually implies that
+// the 1st step is performed automatically for you, so in a C++ class
+// constructor you would start directly with PyObject_Init/InitVar.
 type PyObjectArenaAllocator struct {
 	Ctx   unsafe.Pointer
 	Alloc func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
 	Free  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 unsafe.Pointer, _llcppg_param3 c.SizeT)
 }
 
+// Visit all live GC-capable objects, similar to gc.get_objects(None). The
+// supplied callback is called on every such object with the void* arg set
+// to the supplied arg. Returning 0 from the callback ends iteration, returning
+// 1 allows iteration to continue. Returning any other value may result in
+// undefined behaviour.
+//
+// If new objects are (de)allocated by the callback it is undefined if they
+// will be visited.
+//
+// Garbage collection is disabled during operation. Explicitly running a
+// collection in the callback may lead to undefined behaviour e.g. visiting the
+// same objects multiple times or not at all.
+//
 // llgo:type C
 type GcvisitobjectsT = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) c.Int
 
+// Functions to call the same malloc/realloc/free as used by Python's
+// object allocator.  If WITH_PYMALLOC is enabled, these may differ from
+// the platform malloc/realloc/free.  The Python object allocator is
+// designed for fast, cache-conscious allocation of many "small" objects,
+// and with low hidden memory overhead.
+//
+// PyObject_Malloc(0) returns a unique non-NULL pointer if possible.
+//
+// PyObject_Realloc(NULL, n) acts like PyObject_Malloc(n).
+// PyObject_Realloc(p != NULL, 0) does not return  NULL, or free the memory
+// at p.
+//
+// Returned pointers must be checked for NULL explicitly; no action is
+// performed on failure other than to return NULL (no warning it printed, no
+// exception is set, etc).
+//
+// For allocating objects, use PyObject_{New, NewVar} instead whenever
+// possible.  The PyObject_{Malloc, Realloc, Free} family is exposed
+// so that you can exploit Python's small-block allocator for non-object
+// uses.  If you must use these routines to allocate object memory, make sure
+// the object gets initialized via PyObject_{Init, InitVar} after obtaining
+// the raw memory.
+//
 //go:linkname PyObject_Malloc C.PyObject_Malloc
 func PyObject_Malloc(size c.SizeT) unsafe.Pointer
 
@@ -28,6 +91,8 @@ func PyObject_Realloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 //go:linkname PyObject_Free C.PyObject_Free
 func PyObject_Free(ptr unsafe.Pointer)
 
+// Functions
+//
 // llgo:link (*PyObject).Init C.PyObject_Init
 func (self *PyObject) Init(_llcppg_param2 *PyTypeObject) *PyObject {
 	return self
@@ -48,9 +113,13 @@ func (self *PyTypeObject) X_PyObject_NewVar(_llcppg_param2 PySsizeT) *PyVarObjec
 	return nil
 }
 
+// C equivalent of gc.collect().
+//
 //go:linkname PyGC_Collect C.PyGC_Collect
 func PyGC_Collect() PySsizeT
 
+// C API for controlling the state of the garbage collector
+//
 //go:linkname PyGC_Enable C.PyGC_Enable
 func PyGC_Enable() c.Int
 
@@ -75,9 +144,17 @@ func (self *PyTypeObject) X_PyObject_GC_NewVar(_llcppg_param2 PySsizeT) *PyVarOb
 	return nil
 }
 
+// Tell the GC to track this object.
+//
+// See also private _PyObject_GC_TRACK() macro.
+//
 //go:linkname PyObject_GC_Track C.PyObject_GC_Track
 func PyObject_GC_Track(_llcppg_param1 unsafe.Pointer)
 
+// Tell the GC to stop tracking this object.
+//
+// See also private _PyObject_GC_UNTRACK() macro.
+//
 //go:linkname PyObject_GC_UnTrack C.PyObject_GC_UnTrack
 func PyObject_GC_UnTrack(_llcppg_param1 unsafe.Pointer)
 
@@ -94,19 +171,27 @@ func (self *PyObject) GC_IsFinalized() c.Int {
 	return 0
 }
 
+// Get the arena allocator.
+//
 // llgo:link (*PyObjectArenaAllocator).PyObject_GetArenaAllocator C.PyObject_GetArenaAllocator
 func (self *PyObjectArenaAllocator) PyObject_GetArenaAllocator() {
 }
 
+// Set the arena allocator.
+//
 // llgo:link (*PyObjectArenaAllocator).PyObject_SetArenaAllocator C.PyObject_SetArenaAllocator
 func (self *PyObjectArenaAllocator) PyObject_SetArenaAllocator() {
 }
 
+// Test if an object implements the garbage collector protocol
+//
 // llgo:link (*PyObject).IS_GC C.PyObject_IS_GC
 func (self *PyObject) IS_GC() c.Int {
 	return 0
 }
 
+// Test if a type supports weak references
+//
 // llgo:link (*PyTypeObject).PyType_SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
 func (self *PyTypeObject) PyType_SUPPORTS_WEAKREFS() c.Int {
 	return 0

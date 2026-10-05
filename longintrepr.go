@@ -20,10 +20,40 @@ type Digit = c.Uint32T
 type Sdigit = c.Int32T
 type Twodigits = c.Uint64T
 type Stwodigits = c.Int64T
+
+// Long integer representation.
+//
+// Long integers are made up of a number of 30- or 15-bit digits, depending on
+// the platform. The number of digits (ndigits) is stored in the high bits of
+// the lv_tag field (lvtag >> _PyLong_NON_SIZE_BITS).
+//
+// The absolute value of a number is equal to
+// SUM(for i=0 through ndigits-1) ob_digit[i] * 2**(PyLong_SHIFT*i)
+//
+// The sign of the value is stored in the lower 2 bits of lv_tag.
+//
+// - 0: Positive
+// - 1: Zero
+// - 2: Negative
+//
+// The third lowest bit of lv_tag is
+// set to 1 for the small ints.
+//
+// In a normalized number, ob_digit[ndigits-1] (the most significant
+// digit) is never zero.  Also, in all cases, for all valid i,
+// 0 <= ob_digit[i] <= PyLong_MASK.
+//
+// The allocation function takes care of allocating extra memory
+// so that ob_digit[0] ... ob_digit[ndigits-1] are actually available.
+// We always allocate memory for at least one digit, so accessing ob_digit[0]
+// is always safe. However, in the case ndigits == 0, the contents of
+// ob_digit[0] may be undefined.
 type X_PyLongValue struct {
 	LvTag   c.UintptrT
 	ObDigit [1]Digit
 }
+
+// --- Import/Export API --------------------------------------------------
 type PyLongLayout struct {
 	BitsPerDigit    c.Uint8T
 	DigitSize       c.Uint8T
@@ -43,6 +73,8 @@ type PyLongWriter struct {
 //go:linkname X_PyLong_New C._PyLong_New
 func X_PyLong_New(_llcppg_param1 PySsizeT) *PyLongObject
 
+// Return a copy of src.
+//
 // llgo:link (*PyLongObject).X_PyLong_Copy C._PyLong_Copy
 func (self *PyLongObject) X_PyLong_Copy() *PyObject {
 	return nil

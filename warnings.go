@@ -14,6 +14,8 @@ func (self *PyObject) PyErr_WarnFormat(stack_level PySsizeT, format *c.Char, __l
 	return 0
 }
 
+// Emit a ResourceWarning warning
+//
 // llgo:link (*PyObject).PyErr_ResourceWarning C.PyErr_ResourceWarning
 func (self *PyObject) PyErr_ResourceWarning(stack_level PySsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
 	return 0

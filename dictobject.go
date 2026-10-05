@@ -22,6 +22,9 @@ type PyDictKeysObject = X_dictkeysobject
 type X_dictvalues struct {
 }
 type PyDictValues = X_dictvalues
+
+// The ma_values pointer is NULL for a combined table
+// or points to an array of PyObject* for a split table
 type PyDictObject struct {
 	ObBase         PyObject
 	MaUsed         PySsizeT
@@ -30,9 +33,18 @@ type PyDictObject struct {
 	MaValues       *PyDictValues
 }
 
+// Callback to be invoked when a watched dict is cleared, dealloced, or modified.
+// In clear/dealloc case, key and new_value will be NULL. Otherwise, new_value will be the
+// new value for key, NULL if key is being deleted.
+//
 // llgo:type C
 type PyDict_WatchCallback = func(_llcppg_param1 PyDict_WatchEvent, _llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 *PyObject) c.Int
 
+// The distribution includes a separate file, Objects/dictnotes.txt,
+// describing explorations into dictionary design and optimization.
+// It covers typical dictionary use patterns, the parameters for
+// tuning dictionaries, and several ideas for possible optimizations.
+//
 //go:linkname PyDict_Type C.PyDict_Type
 var PyDict_Type PyTypeObject
 
@@ -98,16 +110,28 @@ func (self *PyObject) PyDict_Contains(key *PyObject) c.Int {
 	return 0
 }
 
+// PyDict_Update(mp, other) is equivalent to PyDict_Merge(mp, other, 1).
+//
 // llgo:link (*PyObject).PyDict_Update C.PyDict_Update
 func (self *PyObject) PyDict_Update(other *PyObject) c.Int {
 	return 0
 }
 
+// PyDict_Merge updates/merges from a mapping object (an object that
+// supports PyMapping_Keys() and PyObject_GetItem()).  If override is true,
+// the last occurrence of a key wins, else the first.  The Python
+// dict.update(other) is equivalent to PyDict_Merge(dict, other, 1).
+//
 // llgo:link (*PyObject).PyDict_Merge C.PyDict_Merge
 func (self *PyObject) PyDict_Merge(other *PyObject, override c.Int) c.Int {
 	return 0
 }
 
+// PyDict_MergeFromSeq2 updates/merges from an iterable object producing
+// iterable objects of length 2.  If override is true, the last occurrence
+// of a key wins, else the first.  The Python dict constructor dict(seq2)
+// is equivalent to dict={}; PyDict_MergeFromSeq(dict, seq2, 1).
+//
 // llgo:link (*PyObject).PyDict_MergeFromSeq2 C.PyDict_MergeFromSeq2
 func (self *PyObject) PyDict_MergeFromSeq2(seq2 *PyObject, override c.Int) c.Int {
 	return 0
@@ -128,6 +152,12 @@ func (self *PyObject) PyDict_DelItemString(key *c.Char) c.Int {
 	return 0
 }
 
+// Return the object from dictionary *op* which has a key *key*.
+// - If the key is present, set *result to a new strong reference to the value
+//   and return 1.
+// - If the key is missing, set *result to NULL and return 0 .
+// - On error, raise an exception and return -1.
+//
 // llgo:link (*PyObject).PyDict_GetItemRef C.PyDict_GetItemRef
 func (self *PyObject) PyDict_GetItemRef(key *PyObject, result **PyObject) c.Int {
 	return 0
@@ -143,6 +173,8 @@ func (self *PyObject) GenericGetDict(_llcppg_param2 unsafe.Pointer) *PyObject {
 	return self
 }
 
+// Dictionary (keys, values, items) views
+//
 //go:linkname PyDictKeys_Type C.PyDictKeys_Type
 var PyDictKeys_Type PyTypeObject
 
@@ -152,6 +184,8 @@ var PyDictValues_Type PyTypeObject
 //go:linkname PyDictItems_Type C.PyDictItems_Type
 var PyDictItems_Type PyTypeObject
 
+// Dictionary (key, value, items) iterators
+//
 //go:linkname PyDictIterKey_Type C.PyDictIterKey_Type
 var PyDictIterKey_Type PyTypeObject
 
@@ -175,6 +209,8 @@ func (self *PyObject) X_PyDict_GetItem_KnownHash(key *PyObject, hash PyHashT) *P
 	return self
 }
 
+// PyDict_GetItemStringRef() can be used instead
+//
 // llgo:link (*PyObject).X_PyDict_GetItemStringWithError C._PyDict_GetItemStringWithError
 func (self *PyObject) X_PyDict_GetItemStringWithError(_llcppg_param2 *c.Char) *PyObject {
 	return self
@@ -185,6 +221,15 @@ func (self *PyObject) PyDict_SetDefault(key *PyObject, defaultobj *PyObject) *Py
 	return self
 }
 
+// Inserts `key` with a value `default_value`, if `key` is not already present
+// in the dictionary.  If `result` is not NULL, then the value associated
+// with `key` is returned in `*result` (either the existing value, or the now
+// inserted `default_value`).
+// Returns:
+//   -1 on error
+//    0 if `key` was not present and `default_value` was inserted
+//    1 if `key` was present and `default_value` was not inserted
+//
 // llgo:link (*PyObject).PyDict_SetDefaultRef C.PyDict_SetDefaultRef
 func (self *PyObject) PyDict_SetDefaultRef(key *PyObject, default_value *PyObject, result **PyObject) c.Int {
 	return 0
@@ -208,17 +253,23 @@ func (self *PyObject) PyDict_PopString(key *c.Char, result **PyObject) c.Int {
 	return 0
 }
 
+// Use PyDict_Pop() instead
+//
 // llgo:link (*PyObject).X_PyDict_Pop C._PyDict_Pop
 func (self *PyObject) X_PyDict_Pop(key *PyObject, default_value *PyObject) *PyObject {
 	return self
 }
 
+// Register/unregister a dict-watcher callback
+//
 //go:linkname PyDict_AddWatcher C.PyDict_AddWatcher
 func PyDict_AddWatcher(callback PyDict_WatchCallback) c.Int
 
 //go:linkname PyDict_ClearWatcher C.PyDict_ClearWatcher
 func PyDict_ClearWatcher(watcher_id c.Int) c.Int
 
+// Mark given dictionary as "watched" (callback will be called if it is modified)
+//
 //go:linkname PyDict_Watch C.PyDict_Watch
 func PyDict_Watch(watcher_id c.Int, dict *PyObject) c.Int
 

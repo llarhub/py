@@ -11,6 +11,8 @@ import (
 const WAIT_LOCK = 1
 const NOWAIT_LOCK = 0
 
+// Return status codes for Python lock acquisition.  Chosen for maximum
+// backwards compatibility, ie failure -> 0, success -> 1.
 type PyLockStatus c.Uint
 
 const (
@@ -20,10 +22,17 @@ const (
 )
 
 type PyThreadTypeLock uintptr
+
+// When Py_LIMITED_API is not defined, the type layout of Py_tss_t is
+// exposed to allow static allocation in the API clients.  Even in this case,
+// you must handle TSS keys through API functions due to compatibility.
 type X_PyTssT struct {
 	X_isInitialized c.Int
 	X_key           pthread.Key
 }
+
+// New in 3.7 */
+// /* Thread Specific Storage (TSS) API
 type PyTssT = X_PyTssT
 
 //go:linkname PyThreadInitThread C.PyThread_init_thread
@@ -32,6 +41,24 @@ func PyThreadInitThread()
 //go:linkname PyThreadStartNewThread C.PyThread_start_new_thread
 func PyThreadStartNewThread(_llcppg_param1 func(_llcppg_param1 unsafe.Pointer), _llcppg_param2 unsafe.Pointer) c.Ulong
 
+// Terminates the current thread. Considered unsafe.
+//
+// WARNING: This function is only safe to call if all functions in the full call
+// stack are written to safely allow it.  Additionally, the behavior is
+// platform-dependent.  This function should be avoided, and is no longer called
+// by Python itself.  It is retained only for compatibility with existing C
+// extension code.
+//
+// With pthreads, calls `pthread_exit` causes some libcs (glibc?) to attempt to
+// unwind the stack and call C++ destructors; if a `noexcept` function is
+// reached, they may terminate the process. Others (macOS) do unwinding.
+//
+// On Windows, calls `_endthreadex` which kills the thread without calling C++
+// destructors.
+//
+// In either case there is a risk of invalid references remaining to data on the
+// thread stack.
+//
 //go:linkname PyThreadExitThread C.PyThread_exit_thread
 func PyThreadExitThread()
 
@@ -53,6 +80,18 @@ func (self PyThreadTypeLock) PyThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
 	return 0
 }
 
+// If microseconds == 0, the call is non-blocking: it returns immediately
+// even when the lock can't be acquired.
+// If microseconds > 0, the call waits up to the specified duration.
+// If microseconds < 0, the call waits until success (or abnormal failure)
+//
+// If *microseconds* is greater than PY_TIMEOUT_MAX, clamp the timeout to
+// PY_TIMEOUT_MAX microseconds.
+//
+// If intr_flag is true and the acquire is interrupted by a signal, then the
+// call will return PY_LOCK_INTR.  The caller may reattempt to acquire the
+// lock.
+//
 // llgo:link PyThreadTypeLock.PyThreadAcquireLockTimed C.PyThread_acquire_lock_timed
 func (self PyThreadTypeLock) PyThreadAcquireLockTimed(microseconds c.LongLong, intr_flag c.Int) PyLockStatus {
 	return 0
@@ -71,6 +110,13 @@ func PyThreadSetStacksize(_llcppg_param1 c.SizeT) c.Int
 //go:linkname PyThread_GetInfo C.PyThread_GetInfo
 func PyThread_GetInfo() *PyObject
 
+// Thread Local Storage (TLS) API
+// TLS API is DEPRECATED.  Use Thread Specific Storage (TSS) API.
+//
+// The existing TLS API has used int to represent TLS keys across all
+// platforms, but it is not POSIX-compliant.  Therefore, the new TSS API uses
+// opaque data type to represent TSS keys to be compatible (see PEP 539).
+//
 //go:linkname PyThreadCreateKey C.PyThread_create_key
 func PyThreadCreateKey() c.Int
 
@@ -86,6 +132,8 @@ func PyThreadGetKeyValue(key c.Int) unsafe.Pointer
 //go:linkname PyThreadDeleteKeyValue C.PyThread_delete_key_value
 func PyThreadDeleteKeyValue(key c.Int)
 
+// Cleanup after a fork
+//
 //go:linkname PyThread_ReInitTLS C.PyThread_ReInitTLS
 func PyThread_ReInitTLS()
 
@@ -96,6 +144,8 @@ func PyThreadTssAlloc() *PyTssT
 func (self *PyTssT) PyThreadTssFree() {
 }
 
+// The parameter key must not be NULL.
+//
 // llgo:link (*PyTssT).PyThreadTssIsCreated C.PyThread_tss_is_created
 func (self *PyTssT) PyThreadTssIsCreated() c.Int {
 	return 0
@@ -120,5 +170,12 @@ func (self *PyTssT) PyThreadTssGet() unsafe.Pointer {
 	return nil
 }
 
+// PY_TIMEOUT_MAX is the highest usable value (in microseconds) of PY_TIMEOUT_T
+// type, and depends on the system threading API.
+//
+// NOTE: this isn't the same value as `_thread.TIMEOUT_MAX`. The _thread module
+// exposes a higher-level API, with timeouts expressed in seconds and
+// floating-point numbers allowed.
+//
 //go:linkname PY_TIMEOUT_MAX C.PY_TIMEOUT_MAX
 var PY_TIMEOUT_MAX c.LongLong

@@ -33,6 +33,9 @@ func (self *PyObject) AsFileDescriptor() c.Int {
 	return 0
 }
 
+// The default encoding used by the platform file system APIs
+// If non-NULL, this is different than the default encoding for strings
+//
 //go:linkname Py_FileSystemDefaultEncoding C.Py_FileSystemDefaultEncoding
 var Py_FileSystemDefaultEncoding *c.Char
 
@@ -48,6 +51,9 @@ var Py_UTF8Mode c.Int
 //go:linkname Py_UniversalNewlineFgets C.Py_UniversalNewlineFgets
 func Py_UniversalNewlineFgets(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *c.FILE, _llcppg_param4 *PyObject) *c.Char
 
+// The std printer acts as a preliminary sys.stderr until the new io
+// infrastructure is in place.
+//
 //go:linkname PyFile_NewStdPrinter C.PyFile_NewStdPrinter
 func PyFile_NewStdPrinter(_llcppg_param1 c.Int) *PyObject
 

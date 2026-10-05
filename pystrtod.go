@@ -18,5 +18,8 @@ const Py_DTST_NAN = 2
 //go:linkname PyOSStringToDouble C.PyOS_string_to_double
 func PyOSStringToDouble(str *c.Char, endptr **c.Char, overflow_exception *PyObject) c.Double
 
+// The caller is responsible for calling PyMem_Free to free the buffer
+// that's is returned.
+//
 //go:linkname PyOSDoubleToString C.PyOS_double_to_string
 func PyOSDoubleToString(val c.Double, format_code c.Char, precision c.Int, flags c.Int, type_ *c.Int) *c.Char

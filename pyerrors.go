@@ -138,6 +138,8 @@ type PyAttributeErrorObject struct {
 	Obj             *PyObject
 	Name            *PyObject
 }
+
+// Compatibility typedefs
 type PyEnvironmentErrorObject = PyOSErrorObject
 
 // llgo:link (*PyObject).PyErr_SetNone C.PyErr_SetNone
@@ -186,9 +188,17 @@ func PyErr_GetExcInfo(_llcppg_param1 **PyObject, _llcppg_param2 **PyObject, _llc
 func (self *PyObject) PyErr_SetExcInfo(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) {
 }
 
+// Defined in Python/pylifecycle.c
+//
+// The Py_FatalError() function is replaced with a macro which logs
+// automatically the name of the current function, unless the Py_LIMITED_API
+// macro is defined.
+//
 //go:linkname Py_FatalError C.Py_FatalError
 func Py_FatalError(message *c.Char)
 
+// Error testing and normalization
+//
 // llgo:link (*PyObject).PyErr_GivenExceptionMatches C.PyErr_GivenExceptionMatches
 func (self *PyObject) PyErr_GivenExceptionMatches(_llcppg_param2 *PyObject) c.Int {
 	return 0
@@ -202,6 +212,8 @@ func (self *PyObject) PyErr_ExceptionMatches() c.Int {
 //go:linkname PyErr_NormalizeException C.PyErr_NormalizeException
 func PyErr_NormalizeException(_llcppg_param1 **PyObject, _llcppg_param2 **PyObject, _llcppg_param3 **PyObject)
 
+// Traceback manipulation (PEP 3134)
+//
 // llgo:link (*PyObject).PyException_SetTraceback C.PyException_SetTraceback
 func (self *PyObject) PyException_SetTraceback(_llcppg_param2 *PyObject) c.Int {
 	return 0
@@ -212,6 +224,8 @@ func (self *PyObject) PyException_GetTraceback() *PyObject {
 	return self
 }
 
+// Cause manipulation (PEP 3134)
+//
 // llgo:link (*PyObject).PyException_GetCause C.PyException_GetCause
 func (self *PyObject) PyException_GetCause() *PyObject {
 	return self
@@ -221,6 +235,8 @@ func (self *PyObject) PyException_GetCause() *PyObject {
 func (self *PyObject) PyException_SetCause(_llcppg_param2 *PyObject) {
 }
 
+// Context manipulation (PEP 3134)
+//
 // llgo:link (*PyObject).PyException_GetContext C.PyException_GetContext
 func (self *PyObject) PyException_GetContext() *PyObject {
 	return self
@@ -244,6 +260,8 @@ func (self *PyObject) PyExceptionClass_Name() *c.Char {
 	return nil
 }
 
+// Predefined exceptions
+//
 //go:linkname PyExc_BaseException C.PyExc_BaseException
 var PyExc_BaseException *PyObject
 
@@ -406,12 +424,16 @@ var PyExc_ProcessLookupError *PyObject
 //go:linkname PyExc_TimeoutError C.PyExc_TimeoutError
 var PyExc_TimeoutError *PyObject
 
+// Compatibility aliases
+//
 //go:linkname PyExc_EnvironmentError C.PyExc_EnvironmentError
 var PyExc_EnvironmentError *PyObject
 
 //go:linkname PyExc_IOError C.PyExc_IOError
 var PyExc_IOError *PyObject
 
+// Predefined warning categories
+//
 //go:linkname PyExc_Warning C.PyExc_Warning
 var PyExc_Warning *PyObject
 
@@ -448,6 +470,8 @@ var PyExc_EncodingWarning *PyObject
 //go:linkname PyExc_ResourceWarning C.PyExc_ResourceWarning
 var PyExc_ResourceWarning *PyObject
 
+// Convenience functions
+//
 //go:linkname PyErr_BadArgument C.PyErr_BadArgument
 func PyErr_BadArgument() c.Int
 
@@ -494,12 +518,16 @@ func (self *PyObject) PyErr_SetImportError(_llcppg_param2 *PyObject, _llcppg_par
 	return self
 }
 
+// Export the old function so that the existing API remains available:
+//
 //go:linkname PyErr_BadInternalCall C.PyErr_BadInternalCall
 func PyErr_BadInternalCall()
 
 //go:linkname X_PyErr_BadInternalCall C._PyErr_BadInternalCall
 func X_PyErr_BadInternalCall(filename *c.Char, lineno c.Int)
 
+// Function to create a new exception
+//
 //go:linkname PyErr_NewException C.PyErr_NewException
 func PyErr_NewException(name *c.Char, base *PyObject, dict *PyObject) *PyObject
 
@@ -510,6 +538,8 @@ func PyErr_NewExceptionWithDoc(name *c.Char, doc *c.Char, base *PyObject, dict *
 func (self *PyObject) PyErr_WriteUnraisable() {
 }
 
+// In signalmodule.c
+//
 //go:linkname PyErr_CheckSignals C.PyErr_CheckSignals
 func PyErr_CheckSignals() c.Int
 
@@ -519,6 +549,8 @@ func PyErr_SetInterrupt()
 //go:linkname PyErr_SetInterruptEx C.PyErr_SetInterruptEx
 func PyErr_SetInterruptEx(signum c.Int) c.Int
 
+// Support for adding program text to SyntaxErrors
+//
 //go:linkname PyErr_SyntaxLocation C.PyErr_SyntaxLocation
 func PyErr_SyntaxLocation(filename *c.Char, lineno c.Int)
 
@@ -528,9 +560,13 @@ func PyErr_SyntaxLocationEx(filename *c.Char, lineno c.Int, col_offset c.Int)
 //go:linkname PyErr_ProgramText C.PyErr_ProgramText
 func PyErr_ProgramText(filename *c.Char, lineno c.Int) *PyObject
 
+// create a UnicodeDecodeError object
+//
 //go:linkname PyUnicodeDecodeError_Create C.PyUnicodeDecodeError_Create
 func PyUnicodeDecodeError_Create(encoding *c.Char, object *c.Char, length PySsizeT, start PySsizeT, end PySsizeT, reason *c.Char) *PyObject
 
+// get the encoding attribute
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_GetEncoding C.PyUnicodeEncodeError_GetEncoding
 func (self *PyObject) PyUnicodeEncodeError_GetEncoding() *PyObject {
 	return self
@@ -541,6 +577,8 @@ func (self *PyObject) PyUnicodeDecodeError_GetEncoding() *PyObject {
 	return self
 }
 
+// get the object attribute
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_GetObject C.PyUnicodeEncodeError_GetObject
 func (self *PyObject) PyUnicodeEncodeError_GetObject() *PyObject {
 	return self
@@ -556,6 +594,9 @@ func (self *PyObject) PyUnicodeTranslateError_GetObject() *PyObject {
 	return self
 }
 
+// get the value of the start attribute (the int * may not be NULL)
+// return 0 on success, -1 on failure
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_GetStart C.PyUnicodeEncodeError_GetStart
 func (self *PyObject) PyUnicodeEncodeError_GetStart(_llcppg_param2 *PySsizeT) c.Int {
 	return 0
@@ -571,6 +612,9 @@ func (self *PyObject) PyUnicodeTranslateError_GetStart(_llcppg_param2 *PySsizeT)
 	return 0
 }
 
+// assign a new value to the start attribute
+// return 0 on success, -1 on failure
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_SetStart C.PyUnicodeEncodeError_SetStart
 func (self *PyObject) PyUnicodeEncodeError_SetStart(_llcppg_param2 PySsizeT) c.Int {
 	return 0
@@ -586,6 +630,9 @@ func (self *PyObject) PyUnicodeTranslateError_SetStart(_llcppg_param2 PySsizeT) 
 	return 0
 }
 
+// get the value of the end attribute (the int *may not be NULL)
+// return 0 on success, -1 on failure
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_GetEnd C.PyUnicodeEncodeError_GetEnd
 func (self *PyObject) PyUnicodeEncodeError_GetEnd(_llcppg_param2 *PySsizeT) c.Int {
 	return 0
@@ -601,6 +648,9 @@ func (self *PyObject) PyUnicodeTranslateError_GetEnd(_llcppg_param2 *PySsizeT) c
 	return 0
 }
 
+// assign a new value to the end attribute
+// return 0 on success, -1 on failure
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_SetEnd C.PyUnicodeEncodeError_SetEnd
 func (self *PyObject) PyUnicodeEncodeError_SetEnd(_llcppg_param2 PySsizeT) c.Int {
 	return 0
@@ -616,6 +666,8 @@ func (self *PyObject) PyUnicodeTranslateError_SetEnd(_llcppg_param2 PySsizeT) c.
 	return 0
 }
 
+// get the value of the reason attribute
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_GetReason C.PyUnicodeEncodeError_GetReason
 func (self *PyObject) PyUnicodeEncodeError_GetReason() *PyObject {
 	return self
@@ -631,6 +683,9 @@ func (self *PyObject) PyUnicodeTranslateError_GetReason() *PyObject {
 	return self
 }
 
+// assign a new value to the reason attribute
+// return 0 on success, -1 on failure
+//
 // llgo:link (*PyObject).PyUnicodeEncodeError_SetReason C.PyUnicodeEncodeError_SetReason
 func (self *PyObject) PyUnicodeEncodeError_SetReason(reason *c.Char) c.Int {
 	return 0
@@ -652,18 +707,26 @@ func PyOSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...a
 //go:linkname PyOSVsnprintf C.PyOS_vsnprintf
 func PyOSVsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
 
+// Context manipulation (PEP 3134)
+//
 // llgo:link (*PyObject).X_PyErr_ChainExceptions1 C._PyErr_ChainExceptions1
 func (self *PyObject) X_PyErr_ChainExceptions1() {
 }
 
+// In exceptions.c
+//
 // llgo:link (*PyObject).PyUnstable_Exc_PrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
 func (self *PyObject) PyUnstable_Exc_PrepReraiseStar(excs *PyObject) *PyObject {
 	return self
 }
 
+// In signalmodule.c
+//
 //go:linkname PySignal_SetWakeupFd C.PySignal_SetWakeupFd
 func PySignal_SetWakeupFd(fd c.Int) c.Int
 
+// Support for adding program text to SyntaxErrors
+//
 // llgo:link (*PyObject).PyErr_SyntaxLocationObject C.PyErr_SyntaxLocationObject
 func (self *PyObject) PyErr_SyntaxLocationObject(lineno c.Int, col_offset c.Int) {
 }

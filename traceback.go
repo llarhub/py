@@ -16,6 +16,8 @@ type X_traceback struct {
 }
 type PyTracebackObject = X_traceback
 
+// Traceback interface
+//
 // llgo:link (*PyFrameObject).PyTraceBack_Here C.PyTraceBack_Here
 func (self *PyFrameObject) PyTraceBack_Here() c.Int {
 	return 0
@@ -26,5 +28,7 @@ func (self *PyObject) PyTraceBack_Print(_llcppg_param2 *PyObject) c.Int {
 	return 0
 }
 
+// Reveal traceback type so we can typecheck traceback objects
+//
 //go:linkname PyTraceBack_Type C.PyTraceBack_Type
 var PyTraceBack_Type PyTypeObject

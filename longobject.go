@@ -100,11 +100,47 @@ func (self *PyObject) PyLong_AsUInt64(value *c.Uint64T) c.Int {
 	return 0
 }
 
+// PyLong_AsNativeBytes: Copy the integer value to a native variable.
+// buffer points to the first byte of the variable.
+// n_bytes is the number of bytes available in the buffer. Pass 0 to request
+// the required size for the value.
+// flags is a bitfield of the following flags:
+// 1 - little endian
+// 2 - native endian
+// 4 - unsigned destination (e.g. don't reject copying 255 into one byte)
+// 8 - raise an exception for negative inputs
+// 16 - call __index__ on non-int types
+// If flags is -1 (all bits set), native endian is used, value truncation
+// behaves most like C (allows negative inputs and allow MSB set), and non-int
+// objects will raise a TypeError.
+// Big endian mode will write the most significant byte into the address
+// directly referenced by buffer; little endian will write the least significant
+// byte into that address.
+//
+// If an exception is raised, returns a negative value.
+// Otherwise, returns the number of bytes that are required to store the value.
+// To check that the full value is represented, ensure that the return value is
+// equal or less than n_bytes.
+// All n_bytes are guaranteed to be written (unless an exception occurs), and
+// so ignoring a positive return value is the equivalent of a downcast in C.
+// In cases where the full value could not be represented, the returned value
+// may be larger than necessary - this function is not an accurate way to
+// calculate the bit length of an integer object.
+//
 // llgo:link (*PyObject).PyLong_AsNativeBytes C.PyLong_AsNativeBytes
 func (self *PyObject) PyLong_AsNativeBytes(buffer unsafe.Pointer, n_bytes PySsizeT, flags c.Int) PySsizeT {
 	return 0
 }
 
+// PyLong_FromNativeBytes: Create an int value from a native integer
+// n_bytes is the number of bytes to read from the buffer. Passing 0 will
+// always produce the zero int.
+// PyLong_FromUnsignedNativeBytes always produces a non-negative int.
+// flags is the same as for PyLong_AsNativeBytes, but only supports selecting
+// the endianness or forcing an unsigned buffer.
+//
+// Returns the int object, or NULL with an exception set.
+//
 //go:linkname PyLong_FromNativeBytes C.PyLong_FromNativeBytes
 func PyLong_FromNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c.Int) *PyObject
 
@@ -156,6 +192,9 @@ func (self *PyObject) PyLong_AsLongLongAndOverflow(_llcppg_param2 *c.Int) c.Long
 //go:linkname PyLong_FromString C.PyLong_FromString
 func PyLong_FromString(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) *PyObject
 
+// These aren't really part of the int object, but they're handy. The
+// functions are in Python/mystrtoul.c.
+//
 //go:linkname PyOSStrtoul C.PyOS_strtoul
 func PyOSStrtoul(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Ulong
 
@@ -177,21 +216,42 @@ func (self *PyLongObject) PyUnstable_Long_CompactValue() PySsizeT {
 	return 0
 }
 
+// PyLong_IsPositive.  Check if the integer object is positive.
+//
+// - On success, return 1 if *obj is positive, and 0 otherwise.
+// - On failure, set an exception, and return -1.
+//
 // llgo:link (*PyObject).PyLong_IsPositive C.PyLong_IsPositive
 func (self *PyObject) PyLong_IsPositive() c.Int {
 	return 0
 }
 
+// PyLong_IsNegative.  Check if the integer object is negative.
+//
+// - On success, return 1 if *obj is negative, and 0 otherwise.
+// - On failure, set an exception, and return -1.
+//
 // llgo:link (*PyObject).PyLong_IsNegative C.PyLong_IsNegative
 func (self *PyObject) PyLong_IsNegative() c.Int {
 	return 0
 }
 
+// PyLong_IsZero.  Check if the integer object is zero.
+//
+// - On success, return 1 if *obj is zero, and 0 if it is non-zero.
+// - On failure, set an exception, and return -1.
+//
 // llgo:link (*PyObject).PyLong_IsZero C.PyLong_IsZero
 func (self *PyObject) PyLong_IsZero() c.Int {
 	return 0
 }
 
+// PyLong_GetSign.  Get the sign of an integer object:
+// 0, -1 or +1 for zero, negative or positive integer, respectively.
+//
+// - On success, set '*sign' to the integer sign, and return 0.
+// - On failure, set an exception, and return -1.
+//
 // llgo:link (*PyObject).PyLong_GetSign C.PyLong_GetSign
 func (self *PyObject) PyLong_GetSign(sign *c.Int) c.Int {
 	return 0
@@ -202,19 +262,59 @@ func (self *PyObject) X_PyLong_Sign() c.Int {
 	return 0
 }
 
+// _PyLong_NumBits.  Return the number of bits needed to represent the
+// absolute value of a long.  For example, this returns 1 for 1 and -1, 2
+// for 2 and -2, and 2 for 3 and -3.  It returns 0 for 0.
+// v must not be NULL, and must be a normalized long.
+// Always successful.
+//
 // llgo:link (*PyObject).X_PyLong_NumBits C._PyLong_NumBits
 func (self *PyObject) X_PyLong_NumBits() c.Int64T {
 	return 0
 }
 
+// _PyLong_FromByteArray:  View the n unsigned bytes as a binary integer in
+// base 256, and return a Python int with the same numeric value.
+// If n is 0, the integer is 0.  Else:
+// If little_endian is 1/true, bytes[n-1] is the MSB and bytes[0] the LSB;
+// else (little_endian is 0/false) bytes[0] is the MSB and bytes[n-1] the
+// LSB.
+// If is_signed is 0/false, view the bytes as a non-negative integer.
+// If is_signed is 1/true, view the bytes as a 2's-complement integer,
+// non-negative if bit 0x80 of the MSB is clear, negative if set.
+// Error returns:
+// + Return NULL with the appropriate exception set if there's not
+// enough memory to create the Python int.
+//
 //go:linkname X_PyLong_FromByteArray C._PyLong_FromByteArray
 func X_PyLong_FromByteArray(bytes *uint8, n c.SizeT, little_endian c.Int, is_signed c.Int) *PyObject
 
+// _PyLong_AsByteArray: Convert the least-significant 8*n bits of long
+// v to a base-256 integer, stored in array bytes.  Normally return 0,
+// return -1 on error.
+// If little_endian is 1/true, store the MSB at bytes[n-1] and the LSB at
+// bytes[0]; else (little_endian is 0/false) store the MSB at bytes[0] and
+// the LSB at bytes[n-1].
+// If is_signed is 0/false, it's an error if v < 0; else (v >= 0) n bytes
+// are filled and there's nothing special about bit 0x80 of the MSB.
+// If is_signed is 1/true, bytes is filled with the 2's-complement
+// representation of v's value.  Bit 0x80 of the MSB is the sign bit.
+// Error returns (-1):
+// + is_signed is 0 and v < 0.  TypeError is set in this case, and bytes
+// isn't altered.
+// + n isn't big enough to hold the full mathematical value of v.  For
+// example, if is_signed is 0 and there are more digits in the v than
+// fit in n; or if is_signed is 1, v < 0, and n is just 1 bit shy of
+// being large enough to hold a sign bit.  OverflowError is set in this
+// case, but bytes holds the least-significant n bytes of the true value.
+//
 // llgo:link (*PyLongObject).X_PyLong_AsByteArray C._PyLong_AsByteArray
 func (self *PyLongObject) X_PyLong_AsByteArray(bytes *uint8, n c.SizeT, little_endian c.Int, is_signed c.Int, with_exceptions c.Int) c.Int {
 	return 0
 }
 
+// For use by the gcd function in mathmodule.c
+//
 // llgo:link (*PyObject).X_PyLong_GCD C._PyLong_GCD
 func (self *PyObject) X_PyLong_GCD(_llcppg_param2 *PyObject) *PyObject {
 	return self

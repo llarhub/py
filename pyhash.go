@@ -18,6 +18,7 @@ const PyHASH_INF = 314159
 const X_PyHASH_BITS = 61
 const X_PyHASH_INF = 314159
 
+// hash function definition
 type PyHash_FuncDef struct {
 	Hash     func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 PySsizeT) PyHashT
 	Name     *c.Char
@@ -25,6 +26,8 @@ type PyHash_FuncDef struct {
 	SeedBits c.Int
 }
 
+// Helpers for hash functions
+//
 // llgo:link (*PyObject).X_Py_HashDouble C._Py_HashDouble
 func (self *PyObject) X_Py_HashDouble(_llcppg_param2 c.Double) PyHashT {
 	return 0

@@ -39,15 +39,23 @@ const (
 type X_PyCodeLocationInfoKind c.Uint
 
 const (
-	PY_CODE_LOCATION_INFO_SHORT0     X_PyCodeLocationInfoKind = 0
-	PY_CODE_LOCATION_INFO_ONE_LINE0  X_PyCodeLocationInfoKind = 10
-	PY_CODE_LOCATION_INFO_ONE_LINE1  X_PyCodeLocationInfoKind = 11
-	PY_CODE_LOCATION_INFO_ONE_LINE2  X_PyCodeLocationInfoKind = 12
+	// short forms are 0 to 9
+	PY_CODE_LOCATION_INFO_SHORT0 X_PyCodeLocationInfoKind = 0
+	// one lineforms are 10 to 12
+	PY_CODE_LOCATION_INFO_ONE_LINE0 X_PyCodeLocationInfoKind = 10
+	// one lineforms are 10 to 12
+	PY_CODE_LOCATION_INFO_ONE_LINE1 X_PyCodeLocationInfoKind = 11
+	// one lineforms are 10 to 12
+	PY_CODE_LOCATION_INFO_ONE_LINE2 X_PyCodeLocationInfoKind = 12
+	// one lineforms are 10 to 12
 	PY_CODE_LOCATION_INFO_NO_COLUMNS X_PyCodeLocationInfoKind = 13
-	PY_CODE_LOCATION_INFO_LONG       X_PyCodeLocationInfoKind = 14
-	PY_CODE_LOCATION_INFO_NONE       X_PyCodeLocationInfoKind = 15
+	// one lineforms are 10 to 12
+	PY_CODE_LOCATION_INFO_LONG X_PyCodeLocationInfoKind = 14
+	// one lineforms are 10 to 12
+	PY_CODE_LOCATION_INFO_NONE X_PyCodeLocationInfoKind = 15
 )
 
+// Bytecode object
 type PyCodeObject struct {
 	ObBase                     PyVarObject
 	CoConsts                   *PyObject
@@ -97,8 +105,18 @@ type X_PyExecutorObject struct {
 type X_PyCoMonitoringData struct {
 }
 
+// A callback that is invoked for different events in a code object's lifecycle.
+//
+// The callback is invoked with a borrowed reference to co, after it is
+// created and before it is destroyed.
+//
+// If the callback sets an exception, it must return -1. Otherwise
+// it should return 0.
+//
 // llgo:type C
 type PyCode_WatchCallback = func(_llcppg_param1 PyCodeEvent, _llcppg_param2 *PyCodeObject) c.Int
+
+// for internal use only
 type X_opaque struct {
 	ComputedLine c.Int
 	LoNext       *c.Uint8T
@@ -115,15 +133,23 @@ type PyCodeAddressRange = X_lineOffsets
 //go:linkname PyCode_Type C.PyCode_Type
 var PyCode_Type PyTypeObject
 
+// Unstable public interface
+//
 //go:linkname PyUnstable_Code_New C.PyUnstable_Code_New
 func PyUnstable_Code_New(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 *PyObject, _llcppg_param7 *PyObject, _llcppg_param8 *PyObject, _llcppg_param9 *PyObject, _llcppg_param10 *PyObject, _llcppg_param11 *PyObject, _llcppg_param12 *PyObject, _llcppg_param13 *PyObject, _llcppg_param14 *PyObject, _llcppg_param15 c.Int, _llcppg_param16 *PyObject, _llcppg_param17 *PyObject) *PyCodeObject
 
 //go:linkname PyUnstable_Code_NewWithPosOnlyArgs C.PyUnstable_Code_NewWithPosOnlyArgs
 func PyUnstable_Code_NewWithPosOnlyArgs(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 c.Int, _llcppg_param7 *PyObject, _llcppg_param8 *PyObject, _llcppg_param9 *PyObject, _llcppg_param10 *PyObject, _llcppg_param11 *PyObject, _llcppg_param12 *PyObject, _llcppg_param13 *PyObject, _llcppg_param14 *PyObject, _llcppg_param15 *PyObject, _llcppg_param16 c.Int, _llcppg_param17 *PyObject, _llcppg_param18 *PyObject) *PyCodeObject
 
+// Creates a new empty code object with the specified source location.
+//
 //go:linkname PyCode_NewEmpty C.PyCode_NewEmpty
 func PyCode_NewEmpty(filename *c.Char, funcname *c.Char, firstlineno c.Int) *PyCodeObject
 
+// Return the line number associated with the specified bytecode index
+// in this code object.  If you just need the line number of a frame,
+// use PyFrame_GetLineNumber() instead.
+//
 // llgo:link (*PyCodeObject).PyCode_Addr2Line C.PyCode_Addr2Line
 func (self *PyCodeObject) PyCode_Addr2Line(_llcppg_param2 c.Int) c.Int {
 	return 0
@@ -134,15 +160,36 @@ func (self *PyCodeObject) PyCode_Addr2Location(_llcppg_param2 c.Int, _llcppg_par
 	return 0
 }
 
+// Register a per-interpreter callback that will be invoked for code object
+// lifecycle events.
+//
+// Returns a handle that may be passed to PyCode_ClearWatcher on success,
+// or -1 and sets an error if no more handles are available.
+//
 //go:linkname PyCode_AddWatcher C.PyCode_AddWatcher
 func PyCode_AddWatcher(callback PyCode_WatchCallback) c.Int
 
+// Clear the watcher associated with the watcher_id handle.
+//
+// Returns 0 on success or -1 if no watcher exists for the provided id.
+//
 //go:linkname PyCode_ClearWatcher C.PyCode_ClearWatcher
 func PyCode_ClearWatcher(watcher_id c.Int) c.Int
 
+// Update *bounds to describe the first and one-past-the-last instructions in the
+// same line as lasti.  Return the number of that line.
+//
 //go:linkname X_PyCode_CheckLineNumber C._PyCode_CheckLineNumber
 func X_PyCode_CheckLineNumber(lasti c.Int, bounds *PyCodeAddressRange) c.Int
 
+// Create a comparable key used to compare constants taking in account the
+// object type. It is used to make sure types are not coerced (e.g., float and
+// complex) _and_ to distinguish 0.0 from -0.0 e.g. on IEEE platforms
+//
+// Return (type(obj), obj, ...): a tuple with variable size (at least 2 items)
+// depending on the type and the value. The type is the first item to not
+// compare bytes and str which can raise a BytesWarning exception.
+//
 // llgo:link (*PyObject).X_PyCode_ConstantKey C._PyCode_ConstantKey
 func (self *PyObject) X_PyCode_ConstantKey() *PyObject {
 	return self
@@ -163,21 +210,30 @@ func (self *PyObject) PyUnstable_Code_SetExtra(index PySsizeT, extra unsafe.Poin
 	return 0
 }
 
+// Equivalent to getattr(code, 'co_code') in Python.
+// Returns a strong reference to a bytes object.
+//
 // llgo:link (*PyCodeObject).PyCode_GetCode C.PyCode_GetCode
 func (self *PyCodeObject) PyCode_GetCode() *PyObject {
 	return nil
 }
 
+// Equivalent to getattr(code, 'co_varnames') in Python.
+//
 // llgo:link (*PyCodeObject).PyCode_GetVarnames C.PyCode_GetVarnames
 func (self *PyCodeObject) PyCode_GetVarnames() *PyObject {
 	return nil
 }
 
+// Equivalent to getattr(code, 'co_cellvars') in Python.
+//
 // llgo:link (*PyCodeObject).PyCode_GetCellvars C.PyCode_GetCellvars
 func (self *PyCodeObject) PyCode_GetCellvars() *PyObject {
 	return nil
 }
 
+// Equivalent to getattr(code, 'co_freevars') in Python.
+//
 // llgo:link (*PyCodeObject).PyCode_GetFreevars C.PyCode_GetFreevars
 func (self *PyCodeObject) PyCode_GetFreevars() *PyObject {
 	return nil

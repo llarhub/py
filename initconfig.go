@@ -7,6 +7,7 @@ import (
 	_ "unsafe"
 )
 
+// --- PyStatus -----------------------------------------------
 type PyStatus struct {
 	X_type   _llcppg_anon_4
 	Func     *c.Char
@@ -21,10 +22,13 @@ const (
 	X_PyStatus_TYPE_EXIT  _llcppg_anon_4 = 2
 )
 
+// --- PyWideStringList ------------------------------------------------
 type PyWideStringList struct {
 	Length PySsizeT
 	Items  **c.WcharT
 }
+
+// --- PyPreConfig -----------------------------------------------
 type PyPreConfig struct {
 	X_configInit      c.Int
 	ParseArgv         c.Int
@@ -37,6 +41,8 @@ type PyPreConfig struct {
 	DevMode           c.Int
 	Allocator         c.Int
 }
+
+// This structure is best documented in the Doc/c-api/init_config.rst file.
 type PyConfig struct {
 	X_configInit          c.Int
 	Isolated              c.Int
@@ -199,6 +205,8 @@ func (self *PyConfig) SetWideStringList(list *PyWideStringList, length PySsizeT,
 	return PyStatus{}
 }
 
+// --- PyConfig_Get() -----------------------------------------
+//
 //go:linkname PyConfig_Get C.PyConfig_Get
 func PyConfig_Get(name *c.Char) *PyObject
 
@@ -211,6 +219,10 @@ func PyConfig_Names() *PyObject
 //go:linkname PyConfig_Set C.PyConfig_Set
 func PyConfig_Set(name *c.Char, value *PyObject) c.Int
 
+// Get the original command line arguments, before Python modified them.
+//
+// See also PyConfig.orig_argv.
+//
 //go:linkname Py_GetArgcArgv C.Py_GetArgcArgv
 func Py_GetArgcArgv(argc *c.Int, argv ***c.WcharT)
 

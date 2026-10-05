@@ -24,14 +24,21 @@ func PyFloat_GetMin() c.Double
 //go:linkname PyFloat_GetInfo C.PyFloat_GetInfo
 func PyFloat_GetInfo() *PyObject
 
+// Return Python float from string PyObject.
+//
 // llgo:link (*PyObject).PyFloat_FromString C.PyFloat_FromString
 func (self *PyObject) PyFloat_FromString() *PyObject {
 	return self
 }
 
+// Return Python float from C double.
+//
 //go:linkname PyFloat_FromDouble C.PyFloat_FromDouble
 func PyFloat_FromDouble(_llcppg_param1 c.Double) *PyObject
 
+// Extract C double from Python float.  The macro version trades safety for
+// speed.
+//
 // llgo:link (*PyObject).PyFloat_AsDouble C.PyFloat_AsDouble
 func (self *PyObject) PyFloat_AsDouble() c.Double {
 	return 0

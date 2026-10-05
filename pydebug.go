@@ -52,5 +52,9 @@ var Py_HashRandomizationFlag c.Int
 //go:linkname Py_IsolatedFlag C.Py_IsolatedFlag
 var Py_IsolatedFlag c.Int
 
+// this is a wrapper around getenv() that pays attention to
+// Py_IgnoreEnvironmentFlag.  It should be used for getting variables like
+// PYTHONPATH and PYTHONHOME from the environment
+//
 //go:linkname Py_GETENV C.Py_GETENV
 func Py_GETENV(name *c.Char) *c.Char

@@ -15,6 +15,7 @@ const FVC_ASCII = 3
 const FVS_MASK = 4
 const FVS_HAVE_SPEC = 4
 
+// Trampoline API
 type PerfMapState struct {
 	PerfMap *c.FILE
 	MapLock PyThreadTypeLock
@@ -57,6 +58,31 @@ func Py_AddPendingCall(func_ func(_llcppg_param1 unsafe.Pointer) c.Int, arg unsa
 //go:linkname Py_MakePendingCalls C.Py_MakePendingCalls
 func Py_MakePendingCalls() c.Int
 
+// Protection against deeply nested recursive calls
+//
+// In Python 3.0, this protection has two levels:
+// normal anti-recursion protection is triggered when the recursion level
+// exceeds the current recursion limit. It raises a RecursionError, and sets
+// the "overflowed" flag in the thread state structure. This flag
+// temporarily *disables* the normal protection; this allows cleanup code
+// to potentially outgrow the recursion limit while processing the
+// RecursionError.
+// "last chance" anti-recursion protection is triggered when the recursion
+// level exceeds "current recursion limit + 50". By construction, this
+// protection can only be triggered when the "overflowed" flag is set. It
+// means the cleanup code has itself gone into an infinite loop, or the
+// RecursionError has been mistakenly ignored. When this protection is
+// triggered, the interpreter aborts with a Fatal Error.
+//
+// In addition, the "overflowed" flag is automatically reset when the
+// recursion level drops below "current recursion limit - 50". This heuristic
+// is meant to ensure that the normal anti-recursion protection doesn't get
+// disabled too long.
+//
+// Please note: this scheme has its own limitations. See:
+// http://mail.python.org/pipermail/python-dev/2008-August/082106.html
+// for some observations.
+//
 //go:linkname Py_SetRecursionLimit C.Py_SetRecursionLimit
 func Py_SetRecursionLimit(_llcppg_param1 c.Int)
 
@@ -89,6 +115,47 @@ func (self *PyFrameObject) PyEval_EvalFrameEx(exc c.Int) *PyObject {
 	return nil
 }
 
+// Interface for threads.
+//
+// A module that plans to do a blocking system call (or something else
+// that lasts a long time and doesn't touch Python data) can allow other
+// threads to run as follows:
+//
+// ...preparations here...
+// Py_BEGIN_ALLOW_THREADS
+// ...blocking system call here...
+// Py_END_ALLOW_THREADS
+// ...interpret result here...
+//
+// The Py_BEGIN_ALLOW_THREADS/Py_END_ALLOW_THREADS pair expands to a
+// {}-surrounded block.
+// To leave the block in the middle (e.g., with return), you must insert
+// a line containing Py_BLOCK_THREADS before the return, e.g.
+//
+// if (...premature_exit...) {
+// Py_BLOCK_THREADS
+// PyErr_SetFromErrno(PyExc_OSError);
+// return NULL;
+// }
+//
+// An alternative is:
+//
+// Py_BLOCK_THREADS
+// if (...premature_exit...) {
+// PyErr_SetFromErrno(PyExc_OSError);
+// return NULL;
+// }
+// Py_UNBLOCK_THREADS
+//
+// For convenience, that the value of 'errno' is restored across
+// Py_END_ALLOW_THREADS and Py_BLOCK_THREADS.
+//
+// WARNING: NEVER NEST CALLS TO Py_BEGIN_ALLOW_THREADS AND
+// Py_END_ALLOW_THREADS!!!
+//
+// Note that not yet all candidates have been converted to use this
+// mechanism!
+//
 //go:linkname PyEval_SaveThread C.PyEval_SaveThread
 func PyEval_SaveThread() *PyThreadState
 
@@ -119,6 +186,10 @@ func PyEval_SetTrace(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
 //go:linkname PyEval_SetTraceAllThreads C.PyEval_SetTraceAllThreads
 func PyEval_SetTraceAllThreads(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
 
+// Look at the current frame's (if any) code's co_flags, and turn on
+// the corresponding compiler flags in cf->cf_flags.  Return 1 if any
+// flag was set, else return 0.
+//
 // llgo:link (*PyCompilerFlags).PyEval_MergeCompilerFlags C.PyEval_MergeCompilerFlags
 func (self *PyCompilerFlags) PyEval_MergeCompilerFlags() c.Int {
 	return 0

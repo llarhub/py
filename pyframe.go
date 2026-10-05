@@ -16,6 +16,8 @@ const PyUnstable_EXECUTABLE_KINDS = 5
 type X_PyInterpreterFrame struct {
 }
 
+// Return the line of code the frame is currently executing.
+//
 // llgo:link (*PyFrameObject).PyFrame_GetLineNumber C.PyFrame_GetLineNumber
 func (self *PyFrameObject) PyFrame_GetLineNumber() c.Int {
 	return 0
@@ -72,16 +74,25 @@ func (self *PyFrameObject) PyFrame_GetVarString(name *c.Char) *PyObject {
 	return nil
 }
 
+// Returns the code object of the frame (strong reference).
+// Does not raise an exception.
+//
 // llgo:link (*X_PyInterpreterFrame).PyUnstable_InterpreterFrame_GetCode C.PyUnstable_InterpreterFrame_GetCode
 func (self *X_PyInterpreterFrame) PyUnstable_InterpreterFrame_GetCode() *PyObject {
 	return nil
 }
 
+// Returns a byte offset into the last executed instruction.
+// Does not raise an exception.
+//
 // llgo:link (*X_PyInterpreterFrame).PyUnstable_InterpreterFrame_GetLasti C.PyUnstable_InterpreterFrame_GetLasti
 func (self *X_PyInterpreterFrame) PyUnstable_InterpreterFrame_GetLasti() c.Int {
 	return 0
 }
 
+// Returns the currently executing line number, or -1 if there is no line number.
+// Does not raise an exception.
+//
 // llgo:link (*X_PyInterpreterFrame).PyUnstable_InterpreterFrame_GetLine C.PyUnstable_InterpreterFrame_GetLine
 func (self *X_PyInterpreterFrame) PyUnstable_InterpreterFrame_GetLine() c.Int {
 	return 0

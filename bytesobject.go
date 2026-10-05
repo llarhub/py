@@ -13,6 +13,19 @@ type PyBytesObject struct {
 	ObSval  [1]c.Char
 }
 
+// Type PyBytesObject represents a byte string.  An extra zero byte is
+// reserved at the end to ensure it is zero-terminated, but a size is
+// present so strings with null bytes in them can be represented.  This
+// is an immutable object type.
+//
+// There are functions to create new bytes objects, to test
+// an object for bytes-ness, and to get the
+// byte string value.  The latter function returns a null pointer
+// if the object is not of the proper type.
+// There is a variant that takes an explicit size as well as a
+// variant that assumes a zero-terminated string.  Note that none of the
+// functions should be applied to NULL pointer.
+//
 //go:linkname PyBytes_Type C.PyBytes_Type
 var PyBytes_Type PyTypeObject
 
@@ -60,6 +73,11 @@ func PyBytes_ConcatAndDel(_llcppg_param1 **PyObject, _llcppg_param2 *PyObject)
 //go:linkname PyBytes_DecodeEscape C.PyBytes_DecodeEscape
 func PyBytes_DecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 PySsizeT, _llcppg_param3 *c.Char, _llcppg_param4 PySsizeT, _llcppg_param5 *c.Char) *PyObject
 
+// Provides access to the internal data buffer and size of a bytes object.
+// Passing NULL as len parameter will force the string buffer to be
+// 0-terminated (passing a string with embedded NUL characters will
+// cause an exception).
+//
 // llgo:link (*PyObject).PyBytes_AsStringAndSize C.PyBytes_AsStringAndSize
 func (self *PyObject) PyBytes_AsStringAndSize(s **c.Char, len *PySsizeT) c.Int {
 	return 0

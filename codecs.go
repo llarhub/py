@@ -7,78 +7,146 @@ import (
 	_ "unsafe"
 )
 
+// Register a new codec search function.
+//
+// As side effect, this tries to load the encodings package, if not
+// yet done, to make sure that it is always first in the list of
+// search functions.
+//
+// The search_function's refcount is incremented by this function.
+//
 // llgo:link (*PyObject).PyCodec_Register C.PyCodec_Register
 func (self *PyObject) PyCodec_Register() c.Int {
 	return 0
 }
 
+// Unregister a codec search function and clear the registry's cache.
+// If the search function is not registered, do nothing.
+// Return 0 on success. Raise an exception and return -1 on error.
+//
 // llgo:link (*PyObject).PyCodec_Unregister C.PyCodec_Unregister
 func (self *PyObject) PyCodec_Unregister() c.Int {
 	return 0
 }
 
+// Codec registry encoding check API.
+//
+// Returns 1/0 depending on whether there is a registered codec for
+// the given encoding.
+//
 //go:linkname PyCodec_KnownEncoding C.PyCodec_KnownEncoding
 func PyCodec_KnownEncoding(encoding *c.Char) c.Int
 
+// Generic codec based encoding API.
+//
+// object is passed through the encoder function found for the given
+// encoding using the error handling method defined by errors. errors
+// may be NULL to use the default method defined for the codec.
+//
+// Raises a LookupError in case no encoder can be found.
+//
 // llgo:link (*PyObject).PyCodec_Encode C.PyCodec_Encode
 func (self *PyObject) PyCodec_Encode(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Generic codec based decoding API.
+//
+// object is passed through the decoder function found for the given
+// encoding using the error handling method defined by errors. errors
+// may be NULL to use the default method defined for the codec.
+//
+// Raises a LookupError in case no encoder can be found.
+//
 // llgo:link (*PyObject).PyCodec_Decode C.PyCodec_Decode
 func (self *PyObject) PyCodec_Decode(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Get an encoder function for the given encoding.
+//
 //go:linkname PyCodec_Encoder C.PyCodec_Encoder
 func PyCodec_Encoder(encoding *c.Char) *PyObject
 
+// Get a decoder function for the given encoding.
+//
 //go:linkname PyCodec_Decoder C.PyCodec_Decoder
 func PyCodec_Decoder(encoding *c.Char) *PyObject
 
+// Get an IncrementalEncoder object for the given encoding.
+//
 //go:linkname PyCodec_IncrementalEncoder C.PyCodec_IncrementalEncoder
 func PyCodec_IncrementalEncoder(encoding *c.Char, errors *c.Char) *PyObject
 
+// Get an IncrementalDecoder object function for the given encoding.
+//
 //go:linkname PyCodec_IncrementalDecoder C.PyCodec_IncrementalDecoder
 func PyCodec_IncrementalDecoder(encoding *c.Char, errors *c.Char) *PyObject
 
+// Get a StreamReader factory function for the given encoding.
+//
 //go:linkname PyCodec_StreamReader C.PyCodec_StreamReader
 func PyCodec_StreamReader(encoding *c.Char, stream *PyObject, errors *c.Char) *PyObject
 
+// Get a StreamWriter factory function for the given encoding.
+//
 //go:linkname PyCodec_StreamWriter C.PyCodec_StreamWriter
 func PyCodec_StreamWriter(encoding *c.Char, stream *PyObject, errors *c.Char) *PyObject
 
+// Register the error handling callback function error under the given
+// name. This function will be called by the codec when it encounters
+// unencodable characters/undecodable bytes and doesn't know the
+// callback name, when name is specified as the error parameter
+// in the call to the encode/decode function.
+// Return 0 on success, -1 on error
+//
 //go:linkname PyCodec_RegisterError C.PyCodec_RegisterError
 func PyCodec_RegisterError(name *c.Char, error *PyObject) c.Int
 
+// Lookup the error handling callback function registered under the given
+// name. As a special case NULL can be passed, in which case
+// the error handling callback for "strict" will be returned.
+//
 //go:linkname PyCodec_LookupError C.PyCodec_LookupError
 func PyCodec_LookupError(name *c.Char) *PyObject
 
+// raise exc as an exception
+//
 // llgo:link (*PyObject).PyCodec_StrictErrors C.PyCodec_StrictErrors
 func (self *PyObject) PyCodec_StrictErrors() *PyObject {
 	return self
 }
 
+// ignore the unicode error, skipping the faulty input
+//
 // llgo:link (*PyObject).PyCodec_IgnoreErrors C.PyCodec_IgnoreErrors
 func (self *PyObject) PyCodec_IgnoreErrors() *PyObject {
 	return self
 }
 
+// replace the unicode encode error with ? or U+FFFD
+//
 // llgo:link (*PyObject).PyCodec_ReplaceErrors C.PyCodec_ReplaceErrors
 func (self *PyObject) PyCodec_ReplaceErrors() *PyObject {
 	return self
 }
 
+// replace the unicode encode error with XML character references
+//
 // llgo:link (*PyObject).PyCodec_XMLCharRefReplaceErrors C.PyCodec_XMLCharRefReplaceErrors
 func (self *PyObject) PyCodec_XMLCharRefReplaceErrors() *PyObject {
 	return self
 }
 
+// replace the unicode encode error with backslash escapes (\x, \u and \U)
+//
 // llgo:link (*PyObject).PyCodec_BackslashReplaceErrors C.PyCodec_BackslashReplaceErrors
 func (self *PyObject) PyCodec_BackslashReplaceErrors() *PyObject {
 	return self
 }
 
+// replace the unicode encode error with backslash escapes (\N, \x, \u and \U)
+//
 // llgo:link (*PyObject).PyCodec_NameReplaceErrors C.PyCodec_NameReplaceErrors
 func (self *PyObject) PyCodec_NameReplaceErrors() *PyObject {
 	return self

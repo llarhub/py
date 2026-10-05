@@ -5,11 +5,15 @@ package py
 const X_Py_STATICALLY_ALLOCATED_FLAG = 4
 const X_Py_IMMORTAL_FLAGS = 1
 
+// Py_REFCNT() implementation for the stable ABI
+//
 // llgo:link (*PyObject).Py_REFCNT C.Py_REFCNT
 func (self *PyObject) Py_REFCNT() PySsizeT {
 	return 0
 }
 
+// Py_SET_REFCNT() implementation for stable ABI
+//
 // llgo:link (*PyObject).X_Py_SetRefcnt C._Py_SetRefcnt
 func (self *PyObject) X_Py_SetRefcnt(refcnt PySsizeT) {
 }
@@ -18,6 +22,9 @@ func (self *PyObject) X_Py_SetRefcnt(refcnt PySsizeT) {
 func (self *PyObject) X_Py_Dealloc() {
 }
 
+// These are provided as conveniences to Python runtime embedders, so that
+// they can have object code that is not dependent on Python compilation flags.
+//
 // llgo:link (*PyObject).Py_IncRef C.Py_IncRef
 func (self *PyObject) Py_IncRef() {
 }
@@ -26,6 +33,9 @@ func (self *PyObject) Py_IncRef() {
 func (self *PyObject) Py_DecRef() {
 }
 
+// Similar to Py_IncRef() and Py_DecRef() but the argument must be non-NULL.
+// Private functions used by Py_INCREF() and Py_DECREF().
+//
 // llgo:link (*PyObject).X_Py_IncRef C._Py_IncRef
 func (self *PyObject) X_Py_IncRef() {
 }
@@ -34,11 +44,16 @@ func (self *PyObject) X_Py_IncRef() {
 func (self *PyObject) X_Py_DecRef() {
 }
 
+// Create a new strong reference to an object:
+// increment the reference count of the object and return the object.
+//
 // llgo:link (*PyObject).Py_NewRef C.Py_NewRef
 func (self *PyObject) Py_NewRef() *PyObject {
 	return self
 }
 
+// Similar to Py_NewRef(), but the object can be NULL.
+//
 // llgo:link (*PyObject).Py_XNewRef C.Py_XNewRef
 func (self *PyObject) Py_XNewRef() *PyObject {
 	return self

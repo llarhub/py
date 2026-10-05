@@ -24,6 +24,8 @@ type PyModuleDef struct {
 	MClear    Inquiry
 	MFree     Freefunc
 }
+
+// New in 3.5
 type PyModuleDef_Slot struct {
 	Slot  c.Int
 	Value unsafe.Pointer
@@ -81,6 +83,8 @@ func (self *PyObject) PyModule_GetState() unsafe.Pointer {
 	return nil
 }
 
+// New in 3.5
+//
 // llgo:link (*PyModuleDef).Init C.PyModuleDef_Init
 func (self *PyModuleDef) Init() *PyObject {
 	return nil

@@ -10,16 +10,23 @@ import (
 //go:linkname PyPickleBuffer_Type C.PyPickleBuffer_Type
 var PyPickleBuffer_Type PyTypeObject
 
+// Create a PickleBuffer redirecting to the given buffer-enabled object
+//
 // llgo:link (*PyObject).PyPickleBuffer_FromObject C.PyPickleBuffer_FromObject
 func (self *PyObject) PyPickleBuffer_FromObject() *PyObject {
 	return self
 }
 
+// Get the PickleBuffer's underlying view to the original object
+// (NULL if released)
+//
 // llgo:link (*PyObject).PyPickleBuffer_GetBuffer C.PyPickleBuffer_GetBuffer
 func (self *PyObject) PyPickleBuffer_GetBuffer() *PyBuffer {
 	return nil
 }
 
+// Release the PickleBuffer.  Returns 0 on success, -1 on error.
+//
 // llgo:link (*PyObject).PyPickleBuffer_Release C.PyPickleBuffer_Release
 func (self *PyObject) PyPickleBuffer_Release() c.Int {
 	return 0

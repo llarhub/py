@@ -4,6 +4,12 @@ package py
 
 import _ "unsafe"
 
+// A range object represents an integer range.  This is an immutable object;
+// a range cannot change its value after creation.
+//
+// Range objects behave like the corresponding tuple objects except that
+// they are represented by a start, stop, and step datamembers.
+//
 //go:linkname PyRange_Type C.PyRange_Type
 var PyRange_Type PyTypeObject
 

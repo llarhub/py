@@ -11,11 +11,16 @@ type PyComplex struct {
 	Real c.Double
 	Imag c.Double
 }
+
+// PyComplexObject represents a complex number with double-precision
+// real and imaginary parts.
 type PyComplexObject struct {
 	ObBase PyObject
 	Cval   PyComplex
 }
 
+// Complex object interface
+//
 //go:linkname PyComplex_Type C.PyComplex_Type
 var PyComplex_Type PyTypeObject
 
@@ -32,6 +37,8 @@ func (self *PyObject) PyComplex_ImagAsDouble() c.Double {
 	return 0
 }
 
+// Operations on complex numbers.
+//
 //go:linkname X_PyCSum C._Py_c_sum
 func X_PyCSum(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
 

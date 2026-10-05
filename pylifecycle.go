@@ -12,6 +12,8 @@ const PyInterpreterConfig_SHARED_GIL = 1
 const PyInterpreterConfig_OWN_GIL = 2
 const X_PyInterpreterConfig_LEGACY_CHECK_MULTI_INTERP_EXTENSIONS = 0
 
+// Signals
+//
 // llgo:type C
 type PyOSSighandlerT = func(_llcppg_param1 c.Int)
 type PyInterpreterConfig struct {
@@ -27,6 +29,8 @@ type PyInterpreterConfig struct {
 // llgo:type C
 type AtexitDatacallbackfunc = func(_llcppg_param1 unsafe.Pointer)
 
+// Initialization and finalization
+//
 //go:linkname Py_Initialize C.Py_Initialize
 func Py_Initialize()
 
@@ -42,6 +46,8 @@ func Py_FinalizeEx() c.Int
 //go:linkname Py_IsInitialized C.Py_IsInitialized
 func Py_IsInitialized() c.Int
 
+// Subinterpreter support
+//
 //go:linkname Py_NewInterpreter C.Py_NewInterpreter
 func Py_NewInterpreter() *PyThreadState
 
@@ -49,18 +55,25 @@ func Py_NewInterpreter() *PyThreadState
 func (self *PyThreadState) Py_EndInterpreter() {
 }
 
+// Py_PyAtExit is for the atexit module, Py_AtExit is for low-level
+// exit functions.
+//
 //go:linkname Py_AtExit C.Py_AtExit
 func Py_AtExit(func_ func()) c.Int
 
 //go:linkname Py_Exit C.Py_Exit
 func Py_Exit(_llcppg_param1 c.Int)
 
+// Bootstrap __main__ (defined in Modules/main.c)
+//
 //go:linkname Py_Main C.Py_Main
 func Py_Main(argc c.Int, argv **c.WcharT) c.Int
 
 //go:linkname Py_BytesMain C.Py_BytesMain
 func Py_BytesMain(argc c.Int, argv **c.Char) c.Int
 
+// In pathconfig.c
+//
 //go:linkname Py_SetProgramName C.Py_SetProgramName
 func Py_SetProgramName(_llcppg_param1 *c.WcharT)
 
@@ -85,6 +98,8 @@ func Py_GetExecPrefix() *c.WcharT
 //go:linkname Py_GetPath C.Py_GetPath
 func Py_GetPath() *c.WcharT
 
+// In their own files
+//
 //go:linkname Py_GetVersion C.Py_GetVersion
 func Py_GetVersion() *c.Char
 
@@ -112,9 +127,14 @@ var Py_Version c.Ulong
 //go:linkname Py_IsFinalizing C.Py_IsFinalizing
 func Py_IsFinalizing() c.Int
 
+// Py_FrozenMain is kept out of the Limited API until documented and present
+// in all builds of Python
+//
 //go:linkname Py_FrozenMain C.Py_FrozenMain
 func Py_FrozenMain(argc c.Int, argv **c.Char) c.Int
 
+// PEP 432 Multi-phase initialization API (Private while provisional!)
+//
 // llgo:link (*PyPreConfig).Py_PreInitialize C.Py_PreInitialize
 func (self *PyPreConfig) Py_PreInitialize() PyStatus {
 	return PyStatus{}
@@ -130,6 +150,8 @@ func (self *PyPreConfig) Py_PreInitializeFromArgs(argc PySsizeT, argv **c.WcharT
 	return PyStatus{}
 }
 
+// Initialization and finalization
+//
 // llgo:link (*PyConfig).Py_InitializeFromConfig C.Py_InitializeFromConfig
 func (self *PyConfig) Py_InitializeFromConfig() PyStatus {
 	return PyStatus{}

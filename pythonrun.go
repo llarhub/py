@@ -24,6 +24,8 @@ func (self *PyObject) PyErr_Display(_llcppg_param2 *PyObject, _llcppg_param3 *Py
 func (self *PyObject) PyErr_DisplayException() {
 }
 
+// Stuff with no proper home (yet)
+//
 //go:linkname PyOS_InputHook C.PyOS_InputHook
 var PyOS_InputHook func() c.Int
 
@@ -60,6 +62,11 @@ func Py_CompileStringExFlags(str *c.Char, filename *c.Char, start c.Int, flags *
 //go:linkname Py_CompileStringObject C.Py_CompileStringObject
 func Py_CompileStringObject(str *c.Char, filename *PyObject, start c.Int, flags *PyCompilerFlags, optimize c.Int) *PyObject
 
+// A function flavor is also exported by libpython. It is required when
+// libpython is accessed directly rather than using header files which defines
+// macros below. On Windows, for example, PyAPI_FUNC() uses dllexport to
+// export functions in pythonXX.dll.
+//
 //go:linkname PyRun_String C.PyRun_String
 func PyRun_String(str *c.Char, s c.Int, g *PyObject, l *PyObject) *PyObject
 
@@ -96,6 +103,8 @@ func PyRun_FileEx(fp *c.FILE, p *c.Char, s c.Int, g *PyObject, l *PyObject, c c.
 //go:linkname PyRun_FileFlags C.PyRun_FileFlags
 func PyRun_FileFlags(fp *c.FILE, p *c.Char, s c.Int, g *PyObject, l *PyObject, flags *PyCompilerFlags) *PyObject
 
+// Stuff with no proper home (yet)
+//
 //go:linkname PyOS_Readline C.PyOS_Readline
 func PyOS_Readline(_llcppg_param1 *c.FILE, _llcppg_param2 *c.FILE, _llcppg_param3 *c.Char) *c.Char
 

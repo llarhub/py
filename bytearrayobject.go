@@ -7,6 +7,7 @@ import (
 	_ "unsafe"
 )
 
+// Object layout
 type PyByteArrayObject struct {
 	ObBase    PyVarObject
 	ObAlloc   PySsizeT
@@ -15,12 +16,16 @@ type PyByteArrayObject struct {
 	ObExports PySsizeT
 }
 
+// Type object
+//
 //go:linkname PyByteArray_Type C.PyByteArray_Type
 var PyByteArray_Type PyTypeObject
 
 //go:linkname PyByteArrayIter_Type C.PyByteArrayIter_Type
 var PyByteArrayIter_Type PyTypeObject
 
+// Direct API functions
+//
 // llgo:link (*PyObject).PyByteArray_FromObject C.PyByteArray_FromObject
 func (self *PyObject) PyByteArray_FromObject() *PyObject {
 	return self

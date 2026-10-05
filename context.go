@@ -9,7 +9,11 @@ import (
 
 type PyContextEvent c.Uint
 
-const Py_CONTEXT_SWITCHED PyContextEvent = 1
+const
+// The current context has switched to a different context.  The object
+// passed to the watch callback is the now-current contextvars.Context
+// object, or None if no context is current.
+Py_CONTEXT_SWITCHED PyContextEvent = 1
 
 type X_pycontextobject struct {
 }
@@ -21,6 +25,12 @@ type X_pycontexttokenobject struct {
 }
 type PyContextToken = X_pycontexttokenobject
 
+// Context object watcher callback function.  The object passed to the callback
+// is event-specific; see PyContextEvent for details.
+//
+// if the callback returns with an exception set, it must return -1. Otherwise
+// it should return 0
+//
 // llgo:type C
 type PyContext_WatchCallback = func(_llcppg_param1 PyContextEvent, _llcppg_param2 *PyObject) c.Int
 
@@ -54,25 +64,60 @@ func (self *PyObject) PyContext_Exit() c.Int {
 	return 0
 }
 
+// Register a per-interpreter callback that will be invoked for context object
+// enter/exit events.
+//
+// Returns a handle that may be passed to PyContext_ClearWatcher on success,
+// or -1 and sets and error if no more handles are available.
+//
 //go:linkname PyContext_AddWatcher C.PyContext_AddWatcher
 func PyContext_AddWatcher(callback PyContext_WatchCallback) c.Int
 
+// Clear the watcher associated with the watcher_id handle.
+//
+// Returns 0 on success or -1 if no watcher exists for the provided id.
+//
 //go:linkname PyContext_ClearWatcher C.PyContext_ClearWatcher
 func PyContext_ClearWatcher(watcher_id c.Int) c.Int
 
+// Create a new context variable.
+//
+// default_value can be NULL.
+//
 //go:linkname PyContextVar_New C.PyContextVar_New
 func PyContextVar_New(name *c.Char, default_value *PyObject) *PyObject
 
+// Get a value for the variable.
+//
+// Returns -1 if an error occurred during lookup.
+//
+// Returns 0 if value either was or was not found.
+//
+// If value was found, *value will point to it.
+// If not, it will point to:
+//
+// - default_value, if not NULL;
+// - the default value of "var", if not NULL;
+// - NULL.
+//
+// '*value' will be a new ref, if not NULL.
+//
 // llgo:link (*PyObject).PyContextVar_Get C.PyContextVar_Get
 func (self *PyObject) PyContextVar_Get(default_value *PyObject, value **PyObject) c.Int {
 	return 0
 }
 
+// Set a new value for the variable.
+// Returns NULL if an error occurs.
+//
 // llgo:link (*PyObject).PyContextVar_Set C.PyContextVar_Set
 func (self *PyObject) PyContextVar_Set(value *PyObject) *PyObject {
 	return self
 }
 
+// Reset a variable to its previous value.
+// Returns 0 on success, -1 on error.
+//
 // llgo:link (*PyObject).PyContextVar_Reset C.PyContextVar_Reset
 func (self *PyObject) PyContextVar_Reset(token *PyObject) c.Int {
 	return 0

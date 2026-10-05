@@ -6,12 +6,18 @@ import _ "unsafe"
 
 type X_PyGenObject struct {
 }
+
+// --- Generators ---------------------------------------------------------
 type PyGenObject = X_PyGenObject
 type X_PyCoroObject struct {
 }
+
+// --- PyCoroObject -------------------------------------------------------
 type PyCoroObject = X_PyCoroObject
 type X_PyAsyncGenObject struct {
 }
+
+// --- Asynchronous Generators --------------------------------------------
 type PyAsyncGenObject = X_PyAsyncGenObject
 
 //go:linkname PyGen_Type C.PyGen_Type

@@ -7,8 +7,21 @@ import (
 	_ "unsafe"
 )
 
+// Track an allocated memory block in the tracemalloc module.
+// Return 0 on success, return -1 on error (failed to allocate memory to store
+// the trace).
+//
+// Return -2 if tracemalloc is disabled.
+//
+// If memory block is already tracked, update the existing trace.
+//
 //go:linkname PyTraceMalloc_Track C.PyTraceMalloc_Track
 func PyTraceMalloc_Track(domain c.Uint, ptr c.UintptrT, size c.SizeT) c.Int
 
+// Untrack an allocated memory block in the tracemalloc module.
+// Do nothing if the block was not tracked.
+//
+// Return -2 if tracemalloc is disabled, otherwise return 0.
+//
 //go:linkname PyTraceMalloc_Untrack C.PyTraceMalloc_Untrack
 func PyTraceMalloc_Untrack(domain c.Uint, ptr c.UintptrT) c.Int

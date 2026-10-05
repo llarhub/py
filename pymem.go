@@ -10,8 +10,11 @@ import (
 type PyMemAllocatorDomain c.Uint
 
 const (
+	// PyMem_RawMalloc(), PyMem_RawRealloc() and PyMem_RawFree()
 	PYMEM_DOMAIN_RAW PyMemAllocatorDomain = 0
+	// PyMem_Malloc(), PyMem_Realloc() and PyMem_Free()
 	PYMEM_DOMAIN_MEM PyMemAllocatorDomain = 1
+	// PyObject_Malloc(), PyObject_Realloc() and PyObject_Free()
 	PYMEM_DOMAIN_OBJ PyMemAllocatorDomain = 2
 )
 
@@ -37,6 +40,15 @@ type PyMemAllocatorEx struct {
 	Free    func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 unsafe.Pointer)
 }
 
+// Functions
+//
+// Functions supplying platform-independent semantics for malloc/realloc/
+// free.  These functions make sure that allocating 0 bytes returns a distinct
+// non-NULL pointer (whenever possible -- if we're flat out of memory, NULL
+// may be returned), even if the platform malloc and realloc don't.
+// Returned pointers must be checked for NULL explicitly.  No action is
+// performed on failure (no exception is set, no warning is printed, etc).
+//
 //go:linkname PyMem_Malloc C.PyMem_Malloc
 func PyMem_Malloc(size c.SizeT) unsafe.Pointer
 
@@ -49,6 +61,11 @@ func PyMem_Realloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 //go:linkname PyMem_Free C.PyMem_Free
 func PyMem_Free(ptr unsafe.Pointer)
 
+// Memory allocator which doesn't require the GIL to be held.
+// Usually, it's just a thin wrapper to functions of the standard C library:
+// malloc(), calloc(), realloc() and free(). The difference is that
+// tracemalloc can track these memory allocations.
+//
 //go:linkname PyMem_RawMalloc C.PyMem_RawMalloc
 func PyMem_RawMalloc(size c.SizeT) unsafe.Pointer
 
@@ -61,13 +78,44 @@ func PyMem_RawRealloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 //go:linkname PyMem_RawFree C.PyMem_RawFree
 func PyMem_RawFree(ptr unsafe.Pointer)
 
+// Get the memory block allocator of the specified domain.
+//
 // llgo:link PyMemAllocatorDomain.PyMem_GetAllocator C.PyMem_GetAllocator
 func (self PyMemAllocatorDomain) PyMem_GetAllocator(allocator *PyMemAllocatorEx) {
 }
 
+// Set the memory block allocator of the specified domain.
+//
+// The new allocator must return a distinct non-NULL pointer when requesting
+// zero bytes.
+//
+// For the PYMEM_DOMAIN_RAW domain, the allocator must be thread-safe: the GIL
+// is not held when the allocator is called.
+//
+// If the new allocator is not a hook (don't call the previous allocator), the
+// PyMem_SetupDebugHooks() function must be called to reinstall the debug hooks
+// on top on the new allocator.
+//
 // llgo:link PyMemAllocatorDomain.PyMem_SetAllocator C.PyMem_SetAllocator
 func (self PyMemAllocatorDomain) PyMem_SetAllocator(allocator *PyMemAllocatorEx) {
 }
 
+// Setup hooks to detect bugs in the following Python memory allocator
+// functions:
+//
+// - PyMem_RawMalloc(), PyMem_RawRealloc(), PyMem_RawFree()
+// - PyMem_Malloc(), PyMem_Realloc(), PyMem_Free()
+// - PyObject_Malloc(), PyObject_Realloc() and PyObject_Free()
+//
+// Newly allocated memory is filled with the byte 0xCB, freed memory is filled
+// with the byte 0xDB. Additional checks:
+//
+// - detect API violations, ex: PyObject_Free() called on a buffer allocated
+// by PyMem_Malloc()
+// - detect write before the start of the buffer (buffer underflow)
+// - detect write after the end of the buffer (buffer overflow)
+//
+// The function does nothing if Python is not compiled is debug mode.
+//
 //go:linkname PyMem_SetupDebugHooks C.PyMem_SetupDebugHooks
 func PyMem_SetupDebugHooks()

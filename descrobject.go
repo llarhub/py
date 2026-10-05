@@ -40,6 +40,12 @@ type PyGetSetDef struct {
 	Doc     *c.Char
 	Closure unsafe.Pointer
 }
+
+// An array of PyMemberDef structures defines the name, type and offset
+// of selected members of a C structure.  These can be read by
+// PyMember_GetOne() and set by PyMember_SetOne() (except if their READONLY
+// flag is set).  The array must be terminated with an entry whose name
+// pointer is NULL.
 type PyMemberDef struct {
 	Name   *c.Char
 	Type   c.Int
@@ -68,6 +74,8 @@ type Wrapperbase struct {
 	Flags      c.Int
 	NameStrobj *PyObject
 }
+
+// Various kinds of descriptor objects
 type PyDescrObject struct {
 	ObBase    PyObject
 	DType     *PyTypeObject

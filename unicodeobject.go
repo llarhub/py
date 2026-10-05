@@ -16,16 +16,31 @@ const SSTATE_INTERNED_IMMORTAL_STATIC = 3
 type PyUnicode_Kind c.Uint
 
 const (
+	// Return values of the PyUnicode_KIND() function:
 	PyUnicode_1BYTE_KIND PyUnicode_Kind = 1
+	// Return values of the PyUnicode_KIND() function:
 	PyUnicode_2BYTE_KIND PyUnicode_Kind = 2
+	// Return values of the PyUnicode_KIND() function:
 	PyUnicode_4BYTE_KIND PyUnicode_Kind = 4
 )
 
+// Py_UCS4 and Py_UCS2 are typedefs for the respective
+// unicode representations.
 type Py_UCS4 = c.Uint32T
 type Py_UCS2 = c.Uint16T
 type Py_UCS1 = c.Uint8T
+
+// Py_UNICODE was the native Unicode storage format (code unit) used by
+// Python and represents a single Unicode element in the Unicode type.
+// With PEP 393, Py_UNICODE is deprecated and replaced with a
+// typedef to wchar_t.
 type PY_UNICODE_TYPE = c.WcharT
 type Py_UNICODE = c.WcharT
+
+// ASCII-only strings created through PyUnicode_New use the PyASCIIObject
+// structure. state.ascii and state.compact are set, and the data
+// immediately follow the structure. utf8_length can be found
+// in the length field; the utf8 pointer is equal to the data pointer.
 type PyASCIIObject struct {
 	ObBase PyObject
 	Length PySsizeT
@@ -40,11 +55,17 @@ type _llcppg_anon_2 struct {
 	StaticallyAllocated c.Uint
 	X                   c.Uint
 }
+
+// Non-ASCII strings allocated through PyUnicode_New use the
+// PyCompactUnicodeObject structure. state.compact is set, and the data
+// immediately follow the structure.
 type PyCompactUnicodeObject struct {
 	X_base     PyASCIIObject
 	Utf8Length PySsizeT
 	Utf8       *c.Char
 }
+
+// Object format for Unicode subclasses.
 type PyUnicodeObject struct {
 	X_base PyCompactUnicodeObject
 	Data   _llcppg_anon_3
@@ -54,6 +75,8 @@ type _llcppg_anon_3 struct {
 }
 type PyUnicodeWriter struct {
 }
+
+// --- Private _PyUnicodeWriter API ---------------------------------------
 type X_PyUnicodeWriter struct {
 	Buffer       *PyObject
 	Data         unsafe.Pointer
@@ -73,9 +96,14 @@ var PyUnicode_Type PyTypeObject
 //go:linkname PyUnicodeIter_Type C.PyUnicodeIter_Type
 var PyUnicodeIter_Type PyTypeObject
 
+// Similar to PyUnicode_FromUnicode(), but u points to UTF-8 encoded bytes
+//
 //go:linkname PyUnicode_FromStringAndSize C.PyUnicode_FromStringAndSize
 func PyUnicode_FromStringAndSize(u *c.Char, size PySsizeT) *PyObject
 
+// Similar to PyUnicode_FromUnicode(), but u points to null-terminated
+// UTF-8 encoded bytes.  The size is determined with strlen().
+//
 //go:linkname PyUnicode_FromString C.PyUnicode_FromString
 func PyUnicode_FromString(u *c.Char) *PyObject
 
@@ -84,39 +112,90 @@ func (self *PyObject) PyUnicode_Substring(start PySsizeT, end PySsizeT) *PyObjec
 	return self
 }
 
+// Copy the string into a UCS4 buffer including the null character if copy_null
+// is set. Return NULL and raise an exception on error. Raise a SystemError if
+// the buffer is smaller than the string. Return buffer on success.
+//
+// buflen is the length of the buffer in (Py_UCS4) characters.
+//
 // llgo:link (*PyObject).PyUnicode_AsUCS4 C.PyUnicode_AsUCS4
 func (self *PyObject) PyUnicode_AsUCS4(buffer *Py_UCS4, buflen PySsizeT, copy_null c.Int) *Py_UCS4 {
 	return nil
 }
 
+// Copy the string into a UCS4 buffer. A new buffer is allocated using
+// PyMem_Malloc; if this fails, NULL is returned with a memory error
+// exception set.
+//
 // llgo:link (*PyObject).PyUnicode_AsUCS4Copy C.PyUnicode_AsUCS4Copy
 func (self *PyObject) PyUnicode_AsUCS4Copy() *Py_UCS4 {
 	return nil
 }
 
+// Get the length of the Unicode object.
+//
 // llgo:link (*PyObject).PyUnicode_GetLength C.PyUnicode_GetLength
 func (self *PyObject) PyUnicode_GetLength() PySsizeT {
 	return 0
 }
 
+// Read a character from the string.
+//
 // llgo:link (*PyObject).PyUnicode_ReadChar C.PyUnicode_ReadChar
 func (self *PyObject) PyUnicode_ReadChar(index PySsizeT) Py_UCS4 {
 	return 0
 }
 
+// Write a character to the string. The string must have been created through
+// PyUnicode_New, must not be shared, and must not have been hashed yet.
+//
+// Return 0 on success, -1 on error.
+//
 // llgo:link (*PyObject).PyUnicode_WriteChar C.PyUnicode_WriteChar
 func (self *PyObject) PyUnicode_WriteChar(index PySsizeT, character Py_UCS4) c.Int {
 	return 0
 }
 
+// Resize a Unicode object. The length is the number of codepoints.
+//
+// unicode is modified to point to the new (resized) object and 0
+// returned on success.
+//
+// Try to resize the string in place (which is usually faster than allocating
+// a new string and copy characters), or create a new string.
+//
+// Error handling is implemented as follows: an exception is set, -1
+// is returned and *unicode left untouched.
+//
+// WARNING: The function doesn't check string content, the result may not be a
+// string in canonical representation.
+//
 //go:linkname PyUnicode_Resize C.PyUnicode_Resize
 func PyUnicode_Resize(unicode **PyObject, length PySsizeT) c.Int
 
+// Decode obj to a Unicode object.
+//
+// bytes, bytearray and other bytes-like objects are decoded according to the
+// given encoding and error handler. The encoding and error handler can be
+// NULL to have the interface use UTF-8 and "strict".
+//
+// All other objects (including Unicode objects) raise an exception.
+//
+// The API returns NULL in case of an error. The caller is responsible
+// for decref'ing the returned objects.
+//
 // llgo:link (*PyObject).PyUnicode_FromEncodedObject C.PyUnicode_FromEncodedObject
 func (self *PyObject) PyUnicode_FromEncodedObject(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Copy an instance of a Unicode subtype to a new true Unicode object if
+// necessary. If obj is already a true Unicode object (not a subtype), return
+// the reference with *incremented* refcount.
+//
+// The API returns NULL in case of an error. The caller is responsible
+// for decref'ing the returned objects.
+//
 // llgo:link (*PyObject).PyUnicode_FromObject C.PyUnicode_FromObject
 func (self *PyObject) PyUnicode_FromObject() *PyObject {
 	return self
@@ -134,64 +213,141 @@ func PyUnicode_InternInPlace(_llcppg_param1 **PyObject)
 //go:linkname PyUnicode_InternFromString C.PyUnicode_InternFromString
 func PyUnicode_InternFromString(u *c.Char) *PyObject
 
+// Create a Unicode Object from the wchar_t buffer w of the given
+// size.
+//
+// The buffer is copied into the new object.
+//
 //go:linkname PyUnicode_FromWideChar C.PyUnicode_FromWideChar
 func PyUnicode_FromWideChar(w *c.WcharT, size PySsizeT) *PyObject
 
+// Copies the Unicode Object contents into the wchar_t buffer w.  At
+// most size wchar_t characters are copied.
+//
+// Note that the resulting wchar_t string may or may not be
+// 0-terminated.  It is the responsibility of the caller to make sure
+// that the wchar_t string is 0-terminated in case this is required by
+// the application.
+//
+// Returns the number of wchar_t characters copied (excluding a
+// possibly trailing 0-termination character) or -1 in case of an
+// error.
+//
 // llgo:link (*PyObject).PyUnicode_AsWideChar C.PyUnicode_AsWideChar
 func (self *PyObject) PyUnicode_AsWideChar(w *c.WcharT, size PySsizeT) PySsizeT {
 	return 0
 }
 
+// Convert the Unicode object to a wide character string. The output string
+// always ends with a nul character. If size is not NULL, write the number of
+// wide characters (excluding the null character) into *size.
+//
+// Returns a buffer allocated by PyMem_Malloc() (use PyMem_Free() to free it)
+// on success. On error, returns NULL, *size is undefined and raises a
+// MemoryError.
+//
 // llgo:link (*PyObject).PyUnicode_AsWideCharString C.PyUnicode_AsWideCharString
 func (self *PyObject) PyUnicode_AsWideCharString(size *PySsizeT) *c.WcharT {
 	return nil
 }
 
+// Create a Unicode Object from the given Unicode code point ordinal.
+//
+// The ordinal must be in range(0x110000). A ValueError is
+// raised in case it is not.
+//
 //go:linkname PyUnicode_FromOrdinal C.PyUnicode_FromOrdinal
 func PyUnicode_FromOrdinal(ordinal c.Int) *PyObject
 
+// Returns "utf-8".
+//
 //go:linkname PyUnicode_GetDefaultEncoding C.PyUnicode_GetDefaultEncoding
 func PyUnicode_GetDefaultEncoding() *c.Char
 
+// Create a Unicode object by decoding the encoded string s of the
+// given size.
+//
 //go:linkname PyUnicode_Decode C.PyUnicode_Decode
 func PyUnicode_Decode(s *c.Char, size PySsizeT, encoding *c.Char, errors *c.Char) *PyObject
 
+// Decode a Unicode object unicode and return the result as Python
+// object.
+//
+// This API is DEPRECATED and will be removed in 3.15.
+// The only supported standard encoding is rot13.
+// Use PyCodec_Decode() to decode with rot13 and non-standard codecs
+// that decode from str.
+//
 // llgo:link (*PyObject).PyUnicode_AsDecodedObject C.PyUnicode_AsDecodedObject
 func (self *PyObject) PyUnicode_AsDecodedObject(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Decode a Unicode object unicode and return the result as Unicode
+// object.
+//
+// This API is DEPRECATED and will be removed in 3.15.
+// The only supported standard encoding is rot13.
+// Use PyCodec_Decode() to decode with rot13 and non-standard codecs
+// that decode from str to str.
+//
 // llgo:link (*PyObject).PyUnicode_AsDecodedUnicode C.PyUnicode_AsDecodedUnicode
 func (self *PyObject) PyUnicode_AsDecodedUnicode(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Encodes a Unicode object and returns the result as Python
+// object.
+//
+// This API is DEPRECATED and will be removed in 3.15.
+// It is superseded by PyUnicode_AsEncodedString()
+// since all standard encodings (except rot13) encode str to bytes.
+// Use PyCodec_Encode() for encoding with rot13 and non-standard codecs
+// that encode form str to non-bytes.
+//
 // llgo:link (*PyObject).PyUnicode_AsEncodedObject C.PyUnicode_AsEncodedObject
 func (self *PyObject) PyUnicode_AsEncodedObject(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Encodes a Unicode object and returns the result as Python string
+// object.
+//
 // llgo:link (*PyObject).PyUnicode_AsEncodedString C.PyUnicode_AsEncodedString
 func (self *PyObject) PyUnicode_AsEncodedString(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Encodes a Unicode object and returns the result as Unicode
+// object.
+//
+// This API is DEPRECATED and will be removed in 3.15.
+// The only supported standard encodings is rot13.
+// Use PyCodec_Encode() to encode with rot13 and non-standard codecs
+// that encode from str to str.
+//
 // llgo:link (*PyObject).PyUnicode_AsEncodedUnicode C.PyUnicode_AsEncodedUnicode
 func (self *PyObject) PyUnicode_AsEncodedUnicode(encoding *c.Char, errors *c.Char) *PyObject {
 	return self
 }
 
+// Build an encoding map.
+//
 // llgo:link (*PyObject).PyUnicode_BuildEncodingMap C.PyUnicode_BuildEncodingMap
 func (self *PyObject) PyUnicode_BuildEncodingMap() *PyObject {
 	return self
 }
 
+// --- UTF-7 Codecs -------------------------------------------------------
+//
 //go:linkname PyUnicode_DecodeUTF7 C.PyUnicode_DecodeUTF7
 func PyUnicode_DecodeUTF7(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
 //go:linkname PyUnicode_DecodeUTF7Stateful C.PyUnicode_DecodeUTF7Stateful
 func PyUnicode_DecodeUTF7Stateful(string *c.Char, length PySsizeT, errors *c.Char, consumed *PySsizeT) *PyObject
 
+// --- UTF-8 Codecs -------------------------------------------------------
+//
 //go:linkname PyUnicode_DecodeUTF8 C.PyUnicode_DecodeUTF8
 func PyUnicode_DecodeUTF8(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
@@ -208,28 +364,78 @@ func (self *PyObject) PyUnicode_AsUTF8AndSize(size *PySsizeT) *c.Char {
 	return nil
 }
 
+// Decodes length bytes from a UTF-32 encoded buffer string and returns
+// the corresponding Unicode object.
+//
+// errors (if non-NULL) defines the error handling. It defaults
+// to "strict".
+//
+// If byteorder is non-NULL, the decoder starts decoding using the
+// given byte order:
+//
+// byteorder == -1: little endian
+// byteorder == 0:  native order
+// byteorder == 1:  big endian
+//
+// In native mode, the first four bytes of the stream are checked for a
+// BOM mark. If found, the BOM mark is analysed, the byte order
+// adjusted and the BOM skipped.  In the other modes, no BOM mark
+// interpretation is done. After completion, *byteorder is set to the
+// current byte order at the end of input data.
+//
+// If byteorder is NULL, the codec starts in native order mode.
+//
 //go:linkname PyUnicode_DecodeUTF32 C.PyUnicode_DecodeUTF32
 func PyUnicode_DecodeUTF32(string *c.Char, length PySsizeT, errors *c.Char, byteorder *c.Int) *PyObject
 
 //go:linkname PyUnicode_DecodeUTF32Stateful C.PyUnicode_DecodeUTF32Stateful
 func PyUnicode_DecodeUTF32Stateful(string *c.Char, length PySsizeT, errors *c.Char, byteorder *c.Int, consumed *PySsizeT) *PyObject
 
+// Returns a Python string using the UTF-32 encoding in native byte
+// order. The string always starts with a BOM mark.
+//
 // llgo:link (*PyObject).PyUnicode_AsUTF32String C.PyUnicode_AsUTF32String
 func (self *PyObject) PyUnicode_AsUTF32String() *PyObject {
 	return self
 }
 
+// Decodes length bytes from a UTF-16 encoded buffer string and returns
+// the corresponding Unicode object.
+//
+// errors (if non-NULL) defines the error handling. It defaults
+// to "strict".
+//
+// If byteorder is non-NULL, the decoder starts decoding using the
+// given byte order:
+//
+// byteorder == -1: little endian
+// byteorder == 0:  native order
+// byteorder == 1:  big endian
+//
+// In native mode, the first two bytes of the stream are checked for a
+// BOM mark. If found, the BOM mark is analysed, the byte order
+// adjusted and the BOM skipped.  In the other modes, no BOM mark
+// interpretation is done. After completion, *byteorder is set to the
+// current byte order at the end of input data.
+//
+// If byteorder is NULL, the codec starts in native order mode.
+//
 //go:linkname PyUnicode_DecodeUTF16 C.PyUnicode_DecodeUTF16
 func PyUnicode_DecodeUTF16(string *c.Char, length PySsizeT, errors *c.Char, byteorder *c.Int) *PyObject
 
 //go:linkname PyUnicode_DecodeUTF16Stateful C.PyUnicode_DecodeUTF16Stateful
 func PyUnicode_DecodeUTF16Stateful(string *c.Char, length PySsizeT, errors *c.Char, byteorder *c.Int, consumed *PySsizeT) *PyObject
 
+// Returns a Python string using the UTF-16 encoding in native byte
+// order. The string always starts with a BOM mark.
+//
 // llgo:link (*PyObject).PyUnicode_AsUTF16String C.PyUnicode_AsUTF16String
 func (self *PyObject) PyUnicode_AsUTF16String() *PyObject {
 	return self
 }
 
+// --- Unicode-Escape Codecs ----------------------------------------------
+//
 //go:linkname PyUnicode_DecodeUnicodeEscape C.PyUnicode_DecodeUnicodeEscape
 func PyUnicode_DecodeUnicodeEscape(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
@@ -238,6 +444,8 @@ func (self *PyObject) PyUnicode_AsUnicodeEscapeString() *PyObject {
 	return self
 }
 
+// --- Raw-Unicode-Escape Codecs ------------------------------------------
+//
 //go:linkname PyUnicode_DecodeRawUnicodeEscape C.PyUnicode_DecodeRawUnicodeEscape
 func PyUnicode_DecodeRawUnicodeEscape(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
@@ -246,6 +454,10 @@ func (self *PyObject) PyUnicode_AsRawUnicodeEscapeString() *PyObject {
 	return self
 }
 
+// --- Latin-1 Codecs -----------------------------------------------------
+//
+// Note: Latin-1 corresponds to the first 256 Unicode ordinals.
+//
 //go:linkname PyUnicode_DecodeLatin1 C.PyUnicode_DecodeLatin1
 func PyUnicode_DecodeLatin1(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
@@ -254,6 +466,10 @@ func (self *PyObject) PyUnicode_AsLatin1String() *PyObject {
 	return self
 }
 
+// --- ASCII Codecs -------------------------------------------------------
+//
+// Only 7-bit ASCII data is expected. All other codes generate errors.
+//
 //go:linkname PyUnicode_DecodeASCII C.PyUnicode_DecodeASCII
 func PyUnicode_DecodeASCII(string *c.Char, length PySsizeT, errors *c.Char) *PyObject
 
@@ -262,6 +478,21 @@ func (self *PyObject) PyUnicode_AsASCIIString() *PyObject {
 	return self
 }
 
+// --- Character Map Codecs -----------------------------------------------
+//
+// This codec uses mappings to encode and decode characters.
+//
+// Decoding mappings must map byte ordinals (integers in the range from 0 to
+// 255) to Unicode strings, integers (which are then interpreted as Unicode
+// ordinals) or None.  Unmapped data bytes (ones which cause a LookupError)
+// as well as mapped to None, 0xFFFE or '\ufffe' are treated as "undefined
+// mapping" and cause an error.
+//
+// Encoding mappings must map Unicode ordinal integers to bytes objects,
+// integers in the range from 0 to 255 or None.  Unmapped character
+// ordinals (ones which cause a LookupError) as well as mapped to
+// None are treated as "undefined mapping" and cause an error.
+//
 //go:linkname PyUnicode_DecodeCharmap C.PyUnicode_DecodeCharmap
 func PyUnicode_DecodeCharmap(string *c.Char, length PySsizeT, mapping *PyObject, errors *c.Char) *PyObject
 
@@ -270,119 +501,230 @@ func (self *PyObject) PyUnicode_AsCharmapString(mapping *PyObject) *PyObject {
 	return self
 }
 
+// Decode a string from the current locale encoding. The decoder is strict if
+// surrogateescape* is equal to zero, otherwise it uses the 'surrogateescape'
+// error handler (PEP 383) to escape undecodable bytes. If a byte sequence can
+// be decoded as a surrogate character and *surrogateescape* is not equal to
+// zero, the byte sequence is escaped using the 'surrogateescape' error handler
+// instead of being decoded. *str* must end with a null character but cannot
+// contain embedded null characters.
+//
 //go:linkname PyUnicode_DecodeLocaleAndSize C.PyUnicode_DecodeLocaleAndSize
 func PyUnicode_DecodeLocaleAndSize(str *c.Char, len PySsizeT, errors *c.Char) *PyObject
 
+// Similar to PyUnicode_DecodeLocaleAndSize(), but compute the string
+// length using strlen().
+//
 //go:linkname PyUnicode_DecodeLocale C.PyUnicode_DecodeLocale
 func PyUnicode_DecodeLocale(str *c.Char, errors *c.Char) *PyObject
 
+// Encode a Unicode object to the current locale encoding. The encoder is
+// strict is *surrogateescape* is equal to zero, otherwise the
+// "surrogateescape" error handler is used. Return a bytes object. The string
+// cannot contain embedded null characters.
+//
 // llgo:link (*PyObject).PyUnicode_EncodeLocale C.PyUnicode_EncodeLocale
 func (self *PyObject) PyUnicode_EncodeLocale(errors *c.Char) *PyObject {
 	return self
 }
 
+// ParseTuple converter: encode str objects to bytes using
+// PyUnicode_EncodeFSDefault(); bytes objects are output as-is.
+//
 // llgo:link (*PyObject).PyUnicode_FSConverter C.PyUnicode_FSConverter
 func (self *PyObject) PyUnicode_FSConverter(_llcppg_param2 unsafe.Pointer) c.Int {
 	return 0
 }
 
+// ParseTuple converter: decode bytes objects to unicode using
+// PyUnicode_DecodeFSDefaultAndSize(); str objects are output as-is.
+//
 // llgo:link (*PyObject).PyUnicode_FSDecoder C.PyUnicode_FSDecoder
 func (self *PyObject) PyUnicode_FSDecoder(_llcppg_param2 unsafe.Pointer) c.Int {
 	return 0
 }
 
+// Decode a null-terminated string from the Python filesystem encoding
+// and error handler.
+//
+// If the string length is known, use PyUnicode_DecodeFSDefaultAndSize().
+//
 //go:linkname PyUnicode_DecodeFSDefault C.PyUnicode_DecodeFSDefault
 func PyUnicode_DecodeFSDefault(s *c.Char) *PyObject
 
+// Decode a string from the Python filesystem encoding and error handler.
+//
 //go:linkname PyUnicode_DecodeFSDefaultAndSize C.PyUnicode_DecodeFSDefaultAndSize
 func PyUnicode_DecodeFSDefaultAndSize(s *c.Char, size PySsizeT) *PyObject
 
+// Encode a Unicode object to the Python filesystem encoding and error handler.
+// Return bytes.
+//
 // llgo:link (*PyObject).PyUnicode_EncodeFSDefault C.PyUnicode_EncodeFSDefault
 func (self *PyObject) PyUnicode_EncodeFSDefault() *PyObject {
 	return self
 }
 
+// Concat two strings giving a new Unicode string.
+//
 // llgo:link (*PyObject).PyUnicode_Concat C.PyUnicode_Concat
 func (self *PyObject) PyUnicode_Concat(right *PyObject) *PyObject {
 	return self
 }
 
+// Concat two strings and put the result in *pleft
+// (sets *pleft to NULL on error)
+//
 //go:linkname PyUnicode_Append C.PyUnicode_Append
 func PyUnicode_Append(pleft **PyObject, right *PyObject)
 
+// Concat two strings, put the result in *pleft and drop the right object
+// (sets *pleft to NULL on error)
+//
 //go:linkname PyUnicode_AppendAndDel C.PyUnicode_AppendAndDel
 func PyUnicode_AppendAndDel(pleft **PyObject, right *PyObject)
 
+// Split a string giving a list of Unicode strings.
+//
+// If sep is NULL, splitting will be done at all whitespace
+// substrings. Otherwise, splits occur at the given separator.
+//
+// At most maxsplit splits will be done. If negative, no limit is set.
+//
+// Separators are not included in the resulting list.
+//
 // llgo:link (*PyObject).PyUnicode_Split C.PyUnicode_Split
 func (self *PyObject) PyUnicode_Split(sep *PyObject, maxsplit PySsizeT) *PyObject {
 	return self
 }
 
+// Dito, but split at line breaks.
+//
+// CRLF is considered to be one line break. Line breaks are not
+// included in the resulting list.
+//
 // llgo:link (*PyObject).PyUnicode_Splitlines C.PyUnicode_Splitlines
 func (self *PyObject) PyUnicode_Splitlines(keepends c.Int) *PyObject {
 	return self
 }
 
+// Partition a string using a given separator.
+//
 // llgo:link (*PyObject).PyUnicode_Partition C.PyUnicode_Partition
 func (self *PyObject) PyUnicode_Partition(sep *PyObject) *PyObject {
 	return self
 }
 
+// Partition a string using a given separator, searching from the end of the
+// string.
+//
 // llgo:link (*PyObject).PyUnicode_RPartition C.PyUnicode_RPartition
 func (self *PyObject) PyUnicode_RPartition(sep *PyObject) *PyObject {
 	return self
 }
 
+// Split a string giving a list of Unicode strings.
+//
+// If sep is NULL, splitting will be done at all whitespace
+// substrings. Otherwise, splits occur at the given separator.
+//
+// At most maxsplit splits will be done. But unlike PyUnicode_Split
+// PyUnicode_RSplit splits from the end of the string. If negative,
+// no limit is set.
+//
+// Separators are not included in the resulting list.
+//
 // llgo:link (*PyObject).PyUnicode_RSplit C.PyUnicode_RSplit
 func (self *PyObject) PyUnicode_RSplit(sep *PyObject, maxsplit PySsizeT) *PyObject {
 	return self
 }
 
+// Translate a string by applying a character mapping table to it and
+// return the resulting Unicode object.
+//
+// The mapping table must map Unicode ordinal integers to Unicode strings,
+// Unicode ordinal integers or None (causing deletion of the character).
+//
+// Mapping tables may be dictionaries or sequences. Unmapped character
+// ordinals (ones which cause a LookupError) are left untouched and
+// are copied as-is.
+//
 // llgo:link (*PyObject).PyUnicode_Translate C.PyUnicode_Translate
 func (self *PyObject) PyUnicode_Translate(table *PyObject, errors *c.Char) *PyObject {
 	return self
 }
 
+// Join a sequence of strings using the given separator and return
+// the resulting Unicode string.
+//
 // llgo:link (*PyObject).PyUnicode_Join C.PyUnicode_Join
 func (self *PyObject) PyUnicode_Join(seq *PyObject) *PyObject {
 	return self
 }
 
+// Return 1 if substr matches str[start:end] at the given tail end, 0
+// otherwise.
+//
 // llgo:link (*PyObject).PyUnicode_Tailmatch C.PyUnicode_Tailmatch
 func (self *PyObject) PyUnicode_Tailmatch(substr *PyObject, start PySsizeT, end PySsizeT, direction c.Int) PySsizeT {
 	return 0
 }
 
+// Return the first position of substr in str[start:end] using the
+// given search direction or -1 if not found. -2 is returned in case
+// an error occurred and an exception is set.
+//
 // llgo:link (*PyObject).PyUnicode_Find C.PyUnicode_Find
 func (self *PyObject) PyUnicode_Find(substr *PyObject, start PySsizeT, end PySsizeT, direction c.Int) PySsizeT {
 	return 0
 }
 
+// Like PyUnicode_Find, but search for single character only.
+//
 // llgo:link (*PyObject).PyUnicode_FindChar C.PyUnicode_FindChar
 func (self *PyObject) PyUnicode_FindChar(ch Py_UCS4, start PySsizeT, end PySsizeT, direction c.Int) PySsizeT {
 	return 0
 }
 
+// Count the number of occurrences of substr in str[start:end].
+//
 // llgo:link (*PyObject).PyUnicode_Count C.PyUnicode_Count
 func (self *PyObject) PyUnicode_Count(substr *PyObject, start PySsizeT, end PySsizeT) PySsizeT {
 	return 0
 }
 
+// Replace at most maxcount occurrences of substr in str with replstr
+// and return the resulting Unicode object.
+//
 // llgo:link (*PyObject).PyUnicode_Replace C.PyUnicode_Replace
 func (self *PyObject) PyUnicode_Replace(substr *PyObject, replstr *PyObject, maxcount PySsizeT) *PyObject {
 	return self
 }
 
+// Compare two strings and return -1, 0, 1 for less than, equal,
+// greater than resp.
+// Raise an exception and return -1 on error.
+//
 // llgo:link (*PyObject).PyUnicode_Compare C.PyUnicode_Compare
 func (self *PyObject) PyUnicode_Compare(right *PyObject) c.Int {
 	return 0
 }
 
+// Compare a Unicode object with C string and return -1, 0, 1 for less than,
+// equal, and greater than, respectively.  It is best to pass only
+// ASCII-encoded strings, but the function interprets the input string as
+// ISO-8859-1 if it contains non-ASCII characters.
+// This function does not raise exceptions.
+//
 // llgo:link (*PyObject).PyUnicode_CompareWithASCIIString C.PyUnicode_CompareWithASCIIString
 func (self *PyObject) PyUnicode_CompareWithASCIIString(right *c.Char) c.Int {
 	return 0
 }
 
+// Compare a Unicode object with UTF-8 encoded C string.
+// Return 1 if they are equal, or 0 otherwise.
+// This function does not raise exceptions.
+//
 // llgo:link (*PyObject).PyUnicode_EqualToUTF8 C.PyUnicode_EqualToUTF8
 func (self *PyObject) PyUnicode_EqualToUTF8(_llcppg_param2 *c.Char) c.Int {
 	return 0
@@ -398,21 +740,42 @@ func (self *PyObject) PyUnicode_Equal(str2 *PyObject) c.Int {
 	return 0
 }
 
+// Rich compare two strings and return one of the following:
+//
+// - NULL in case an exception was raised
+// - Py_True or Py_False for successful comparisons
+// - Py_NotImplemented in case the type combination is unknown
+//
+// Possible values for op:
+//
+// Py_GT, Py_GE, Py_EQ, Py_NE, Py_LT, Py_LE
+//
 // llgo:link (*PyObject).PyUnicode_RichCompare C.PyUnicode_RichCompare
 func (self *PyObject) PyUnicode_RichCompare(right *PyObject, op c.Int) *PyObject {
 	return self
 }
 
+// Apply an argument tuple or dictionary to a format string and return
+// the resulting Unicode string.
+//
 // llgo:link (*PyObject).PyUnicode_Format C.PyUnicode_Format
 func (self *PyObject) PyUnicode_Format(args *PyObject) *PyObject {
 	return self
 }
 
+// Checks whether element is contained in container and return 1/0
+// accordingly.
+//
+// element has to coerce to a one element Unicode string. -1 is
+// returned in case of an error.
+//
 // llgo:link (*PyObject).PyUnicode_Contains C.PyUnicode_Contains
 func (self *PyObject) PyUnicode_Contains(element *PyObject) c.Int {
 	return 0
 }
 
+// Checks whether argument is a valid identifier.
+//
 // llgo:link (*PyObject).PyUnicode_IsIdentifier C.PyUnicode_IsIdentifier
 func (self *PyObject) PyUnicode_IsIdentifier() c.Int {
 	return 0
@@ -440,19 +803,53 @@ func (self *PyObject) PyUnicode_DATA() unsafe.Pointer {
 	return nil
 }
 
+// With PEP 393, this is the recommended way to allocate a new unicode object.
+// This function will allocate the object and its buffer in a single memory
+// block.  Objects created using this function are not resizable.
+//
 //go:linkname PyUnicode_New C.PyUnicode_New
 func PyUnicode_New(size PySsizeT, maxchar Py_UCS4) *PyObject
 
+// Copy character from one unicode object into another, this function performs
+// character conversion when necessary and falls back to memcpy() if possible.
+//
+// Fail if to is too small (smaller than *how_many* or smaller than
+// len(from)-from_start), or if kind(from[from_start:from_start+how_many]) >
+// kind(to), or if *to* has more than 1 reference.
+//
+// Return the number of written character, or return -1 and raise an exception
+// on error.
+//
+// Pseudo-code:
+//
+// how_many = min(how_many, len(from) - from_start)
+// to[to_start:to_start+how_many] = from[from_start:from_start+how_many]
+// return how_many
+//
+// Note: The function doesn't write a terminating null character.
+//
 // llgo:link (*PyObject).PyUnicode_CopyCharacters C.PyUnicode_CopyCharacters
 func (self *PyObject) PyUnicode_CopyCharacters(to_start PySsizeT, from *PyObject, from_start PySsizeT, how_many PySsizeT) PySsizeT {
 	return 0
 }
 
+// Fill a string with a character: write fill_char into
+// unicode[start:start+length].
+//
+// Fail if fill_char is bigger than the string maximum character, or if the
+// string has more than 1 reference.
+//
+// Return the number of written character, or return -1 and raise an exception
+// on error.
+//
 // llgo:link (*PyObject).PyUnicode_Fill C.PyUnicode_Fill
 func (self *PyObject) PyUnicode_Fill(start PySsizeT, length PySsizeT, fill_char Py_UCS4) PySsizeT {
 	return 0
 }
 
+// Create a new string from a buffer of Py_UCS1, Py_UCS2 or Py_UCS4 characters.
+// Scan the string to find the maximum character.
+//
 //go:linkname PyUnicode_FromKindAndData C.PyUnicode_FromKindAndData
 func PyUnicode_FromKindAndData(kind c.Int, buffer unsafe.Pointer, size PySsizeT) *PyObject
 
@@ -518,59 +915,109 @@ func (self *PyUnicodeWriter) DecodeUTF8Stateful(string *c.Char, length PySsizeT,
 	return 0
 }
 
+// Initialize a Unicode writer.
+//
+// By default, the minimum buffer size is 0 character and overallocation is
+// disabled. Set min_length, min_char and overallocate attributes to control
+// the allocation of the buffer.
+//
 // llgo:link (*X_PyUnicodeWriter).Init C._PyUnicodeWriter_Init
 func (self *X_PyUnicodeWriter) Init() {
 }
 
+// Don't call this function directly, use the _PyUnicodeWriter_Prepare() macro
+// instead.
+//
 // llgo:link (*X_PyUnicodeWriter).PrepareInternal C._PyUnicodeWriter_PrepareInternal
 func (self *X_PyUnicodeWriter) PrepareInternal(length PySsizeT, maxchar Py_UCS4) c.Int {
 	return 0
 }
 
+// Don't call this function directly, use the _PyUnicodeWriter_PrepareKind()
+// macro instead.
+//
 // llgo:link (*X_PyUnicodeWriter).PrepareKindInternal C._PyUnicodeWriter_PrepareKindInternal
 func (self *X_PyUnicodeWriter) PrepareKindInternal(kind c.Int) c.Int {
 	return 0
 }
 
+// Append a Unicode character.
+// Return 0 on success, raise an exception and return -1 on error.
+//
 // llgo:link (*X_PyUnicodeWriter).WriteChar C._PyUnicodeWriter_WriteChar
 func (self *X_PyUnicodeWriter) WriteChar(ch Py_UCS4) c.Int {
 	return 0
 }
 
+// Append a Unicode string.
+// Return 0 on success, raise an exception and return -1 on error.
+//
 // llgo:link (*X_PyUnicodeWriter).WriteStr C._PyUnicodeWriter_WriteStr
 func (self *X_PyUnicodeWriter) WriteStr(str *PyObject) c.Int {
 	return 0
 }
 
+// Append a substring of a Unicode string.
+// Return 0 on success, raise an exception and return -1 on error.
+//
 // llgo:link (*X_PyUnicodeWriter).WriteSubstring C._PyUnicodeWriter_WriteSubstring
 func (self *X_PyUnicodeWriter) WriteSubstring(str *PyObject, start PySsizeT, end PySsizeT) c.Int {
 	return 0
 }
 
+// Append an ASCII-encoded byte string.
+// Return 0 on success, raise an exception and return -1 on error.
+//
 // llgo:link (*X_PyUnicodeWriter).WriteASCIIString C._PyUnicodeWriter_WriteASCIIString
 func (self *X_PyUnicodeWriter) WriteASCIIString(str *c.Char, len PySsizeT) c.Int {
 	return 0
 }
 
+// Append a latin1-encoded byte string.
+// Return 0 on success, raise an exception and return -1 on error.
+//
 // llgo:link (*X_PyUnicodeWriter).WriteLatin1String C._PyUnicodeWriter_WriteLatin1String
 func (self *X_PyUnicodeWriter) WriteLatin1String(str *c.Char, len PySsizeT) c.Int {
 	return 0
 }
 
+// Get the value of the writer as a Unicode string. Clear the
+// buffer of the writer. Raise an exception and return NULL
+// on error.
+//
 // llgo:link (*X_PyUnicodeWriter).Finish C._PyUnicodeWriter_Finish
 func (self *X_PyUnicodeWriter) Finish() *PyObject {
 	return nil
 }
 
+// Deallocate memory of a writer (clear its internal buffer).
+//
 // llgo:link (*X_PyUnicodeWriter).Dealloc C._PyUnicodeWriter_Dealloc
 func (self *X_PyUnicodeWriter) Dealloc() {
 }
 
+// Returns a pointer to the default encoding (UTF-8) of the
+// Unicode object unicode.
+//
+// Like PyUnicode_AsUTF8AndSize(), this also caches the UTF-8 representation
+// in the unicodeobject.
+//
+// _PyUnicode_AsString is a #define for PyUnicode_AsUTF8 to
+// support the previous internal function with the same behaviour.
+//
+// Use of this API is DEPRECATED since no size information can be
+// extracted from the returned data.
+//
 // llgo:link (*PyObject).PyUnicode_AsUTF8 C.PyUnicode_AsUTF8
 func (self *PyObject) PyUnicode_AsUTF8() *c.Char {
 	return nil
 }
 
+// These should not be used directly. Use the Py_UNICODE_IS* and
+// Py_UNICODE_TO* macros instead.
+//
+// These APIs are implemented in Objects/unicodectype.c.
+//
 //go:linkname X_PyUnicode_IsLowercase C._PyUnicode_IsLowercase
 func X_PyUnicode_IsLowercase(ch Py_UCS4) c.Int
 
@@ -619,9 +1066,14 @@ func X_PyUnicode_IsPrintable(ch Py_UCS4) c.Int
 //go:linkname X_PyUnicode_IsAlpha C._PyUnicode_IsAlpha
 func X_PyUnicode_IsAlpha(ch Py_UCS4) c.Int
 
+// Helper array used by Py_UNICODE_ISSPACE().
+//
 //go:linkname X_PyAsciiWhitespace C._Py_ascii_whitespace
 var X_PyAsciiWhitespace *uint8
 
+// Return an interned Unicode object for an Identifier; may fail if there is no
+// memory.
+//
 // llgo:link (*X_Py_Identifier).X_PyUnicode_FromId C._PyUnicode_FromId
 func (self *X_Py_Identifier) X_PyUnicode_FromId() *PyObject {
 	return nil

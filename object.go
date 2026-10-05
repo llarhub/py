@@ -35,6 +35,7 @@ const Py_GT = 4
 const Py_GE = 5
 const X_Py_ATTR_CACHE_UNUSED = 30000
 
+// Result of calling PyIter_Send
 type PySendResult c.Int
 
 const (
@@ -54,6 +55,9 @@ type X_object struct {
 	_llcppg_anon_0
 	ObType *PyTypeObject
 }
+
+// If this structure is modified, Doc/includes/typestruct.h should be updated
+// as well.
 type X_typeobject struct {
 	ObBase             PyVarObject
 	TpName             *c.Char
@@ -115,6 +119,19 @@ type PyVarObject struct {
 	ObSize PySsizeT
 }
 
+// Type objects contain a string containing the type name (to help somewhat
+// in debugging), the allocation parameters (see PyObject_New() and
+// PyObject_NewVar()),
+// and methods for accessing objects of the type.  Methods are optional, a
+// nil pointer meaning that particular kind of access is not available for
+// this type.  The Py_DECREF() macro uses the tp_dealloc method without
+// checking for a nil pointer; it should always be implemented except if
+// the implementation can guarantee that the reference count will never
+// reach zero (e.g., for statically allocated type objects).
+//
+// NB: the methods for certain type groups are now contained in separate
+// method blocks.
+//
 // llgo:type C
 type Unaryfunc = func(_llcppg_param1 *PyObject) *PyObject
 
@@ -215,11 +232,33 @@ type PyType_Spec struct {
 	Flags     c.Uint
 	Slots     *PyType_Slot
 }
+
+// ******************* String Literals ****************************************/
+// /* This structure helps managing static strings. The basic usage goes like this:
+// Instead of doing
+//
+// r = PyObject_CallMethod(o, "foo", "args", ...);
+//
+// do
+//
+// _Py_IDENTIFIER(foo);
+// ...
+// r = _PyObject_CallMethodId(o, &PyId_foo, "args", ...);
+//
+// PyId_foo is a static variable, either on block level or file level. On first
+// usage, the string "foo" is interned, and the structures are linked. On interpreter
+// shutdown, all strings are released.
+//
+// Alternatively, _Py_static_string allows choosing the variable name.
+// _PyUnicode_FromId returns a borrowed reference to the interned string.
+// _PyObject_{Get,Set,Has}AttrId are __getattr__ versions using _Py_Identifier*.
 type X_Py_Identifier struct {
 	String *c.Char
 	Index  PySsizeT
 	Mutex  _llcppg_anon_1
 }
+
+// Hidden PyMutex struct for non free-threaded build.
 type _llcppg_anon_1 struct {
 	V c.Uint8T
 }
@@ -291,12 +330,21 @@ type PyBufferProcs struct {
 	BfGetbuffer     Getbufferproc
 	BfReleasebuffer Releasebufferproc
 }
+
+// Allow printfunc in the tp_vectorcall_offset slot for
+// backwards-compatibility
 type Printfunc = PySsizeT
+
+// This struct is used by the specializer
+// It should be treated as an opaque blob
+// by code other than the specializer and interpreter.
 type X_specializationCache struct {
 	Getitem        *PyObject
 	GetitemVersion c.Uint32T
 	Init           *PyObject
 }
+
+// The *real* layout of a type object when allocated on the heap
 type X_heaptypeobject struct {
 	HtType       PyTypeObject
 	AsAsync      PyAsyncMethods
@@ -315,6 +363,8 @@ type X_heaptypeobject struct {
 }
 type X_dictkeysobject struct {
 }
+
+// The *real* layout of a type object when allocated on the heap
 type PyHeapTypeObject = X_heaptypeobject
 
 // llgo:type C
@@ -327,11 +377,15 @@ func (p *_llcppg_anon_0) XGof_ref_ob_refcnt_full() *c.Int64T {
 	return (*c.Int64T)(unsafe.Pointer(p))
 }
 
+// Test if the 'x' object is the 'y' object, the same as "x is y" in Python.
+//
 // llgo:link (*PyObject).Py_Is C.Py_Is
 func (self *PyObject) Py_Is(y *PyObject) c.Int {
 	return 0
 }
 
+// Py_TYPE() implementation for the stable ABI
+//
 // llgo:link (*PyObject).Py_TYPE C.Py_TYPE
 func (self *PyObject) Py_TYPE() *PyTypeObject {
 	return nil
@@ -413,17 +467,25 @@ func (self *PyTypeObject) PyType_GetBaseByToken(_llcppg_param2 unsafe.Pointer, _
 	return 0
 }
 
+// Generic type check
+//
 // llgo:link (*PyTypeObject).PyType_IsSubtype C.PyType_IsSubtype
 func (self *PyTypeObject) PyType_IsSubtype(_llcppg_param2 *PyTypeObject) c.Int {
 	return 0
 }
 
+// built-in 'type'
+//
 //go:linkname PyType_Type C.PyType_Type
 var PyType_Type PyTypeObject
 
+// built-in 'object'
+//
 //go:linkname PyBaseObject_Type C.PyBaseObject_Type
 var PyBaseObject_Type PyTypeObject
 
+// built-in 'super'
+//
 //go:linkname PySuper_Type C.PySuper_Type
 var PySuper_Type PyTypeObject
 
@@ -454,6 +516,8 @@ func PyType_ClearCache() c.Uint
 func (self *PyTypeObject) PyType_Modified() {
 }
 
+// Generic operations on objects
+//
 // llgo:link (*PyObject).Repr C.PyObject_Repr
 func (self *PyObject) Repr() *PyObject {
 	return self
@@ -593,11 +657,18 @@ func (self *PyObject) PyCallable_Check() c.Int {
 func (self *PyObject) ClearWeakRefs() {
 }
 
+// PyObject_Dir(obj) acts like Python builtins.dir(obj), returning a
+// list of strings.  PyObject_Dir(NULL) is like builtins.dir(),
+// returning the names of the current locals.  In this case, if there are
+// no current locals, NULL is returned, and PyErr_Occurred() is false.
+//
 // llgo:link (*PyObject).Dir C.PyObject_Dir
 func (self *PyObject) Dir() *PyObject {
 	return self
 }
 
+// Helpers for printing recursive container types
+//
 // llgo:link (*PyObject).Py_ReprEnter C.Py_ReprEnter
 func (self *PyObject) Py_ReprEnter() c.Int {
 	return 0
@@ -613,14 +684,20 @@ func Py_GetConstant(constant_id c.Uint) *PyObject
 //go:linkname Py_GetConstantBorrowed C.Py_GetConstantBorrowed
 func Py_GetConstantBorrowed(constant_id c.Uint) *PyObject
 
+// Don't use this directly
+//
 //go:linkname X_Py_NoneStruct C._Py_NoneStruct
 var X_Py_NoneStruct PyObject
 
+// Test if an object is the None singleton, the same as "x is None" in Python.
+//
 // llgo:link (*PyObject).Py_IsNone C.Py_IsNone
 func (self *PyObject) Py_IsNone() c.Int {
 	return 0
 }
 
+// Don't use this directly
+//
 //go:linkname X_Py_NotImplementedStruct C._Py_NotImplementedStruct
 var X_Py_NotImplementedStruct PyObject
 
@@ -695,6 +772,9 @@ func (self *PyObject) CallFinalizerFromDealloc() c.Int {
 func (self *PyObject) PyUnstable_Object_ClearWeakRefsNoCallbacks() {
 }
 
+// Same as PyObject_Generic{Get,Set}Attr, but passing the attributes
+// dict as the last parameter.
+//
 // llgo:link (*PyObject).X_PyObject_GenericGetAttrWithDict C._PyObject_GenericGetAttrWithDict
 func (self *PyObject) X_PyObject_GenericGetAttrWithDict(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 c.Int) *PyObject {
 	return self
@@ -710,6 +790,12 @@ func (self *PyObject) X_PyObject_FunctionStr() *PyObject {
 	return self
 }
 
+// Declare and define _PyObject_AssertFailed() even when NDEBUG is defined,
+// to avoid causing compiler/linker errors when building extensions without
+// NDEBUG against a Python built with NDEBUG defined.
+//
+// msg, expr and function can be NULL.
+//
 // llgo:link (*PyObject).X_PyObject_AssertFailed C._PyObject_AssertFailed
 func (self *PyObject) X_PyObject_AssertFailed(expr *c.Char, msg *c.Char, file *c.Char, line c.Int, function *c.Char) {
 }
@@ -758,6 +844,11 @@ func PyType_Watch(watcher_id c.Int, type_ *PyObject) c.Int
 //go:linkname PyType_Unwatch C.PyType_Unwatch
 func PyType_Unwatch(watcher_id c.Int, type_ *PyObject) c.Int
 
+// Attempt to assign a version tag to the given type.
+//
+// Returns 1 if the type already had a valid version tag or a new one was
+// assigned, or 0 if a new tag could not be assigned.
+//
 // llgo:link (*PyTypeObject).PyUnstable_Type_AssignVersionTag C.PyUnstable_Type_AssignVersionTag
 func (self *PyTypeObject) PyUnstable_Type_AssignVersionTag() c.Int {
 	return 0
@@ -769,21 +860,35 @@ func PyRefTracer_SetTracer(tracer PyRefTracer, data unsafe.Pointer) c.Int
 //go:linkname PyRefTracer_GetTracer C.PyRefTracer_GetTracer
 func PyRefTracer_GetTracer(_llcppg_param1 *unsafe.Pointer) PyRefTracer
 
+// Enable PEP-703 deferred reference counting on the object.
+//
+// Returns 1 if deferred reference counting was successfully enabled, and
+// 0 if the runtime ignored it. This function cannot fail.
+//
 // llgo:link (*PyObject).PyUnstable_Object_EnableDeferredRefcount C.PyUnstable_Object_EnableDeferredRefcount
 func (self *PyObject) PyUnstable_Object_EnableDeferredRefcount() c.Int {
 	return 0
 }
 
+// Determine if the object exists as a unique temporary variable on the
+// topmost frame of the interpreter.
+//
 // llgo:link (*PyObject).PyUnstable_Object_IsUniqueReferencedTemporary C.PyUnstable_Object_IsUniqueReferencedTemporary
 func (self *PyObject) PyUnstable_Object_IsUniqueReferencedTemporary() c.Int {
 	return 0
 }
 
+// Check whether the object is immortal. This cannot fail.
+//
 // llgo:link (*PyObject).PyUnstable_IsImmortal C.PyUnstable_IsImmortal
 func (self *PyObject) PyUnstable_IsImmortal() c.Int {
 	return 0
 }
 
+// Increments the reference count of the object, if it's not zero.
+// PyUnstable_EnableTryIncRef() should be called on the object
+// before calling this function in order to avoid spurious failures.
+//
 // llgo:link (*PyObject).PyUnstable_TryIncRef C.PyUnstable_TryIncRef
 func (self *PyObject) PyUnstable_TryIncRef() c.Int {
 	return 0

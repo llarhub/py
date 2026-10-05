@@ -14,6 +14,8 @@ type PySliceObject struct {
 	Step   *PyObject
 }
 
+// Don't use this directly
+//
 //go:linkname X_Py_EllipsisObject C._Py_EllipsisObject
 var X_Py_EllipsisObject PyObject
 
