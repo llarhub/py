@@ -8,10 +8,64 @@ import (
 )
 
 const Py_UNICODE_SIZE = 4
+const SSTATE_NOT_INTERNED = 0
+const SSTATE_INTERNED_MORTAL = 1
+const SSTATE_INTERNED_IMMORTAL = 2
+const SSTATE_INTERNED_IMMORTAL_STATIC = 3
+
+type PyUnicode_Kind c.Uint
+
+const (
+	PyUnicode_1BYTE_KIND PyUnicode_Kind = 1
+	PyUnicode_2BYTE_KIND PyUnicode_Kind = 2
+	PyUnicode_4BYTE_KIND PyUnicode_Kind = 4
+)
 
 type Py_UCS4 = c.Uint32T
 type Py_UCS2 = c.Uint16T
 type Py_UCS1 = c.Uint8T
+type PY_UNICODE_TYPE = c.WcharT
+type Py_UNICODE = c.WcharT
+type PyASCIIObject struct {
+	ObBase PyObject
+	Length PySsizeT
+	Hash   PyHashT
+	State  _llcppg_anon_2
+}
+type _llcppg_anon_2 struct {
+	Interned            c.Uint
+	Kind                c.Uint
+	Compact             c.Uint
+	Ascii               c.Uint
+	StaticallyAllocated c.Uint
+	X                   c.Uint
+}
+type PyCompactUnicodeObject struct {
+	X_base     PyASCIIObject
+	Utf8Length PySsizeT
+	Utf8       *c.Char
+}
+type PyUnicodeObject struct {
+	X_base PyCompactUnicodeObject
+	Data   _llcppg_anon_3
+}
+type _llcppg_anon_3 struct {
+	_xgo_union [1]uint64
+}
+type PyUnicodeWriter struct {
+}
+type X_PyUnicodeWriter struct {
+	Buffer       *PyObject
+	Data         unsafe.Pointer
+	Kind         c.Int
+	Maxchar      Py_UCS4
+	Size         PySsizeT
+	Pos          PySsizeT
+	MinLength    PySsizeT
+	MinChar      Py_UCS4
+	Overallocate uint8
+	Readonly     uint8
+}
 
 //go:linkname PyUnicode_Type C.PyUnicode_Type
 var PyUnicode_Type PyTypeObject
@@ -362,4 +416,213 @@ func (self *PyObject) PyUnicode_Contains(element *PyObject) c.Int {
 // llgo:link (*PyObject).PyUnicode_IsIdentifier C.PyUnicode_IsIdentifier
 func (self *PyObject) PyUnicode_IsIdentifier() c.Int {
 	return 0
+}
+func (p *_llcppg_anon_3) XGof_ref_any() *unsafe.Pointer {
+	return (*unsafe.Pointer)(unsafe.Pointer(p))
+}
+func (p *_llcppg_anon_3) XGof_ref_latin1() **Py_UCS1 {
+	return (**Py_UCS1)(unsafe.Pointer(p))
+}
+func (p *_llcppg_anon_3) XGof_ref_ucs2() **Py_UCS2 {
+	return (**Py_UCS2)(unsafe.Pointer(p))
+}
+func (p *_llcppg_anon_3) XGof_ref_ucs4() **Py_UCS4 {
+	return (**Py_UCS4)(unsafe.Pointer(p))
+}
+
+// llgo:link (*PyObject).PyUnicode_KIND C.PyUnicode_KIND
+func (self *PyObject) PyUnicode_KIND() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnicode_DATA C.PyUnicode_DATA
+func (self *PyObject) PyUnicode_DATA() unsafe.Pointer {
+	return nil
+}
+
+//go:linkname PyUnicode_New C.PyUnicode_New
+func PyUnicode_New(size PySsizeT, maxchar Py_UCS4) *PyObject
+
+// llgo:link (*PyObject).PyUnicode_CopyCharacters C.PyUnicode_CopyCharacters
+func (self *PyObject) PyUnicode_CopyCharacters(to_start PySsizeT, from *PyObject, from_start PySsizeT, how_many PySsizeT) PySsizeT {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnicode_Fill C.PyUnicode_Fill
+func (self *PyObject) PyUnicode_Fill(start PySsizeT, length PySsizeT, fill_char Py_UCS4) PySsizeT {
+	return 0
+}
+
+//go:linkname PyUnicode_FromKindAndData C.PyUnicode_FromKindAndData
+func PyUnicode_FromKindAndData(kind c.Int, buffer unsafe.Pointer, size PySsizeT) *PyObject
+
+//go:linkname PyUnicodeWriter_Create C.PyUnicodeWriter_Create
+func PyUnicodeWriter_Create(length PySsizeT) *PyUnicodeWriter
+
+// llgo:link (*PyUnicodeWriter).Discard C.PyUnicodeWriter_Discard
+func (self *PyUnicodeWriter) Discard() {
+}
+
+// llgo:link (*PyUnicodeWriter).Finish C.PyUnicodeWriter_Finish
+func (self *PyUnicodeWriter) Finish() *PyObject {
+	return nil
+}
+
+// llgo:link (*PyUnicodeWriter).WriteChar C.PyUnicodeWriter_WriteChar
+func (self *PyUnicodeWriter) WriteChar(ch Py_UCS4) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteUTF8 C.PyUnicodeWriter_WriteUTF8
+func (self *PyUnicodeWriter) WriteUTF8(str *c.Char, size PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteASCII C.PyUnicodeWriter_WriteASCII
+func (self *PyUnicodeWriter) WriteASCII(str *c.Char, size PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteWideChar C.PyUnicodeWriter_WriteWideChar
+func (self *PyUnicodeWriter) WriteWideChar(str *c.WcharT, size PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteUCS4 C.PyUnicodeWriter_WriteUCS4
+func (self *PyUnicodeWriter) WriteUCS4(str *Py_UCS4, size PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteStr C.PyUnicodeWriter_WriteStr
+func (self *PyUnicodeWriter) WriteStr(obj *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteRepr C.PyUnicodeWriter_WriteRepr
+func (self *PyUnicodeWriter) WriteRepr(obj *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).WriteSubstring C.PyUnicodeWriter_WriteSubstring
+func (self *PyUnicodeWriter) WriteSubstring(str *PyObject, start PySsizeT, end PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).Format C.PyUnicodeWriter_Format
+func (self *PyUnicodeWriter) Format(format *c.Char, __llgo_va_list ...any) c.Int {
+	return 0
+}
+
+// llgo:link (*PyUnicodeWriter).DecodeUTF8Stateful C.PyUnicodeWriter_DecodeUTF8Stateful
+func (self *PyUnicodeWriter) DecodeUTF8Stateful(string *c.Char, length PySsizeT, errors *c.Char, consumed *PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).Init C._PyUnicodeWriter_Init
+func (self *X_PyUnicodeWriter) Init() {
+}
+
+// llgo:link (*X_PyUnicodeWriter).PrepareInternal C._PyUnicodeWriter_PrepareInternal
+func (self *X_PyUnicodeWriter) PrepareInternal(length PySsizeT, maxchar Py_UCS4) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).PrepareKindInternal C._PyUnicodeWriter_PrepareKindInternal
+func (self *X_PyUnicodeWriter) PrepareKindInternal(kind c.Int) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).WriteChar C._PyUnicodeWriter_WriteChar
+func (self *X_PyUnicodeWriter) WriteChar(ch Py_UCS4) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).WriteStr C._PyUnicodeWriter_WriteStr
+func (self *X_PyUnicodeWriter) WriteStr(str *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).WriteSubstring C._PyUnicodeWriter_WriteSubstring
+func (self *X_PyUnicodeWriter) WriteSubstring(str *PyObject, start PySsizeT, end PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).WriteASCIIString C._PyUnicodeWriter_WriteASCIIString
+func (self *X_PyUnicodeWriter) WriteASCIIString(str *c.Char, len PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).WriteLatin1String C._PyUnicodeWriter_WriteLatin1String
+func (self *X_PyUnicodeWriter) WriteLatin1String(str *c.Char, len PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*X_PyUnicodeWriter).Finish C._PyUnicodeWriter_Finish
+func (self *X_PyUnicodeWriter) Finish() *PyObject {
+	return nil
+}
+
+// llgo:link (*X_PyUnicodeWriter).Dealloc C._PyUnicodeWriter_Dealloc
+func (self *X_PyUnicodeWriter) Dealloc() {
+}
+
+// llgo:link (*PyObject).PyUnicode_AsUTF8 C.PyUnicode_AsUTF8
+func (self *PyObject) PyUnicode_AsUTF8() *c.Char {
+	return nil
+}
+
+//go:linkname X_PyUnicode_IsLowercase C._PyUnicode_IsLowercase
+func X_PyUnicode_IsLowercase(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsUppercase C._PyUnicode_IsUppercase
+func X_PyUnicode_IsUppercase(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsTitlecase C._PyUnicode_IsTitlecase
+func X_PyUnicode_IsTitlecase(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsWhitespace C._PyUnicode_IsWhitespace
+func X_PyUnicode_IsWhitespace(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsLinebreak C._PyUnicode_IsLinebreak
+func X_PyUnicode_IsLinebreak(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_ToLowercase C._PyUnicode_ToLowercase
+func X_PyUnicode_ToLowercase(ch Py_UCS4) Py_UCS4
+
+//go:linkname X_PyUnicode_ToUppercase C._PyUnicode_ToUppercase
+func X_PyUnicode_ToUppercase(ch Py_UCS4) Py_UCS4
+
+//go:linkname X_PyUnicode_ToTitlecase C._PyUnicode_ToTitlecase
+func X_PyUnicode_ToTitlecase(ch Py_UCS4) Py_UCS4
+
+//go:linkname X_PyUnicode_ToDecimalDigit C._PyUnicode_ToDecimalDigit
+func X_PyUnicode_ToDecimalDigit(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_ToDigit C._PyUnicode_ToDigit
+func X_PyUnicode_ToDigit(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_ToNumeric C._PyUnicode_ToNumeric
+func X_PyUnicode_ToNumeric(ch Py_UCS4) c.Double
+
+//go:linkname X_PyUnicode_IsDecimalDigit C._PyUnicode_IsDecimalDigit
+func X_PyUnicode_IsDecimalDigit(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsDigit C._PyUnicode_IsDigit
+func X_PyUnicode_IsDigit(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsNumeric C._PyUnicode_IsNumeric
+func X_PyUnicode_IsNumeric(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsPrintable C._PyUnicode_IsPrintable
+func X_PyUnicode_IsPrintable(ch Py_UCS4) c.Int
+
+//go:linkname X_PyUnicode_IsAlpha C._PyUnicode_IsAlpha
+func X_PyUnicode_IsAlpha(ch Py_UCS4) c.Int
+
+//go:linkname X_PyAsciiWhitespace C._Py_ascii_whitespace
+var X_PyAsciiWhitespace *uint8
+
+// llgo:link (*X_Py_Identifier).X_PyUnicode_FromId C._PyUnicode_FromId
+func (self *X_Py_Identifier) X_PyUnicode_FromId() *PyObject {
+	return nil
 }

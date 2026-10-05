@@ -31,6 +31,7 @@ const Py_READONLY = 1
 const Py_AUDIT_READ = 2
 const X_Py_WRITE_RESTRICTED = 4
 const Py_RELATIVE_OFFSET = 8
+const PyWrapperFlag_KEYWORDS = 1
 
 type PyGetSetDef struct {
 	Name    *c.Char
@@ -52,6 +53,45 @@ type Getter = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) *PyO
 
 // llgo:type C
 type Setter = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer) c.Int
+
+// llgo:type C
+type Wrapperfunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer) *PyObject
+
+// llgo:type C
+type WrapperfuncKwds = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *PyObject) *PyObject
+type Wrapperbase struct {
+	Name       *c.Char
+	Offset     c.Int
+	Function   unsafe.Pointer
+	Wrapper    Wrapperfunc
+	Doc        *c.Char
+	Flags      c.Int
+	NameStrobj *PyObject
+}
+type PyDescrObject struct {
+	ObBase    PyObject
+	DType     *PyTypeObject
+	DName     *PyObject
+	DQualname *PyObject
+}
+type PyMethodDescrObject struct {
+	DCommon    PyDescrObject
+	DMethod    *PyMethodDef
+	Vectorcall Vectorcallfunc
+}
+type PyMemberDescrObject struct {
+	DCommon PyDescrObject
+	DMember *PyMemberDef
+}
+type PyGetSetDescrObject struct {
+	DCommon PyDescrObject
+	DGetset *PyGetSetDef
+}
+type PyWrapperDescrObject struct {
+	DCommon  PyDescrObject
+	DBase    *Wrapperbase
+	DWrapped unsafe.Pointer
+}
 
 //go:linkname PyClassMethodDescr_Type C.PyClassMethodDescr_Type
 var PyClassMethodDescr_Type PyTypeObject
@@ -109,3 +149,13 @@ func PyMember_GetOne(_llcppg_param1 *c.Char, _llcppg_param2 *PyMemberDef) *PyObj
 
 //go:linkname PyMember_SetOne C.PyMember_SetOne
 func PyMember_SetOne(_llcppg_param1 *c.Char, _llcppg_param2 *PyMemberDef, _llcppg_param3 *PyObject) c.Int
+
+// llgo:link (*PyTypeObject).PyDescr_NewWrapper C.PyDescr_NewWrapper
+func (self *PyTypeObject) PyDescr_NewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *PyObject {
+	return nil
+}
+
+// llgo:link (*PyObject).PyDescr_IsData C.PyDescr_IsData
+func (self *PyObject) PyDescr_IsData() c.Int {
+	return 0
+}

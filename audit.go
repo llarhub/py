@@ -4,11 +4,17 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
+
+// llgo:type C
+type Py_AuditHookFunction = func(_llcppg_param1 *c.Char, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer) c.Int
 
 //go:linkname PySys_Audit C.PySys_Audit
 func PySys_Audit(event *c.Char, argFormat *c.Char, __llgo_va_list ...any) c.Int
 
 //go:linkname PySys_AuditTuple C.PySys_AuditTuple
 func PySys_AuditTuple(event *c.Char, args *PyObject) c.Int
+
+//go:linkname PySys_AddAuditHook C.PySys_AddAuditHook
+func PySys_AddAuditHook(_llcppg_param1 Py_AuditHookFunction, _llcppg_param2 unsafe.Pointer) c.Int

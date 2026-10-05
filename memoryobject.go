@@ -7,6 +7,32 @@ import (
 	_ "unsafe"
 )
 
+const X_Py_MANAGED_BUFFER_RELEASED = 1
+const X_Py_MANAGED_BUFFER_FREE_FORMAT = 2
+const X_Py_MEMORYVIEW_RELEASED = 1
+const X_Py_MEMORYVIEW_C = 2
+const X_Py_MEMORYVIEW_FORTRAN = 4
+const X_Py_MEMORYVIEW_SCALAR = 8
+const X_Py_MEMORYVIEW_PIL = 16
+const X_Py_MEMORYVIEW_RESTRICTED = 32
+
+type X_PyManagedBufferObject struct {
+	ObBase  PyObject
+	Flags   c.Int
+	Exports PySsizeT
+	Master  PyBuffer
+}
+type PyMemoryViewObject struct {
+	ObBase      PyVarObject
+	Mbuf        *X_PyManagedBufferObject
+	Hash        PyHashT
+	Flags       c.Int
+	Exports     PySsizeT
+	View        PyBuffer
+	Weakreflist *PyObject
+	ObArray     [1]PySsizeT
+}
+
 //go:linkname PyMemoryView_Type C.PyMemoryView_Type
 var PyMemoryView_Type PyTypeObject
 

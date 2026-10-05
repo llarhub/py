@@ -7,6 +7,15 @@ import (
 	"unsafe"
 )
 
+type PyObjectArenaAllocator struct {
+	Ctx   unsafe.Pointer
+	Alloc func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
+	Free  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 unsafe.Pointer, _llcppg_param3 c.SizeT)
+}
+
+// llgo:type C
+type GcvisitobjectsT = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) c.Int
+
 //go:linkname PyObject_Malloc C.PyObject_Malloc
 func PyObject_Malloc(size c.SizeT) unsafe.Pointer
 
@@ -84,3 +93,34 @@ func (self *PyObject) GC_IsTracked() c.Int {
 func (self *PyObject) GC_IsFinalized() c.Int {
 	return 0
 }
+
+// llgo:link (*PyObjectArenaAllocator).PyObject_GetArenaAllocator C.PyObject_GetArenaAllocator
+func (self *PyObjectArenaAllocator) PyObject_GetArenaAllocator() {
+}
+
+// llgo:link (*PyObjectArenaAllocator).PyObject_SetArenaAllocator C.PyObject_SetArenaAllocator
+func (self *PyObjectArenaAllocator) PyObject_SetArenaAllocator() {
+}
+
+// llgo:link (*PyObject).IS_GC C.PyObject_IS_GC
+func (self *PyObject) IS_GC() c.Int {
+	return 0
+}
+
+// llgo:link (*PyTypeObject).PyType_SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
+func (self *PyTypeObject) PyType_SUPPORTS_WEAKREFS() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).GET_WEAKREFS_LISTPTR C.PyObject_GET_WEAKREFS_LISTPTR
+func (self *PyObject) GET_WEAKREFS_LISTPTR() **PyObject {
+	return nil
+}
+
+// llgo:link (*PyTypeObject).PyUnstable_Object_GC_NewWithExtraData C.PyUnstable_Object_GC_NewWithExtraData
+func (self *PyTypeObject) PyUnstable_Object_GC_NewWithExtraData(_llcppg_param2 c.SizeT) *PyObject {
+	return nil
+}
+
+//go:linkname PyUnstable_GC_VisitObjects C.PyUnstable_GC_VisitObjects
+func PyUnstable_GC_VisitObjects(callback GcvisitobjectsT, arg unsafe.Pointer)

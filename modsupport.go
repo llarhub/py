@@ -13,6 +13,23 @@ const PYTHON_API_STRING = "1013"
 const PYTHON_ABI_VERSION = 3
 const PYTHON_ABI_STRING = "3"
 
+type X_PyOnceFlag struct {
+	V c.Uint8T
+}
+type X_PyArg_Parser struct {
+	Format         *c.Char
+	Keywords       **c.Char
+	Fname          *c.Char
+	CustomMsg      *c.Char
+	Once           X_PyOnceFlag
+	IsKwtupleOwned c.Int
+	Pos            c.Int
+	Min            c.Int
+	Max            c.Int
+	Kwtuple        *PyObject
+	Next           *X_PyArg_Parser
+}
+
 // llgo:link (*PyObject).PyArg_Parse C.PyArg_Parse
 func (self *PyObject) PyArg_Parse(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
@@ -107,4 +124,9 @@ func (self *PyModuleDef) PyModule_Create2(apiver c.Int) *PyObject {
 // llgo:link (*PyModuleDef).PyModule_FromDefAndSpec2 C.PyModule_FromDefAndSpec2
 func (self *PyModuleDef) PyModule_FromDefAndSpec2(spec *PyObject, module_api_version c.Int) *PyObject {
 	return nil
+}
+
+// llgo:link (*PyObject).X_PyArg_ParseTupleAndKeywordsFast C._PyArg_ParseTupleAndKeywordsFast
+func (self *PyObject) X_PyArg_ParseTupleAndKeywordsFast(_llcppg_param2 *PyObject, _llcppg_param3 *X_PyArg_Parser, __llgo_va_list ...any) c.Int {
+	return 0
 }

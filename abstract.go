@@ -504,3 +504,31 @@ func (self *PyObject) IsInstance(typeorclass *PyObject) c.Int {
 func (self *PyObject) IsSubclass(typeorclass *PyObject) c.Int {
 	return 0
 }
+
+// llgo:link (*PyObject).X_PyObject_CallMethodId C._PyObject_CallMethodId
+func (self *PyObject) X_PyObject_CallMethodId(name *X_Py_Identifier, format *c.Char, __llgo_va_list ...any) *PyObject {
+	return self
+}
+
+//go:linkname X_PyStack_AsDict C._PyStack_AsDict
+func X_PyStack_AsDict(values **PyObject, kwnames *PyObject) *PyObject
+
+// llgo:link (*PyObject).PyVectorcall_Function C.PyVectorcall_Function
+func (self *PyObject) PyVectorcall_Function() Vectorcallfunc {
+	return nil
+}
+
+// llgo:link (*PyObject).VectorcallDict C.PyObject_VectorcallDict
+func (self *PyObject) VectorcallDict(args **PyObject, nargsf c.SizeT, kwargs *PyObject) *PyObject {
+	return self
+}
+
+// llgo:link (*PyObject).CallOneArg C.PyObject_CallOneArg
+func (self *PyObject) CallOneArg(arg *PyObject) *PyObject {
+	return self
+}
+
+// llgo:link (*PyObject).LengthHint C.PyObject_LengthHint
+func (self *PyObject) LengthHint(_llcppg_param2 PySsizeT) PySsizeT {
+	return 0
+}

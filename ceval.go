@@ -15,6 +15,11 @@ const FVC_ASCII = 3
 const FVS_MASK = 4
 const FVS_HAVE_SPEC = 4
 
+type PerfMapState struct {
+	PerfMap *c.FILE
+	MapLock PyThreadTypeLock
+}
+
 // llgo:link (*PyObject).PyEval_EvalCode C.PyEval_EvalCode
 func (self *PyObject) PyEval_EvalCode(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
 	return self
@@ -101,3 +106,58 @@ func (self *PyThreadState) PyEval_AcquireThread() {
 // llgo:link (*PyThreadState).PyEval_ReleaseThread C.PyEval_ReleaseThread
 func (self *PyThreadState) PyEval_ReleaseThread() {
 }
+
+//go:linkname PyEval_SetProfile C.PyEval_SetProfile
+func PyEval_SetProfile(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+
+//go:linkname PyEval_SetProfileAllThreads C.PyEval_SetProfileAllThreads
+func PyEval_SetProfileAllThreads(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+
+//go:linkname PyEval_SetTrace C.PyEval_SetTrace
+func PyEval_SetTrace(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+
+//go:linkname PyEval_SetTraceAllThreads C.PyEval_SetTraceAllThreads
+func PyEval_SetTraceAllThreads(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+
+// llgo:link (*PyCompilerFlags).PyEval_MergeCompilerFlags C.PyEval_MergeCompilerFlags
+func (self *PyCompilerFlags) PyEval_MergeCompilerFlags() c.Int {
+	return 0
+}
+
+// llgo:link (*PyThreadState).X_PyEval_EvalFrameDefault C._PyEval_EvalFrameDefault
+func (self *PyThreadState) X_PyEval_EvalFrameDefault(f *X_PyInterpreterFrame, exc c.Int) *PyObject {
+	return nil
+}
+
+//go:linkname PyUnstable_Eval_RequestCodeExtraIndex C.PyUnstable_Eval_RequestCodeExtraIndex
+func PyUnstable_Eval_RequestCodeExtraIndex(_llcppg_param1 Freefunc) PySsizeT
+
+// llgo:link (*PyObject).X_PyEval_SliceIndex C._PyEval_SliceIndex
+func (self *PyObject) X_PyEval_SliceIndex(_llcppg_param2 *PySsizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).X_PyEval_SliceIndexNotNone C._PyEval_SliceIndexNotNone
+func (self *PyObject) X_PyEval_SliceIndexNotNone(_llcppg_param2 *PySsizeT) c.Int {
+	return 0
+}
+
+//go:linkname PyUnstable_PerfMapState_Init C.PyUnstable_PerfMapState_Init
+func PyUnstable_PerfMapState_Init() c.Int
+
+//go:linkname PyUnstable_WritePerfMapEntry C.PyUnstable_WritePerfMapEntry
+func PyUnstable_WritePerfMapEntry(code_addr unsafe.Pointer, code_size c.Uint, entry_name *c.Char) c.Int
+
+//go:linkname PyUnstable_PerfMapState_Fini C.PyUnstable_PerfMapState_Fini
+func PyUnstable_PerfMapState_Fini()
+
+//go:linkname PyUnstable_CopyPerfMapFile C.PyUnstable_CopyPerfMapFile
+func PyUnstable_CopyPerfMapFile(parent_filename *c.Char) c.Int
+
+// llgo:link (*PyCodeObject).PyUnstable_PerfTrampoline_CompileCode C.PyUnstable_PerfTrampoline_CompileCode
+func (self *PyCodeObject) PyUnstable_PerfTrampoline_CompileCode() c.Int {
+	return 0
+}
+
+//go:linkname PyUnstable_PerfTrampoline_SetPersistAfterFork C.PyUnstable_PerfTrampoline_SetPersistAfterFork
+func PyUnstable_PerfTrampoline_SetPersistAfterFork(enable c.Int) c.Int

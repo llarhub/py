@@ -7,6 +7,15 @@ import (
 	_ "unsafe"
 )
 
+type PyComplex struct {
+	Real c.Double
+	Imag c.Double
+}
+type PyComplexObject struct {
+	ObBase PyObject
+	Cval   PyComplex
+}
+
 //go:linkname PyComplex_Type C.PyComplex_Type
 var PyComplex_Type PyTypeObject
 
@@ -21,4 +30,39 @@ func (self *PyObject) PyComplex_RealAsDouble() c.Double {
 // llgo:link (*PyObject).PyComplex_ImagAsDouble C.PyComplex_ImagAsDouble
 func (self *PyObject) PyComplex_ImagAsDouble() c.Double {
 	return 0
+}
+
+//go:linkname X_PyCSum C._Py_c_sum
+func X_PyCSum(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
+
+//go:linkname X_PyCDiff C._Py_c_diff
+func X_PyCDiff(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
+
+// llgo:link PyComplex.X_PyCNeg C._Py_c_neg
+func (self PyComplex) X_PyCNeg() PyComplex {
+	return self
+}
+
+//go:linkname X_PyCProd C._Py_c_prod
+func X_PyCProd(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
+
+//go:linkname X_PyCQuot C._Py_c_quot
+func X_PyCQuot(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
+
+//go:linkname X_PyCPow C._Py_c_pow
+func X_PyCPow(_llcppg_param1 PyComplex, _llcppg_param2 PyComplex) PyComplex
+
+// llgo:link PyComplex.X_PyCAbs C._Py_c_abs
+func (self PyComplex) X_PyCAbs() c.Double {
+	return 0
+}
+
+// llgo:link PyComplex.FromCComplex C.PyComplex_FromCComplex
+func (self PyComplex) FromCComplex() *PyObject {
+	return nil
+}
+
+// llgo:link (*PyObject).PyComplex_AsCComplex C.PyComplex_AsCComplex
+func (self *PyObject) PyComplex_AsCComplex() PyComplex {
+	return PyComplex{}
 }

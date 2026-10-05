@@ -4,10 +4,20 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 const MAX_CO_EXTRA_USERS = 255
+const PyTrace_CALL = 0
+const PyTrace_EXCEPTION = 1
+const PyTrace_LINE = 2
+const PyTrace_RETURN = 3
+const PyTrace_C_CALL = 4
+const PyTrace_C_EXCEPTION = 5
+const PyTrace_C_RETURN = 6
+const PyTrace_OPCODE = 7
+const X_Py_MAX_SCRIPT_PATH_SIZE = 512
+const X_PY_DATA_STACK_CHUNK_SIZE = 16384
 
 type PyGILState_STATE c.Uint
 
@@ -15,6 +25,85 @@ const (
 	PyGILState_LOCKED   PyGILState_STATE = 0
 	PyGILState_UNLOCKED PyGILState_STATE = 1
 )
+
+type X_ts struct {
+	Prev                         *PyThreadState
+	Next                         *PyThreadState
+	Interp                       *PyInterpreterState
+	EvalBreaker                  c.UintptrT
+	X_status                     _llcppg_anon_5
+	HoldsGil                     c.Int
+	X_whence                     c.Int
+	State                        c.Int
+	PyRecursionRemaining         c.Int
+	PyRecursionLimit             c.Int
+	RecursionHeadroom            c.Int
+	Tracing                      c.Int
+	WhatEvent                    c.Int
+	CurrentFrame                 *X_PyInterpreterFrame
+	CProfilefunc                 PyTracefunc
+	CTracefunc                   PyTracefunc
+	CProfileobj                  *PyObject
+	CTraceobj                    *PyObject
+	CurrentException             *PyObject
+	ExcInfo                      *X_PyErr_StackItem
+	Dict                         *PyObject
+	GilstateCounter              c.Int
+	AsyncExc                     *PyObject
+	ThreadId                     c.Ulong
+	NativeThreadId               c.Ulong
+	DeleteLater                  *PyObject
+	CriticalSection              c.UintptrT
+	CoroutineOriginTrackingDepth c.Int
+	AsyncGenFirstiter            *PyObject
+	AsyncGenFinalizer            *PyObject
+	Context                      *PyObject
+	ContextVer                   c.Uint64T
+	Id                           c.Uint64T
+	DatastackChunk               *X_PyStackChunk
+	DatastackTop                 **PyObject
+	DatastackLimit               **PyObject
+	ExcState                     X_PyErr_StackItem
+	CurrentExecutor              *PyObject
+	DictGlobalVersion            c.Uint64T
+	ThreadingLocalKey            *PyObject
+	ThreadingLocalSentinel       *PyObject
+	RemoteDebuggerSupport        X_PyRemoteDebuggerSupport
+	DatastackCachedChunk         *X_PyStackChunk
+}
+
+// llgo:type C
+type PyTracefunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyFrameObject, _llcppg_param3 c.Int, _llcppg_param4 *PyObject) c.Int
+type X_PyRemoteDebuggerSupport struct {
+	DebuggerPendingCall c.Int32T
+	DebuggerScriptPath  [512]c.Char
+}
+type X_errStackitem struct {
+	ExcValue     *PyObject
+	PreviousItem *X_errStackitem
+}
+type X_PyErr_StackItem = X_errStackitem
+type X_stackChunk struct {
+	Previous *X_stackChunk
+	Size     c.SizeT
+	Top      c.SizeT
+	Data     [1]*PyObject
+}
+type X_PyStackChunk = X_stackChunk
+type _llcppg_anon_5 struct {
+	Initialized   c.Uint
+	Bound         c.Uint
+	Unbound       c.Uint
+	BoundGilstate c.Uint
+	Active        c.Uint
+	Finalizing    c.Uint
+	Cleared       c.Uint
+	Finalized     c.Uint
+	X             c.Uint
+}
+
+// llgo:type C
+type X_PyFrameEvalFunction = func(_llcppg_param1 *PyThreadState, _llcppg_param2 *X_PyInterpreterFrame, _llcppg_param3 c.Int) *PyObject
 
 //go:linkname PyInterpreterState_New C.PyInterpreterState_New
 func PyInterpreterState_New() *PyInterpreterState
@@ -106,3 +195,71 @@ func (self PyGILState_STATE) PyGILState_Release() {
 
 //go:linkname PyGILState_GetThisThreadState C.PyGILState_GetThisThreadState
 func PyGILState_GetThisThreadState() *PyThreadState
+
+// llgo:link (*PyInterpreterState).X_PyInterpreterState_RequiresIDRef C._PyInterpreterState_RequiresIDRef
+func (self *PyInterpreterState) X_PyInterpreterState_RequiresIDRef() c.Int {
+	return 0
+}
+
+// llgo:link (*PyInterpreterState).X_PyInterpreterState_RequireIDRef C._PyInterpreterState_RequireIDRef
+func (self *PyInterpreterState) X_PyInterpreterState_RequireIDRef(_llcppg_param2 c.Int) {
+}
+
+//go:linkname PyThreadState_GetUnchecked C.PyThreadState_GetUnchecked
+func PyThreadState_GetUnchecked() *PyThreadState
+
+// llgo:link (*PyThreadState).EnterTracing C.PyThreadState_EnterTracing
+func (self *PyThreadState) EnterTracing() {
+}
+
+// llgo:link (*PyThreadState).LeaveTracing C.PyThreadState_LeaveTracing
+func (self *PyThreadState) LeaveTracing() {
+}
+
+//go:linkname PyGILState_Check C.PyGILState_Check
+func PyGILState_Check() c.Int
+
+//go:linkname X_PyThread_CurrentFrames C._PyThread_CurrentFrames
+func X_PyThread_CurrentFrames() *PyObject
+
+// llgo:link (*PyThreadState).PyUnstable_ThreadState_SetStackProtection C.PyUnstable_ThreadState_SetStackProtection
+func (self *PyThreadState) PyUnstable_ThreadState_SetStackProtection(stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int {
+	return 0
+}
+
+// llgo:link (*PyThreadState).PyUnstable_ThreadState_ResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
+func (self *PyThreadState) PyUnstable_ThreadState_ResetStackProtection() {
+}
+
+//go:linkname PyInterpreterState_Main C.PyInterpreterState_Main
+func PyInterpreterState_Main() *PyInterpreterState
+
+//go:linkname PyInterpreterState_Head C.PyInterpreterState_Head
+func PyInterpreterState_Head() *PyInterpreterState
+
+// llgo:link (*PyInterpreterState).Next C.PyInterpreterState_Next
+func (self *PyInterpreterState) Next() *PyInterpreterState {
+	return self
+}
+
+// llgo:link (*PyInterpreterState).ThreadHead C.PyInterpreterState_ThreadHead
+func (self *PyInterpreterState) ThreadHead() *PyThreadState {
+	return nil
+}
+
+// llgo:link (*PyThreadState).GetNext C.PyThreadState_Next
+func (self *PyThreadState) GetNext() *PyThreadState {
+	return self
+}
+
+//go:linkname PyThreadState_DeleteCurrent C.PyThreadState_DeleteCurrent
+func PyThreadState_DeleteCurrent()
+
+// llgo:link (*PyInterpreterState).X_PyInterpreterState_GetEvalFrameFunc C._PyInterpreterState_GetEvalFrameFunc
+func (self *PyInterpreterState) X_PyInterpreterState_GetEvalFrameFunc() X_PyFrameEvalFunction {
+	return nil
+}
+
+// llgo:link (*PyInterpreterState).X_PyInterpreterState_SetEvalFrameFunc C._PyInterpreterState_SetEvalFrameFunc
+func (self *PyInterpreterState) X_PyInterpreterState_SetEvalFrameFunc(eval_frame X_PyFrameEvalFunction) {
+}

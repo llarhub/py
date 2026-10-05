@@ -33,6 +33,7 @@ const Py_EQ = 2
 const Py_NE = 3
 const Py_GT = 4
 const Py_GE = 5
+const X_Py_ATTR_CACHE_UNUSED = 30000
 
 type PySendResult c.Int
 
@@ -42,9 +43,69 @@ const (
 	PYGEN_NEXT   PySendResult = 1
 )
 
+type PyRefTracerEvent c.Uint
+
+const (
+	PyRefTracer_CREATE  PyRefTracerEvent = 0
+	PyRefTracer_DESTROY PyRefTracerEvent = 1
+)
+
 type X_object struct {
 	_llcppg_anon_0
 	ObType *PyTypeObject
+}
+type X_typeobject struct {
+	ObBase             PyVarObject
+	TpName             *c.Char
+	TpBasicsize        PySsizeT
+	TpItemsize         PySsizeT
+	TpDealloc          Destructor
+	TpVectorcallOffset PySsizeT
+	TpGetattr          Getattrfunc
+	TpSetattr          Setattrfunc
+	TpAsAsync          *PyAsyncMethods
+	TpRepr             Reprfunc
+	TpAsNumber         *PyNumberMethods
+	TpAsSequence       *PySequenceMethods
+	TpAsMapping        *PyMappingMethods
+	TpHash             Hashfunc
+	TpCall             Ternaryfunc
+	TpStr              Reprfunc
+	TpGetattro         Getattrofunc
+	TpSetattro         Setattrofunc
+	TpAsBuffer         *PyBufferProcs
+	TpFlags            c.Ulong
+	TpDoc              *c.Char
+	TpTraverse         Traverseproc
+	TpClear            Inquiry
+	TpRichcompare      Richcmpfunc
+	TpWeaklistoffset   PySsizeT
+	TpIter             Getiterfunc
+	TpIternext         Iternextfunc
+	TpMethods          *PyMethodDef
+	TpMembers          *PyMemberDef
+	TpGetset           *PyGetSetDef
+	TpBase             *PyTypeObject
+	TpDict             *PyObject
+	TpDescrGet         Descrgetfunc
+	TpDescrSet         Descrsetfunc
+	TpDictoffset       PySsizeT
+	TpInit             Initproc
+	TpAlloc            Allocfunc
+	TpNew              Newfunc
+	TpFree             Freefunc
+	TpIsGc             Inquiry
+	TpBases            *PyObject
+	TpMro              *PyObject
+	TpCache            *PyObject
+	TpSubclasses       unsafe.Pointer
+	TpWeaklist         *PyObject
+	TpDel              Destructor
+	TpVersionTag       c.Uint
+	TpFinalize         Destructor
+	TpVectorcall       Vectorcallfunc
+	TpWatched          uint8
+	TpVersionsUsed     c.Uint16T
 }
 type _llcppg_anon_0 struct {
 	_xgo_union [1]uint64
@@ -154,6 +215,113 @@ type PyType_Spec struct {
 	Flags     c.Uint
 	Slots     *PyType_Slot
 }
+type X_Py_Identifier struct {
+	String *c.Char
+	Index  PySsizeT
+	Mutex  _llcppg_anon_1
+}
+type _llcppg_anon_1 struct {
+	V c.Uint8T
+}
+type PyNumberMethods struct {
+	NbAdd                   Binaryfunc
+	NbSubtract              Binaryfunc
+	NbMultiply              Binaryfunc
+	NbRemainder             Binaryfunc
+	NbDivmod                Binaryfunc
+	NbPower                 Ternaryfunc
+	NbNegative              Unaryfunc
+	NbPositive              Unaryfunc
+	NbAbsolute              Unaryfunc
+	NbBool                  Inquiry
+	NbInvert                Unaryfunc
+	NbLshift                Binaryfunc
+	NbRshift                Binaryfunc
+	NbAnd                   Binaryfunc
+	NbXor                   Binaryfunc
+	NbOr                    Binaryfunc
+	NbInt                   Unaryfunc
+	NbReserved              unsafe.Pointer
+	NbFloat                 Unaryfunc
+	NbInplaceAdd            Binaryfunc
+	NbInplaceSubtract       Binaryfunc
+	NbInplaceMultiply       Binaryfunc
+	NbInplaceRemainder      Binaryfunc
+	NbInplacePower          Ternaryfunc
+	NbInplaceLshift         Binaryfunc
+	NbInplaceRshift         Binaryfunc
+	NbInplaceAnd            Binaryfunc
+	NbInplaceXor            Binaryfunc
+	NbInplaceOr             Binaryfunc
+	NbFloorDivide           Binaryfunc
+	NbTrueDivide            Binaryfunc
+	NbInplaceFloorDivide    Binaryfunc
+	NbInplaceTrueDivide     Binaryfunc
+	NbIndex                 Unaryfunc
+	NbMatrixMultiply        Binaryfunc
+	NbInplaceMatrixMultiply Binaryfunc
+}
+type PySequenceMethods struct {
+	SqLength        Lenfunc
+	SqConcat        Binaryfunc
+	SqRepeat        Ssizeargfunc
+	SqItem          Ssizeargfunc
+	WasSqSlice      unsafe.Pointer
+	SqAssItem       Ssizeobjargproc
+	WasSqAssSlice   unsafe.Pointer
+	SqContains      Objobjproc
+	SqInplaceConcat Binaryfunc
+	SqInplaceRepeat Ssizeargfunc
+}
+type PyMappingMethods struct {
+	MpLength       Lenfunc
+	MpSubscript    Binaryfunc
+	MpAssSubscript Objobjargproc
+}
+
+// llgo:type C
+type Sendfunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 **PyObject) PySendResult
+type PyAsyncMethods struct {
+	AmAwait Unaryfunc
+	AmAiter Unaryfunc
+	AmAnext Unaryfunc
+	AmSend  Sendfunc
+}
+type PyBufferProcs struct {
+	BfGetbuffer     Getbufferproc
+	BfReleasebuffer Releasebufferproc
+}
+type Printfunc = PySsizeT
+type X_specializationCache struct {
+	Getitem        *PyObject
+	GetitemVersion c.Uint32T
+	Init           *PyObject
+}
+type X_heaptypeobject struct {
+	HtType       PyTypeObject
+	AsAsync      PyAsyncMethods
+	AsNumber     PyNumberMethods
+	AsMapping    PyMappingMethods
+	AsSequence   PySequenceMethods
+	AsBuffer     PyBufferProcs
+	HtName       *PyObject
+	HtSlots      *PyObject
+	HtQualname   *PyObject
+	HtCachedKeys *X_dictkeysobject
+	HtModule     *PyObject
+	X_htTpname   *c.Char
+	HtToken      unsafe.Pointer
+	X_specCache  X_specializationCache
+}
+type X_dictkeysobject struct {
+}
+type PyHeapTypeObject = X_heaptypeobject
+
+// llgo:type C
+type PyType_WatchCallback = func(_llcppg_param1 *PyTypeObject) c.Int
+
+// llgo:type C
+type PyRefTracer = func(_llcppg_param1 *PyObject, _llcppg_param2 PyRefTracerEvent, _llcppg_param3 unsafe.Pointer) c.Int
 
 func (p *_llcppg_anon_0) XGof_ref_ob_refcnt_full() *c.Int64T {
 	return (*c.Int64T)(unsafe.Pointer(p))
@@ -455,6 +623,180 @@ func (self *PyObject) Py_IsNone() c.Int {
 
 //go:linkname X_Py_NotImplementedStruct C._Py_NotImplementedStruct
 var X_Py_NotImplementedStruct PyObject
+
+// llgo:link (*PyObject).X_Py_NewReference C._Py_NewReference
+func (self *PyObject) X_Py_NewReference() {
+}
+
+// llgo:link (*PyObject).X_Py_NewReferenceNoTotal C._Py_NewReferenceNoTotal
+func (self *PyObject) X_Py_NewReferenceNoTotal() {
+}
+
+// llgo:link (*PyObject).X_Py_ResurrectReference C._Py_ResurrectReference
+func (self *PyObject) X_Py_ResurrectReference() {
+}
+
+// llgo:link (*PyObject).X_Py_ForgetReference C._Py_ForgetReference
+func (self *PyObject) X_Py_ForgetReference() {
+}
+
+// llgo:link (*PyTypeObject).X_PyType_Name C._PyType_Name
+func (self *PyTypeObject) X_PyType_Name() *c.Char {
+	return nil
+}
+
+// llgo:link (*PyTypeObject).X_PyType_Lookup C._PyType_Lookup
+func (self *PyTypeObject) X_PyType_Lookup(_llcppg_param2 *PyObject) *PyObject {
+	return nil
+}
+
+// llgo:link (*PyTypeObject).X_PyType_LookupRef C._PyType_LookupRef
+func (self *PyTypeObject) X_PyType_LookupRef(_llcppg_param2 *PyObject) *PyObject {
+	return nil
+}
+
+// llgo:link (*PyTypeObject).PyType_GetDict C.PyType_GetDict
+func (self *PyTypeObject) PyType_GetDict() *PyObject {
+	return nil
+}
+
+// llgo:link (*PyObject).Print C.PyObject_Print
+func (self *PyObject) Print(_llcppg_param2 *c.FILE, _llcppg_param3 c.Int) c.Int {
+	return 0
+}
+
+//go:linkname X_Py_BreakPoint C._Py_BreakPoint
+func X_Py_BreakPoint()
+
+// llgo:link (*PyObject).X_PyObject_Dump C._PyObject_Dump
+func (self *PyObject) X_PyObject_Dump() {
+}
+
+// llgo:link (*PyObject).X_PyObject_GetAttrId C._PyObject_GetAttrId
+func (self *PyObject) X_PyObject_GetAttrId(_llcppg_param2 *X_Py_Identifier) *PyObject {
+	return self
+}
+
+// llgo:link (*PyObject).X_PyObject_GetDictPtr C._PyObject_GetDictPtr
+func (self *PyObject) X_PyObject_GetDictPtr() **PyObject {
+	return nil
+}
+
+// llgo:link (*PyObject).CallFinalizer C.PyObject_CallFinalizer
+func (self *PyObject) CallFinalizer() {
+}
+
+// llgo:link (*PyObject).CallFinalizerFromDealloc C.PyObject_CallFinalizerFromDealloc
+func (self *PyObject) CallFinalizerFromDealloc() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnstable_Object_ClearWeakRefsNoCallbacks C.PyUnstable_Object_ClearWeakRefsNoCallbacks
+func (self *PyObject) PyUnstable_Object_ClearWeakRefsNoCallbacks() {
+}
+
+// llgo:link (*PyObject).X_PyObject_GenericGetAttrWithDict C._PyObject_GenericGetAttrWithDict
+func (self *PyObject) X_PyObject_GenericGetAttrWithDict(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 c.Int) *PyObject {
+	return self
+}
+
+// llgo:link (*PyObject).X_PyObject_GenericSetAttrWithDict C._PyObject_GenericSetAttrWithDict
+func (self *PyObject) X_PyObject_GenericSetAttrWithDict(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).X_PyObject_FunctionStr C._PyObject_FunctionStr
+func (self *PyObject) X_PyObject_FunctionStr() *PyObject {
+	return self
+}
+
+// llgo:link (*PyObject).X_PyObject_AssertFailed C._PyObject_AssertFailed
+func (self *PyObject) X_PyObject_AssertFailed(expr *c.Char, msg *c.Char, file *c.Char, line c.Int, function *c.Char) {
+}
+
+// llgo:link (*PyThreadState).X_PyTrashThreadDepositObject C._PyTrash_thread_deposit_object
+func (self *PyThreadState) X_PyTrashThreadDepositObject(op *PyObject) {
+}
+
+// llgo:link (*PyThreadState).X_PyTrashThreadDestroyChain C._PyTrash_thread_destroy_chain
+func (self *PyThreadState) X_PyTrashThreadDestroyChain() {
+}
+
+// llgo:link (*PyThreadState).X_Py_ReachedRecursionLimitWithMargin C._Py_ReachedRecursionLimitWithMargin
+func (self *PyThreadState) X_Py_ReachedRecursionLimitWithMargin(margin_count c.Int) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).ItemData C.PyObject_GetItemData
+func (self *PyObject) ItemData() unsafe.Pointer {
+	return nil
+}
+
+// llgo:link (*PyObject).VisitManagedDict C.PyObject_VisitManagedDict
+func (self *PyObject) VisitManagedDict(visit Visitproc, arg unsafe.Pointer) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).X_PyObject_SetManagedDict C._PyObject_SetManagedDict
+func (self *PyObject) X_PyObject_SetManagedDict(new_dict *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).ClearManagedDict C.PyObject_ClearManagedDict
+func (self *PyObject) ClearManagedDict() {
+}
+
+//go:linkname PyType_AddWatcher C.PyType_AddWatcher
+func PyType_AddWatcher(callback PyType_WatchCallback) c.Int
+
+//go:linkname PyType_ClearWatcher C.PyType_ClearWatcher
+func PyType_ClearWatcher(watcher_id c.Int) c.Int
+
+//go:linkname PyType_Watch C.PyType_Watch
+func PyType_Watch(watcher_id c.Int, type_ *PyObject) c.Int
+
+//go:linkname PyType_Unwatch C.PyType_Unwatch
+func PyType_Unwatch(watcher_id c.Int, type_ *PyObject) c.Int
+
+// llgo:link (*PyTypeObject).PyUnstable_Type_AssignVersionTag C.PyUnstable_Type_AssignVersionTag
+func (self *PyTypeObject) PyUnstable_Type_AssignVersionTag() c.Int {
+	return 0
+}
+
+//go:linkname PyRefTracer_SetTracer C.PyRefTracer_SetTracer
+func PyRefTracer_SetTracer(tracer PyRefTracer, data unsafe.Pointer) c.Int
+
+//go:linkname PyRefTracer_GetTracer C.PyRefTracer_GetTracer
+func PyRefTracer_GetTracer(_llcppg_param1 *unsafe.Pointer) PyRefTracer
+
+// llgo:link (*PyObject).PyUnstable_Object_EnableDeferredRefcount C.PyUnstable_Object_EnableDeferredRefcount
+func (self *PyObject) PyUnstable_Object_EnableDeferredRefcount() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnstable_Object_IsUniqueReferencedTemporary C.PyUnstable_Object_IsUniqueReferencedTemporary
+func (self *PyObject) PyUnstable_Object_IsUniqueReferencedTemporary() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnstable_IsImmortal C.PyUnstable_IsImmortal
+func (self *PyObject) PyUnstable_IsImmortal() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnstable_TryIncRef C.PyUnstable_TryIncRef
+func (self *PyObject) PyUnstable_TryIncRef() c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyUnstable_EnableTryIncRef C.PyUnstable_EnableTryIncRef
+func (self *PyObject) PyUnstable_EnableTryIncRef() {
+}
+
+// llgo:link (*PyObject).PyUnstable_Object_IsUniquelyReferenced C.PyUnstable_Object_IsUniquelyReferenced
+func (self *PyObject) PyUnstable_Object_IsUniquelyReferenced() c.Int {
+	return 0
+}
 
 // llgo:link (*PyTypeObject).PyType_GetModuleByDef C.PyType_GetModuleByDef
 func (self *PyTypeObject) PyType_GetModuleByDef(_llcppg_param2 *PyModuleDef) *PyObject {

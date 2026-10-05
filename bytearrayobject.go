@@ -7,6 +7,14 @@ import (
 	_ "unsafe"
 )
 
+type PyByteArrayObject struct {
+	ObBase    PyVarObject
+	ObAlloc   PySsizeT
+	ObBytes   *c.Char
+	ObStart   *c.Char
+	ObExports PySsizeT
+}
+
 //go:linkname PyByteArray_Type C.PyByteArray_Type
 var PyByteArray_Type PyTypeObject
 
@@ -40,3 +48,6 @@ func (self *PyObject) PyByteArray_AsString() *c.Char {
 func (self *PyObject) PyByteArray_Resize(_llcppg_param2 PySsizeT) c.Int {
 	return 0
 }
+
+//go:linkname X_PyByteArrayEmptyString C._PyByteArray_empty_string
+var X_PyByteArrayEmptyString *c.Char

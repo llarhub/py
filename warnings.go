@@ -23,3 +23,13 @@ func (self *PyObject) PyErr_ResourceWarning(stack_level PySsizeT, format *c.Char
 func (self *PyObject) PyErr_WarnExplicit(message *c.Char, filename *c.Char, lineno c.Int, module *c.Char, registry *PyObject) c.Int {
 	return 0
 }
+
+// llgo:link (*PyObject).PyErr_WarnExplicitObject C.PyErr_WarnExplicitObject
+func (self *PyObject) PyErr_WarnExplicitObject(message *PyObject, filename *PyObject, lineno c.Int, module *PyObject, registry *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyErr_WarnExplicitFormat C.PyErr_WarnExplicitFormat
+func (self *PyObject) PyErr_WarnExplicitFormat(filename *c.Char, lineno c.Int, module *c.Char, registry *PyObject, format *c.Char, __llgo_va_list ...any) c.Int {
+	return 0
+}

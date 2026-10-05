@@ -41,6 +41,18 @@ type PyCFunctionFastWithKeywords = func(_llcppg_param1 *PyObject, _llcppg_param2
 type PyCMethod = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyTypeObject, _llcppg_param3 **PyObject, _llcppg_param4 PySsizeT, _llcppg_param5 *PyObject) *PyObject
 type X_PyCFunctionFast = PyCFunctionFast
 type X_PyCFunctionFastWithKeywords = PyCFunctionFastWithKeywords
+type PyCFunctionObject struct {
+	ObBase       PyObject
+	MMl          *PyMethodDef
+	MSelf        *PyObject
+	MModule      *PyObject
+	MWeakreflist *PyObject
+	Vectorcall   Vectorcallfunc
+}
+type PyCMethodObject struct {
+	Func    PyCFunctionObject
+	MmClass *PyTypeObject
+}
 
 //go:linkname PyCFunction_Type C.PyCFunction_Type
 var PyCFunction_Type PyTypeObject
@@ -74,3 +86,6 @@ func (self *PyMethodDef) PyCFunction_NewEx(_llcppg_param2 *PyObject, _llcppg_par
 func (self *PyMethodDef) PyCMethod_New(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 *PyTypeObject) *PyObject {
 	return nil
 }
+
+//go:linkname PyCMethod_Type C.PyCMethod_Type
+var PyCMethod_Type PyTypeObject

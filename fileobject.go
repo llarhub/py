@@ -4,10 +4,13 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 const PY_STDIOTEXTMODE = "b"
+
+// llgo:type C
+type Py_OpenCodeHookFunction = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) *PyObject
 
 //go:linkname PyFile_FromFd C.PyFile_FromFd
 func PyFile_FromFd(_llcppg_param1 c.Int, _llcppg_param2 *c.Char, _llcppg_param3 *c.Char, _llcppg_param4 c.Int, _llcppg_param5 *c.Char, _llcppg_param6 *c.Char, _llcppg_param7 *c.Char, _llcppg_param8 c.Int) *PyObject
@@ -41,3 +44,23 @@ var Py_HasFileSystemDefaultEncoding c.Int
 
 //go:linkname Py_UTF8Mode C.Py_UTF8Mode
 var Py_UTF8Mode c.Int
+
+//go:linkname Py_UniversalNewlineFgets C.Py_UniversalNewlineFgets
+func Py_UniversalNewlineFgets(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *c.FILE, _llcppg_param4 *PyObject) *c.Char
+
+//go:linkname PyFile_NewStdPrinter C.PyFile_NewStdPrinter
+func PyFile_NewStdPrinter(_llcppg_param1 c.Int) *PyObject
+
+//go:linkname PyStdPrinter_Type C.PyStdPrinter_Type
+var PyStdPrinter_Type PyTypeObject
+
+//go:linkname PyFile_OpenCode C.PyFile_OpenCode
+func PyFile_OpenCode(utf8path *c.Char) *PyObject
+
+// llgo:link (*PyObject).PyFile_OpenCodeObject C.PyFile_OpenCodeObject
+func (self *PyObject) PyFile_OpenCodeObject() *PyObject {
+	return self
+}
+
+//go:linkname PyFile_SetOpenCodeHook C.PyFile_SetOpenCodeHook
+func PyFile_SetOpenCodeHook(hook Py_OpenCodeHookFunction, userData unsafe.Pointer) c.Int

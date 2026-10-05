@@ -7,6 +7,24 @@ import (
 	_ "unsafe"
 )
 
+const PySet_MINSIZE = 8
+
+type Setentry struct {
+	Key  *PyObject
+	Hash PyHashT
+}
+type PySetObject struct {
+	ObBase      PyObject
+	Fill        PySsizeT
+	Used        PySsizeT
+	Mask        PySsizeT
+	Table       *Setentry
+	Hash        PyHashT
+	Finger      PySsizeT
+	Smalltable  [8]Setentry
+	Weakreflist *PyObject
+}
+
 //go:linkname PySet_Type C.PySet_Type
 var PySet_Type PyTypeObject
 

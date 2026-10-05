@@ -7,6 +7,12 @@ import (
 	_ "unsafe"
 )
 
+type PyListObject struct {
+	ObBase    PyVarObject
+	ObItem    **PyObject
+	Allocated PySsizeT
+}
+
 //go:linkname PyList_Type C.PyList_Type
 var PyList_Type PyTypeObject
 
@@ -72,4 +78,14 @@ func (self *PyObject) PyList_Reverse() c.Int {
 // llgo:link (*PyObject).PyList_AsTuple C.PyList_AsTuple
 func (self *PyObject) PyList_AsTuple() *PyObject {
 	return self
+}
+
+// llgo:link (*PyObject).PyList_Extend C.PyList_Extend
+func (self *PyObject) PyList_Extend(iterable *PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyObject).PyList_Clear C.PyList_Clear
+func (self *PyObject) PyList_Clear() c.Int {
+	return 0
 }

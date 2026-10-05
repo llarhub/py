@@ -7,6 +7,12 @@ import (
 	_ "unsafe"
 )
 
+type PyTupleObject struct {
+	ObBase PyVarObject
+	ObHash PyHashT
+	ObItem [1]*PyObject
+}
+
 //go:linkname PyTuple_Type C.PyTuple_Type
 var PyTuple_Type PyTypeObject
 
@@ -38,3 +44,6 @@ func (self *PyObject) PyTuple_GetSlice(_llcppg_param2 PySsizeT, _llcppg_param3 P
 
 //go:linkname PyTuple_Pack C.PyTuple_Pack
 func PyTuple_Pack(_llcppg_param1 PySsizeT, __llgo_va_list ...any) *PyObject
+
+//go:linkname X_PyTuple_Resize C._PyTuple_Resize
+func X_PyTuple_Resize(_llcppg_param1 **PyObject, _llcppg_param2 PySsizeT) c.Int

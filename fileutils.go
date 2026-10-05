@@ -12,3 +12,11 @@ func Py_DecodeLocale(arg *c.Char, size *c.SizeT) *c.WcharT
 
 //go:linkname Py_EncodeLocale C.Py_EncodeLocale
 func Py_EncodeLocale(text *c.WcharT, error_pos *c.SizeT) *c.Char
+
+// llgo:link (*PyObject).PyFopen C.Py_fopen
+func (self *PyObject) PyFopen(mode *c.Char) *c.FILE {
+	return nil
+}
+
+//go:linkname PyFclose C.Py_fclose
+func PyFclose(file *c.FILE) c.Int

@@ -7,6 +7,15 @@ import (
 	_ "unsafe"
 )
 
+type X_traceback struct {
+	ObBase   PyObject
+	TbNext   *PyTracebackObject
+	TbFrame  *PyFrameObject
+	TbLasti  c.Int
+	TbLineno c.Int
+}
+type PyTracebackObject = X_traceback
+
 // llgo:link (*PyFrameObject).PyTraceBack_Here C.PyTraceBack_Here
 func (self *PyFrameObject) PyTraceBack_Here() c.Int {
 	return 0

@@ -7,6 +7,11 @@ import (
 	_ "unsafe"
 )
 
+type PyFloatObject struct {
+	ObBase PyObject
+	ObFval c.Double
+}
+
 //go:linkname PyFloat_Type C.PyFloat_Type
 var PyFloat_Type PyTypeObject
 
@@ -31,3 +36,21 @@ func PyFloat_FromDouble(_llcppg_param1 c.Double) *PyObject
 func (self *PyObject) PyFloat_AsDouble() c.Double {
 	return 0
 }
+
+//go:linkname PyFloat_Pack2 C.PyFloat_Pack2
+func PyFloat_Pack2(x c.Double, p *c.Char, le c.Int) c.Int
+
+//go:linkname PyFloat_Pack4 C.PyFloat_Pack4
+func PyFloat_Pack4(x c.Double, p *c.Char, le c.Int) c.Int
+
+//go:linkname PyFloat_Pack8 C.PyFloat_Pack8
+func PyFloat_Pack8(x c.Double, p *c.Char, le c.Int) c.Int
+
+//go:linkname PyFloat_Unpack2 C.PyFloat_Unpack2
+func PyFloat_Unpack2(p *c.Char, le c.Int) c.Double
+
+//go:linkname PyFloat_Unpack4 C.PyFloat_Unpack4
+func PyFloat_Unpack4(p *c.Char, le c.Int) c.Double
+
+//go:linkname PyFloat_Unpack8 C.PyFloat_Unpack8
+func PyFloat_Unpack8(p *c.Char, le c.Int) c.Double

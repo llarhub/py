@@ -7,6 +7,15 @@ import (
 	_ "unsafe"
 )
 
+type X_PyWeakReference struct {
+	ObBase     PyObject
+	WrObject   *PyObject
+	WrCallback *PyObject
+	Hash       PyHashT
+	WrPrev     *PyWeakReference
+	WrNext     *PyWeakReference
+	Vectorcall Vectorcallfunc
+}
 type PyWeakReference = X_PyWeakReference
 
 //go:linkname X_PyWeakref_RefType C._PyWeakref_RefType
@@ -35,5 +44,14 @@ func (self *PyObject) PyWeakref_GetObject() *PyObject {
 
 // llgo:link (*PyObject).PyWeakref_GetRef C.PyWeakref_GetRef
 func (self *PyObject) PyWeakref_GetRef(pobj **PyObject) c.Int {
+	return 0
+}
+
+// llgo:link (*PyWeakReference).X_PyWeakref_ClearRef C._PyWeakref_ClearRef
+func (self *PyWeakReference) X_PyWeakref_ClearRef() {
+}
+
+// llgo:link (*PyObject).PyWeakref_IsDead C.PyWeakref_IsDead
+func (self *PyObject) PyWeakref_IsDead() c.Int {
 	return 0
 }

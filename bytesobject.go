@@ -7,6 +7,12 @@ import (
 	_ "unsafe"
 )
 
+type PyBytesObject struct {
+	ObBase  PyVarObject
+	ObShash PyHashT
+	ObSval  [1]c.Char
+}
+
 //go:linkname PyBytes_Type C.PyBytes_Type
 var PyBytes_Type PyTypeObject
 
@@ -57,4 +63,12 @@ func PyBytes_DecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 PySsizeT, _llcp
 // llgo:link (*PyObject).PyBytes_AsStringAndSize C.PyBytes_AsStringAndSize
 func (self *PyObject) PyBytes_AsStringAndSize(s **c.Char, len *PySsizeT) c.Int {
 	return 0
+}
+
+//go:linkname X_PyBytes_Resize C._PyBytes_Resize
+func X_PyBytes_Resize(_llcppg_param1 **PyObject, _llcppg_param2 PySsizeT) c.Int
+
+// llgo:link (*PyObject).PyBytes_Join C.PyBytes_Join
+func (self *PyObject) PyBytes_Join(iterable *PyObject) *PyObject {
+	return self
 }

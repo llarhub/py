@@ -7,6 +7,17 @@ import (
 	_ "unsafe"
 )
 
+type X_inittab struct {
+	Name     *c.Char
+	Initfunc func() *PyObject
+}
+type X_frozen struct {
+	Name      *c.Char
+	Code      *uint8
+	Size      c.Int
+	IsPackage c.Int
+}
+
 //go:linkname PyImport_GetMagicNumber C.PyImport_GetMagicNumber
 func PyImport_GetMagicNumber() c.Long
 
@@ -85,3 +96,22 @@ func PyImport_ImportFrozenModule(name *c.Char) c.Int
 
 //go:linkname PyImport_AppendInittab C.PyImport_AppendInittab
 func PyImport_AppendInittab(name *c.Char, initfunc func() *PyObject) c.Int
+
+//go:linkname PyImport_Inittab C.PyImport_Inittab
+var PyImport_Inittab *X_inittab
+
+// llgo:link (*X_inittab).PyImport_ExtendInittab C.PyImport_ExtendInittab
+func (self *X_inittab) PyImport_ExtendInittab() c.Int {
+	return 0
+}
+
+//go:linkname PyImport_FrozenModules C.PyImport_FrozenModules
+var PyImport_FrozenModules *X_frozen
+
+// llgo:link (*PyObject).PyImport_ImportModuleAttr C.PyImport_ImportModuleAttr
+func (self *PyObject) PyImport_ImportModuleAttr(attr_name *PyObject) *PyObject {
+	return self
+}
+
+//go:linkname PyImport_ImportModuleAttrString C.PyImport_ImportModuleAttrString
+func PyImport_ImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *PyObject
