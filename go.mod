@@ -1,4 +1,4 @@
-module github.com/llarhub/py/c
+module github.com/llarhub/py
 
 go 1.23
 
