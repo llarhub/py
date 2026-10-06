@@ -17,9 +17,9 @@ type Status struct {
 type _llcppg_anon_4 c.Uint
 
 const (
-	X_PyStatus_TYPE_OK    _llcppg_anon_4 = 0
-	X_PyStatus_TYPE_ERROR _llcppg_anon_4 = 1
-	X_PyStatus_TYPE_EXIT  _llcppg_anon_4 = 2
+	X_Status_TYPE_OK    _llcppg_anon_4 = 0
+	X_Status_TYPE_ERROR _llcppg_anon_4 = 1
+	X_Status_TYPE_EXIT  _llcppg_anon_4 = 2
 )
 
 // --- PyWideStringList ------------------------------------------------

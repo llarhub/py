@@ -10,11 +10,11 @@ import (
 type FunctionWatchEvent c.Uint
 
 const (
-	PyFunction_EVENT_CREATE            FunctionWatchEvent = 0
-	PyFunction_EVENT_DESTROY           FunctionWatchEvent = 1
-	PyFunction_EVENT_MODIFY_CODE       FunctionWatchEvent = 2
-	PyFunction_EVENT_MODIFY_DEFAULTS   FunctionWatchEvent = 3
-	PyFunction_EVENT_MODIFY_KWDEFAULTS FunctionWatchEvent = 4
+	Function_EVENT_CREATE            FunctionWatchEvent = 0
+	Function_EVENT_DESTROY           FunctionWatchEvent = 1
+	Function_EVENT_MODIFY_CODE       FunctionWatchEvent = 2
+	Function_EVENT_MODIFY_DEFAULTS   FunctionWatchEvent = 3
+	Function_EVENT_MODIFY_KWDEFAULTS FunctionWatchEvent = 4
 )
 
 type FrameConstructor struct {

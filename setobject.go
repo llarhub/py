@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-const PySet_MINSIZE = 8
+const Set_MINSIZE = 8
 
 type Setentry struct {
 	Key  *Object

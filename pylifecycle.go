@@ -7,10 +7,10 @@ import (
 	"unsafe"
 )
 
-const PyInterpreterConfig_DEFAULT_GIL = 0
-const PyInterpreterConfig_SHARED_GIL = 1
-const PyInterpreterConfig_OWN_GIL = 2
-const X_PyInterpreterConfig_LEGACY_CHECK_MULTI_INTERP_EXTENSIONS = 0
+const InterpreterConfig_DEFAULT_GIL = 0
+const InterpreterConfig_SHARED_GIL = 1
+const InterpreterConfig_OWN_GIL = 2
+const X_InterpreterConfig_LEGACY_CHECK_MULTI_INTERP_EXTENSIONS = 0
 
 // Signals
 //

@@ -13,10 +13,10 @@ const HASH_SIPHASH24 = 1
 const HASH_FNV = 2
 const HASH_SIPHASH13 = 3
 const HASH_ALGORITHM = 3
-const PyHASH_BITS = 61
-const PyHASH_INF = 314159
-const X_PyHASH_BITS = 61
-const X_PyHASH_INF = 314159
+const HASH_BITS = 61
+const HASH_INF = 314159
+const X_HASH_BITS = 61
+const X_HASH_INF = 314159
 
 // hash function definition
 //

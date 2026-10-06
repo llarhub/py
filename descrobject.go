@@ -31,7 +31,7 @@ const READONLY = 1
 const AUDIT_READ = 2
 const X_WRITE_RESTRICTED = 4
 const RELATIVE_OFFSET = 8
-const PyWrapperFlag_KEYWORDS = 1
+const WrapperFlag_KEYWORDS = 1
 
 type GetSetDef struct {
 	Name    *c.Char

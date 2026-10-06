@@ -9,22 +9,22 @@ import (
 )
 
 const MAX_CO_EXTRA_USERS = 255
-const PyTrace_CALL = 0
-const PyTrace_EXCEPTION = 1
-const PyTrace_LINE = 2
-const PyTrace_RETURN = 3
-const PyTrace_C_CALL = 4
-const PyTrace_C_EXCEPTION = 5
-const PyTrace_C_RETURN = 6
-const PyTrace_OPCODE = 7
+const Trace_CALL = 0
+const Trace_EXCEPTION = 1
+const Trace_LINE = 2
+const Trace_RETURN = 3
+const Trace_C_CALL = 4
+const Trace_C_EXCEPTION = 5
+const Trace_C_RETURN = 6
+const Trace_OPCODE = 7
 const X_MAX_SCRIPT_PATH_SIZE = 512
 const X_DATA_STACK_CHUNK_SIZE = 16384
 
 type GILState_STATE c.Uint
 
 const (
-	PyGILState_LOCKED   GILState_STATE = 0
-	PyGILState_UNLOCKED GILState_STATE = 1
+	GILState_LOCKED   GILState_STATE = 0
+	GILState_UNLOCKED GILState_STATE = 1
 )
 
 type X_ts struct {

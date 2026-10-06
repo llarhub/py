@@ -13,7 +13,7 @@ const
 // The current context has switched to a different context.  The object
 // passed to the watch callback is the now-current contextvars.Context
 // object, or None if no context is current.
-Py_CONTEXT_SWITCHED ContextEvent = 1
+CONTEXT_SWITCHED ContextEvent = 1
 
 type X_pycontextobject struct {
 }

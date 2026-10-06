@@ -7,27 +7,27 @@ import (
 	"unsafe"
 )
 
-const PyBUF_MAX_NDIM = 64
-const PyBUF_SIMPLE = 0
-const PyBUF_WRITABLE = 1
-const PyBUF_WRITEABLE = 1
-const PyBUF_FORMAT = 4
-const PyBUF_ND = 8
-const PyBUF_STRIDES = 24
-const PyBUF_C_CONTIGUOUS = 56
-const PyBUF_F_CONTIGUOUS = 88
-const PyBUF_ANY_CONTIGUOUS = 152
-const PyBUF_INDIRECT = 280
-const PyBUF_CONTIG = 9
-const PyBUF_CONTIG_RO = 8
-const PyBUF_STRIDED = 25
-const PyBUF_STRIDED_RO = 24
-const PyBUF_RECORDS = 29
-const PyBUF_RECORDS_RO = 28
-const PyBUF_FULL = 285
-const PyBUF_FULL_RO = 284
-const PyBUF_READ = 256
-const PyBUF_WRITE = 512
+const BUF_MAX_NDIM = 64
+const BUF_SIMPLE = 0
+const BUF_WRITABLE = 1
+const BUF_WRITEABLE = 1
+const BUF_FORMAT = 4
+const BUF_ND = 8
+const BUF_STRIDES = 24
+const BUF_C_CONTIGUOUS = 56
+const BUF_F_CONTIGUOUS = 88
+const BUF_ANY_CONTIGUOUS = 152
+const BUF_INDIRECT = 280
+const BUF_CONTIG = 9
+const BUF_CONTIG_RO = 8
+const BUF_STRIDED = 25
+const BUF_STRIDED_RO = 24
+const BUF_RECORDS = 29
+const BUF_RECORDS_RO = 28
+const BUF_FULL = 285
+const BUF_FULL_RO = 284
+const BUF_READ = 256
+const BUF_WRITE = 512
 
 // === New Buffer API ============================================
 // Limited API and stable ABI since Python 3.11

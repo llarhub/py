@@ -10,12 +10,12 @@ import (
 type DictWatchEvent c.Uint
 
 const (
-	PyDict_EVENT_ADDED       DictWatchEvent = 0
-	PyDict_EVENT_MODIFIED    DictWatchEvent = 1
-	PyDict_EVENT_DELETED     DictWatchEvent = 2
-	PyDict_EVENT_CLONED      DictWatchEvent = 3
-	PyDict_EVENT_CLEARED     DictWatchEvent = 4
-	PyDict_EVENT_DEALLOCATED DictWatchEvent = 5
+	Dict_EVENT_ADDED       DictWatchEvent = 0
+	Dict_EVENT_MODIFIED    DictWatchEvent = 1
+	Dict_EVENT_DELETED     DictWatchEvent = 2
+	Dict_EVENT_CLONED      DictWatchEvent = 3
+	Dict_EVENT_CLEARED     DictWatchEvent = 4
+	Dict_EVENT_DEALLOCATED DictWatchEvent = 5
 )
 
 type DictKeysObject = X_dictkeysobject

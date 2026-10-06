@@ -7,10 +7,10 @@ import (
 	"unsafe"
 )
 
-const PyLong_SHIFT = 30
-const X_PyLong_DECIMAL_SHIFT = 9
-const X_PyLong_SIGN_MASK = 3
-const X_PyLong_NON_SIZE_BITS = 3
+const Long_SHIFT = 30
+const X_Long_DECIMAL_SHIFT = 9
+const X_Long_SIGN_MASK = 3
+const X_Long_NON_SIZE_BITS = 3
 
 type X_longobject struct {
 	ObBase    Object

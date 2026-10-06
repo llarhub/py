@@ -47,8 +47,8 @@ const (
 type RefTracerEvent c.Uint
 
 const (
-	PyRefTracer_CREATE  RefTracerEvent = 0
-	PyRefTracer_DESTROY RefTracerEvent = 1
+	RefTracer_CREATE  RefTracerEvent = 0
+	RefTracer_DESTROY RefTracerEvent = 1
 )
 
 type X_object struct {

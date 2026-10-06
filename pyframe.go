@@ -7,11 +7,11 @@ import (
 	"unsafe"
 )
 
-const PyUnstable_EXECUTABLE_KIND_SKIP = 0
-const PyUnstable_EXECUTABLE_KIND_PY_FUNCTION = 1
-const PyUnstable_EXECUTABLE_KIND_BUILTIN_FUNCTION = 3
-const PyUnstable_EXECUTABLE_KIND_METHOD_DESCRIPTOR = 4
-const PyUnstable_EXECUTABLE_KINDS = 5
+const Unstable_EXECUTABLE_KIND_SKIP = 0
+const Unstable_EXECUTABLE_KIND_PY_FUNCTION = 1
+const Unstable_EXECUTABLE_KIND_BUILTIN_FUNCTION = 3
+const Unstable_EXECUTABLE_KIND_METHOD_DESCRIPTOR = 4
+const Unstable_EXECUTABLE_KINDS = 5
 
 type X_InterpreterFrame struct {
 }

@@ -18,11 +18,11 @@ type UnicodeKind c.Uint
 
 const (
 	// Return values of the PyUnicode_KIND() function:
-	PyUnicode_1BYTE_KIND UnicodeKind = 1
+	Unicode_1BYTE_KIND UnicodeKind = 1
 	// Return values of the PyUnicode_KIND() function:
-	PyUnicode_2BYTE_KIND UnicodeKind = 2
+	Unicode_2BYTE_KIND UnicodeKind = 2
 	// Return values of the PyUnicode_KIND() function:
-	PyUnicode_4BYTE_KIND UnicodeKind = 4
+	Unicode_4BYTE_KIND UnicodeKind = 4
 )
 
 // Py_UCS4 and Py_UCS2 are typedefs for the respective

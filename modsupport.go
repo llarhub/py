@@ -8,10 +8,10 @@ import (
 )
 
 const CLEANUP_SUPPORTED = 131072
-const PYTHON_API_VERSION = 1013
-const PYTHON_API_STRING = "1013"
-const PYTHON_ABI_VERSION = 3
-const PYTHON_ABI_STRING = "3"
+const API_VERSION = 1013
+const API_STRING = "1013"
+const ABI_VERSION = 3
+const ABI_STRING = "3"
 
 // A data structure that can be used to run initialization code once in a
 // thread-safe manner. The C++11 equivalent is std::call_once.
