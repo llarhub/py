@@ -20,23 +20,12 @@ type PerfMapState struct {
 	PerfMap *c.FILE
 	MapLock ThreadTypeLock
 }
-type Eval struct {
-	X_object
-}
 
-func (self *Object) AsEval() *Eval {
-	return (*Eval)(unsafe.Pointer(self))
-}
+//go:linkname EvalCode C.PyEval_EvalCode
+func EvalCode(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object) *Object
 
-// llgo:link (*Eval).Code C.PyEval_EvalCode
-func (self *Eval) Code(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
-	return nil
-}
-
-// llgo:link (*Eval).CodeEx C.PyEval_EvalCodeEx
-func (self *Eval) CodeEx(globals *Object, locals *Object, args **Object, argc c.Int, kwds **Object, kwdc c.Int, defs **Object, defc c.Int, kwdefs *Object, closure *Object) *Object {
-	return nil
-}
+//go:linkname EvalCodeEx C.PyEval_EvalCodeEx
+func EvalCodeEx(co *Object, globals *Object, locals *Object, args **Object, argc c.Int, kwds **Object, kwdc c.Int, defs **Object, defc c.Int, kwdefs *Object, closure *Object) *Object
 
 //go:linkname EvalGetBuiltins C.PyEval_GetBuiltins
 func EvalGetBuiltins() *Object
@@ -102,25 +91,17 @@ func EnterRecursiveCall(where *c.Char) c.Int
 //go:linkname LeaveRecursiveCall C.Py_LeaveRecursiveCall
 func LeaveRecursiveCall()
 
-// llgo:link (*Eval).FuncName C.PyEval_GetFuncName
-func (self *Eval) FuncName() *c.Char {
-	return nil
-}
+//go:linkname EvalGetFuncName C.PyEval_GetFuncName
+func EvalGetFuncName(_llcppg_param1 *Object) *c.Char
 
-// llgo:link (*Eval).FuncDesc C.PyEval_GetFuncDesc
-func (self *Eval) FuncDesc() *c.Char {
-	return nil
-}
+//go:linkname EvalGetFuncDesc C.PyEval_GetFuncDesc
+func EvalGetFuncDesc(_llcppg_param1 *Object) *c.Char
 
-// llgo:link (*Eval).Frame C.PyEval_EvalFrame
-func (self *Eval) Frame() *Object {
-	return nil
-}
+//go:linkname EvalFrame C.PyEval_EvalFrame
+func EvalFrame(_llcppg_param1 *FrameObject) *Object
 
-// llgo:link (*Eval).FrameEx C.PyEval_EvalFrameEx
-func (self *Eval) FrameEx(exc c.Int) *Object {
-	return nil
-}
+//go:linkname EvalFrameEx C.PyEval_EvalFrameEx
+func EvalFrameEx(f *FrameObject, exc c.Int) *Object
 
 // Interface for threads.
 //
@@ -166,20 +147,17 @@ func (self *Eval) FrameEx(exc c.Int) *Object {
 //go:linkname EvalSaveThread C.PyEval_SaveThread
 func EvalSaveThread() *ThreadState
 
-// llgo:link (*Eval).RestoreThread C.PyEval_RestoreThread
-func (self *Eval) RestoreThread() {
-}
+//go:linkname EvalRestoreThread C.PyEval_RestoreThread
+func EvalRestoreThread(_llcppg_param1 *ThreadState)
 
 //go:linkname EvalInitThreads C.PyEval_InitThreads
 func EvalInitThreads()
 
-// llgo:link (*Eval).AcquireThread C.PyEval_AcquireThread
-func (self *Eval) AcquireThread() {
-}
+//go:linkname EvalAcquireThread C.PyEval_AcquireThread
+func EvalAcquireThread(tstate *ThreadState)
 
-// llgo:link (*Eval).ReleaseThread C.PyEval_ReleaseThread
-func (self *Eval) ReleaseThread() {
-}
+//go:linkname EvalReleaseThread C.PyEval_ReleaseThread
+func EvalReleaseThread(tstate *ThreadState)
 
 //go:linkname EvalSetProfile C.PyEval_SetProfile
 func EvalSetProfile(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
@@ -197,13 +175,11 @@ func EvalSetTraceAllThreads(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
 // the corresponding compiler flags in cf->cf_flags.  Return 1 if any
 // flag was set, else return 0.
 //
-// llgo:link (*Eval).MergeCompilerFlags C.PyEval_MergeCompilerFlags
-func (self *Eval) MergeCompilerFlags() c.Int {
-	return 0
-}
+//go:linkname EvalMergeCompilerFlags C.PyEval_MergeCompilerFlags
+func EvalMergeCompilerFlags(cf *CompilerFlags) c.Int
 
-//go:linkname X_EvalEvalFrameDefault C._PyEval_EvalFrameDefault
-func X_EvalEvalFrameDefault(tstate *ThreadState, f *X_InterpreterFrame, exc c.Int) *Object
+//go:linkname X_EvalFrameDefault C._PyEval_EvalFrameDefault
+func X_EvalFrameDefault(tstate *ThreadState, f *X_InterpreterFrame, exc c.Int) *Object
 
 //go:linkname UnstableEvalRequestCodeExtraIndex C.PyUnstable_Eval_RequestCodeExtraIndex
 func UnstableEvalRequestCodeExtraIndex(_llcppg_param1 Freefunc) SsizeT

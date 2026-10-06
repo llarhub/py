@@ -16,13 +16,11 @@ func ErrPrint()
 //go:linkname ErrPrintEx C.PyErr_PrintEx
 func ErrPrintEx(_llcppg_param1 c.Int)
 
-// llgo:link (*Err).Display C.PyErr_Display
-func (self *Err) Display(_llcppg_param2 *Object, _llcppg_param3 *Object) {
-}
+//go:linkname ErrDisplay C.PyErr_Display
+func ErrDisplay(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object)
 
-// llgo:link (*Err).DisplayException C.PyErr_DisplayException
-func (self *Err) DisplayException() {
-}
+//go:linkname ErrDisplayException C.PyErr_DisplayException
+func ErrDisplayException(_llcppg_param1 *Object)
 
 // Stuff with no proper home (yet)
 //

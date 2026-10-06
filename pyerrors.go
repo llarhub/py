@@ -141,25 +141,15 @@ type AttributeErrorObject struct {
 
 // Compatibility typedefs
 type EnvironmentErrorObject = OSErrorObject
-type Err struct {
-	X_object
-}
 
-func (self *Object) AsErr() *Err {
-	return (*Err)(unsafe.Pointer(self))
-}
+//go:linkname ErrSetNone C.PyErr_SetNone
+func ErrSetNone(_llcppg_param1 *Object)
 
-// llgo:link (*Err).SetNone C.PyErr_SetNone
-func (self *Err) SetNone() {
-}
+//go:linkname ErrSetObject C.PyErr_SetObject
+func ErrSetObject(_llcppg_param1 *Object, _llcppg_param2 *Object)
 
-// llgo:link (*Err).SetObject C.PyErr_SetObject
-func (self *Err) SetObject(_llcppg_param2 *Object) {
-}
-
-// llgo:link (*Err).SetString C.PyErr_SetString
-func (self *Err) SetString(string *c.Char) {
-}
+//go:linkname ErrSetString C.PyErr_SetString
+func ErrSetString(exception *Object, string *c.Char)
 
 //go:linkname ErrOccurred C.PyErr_Occurred
 func ErrOccurred() *Object
@@ -170,30 +160,26 @@ func ErrClear()
 //go:linkname ErrFetch C.PyErr_Fetch
 func ErrFetch(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
 
-// llgo:link (*Err).Restore C.PyErr_Restore
-func (self *Err) Restore(_llcppg_param2 *Object, _llcppg_param3 *Object) {
-}
+//go:linkname ErrRestore C.PyErr_Restore
+func ErrRestore(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object)
 
 //go:linkname ErrGetRaisedException C.PyErr_GetRaisedException
 func ErrGetRaisedException() *Object
 
-// llgo:link (*Err).SetRaisedException C.PyErr_SetRaisedException
-func (self *Err) SetRaisedException() {
-}
+//go:linkname ErrSetRaisedException C.PyErr_SetRaisedException
+func ErrSetRaisedException(_llcppg_param1 *Object)
 
 //go:linkname ErrGetHandledException C.PyErr_GetHandledException
 func ErrGetHandledException() *Object
 
-// llgo:link (*Err).SetHandledException C.PyErr_SetHandledException
-func (self *Err) SetHandledException() {
-}
+//go:linkname ErrSetHandledException C.PyErr_SetHandledException
+func ErrSetHandledException(_llcppg_param1 *Object)
 
 //go:linkname ErrGetExcInfo C.PyErr_GetExcInfo
 func ErrGetExcInfo(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
 
-// llgo:link (*Err).SetExcInfo C.PyErr_SetExcInfo
-func (self *Err) SetExcInfo(_llcppg_param2 *Object, _llcppg_param3 *Object) {
-}
+//go:linkname ErrSetExcInfo C.PyErr_SetExcInfo
+func ErrSetExcInfo(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object)
 
 // Defined in Python/pylifecycle.c
 //
@@ -206,15 +192,11 @@ func FatalError(message *c.Char)
 
 // Error testing and normalization
 //
-// llgo:link (*Err).GivenExceptionMatches C.PyErr_GivenExceptionMatches
-func (self *Err) GivenExceptionMatches(_llcppg_param2 *Object) c.Int {
-	return 0
-}
+//go:linkname ErrGivenExceptionMatches C.PyErr_GivenExceptionMatches
+func ErrGivenExceptionMatches(_llcppg_param1 *Object, _llcppg_param2 *Object) c.Int
 
-// llgo:link (*Err).ExceptionMatches C.PyErr_ExceptionMatches
-func (self *Err) ExceptionMatches() c.Int {
-	return 0
-}
+//go:linkname ErrExceptionMatches C.PyErr_ExceptionMatches
+func ErrExceptionMatches(_llcppg_param1 *Object) c.Int
 
 //go:linkname ErrNormalizeException C.PyErr_NormalizeException
 func ErrNormalizeException(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
@@ -501,45 +483,29 @@ func ErrBadArgument() c.Int
 //go:linkname ErrNoMemory C.PyErr_NoMemory
 func ErrNoMemory() *Object
 
-// llgo:link (*Err).SetFromErrno C.PyErr_SetFromErrno
-func (self *Err) SetFromErrno() *Object {
-	return nil
-}
+//go:linkname ErrSetFromErrno C.PyErr_SetFromErrno
+func ErrSetFromErrno(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Err).ErrSetFromErrnoWithFilenameObject C.PyErr_SetFromErrnoWithFilenameObject
-func (self *Err) ErrSetFromErrnoWithFilenameObject(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname ErrSetFromErrnoWithFilenameObject C.PyErr_SetFromErrnoWithFilenameObject
+func ErrSetFromErrnoWithFilenameObject(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object
 
-// llgo:link (*Err).SetFromErrnoWithFilenameObjects C.PyErr_SetFromErrnoWithFilenameObjects
-func (self *Err) SetFromErrnoWithFilenameObjects(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
-	return nil
-}
+//go:linkname ErrSetFromErrnoWithFilenameObjects C.PyErr_SetFromErrnoWithFilenameObjects
+func ErrSetFromErrnoWithFilenameObjects(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object) *Object
 
-// llgo:link (*Err).SetFromErrnoWithFilename C.PyErr_SetFromErrnoWithFilename
-func (self *Err) SetFromErrnoWithFilename(filename *c.Char) *Object {
-	return nil
-}
+//go:linkname ErrSetFromErrnoWithFilename C.PyErr_SetFromErrnoWithFilename
+func ErrSetFromErrnoWithFilename(exc *Object, filename *c.Char) *Object
 
-// llgo:link (*Err).Format C.PyErr_Format
-func (self *Err) Format(format *c.Char, __llgo_va_list ...any) *Object {
-	return nil
-}
+//go:linkname ErrFormat C.PyErr_Format
+func ErrFormat(exception *Object, format *c.Char, __llgo_va_list ...any) *Object
 
-// llgo:link (*Err).FormatV C.PyErr_FormatV
-func (self *Err) FormatV(format *c.Char, vargs c.VaList) *Object {
-	return nil
-}
+//go:linkname Err_FormatV C.PyErr_FormatV
+func Err_FormatV(exception *Object, format *c.Char, vargs c.VaList) *Object
 
-// llgo:link (*Err).SetImportErrorSubclass C.PyErr_SetImportErrorSubclass
-func (self *Err) SetImportErrorSubclass(_llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *Object) *Object {
-	return nil
-}
+//go:linkname ErrSetImportErrorSubclass C.PyErr_SetImportErrorSubclass
+func ErrSetImportErrorSubclass(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *Object) *Object
 
-// llgo:link (*Err).SetImportError C.PyErr_SetImportError
-func (self *Err) SetImportError(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
-	return nil
-}
+//go:linkname ErrSetImportError C.PyErr_SetImportError
+func ErrSetImportError(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object) *Object
 
 // Export the old function so that the existing API remains available:
 //
@@ -557,9 +523,8 @@ func ErrNewException(name *c.Char, base *Object, dict *Object) *Object
 //go:linkname ErrNewExceptionWithDoc C.PyErr_NewExceptionWithDoc
 func ErrNewExceptionWithDoc(name *c.Char, doc *c.Char, base *Object, dict *Object) *Object
 
-// llgo:link (*Err).WriteUnraisable C.PyErr_WriteUnraisable
-func (self *Err) WriteUnraisable() {
-}
+//go:linkname ErrWriteUnraisable C.PyErr_WriteUnraisable
+func ErrWriteUnraisable(_llcppg_param1 *Object)
 
 // In signalmodule.c
 //
@@ -773,18 +738,14 @@ func SignalSetWakeupFd(fd c.Int) c.Int
 
 // Support for adding program text to SyntaxErrors
 //
-// llgo:link (*Err).SyntaxLocationObject C.PyErr_SyntaxLocationObject
-func (self *Err) SyntaxLocationObject(lineno c.Int, col_offset c.Int) {
-}
+//go:linkname ErrSyntaxLocationObject C.PyErr_SyntaxLocationObject
+func ErrSyntaxLocationObject(filename *Object, lineno c.Int, col_offset c.Int)
 
-// llgo:link (*Err).RangedSyntaxLocationObject C.PyErr_RangedSyntaxLocationObject
-func (self *Err) RangedSyntaxLocationObject(lineno c.Int, col_offset c.Int, end_lineno c.Int, end_col_offset c.Int) {
-}
+//go:linkname ErrRangedSyntaxLocationObject C.PyErr_RangedSyntaxLocationObject
+func ErrRangedSyntaxLocationObject(filename *Object, lineno c.Int, col_offset c.Int, end_lineno c.Int, end_col_offset c.Int)
 
-// llgo:link (*Err).ProgramTextObject C.PyErr_ProgramTextObject
-func (self *Err) ProgramTextObject(lineno c.Int) *Object {
-	return nil
-}
+//go:linkname ErrProgramTextObject C.PyErr_ProgramTextObject
+func ErrProgramTextObject(filename *Object, lineno c.Int) *Object
 
 //go:linkname X_FatalErrorFunc C._Py_FatalErrorFunc
 func X_FatalErrorFunc(func_ *c.Char, message *c.Char)

@@ -249,22 +249,12 @@ func (self *Iter) Check() c.Int {
 	return 0
 }
 
-type AIter struct {
-	X_object
-}
-
-func (self *Object) AsAIter() *AIter {
-	return (*AIter)(unsafe.Pointer(self))
-}
-
 // Returns non-zero if the object 'obj' provides AsyncIterator protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*AIter).Check C.PyAIter_Check
-func (self *AIter) Check() c.Int {
-	return 0
-}
+//go:linkname AIterCheck C.PyAIter_Check
+func AIterCheck(_llcppg_param1 *Object) c.Int
 
 // Return 1 and set 'item' to the next item of 'iter' on success.
 // Return 0 and set 'item' to NULL when there are no remaining values.

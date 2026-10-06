@@ -2,7 +2,7 @@
 
 package py
 
-import "unsafe"
+import _ "unsafe"
 
 type X_GenObject struct {
 }
@@ -23,44 +23,20 @@ type AsyncGenObject = X_AsyncGenObject
 //go:linkname GenType C.PyGen_Type
 var GenType TypeObject
 
-type Gen struct {
-	X_frame
-}
+//go:linkname GenNew C.PyGen_New
+func GenNew(_llcppg_param1 *FrameObject) *Object
 
-func (self *FrameObject) AsGen() *Gen {
-	return (*Gen)(unsafe.Pointer(self))
-}
+//go:linkname GenNewWithQualName C.PyGen_NewWithQualName
+func GenNewWithQualName(_llcppg_param1 *FrameObject, name *Object, qualname *Object) *Object
 
-// llgo:link (*Gen).New C.PyGen_New
-func (self *Gen) New() *Object {
-	return nil
-}
-
-// llgo:link (*Gen).NewWithQualName C.PyGen_NewWithQualName
-func (self *Gen) NewWithQualName(name *Object, qualname *Object) *Object {
-	return nil
-}
-
-// llgo:link (*Gen).Code C.PyGen_GetCode
-func (self *Gen) Code() *CodeObject {
-	return nil
-}
+//go:linkname GenGetCode C.PyGen_GetCode
+func GenGetCode(gen *GenObject) *CodeObject
 
 //go:linkname CoroType C.PyCoro_Type
 var CoroType TypeObject
 
-type Coro struct {
-	X_frame
-}
-
-func (self *FrameObject) AsCoro() *Coro {
-	return (*Coro)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Coro).New C.PyCoro_New
-func (self *Coro) New(name *Object, qualname *Object) *Object {
-	return nil
-}
+//go:linkname CoroNew C.PyCoro_New
+func CoroNew(_llcppg_param1 *FrameObject, name *Object, qualname *Object) *Object
 
 //go:linkname AsyncGenType C.PyAsyncGen_Type
 var AsyncGenType TypeObject
@@ -68,15 +44,5 @@ var AsyncGenType TypeObject
 //go:linkname X_AsyncGenASendType C._PyAsyncGenASend_Type
 var X_AsyncGenASendType TypeObject
 
-type AsyncGen struct {
-	X_frame
-}
-
-func (self *FrameObject) AsAsyncGen() *AsyncGen {
-	return (*AsyncGen)(unsafe.Pointer(self))
-}
-
-// llgo:link (*AsyncGen).New C.PyAsyncGen_New
-func (self *AsyncGen) New(name *Object, qualname *Object) *Object {
-	return nil
-}
+//go:linkname AsyncGenNew C.PyAsyncGen_New
+func AsyncGenNew(_llcppg_param1 *FrameObject, name *Object, qualname *Object) *Object

@@ -2,36 +2,27 @@
 
 package py
 
-import "github.com/goplus/lib/c"
+import (
+	"github.com/goplus/lib/c"
+	_ "unsafe"
+)
 
-// llgo:link (*Err).WarnEx C.PyErr_WarnEx
-func (self *Err) WarnEx(message *c.Char, stack_level SsizeT) c.Int {
-	return 0
-}
+//go:linkname ErrWarnEx C.PyErr_WarnEx
+func ErrWarnEx(category *Object, message *c.Char, stack_level SsizeT) c.Int
 
-// llgo:link (*Err).WarnFormat C.PyErr_WarnFormat
-func (self *Err) WarnFormat(stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ErrWarnFormat C.PyErr_WarnFormat
+func ErrWarnFormat(category *Object, stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int
 
 // Emit a ResourceWarning warning
 //
-// llgo:link (*Err).ResourceWarning C.PyErr_ResourceWarning
-func (self *Err) ResourceWarning(stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ErrResourceWarning C.PyErr_ResourceWarning
+func ErrResourceWarning(source *Object, stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int
 
-// llgo:link (*Err).WarnExplicit C.PyErr_WarnExplicit
-func (self *Err) WarnExplicit(message *c.Char, filename *c.Char, lineno c.Int, module *c.Char, registry *Object) c.Int {
-	return 0
-}
+//go:linkname ErrWarnExplicit C.PyErr_WarnExplicit
+func ErrWarnExplicit(category *Object, message *c.Char, filename *c.Char, lineno c.Int, module *c.Char, registry *Object) c.Int
 
-// llgo:link (*Err).WarnExplicitObject C.PyErr_WarnExplicitObject
-func (self *Err) WarnExplicitObject(message *Object, filename *Object, lineno c.Int, module *Object, registry *Object) c.Int {
-	return 0
-}
+//go:linkname ErrWarnExplicitObject C.PyErr_WarnExplicitObject
+func ErrWarnExplicitObject(category *Object, message *Object, filename *Object, lineno c.Int, module *Object, registry *Object) c.Int
 
-// llgo:link (*Err).WarnExplicitFormat C.PyErr_WarnExplicitFormat
-func (self *Err) WarnExplicitFormat(filename *c.Char, lineno c.Int, module *c.Char, registry *Object, format *c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ErrWarnExplicitFormat C.PyErr_WarnExplicitFormat
+func ErrWarnExplicitFormat(category *Object, filename *c.Char, lineno c.Int, module *c.Char, registry *Object, format *c.Char, __llgo_va_list ...any) c.Int

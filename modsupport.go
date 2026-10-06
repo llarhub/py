@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 const CLEANUP_SUPPORTED = 131072
@@ -31,48 +31,27 @@ type X_ArgParser struct {
 	Kwtuple        *Object
 	Next           *X_ArgParser
 }
-type Arg struct {
-	X_object
-}
 
-func (self *Object) AsArg() *Arg {
-	return (*Arg)(unsafe.Pointer(self))
-}
+//go:linkname ArgParse C.PyArg_Parse
+func ArgParse(_llcppg_param1 *Object, _llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int
 
-// llgo:link (*Arg).Parse C.PyArg_Parse
-func (self *Arg) Parse(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ArgParseTuple C.PyArg_ParseTuple
+func ArgParseTuple(_llcppg_param1 *Object, _llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int
 
-// llgo:link (*Arg).ParseTuple C.PyArg_ParseTuple
-func (self *Arg) ParseTuple(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ArgParseTupleAndKeywords C.PyArg_ParseTupleAndKeywords
+func ArgParseTupleAndKeywords(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, __llgo_va_list ...any) c.Int
 
-// llgo:link (*Arg).ParseTupleAndKeywords C.PyArg_ParseTupleAndKeywords
-func (self *Arg) ParseTupleAndKeywords(_llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ArgVaParse C.PyArg_VaParse
+func ArgVaParse(_llcppg_param1 *Object, _llcppg_param2 *c.Char, _llcppg_param3 c.VaList) c.Int
 
-// llgo:link (*Arg).VaParse C.PyArg_VaParse
-func (self *Arg) VaParse(_llcppg_param2 *c.Char, _llcppg_param3 c.VaList) c.Int {
-	return 0
-}
+//go:linkname ArgVaParseTupleAndKeywords C.PyArg_VaParseTupleAndKeywords
+func ArgVaParseTupleAndKeywords(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, _llcppg_param5 c.VaList) c.Int
 
-// llgo:link (*Arg).VaParseTupleAndKeywords C.PyArg_VaParseTupleAndKeywords
-func (self *Arg) VaParseTupleAndKeywords(_llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, _llcppg_param5 c.VaList) c.Int {
-	return 0
-}
+//go:linkname ArgValidateKeywordArguments C.PyArg_ValidateKeywordArguments
+func ArgValidateKeywordArguments(_llcppg_param1 *Object) c.Int
 
-// llgo:link (*Arg).ValidateKeywordArguments C.PyArg_ValidateKeywordArguments
-func (self *Arg) ValidateKeywordArguments() c.Int {
-	return 0
-}
-
-// llgo:link (*Arg).UnpackTuple C.PyArg_UnpackTuple
-func (self *Arg) UnpackTuple(_llcppg_param2 *c.Char, _llcppg_param3 SsizeT, _llcppg_param4 SsizeT, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname ArgUnpackTuple C.PyArg_UnpackTuple
+func ArgUnpackTuple(_llcppg_param1 *Object, _llcppg_param2 *c.Char, _llcppg_param3 SsizeT, _llcppg_param4 SsizeT, __llgo_va_list ...any) c.Int
 
 //go:linkname BuildValue C.Py_BuildValue
 func BuildValue(_llcppg_param1 *c.Char, __llgo_va_list ...any) *Object
