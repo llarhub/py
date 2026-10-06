@@ -4,6 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
+	"github.com/qiniu/x/bitfield"
 	"unsafe"
 )
 
@@ -16,20 +17,20 @@ const PyTrace_C_CALL = 4
 const PyTrace_C_EXCEPTION = 5
 const PyTrace_C_RETURN = 6
 const PyTrace_OPCODE = 7
-const X_Py_MAX_SCRIPT_PATH_SIZE = 512
-const X_PY_DATA_STACK_CHUNK_SIZE = 16384
+const X_MAX_SCRIPT_PATH_SIZE = 512
+const X_DATA_STACK_CHUNK_SIZE = 16384
 
-type PyGILState_STATE c.Uint
+type GILState_STATE c.Uint
 
 const (
-	PyGILState_LOCKED   PyGILState_STATE = 0
-	PyGILState_UNLOCKED PyGILState_STATE = 1
+	PyGILState_LOCKED   GILState_STATE = 0
+	PyGILState_UNLOCKED GILState_STATE = 1
 )
 
 type X_ts struct {
-	Prev                         *PyThreadState
-	Next                         *PyThreadState
-	Interp                       *PyInterpreterState
+	Prev                         *ThreadState
+	Next                         *ThreadState
+	Interp                       *InterpreterState
 	EvalBreaker                  c.UintptrT
 	X_status                     _llcppg_anon_5
 	HoldsGil                     c.Int
@@ -40,139 +41,140 @@ type X_ts struct {
 	RecursionHeadroom            c.Int
 	Tracing                      c.Int
 	WhatEvent                    c.Int
-	CurrentFrame                 *X_PyInterpreterFrame
-	CProfilefunc                 PyTracefunc
-	CTracefunc                   PyTracefunc
-	CProfileobj                  *PyObject
-	CTraceobj                    *PyObject
-	CurrentException             *PyObject
-	ExcInfo                      *X_PyErr_StackItem
-	Dict                         *PyObject
+	CurrentFrame                 *X_InterpreterFrame
+	CProfilefunc                 Tracefunc
+	CTracefunc                   Tracefunc
+	CProfileobj                  *Object
+	CTraceobj                    *Object
+	CurrentException             *Object
+	ExcInfo                      *X_ErrStackItem
+	Dict                         *Object
 	GilstateCounter              c.Int
-	AsyncExc                     *PyObject
+	AsyncExc                     *Object
 	ThreadId                     c.Ulong
 	NativeThreadId               c.Ulong
-	DeleteLater                  *PyObject
+	DeleteLater                  *Object
 	CriticalSection              c.UintptrT
 	CoroutineOriginTrackingDepth c.Int
-	AsyncGenFirstiter            *PyObject
-	AsyncGenFinalizer            *PyObject
-	Context                      *PyObject
+	AsyncGenFirstiter            *Object
+	AsyncGenFinalizer            *Object
+	Context                      *Object
 	ContextVer                   c.Uint64T
 	Id                           c.Uint64T
-	DatastackChunk               *X_PyStackChunk
-	DatastackTop                 **PyObject
-	DatastackLimit               **PyObject
-	ExcState                     X_PyErr_StackItem
-	CurrentExecutor              *PyObject
+	DatastackChunk               *X_StackChunk
+	DatastackTop                 **Object
+	DatastackLimit               **Object
+	ExcState                     X_ErrStackItem
+	CurrentExecutor              *Object
 	DictGlobalVersion            c.Uint64T
-	ThreadingLocalKey            *PyObject
-	ThreadingLocalSentinel       *PyObject
-	RemoteDebuggerSupport        X_PyRemoteDebuggerSupport
-	DatastackCachedChunk         *X_PyStackChunk
+	ThreadingLocalKey            *Object
+	ThreadingLocalSentinel       *Object
+	RemoteDebuggerSupport        X_RemoteDebuggerSupport
+	DatastackCachedChunk         *X_StackChunk
 }
 
 // Py_tracefunc return -1 when raising an exception, or 0 for success.
 //
 // llgo:type C
-type PyTracefunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyFrameObject, _llcppg_param3 c.Int, _llcppg_param4 *PyObject) c.Int
-type X_PyRemoteDebuggerSupport struct {
+type Tracefunc = func(_llcppg_param1 *Object, _llcppg_param2 *FrameObject, _llcppg_param3 c.Int, _llcppg_param4 *Object) c.Int
+type X_RemoteDebuggerSupport struct {
 	DebuggerPendingCall c.Int32T
 	DebuggerScriptPath  [512]c.Char
 }
 type X_errStackitem struct {
-	ExcValue     *PyObject
+	ExcValue     *Object
 	PreviousItem *X_errStackitem
 }
-type X_PyErr_StackItem = X_errStackitem
+type X_ErrStackItem = X_errStackitem
 type X_stackChunk struct {
 	Previous *X_stackChunk
 	Size     c.SizeT
 	Top      c.SizeT
-	Data     [1]*PyObject
+	Data     [1]*Object
 }
-type X_PyStackChunk = X_stackChunk
+type X_StackChunk = X_stackChunk
 type _llcppg_anon_5 struct {
-	Initialized   c.Uint
-	Bound         c.Uint
-	Unbound       c.Uint
-	BoundGilstate c.Uint
-	Active        c.Uint
-	Finalizing    c.Uint
-	Cleared       c.Uint
-	Finalized     c.Uint
-	X             c.Uint
+	_xgo_align  [0]uint32
+	_xgo_bits_0 [4]uint8
 }
 
 // Frame evaluation API
 //
 // llgo:type C
-type X_PyFrameEvalFunction = func(_llcppg_param1 *PyThreadState, _llcppg_param2 *X_PyInterpreterFrame, _llcppg_param3 c.Int) *PyObject
+type X_FrameEvalFunction = func(_llcppg_param1 *ThreadState, _llcppg_param2 *X_InterpreterFrame, _llcppg_param3 c.Int) *Object
 
-//go:linkname PyInterpreterState_New C.PyInterpreterState_New
-func PyInterpreterState_New() *PyInterpreterState
+//go:linkname InterpreterStateNew C.PyInterpreterState_New
+func InterpreterStateNew() *InterpreterState
 
-// llgo:link (*PyInterpreterState).Clear C.PyInterpreterState_Clear
-func (self *PyInterpreterState) Clear() {
+// llgo:link (*InterpreterState).Clear C.PyInterpreterState_Clear
+func (self *InterpreterState) Clear() {
 }
 
-// llgo:link (*PyInterpreterState).Delete C.PyInterpreterState_Delete
-func (self *PyInterpreterState) Delete() {
+// llgo:link (*InterpreterState).Delete C.PyInterpreterState_Delete
+func (self *InterpreterState) Delete() {
 }
 
-// New in 3.9 */
-// /* Get the current interpreter state.
+// New in 3.9
+// Get the current interpreter state.
 //
 // Issue a fatal error if there no current Python thread state or no current
 // interpreter. It cannot return NULL.
 //
 // The caller must hold the GIL.
 //
-//go:linkname PyInterpreterState_Get C.PyInterpreterState_Get
-func PyInterpreterState_Get() *PyInterpreterState
+//go:linkname InterpreterStateGet C.PyInterpreterState_Get
+func InterpreterStateGet() *InterpreterState
 
 // New in 3.8
 //
-// llgo:link (*PyInterpreterState).Dict C.PyInterpreterState_GetDict
-func (self *PyInterpreterState) Dict() *PyObject {
+// llgo:link (*InterpreterState).Dict C.PyInterpreterState_GetDict
+func (self *InterpreterState) Dict() *Object {
 	return nil
 }
 
 // New in 3.7
 //
-// llgo:link (*PyInterpreterState).ID C.PyInterpreterState_GetID
-func (self *PyInterpreterState) ID() c.Int64T {
+// llgo:link (*InterpreterState).ID C.PyInterpreterState_GetID
+func (self *InterpreterState) ID() c.Int64T {
 	return 0
+}
+
+type State struct {
+	X_object
+}
+
+func (self *Object) AsState() *State {
+	return (*State)(unsafe.Pointer(self))
 }
 
 // New in 3.3
 //
-// llgo:link (*PyObject).PyState_AddModule C.PyState_AddModule
-func (self *PyObject) PyState_AddModule(_llcppg_param2 *PyModuleDef) c.Int {
+// llgo:link (*State).AddModule C.PyState_AddModule
+func (self *State) AddModule(_llcppg_param2 *ModuleDef) c.Int {
 	return 0
 }
 
-// llgo:link (*PyModuleDef).PyState_RemoveModule C.PyState_RemoveModule
-func (self *PyModuleDef) PyState_RemoveModule() c.Int {
+// llgo:link (*State).RemoveModule C.PyState_RemoveModule
+func (self *State) RemoveModule() c.Int {
 	return 0
 }
 
-// llgo:link (*PyModuleDef).PyState_FindModule C.PyState_FindModule
-func (self *PyModuleDef) PyState_FindModule() *PyObject {
+// llgo:link (*State).FindModule C.PyState_FindModule
+func (self *State) FindModule() *Object {
 	return nil
 }
 
-// llgo:link (*PyInterpreterState).PyThreadState_New C.PyThreadState_New
-func (self *PyInterpreterState) PyThreadState_New() *PyThreadState {
+// llgo:link (*InterpreterState).ThreadStateNew C.PyThreadState_New
+func (self *InterpreterState) ThreadStateNew() *ThreadState {
 	return nil
 }
 
-// llgo:link (*PyThreadState).Clear C.PyThreadState_Clear
-func (self *PyThreadState) Clear() {
+// llgo:link (*ThreadState).Clear C.PyThreadState_Clear
+func (self *ThreadState) Clear() {
 }
 
-// llgo:link (*PyThreadState).Delete C.PyThreadState_Delete
-func (self *PyThreadState) Delete() {
+// llgo:link (*ThreadState).Delete C.PyThreadState_Delete
+func (self *ThreadState) Delete() {
 }
 
 // Get the current thread state.
@@ -184,34 +186,34 @@ func (self *PyThreadState) Delete() {
 //
 // See also PyThreadState_GetUnchecked() and _PyThreadState_GET().
 //
-//go:linkname PyThreadState_Get C.PyThreadState_Get
-func PyThreadState_Get() *PyThreadState
+//go:linkname ThreadStateGet C.PyThreadState_Get
+func ThreadStateGet() *ThreadState
 
-// llgo:link (*PyThreadState).Swap C.PyThreadState_Swap
-func (self *PyThreadState) Swap() *PyThreadState {
+// llgo:link (*ThreadState).Swap C.PyThreadState_Swap
+func (self *ThreadState) Swap() *ThreadState {
 	return self
 }
 
-//go:linkname PyThreadState_GetDict C.PyThreadState_GetDict
-func PyThreadState_GetDict() *PyObject
+//go:linkname ThreadStateGetDict C.PyThreadState_GetDict
+func ThreadStateGetDict() *Object
 
-//go:linkname PyThreadState_SetAsyncExc C.PyThreadState_SetAsyncExc
-func PyThreadState_SetAsyncExc(_llcppg_param1 c.Ulong, _llcppg_param2 *PyObject) c.Int
+//go:linkname ThreadStateSetAsyncExc C.PyThreadState_SetAsyncExc
+func ThreadStateSetAsyncExc(_llcppg_param1 c.Ulong, _llcppg_param2 *Object) c.Int
 
 // New in 3.9
 //
-// llgo:link (*PyThreadState).Interpreter C.PyThreadState_GetInterpreter
-func (self *PyThreadState) Interpreter() *PyInterpreterState {
+// llgo:link (*ThreadState).Interpreter C.PyThreadState_GetInterpreter
+func (self *ThreadState) Interpreter() *InterpreterState {
 	return nil
 }
 
-// llgo:link (*PyThreadState).Frame C.PyThreadState_GetFrame
-func (self *PyThreadState) Frame() *PyFrameObject {
+// llgo:link (*ThreadState).Frame C.PyThreadState_GetFrame
+func (self *ThreadState) Frame() *FrameObject {
 	return nil
 }
 
-// llgo:link (*PyThreadState).ID C.PyThreadState_GetID
-func (self *PyThreadState) ID() c.Uint64T {
+// llgo:link (*ThreadState).ID C.PyThreadState_GetID
+func (self *ThreadState) ID() c.Uint64T {
 	return 0
 }
 
@@ -236,8 +238,8 @@ func (self *PyThreadState) ID() c.Uint64T {
 //
 // Failure is a fatal error.
 //
-//go:linkname PyGILState_Ensure C.PyGILState_Ensure
-func PyGILState_Ensure() PyGILState_STATE
+//go:linkname GILStateEnsure C.PyGILState_Ensure
+func GILStateEnsure() GILState_STATE
 
 // Release any resources previously acquired.  After this call, Python's
 // state will be the same as it was prior to the corresponding
@@ -247,8 +249,8 @@ func PyGILState_Ensure() PyGILState_STATE
 // Every call to PyGILState_Ensure must be matched by a call to
 // PyGILState_Release on the same thread.
 //
-// llgo:link PyGILState_STATE.PyGILState_Release C.PyGILState_Release
-func (self PyGILState_STATE) PyGILState_Release() {
+// llgo:link GILState_STATE.GILStateRelease C.PyGILState_Release
+func (self GILState_STATE) GILStateRelease() {
 }
 
 // Helper/diagnostic function - get the current thread state for
@@ -257,37 +259,114 @@ func (self PyGILState_STATE) PyGILState_Release() {
 // thread-state, even if no auto-thread-state call has been made
 // on the main thread.
 //
-//go:linkname PyGILState_GetThisThreadState C.PyGILState_GetThisThreadState
-func PyGILState_GetThisThreadState() *PyThreadState
+//go:linkname GILStateGetThisThreadState C.PyGILState_GetThisThreadState
+func GILStateGetThisThreadState() *ThreadState
 
 // private interpreter helpers
 //
-// llgo:link (*PyInterpreterState).X_PyInterpreterState_RequiresIDRef C._PyInterpreterState_RequiresIDRef
-func (self *PyInterpreterState) X_PyInterpreterState_RequiresIDRef() c.Int {
-	return 0
+//go:linkname X_InterpreterStateRequiresIDRef C._PyInterpreterState_RequiresIDRef
+func X_InterpreterStateRequiresIDRef(_llcppg_param1 *InterpreterState) c.Int
+
+//go:linkname X_InterpreterStateRequireIDRef C._PyInterpreterState_RequireIDRef
+func X_InterpreterStateRequireIDRef(_llcppg_param1 *InterpreterState, _llcppg_param2 c.Int)
+
+// unsigned int initialized : 1
+func (p *_llcppg_anon_5) XGof_get_initialized() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 0, 1))
 }
 
-// llgo:link (*PyInterpreterState).X_PyInterpreterState_RequireIDRef C._PyInterpreterState_RequireIDRef
-func (self *PyInterpreterState) X_PyInterpreterState_RequireIDRef(_llcppg_param2 c.Int) {
+// unsigned int initialized : 1
+func (p *_llcppg_anon_5) XGof_set_initialized(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 0, 1, uint64(v))
+}
+
+// unsigned int bound : 1
+func (p *_llcppg_anon_5) XGof_get_bound() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 1, 1))
+}
+
+// unsigned int bound : 1
+func (p *_llcppg_anon_5) XGof_set_bound(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 1, 1, uint64(v))
+}
+
+// unsigned int unbound : 1
+func (p *_llcppg_anon_5) XGof_get_unbound() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 2, 1))
+}
+
+// unsigned int unbound : 1
+func (p *_llcppg_anon_5) XGof_set_unbound(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 2, 1, uint64(v))
+}
+
+// unsigned int bound_gilstate : 1
+func (p *_llcppg_anon_5) XGof_get_bound_gilstate() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 3, 1))
+}
+
+// unsigned int bound_gilstate : 1
+func (p *_llcppg_anon_5) XGof_set_bound_gilstate(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 3, 1, uint64(v))
+}
+
+// unsigned int active : 1
+func (p *_llcppg_anon_5) XGof_get_active() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 4, 1))
+}
+
+// unsigned int active : 1
+func (p *_llcppg_anon_5) XGof_set_active(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 4, 1, uint64(v))
+}
+
+// unsigned int finalizing : 1
+func (p *_llcppg_anon_5) XGof_get_finalizing() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 5, 1))
+}
+
+// unsigned int finalizing : 1
+func (p *_llcppg_anon_5) XGof_set_finalizing(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 5, 1, uint64(v))
+}
+
+// unsigned int cleared : 1
+func (p *_llcppg_anon_5) XGof_get_cleared() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 6, 1))
+}
+
+// unsigned int cleared : 1
+func (p *_llcppg_anon_5) XGof_set_cleared(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 6, 1, uint64(v))
+}
+
+// unsigned int finalized : 1
+func (p *_llcppg_anon_5) XGof_get_finalized() c.Uint {
+	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 7, 1))
+}
+
+// unsigned int finalized : 1
+func (p *_llcppg_anon_5) XGof_set_finalized(v c.Uint) {
+	bitfield.Set(unsafe.Pointer(p), 7, 1, uint64(v))
 }
 
 // Similar to PyThreadState_Get(), but don't issue a fatal error
 // if it is NULL.
 //
-//go:linkname PyThreadState_GetUnchecked C.PyThreadState_GetUnchecked
-func PyThreadState_GetUnchecked() *PyThreadState
+//go:linkname ThreadStateGetUnchecked C.PyThreadState_GetUnchecked
+func ThreadStateGetUnchecked() *ThreadState
 
 // Disable tracing and profiling.
 //
-// llgo:link (*PyThreadState).EnterTracing C.PyThreadState_EnterTracing
-func (self *PyThreadState) EnterTracing() {
+// llgo:link (*ThreadState).EnterTracing C.PyThreadState_EnterTracing
+func (self *ThreadState) EnterTracing() {
 }
 
 // Reset tracing and profiling: enable them if a trace function or a profile
 // function is set, otherwise disable them.
 //
-// llgo:link (*PyThreadState).LeaveTracing C.PyThreadState_LeaveTracing
-func (self *PyThreadState) LeaveTracing() {
+// llgo:link (*ThreadState).LeaveTracing C.PyThreadState_LeaveTracing
+func (self *ThreadState) LeaveTracing() {
 }
 
 // Helper/diagnostic function - return 1 if the current thread
@@ -295,62 +374,59 @@ func (self *PyThreadState) LeaveTracing() {
 //
 // The function returns 1 if _PyGILState_check_enabled is non-zero.
 //
-//go:linkname PyGILState_Check C.PyGILState_Check
-func PyGILState_Check() c.Int
+//go:linkname GILStateCheck C.PyGILState_Check
+func GILStateCheck() c.Int
 
 // The implementation of sys._current_frames()  Returns a dict mapping
 // thread id to that thread's current frame.
 //
-//go:linkname X_PyThread_CurrentFrames C._PyThread_CurrentFrames
-func X_PyThread_CurrentFrames() *PyObject
+//go:linkname X_ThreadCurrentFrames C._PyThread_CurrentFrames
+func X_ThreadCurrentFrames() *Object
 
 // Set the stack protection start address and stack protection size
 // of a Python thread state
 //
-// llgo:link (*PyThreadState).PyUnstable_ThreadState_SetStackProtection C.PyUnstable_ThreadState_SetStackProtection
-func (self *PyThreadState) PyUnstable_ThreadState_SetStackProtection(stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int {
+// llgo:link (*Unstable).ThreadStateSetStackProtection C.PyUnstable_ThreadState_SetStackProtection
+func (self *Unstable) ThreadStateSetStackProtection(stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int {
 	return 0
 }
 
 // Reset the stack protection start address and stack protection size
 // of a Python thread state
 //
-// llgo:link (*PyThreadState).PyUnstable_ThreadState_ResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
-func (self *PyThreadState) PyUnstable_ThreadState_ResetStackProtection() {
+// llgo:link (*Unstable).ThreadStateResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
+func (self *Unstable) ThreadStateResetStackProtection() {
 }
 
 // Routines for advanced debuggers, requested by David Beazley.
 // Don't use unless you know what you are doing!
 //
-//go:linkname PyInterpreterState_Main C.PyInterpreterState_Main
-func PyInterpreterState_Main() *PyInterpreterState
+//go:linkname InterpreterStateMain C.PyInterpreterState_Main
+func InterpreterStateMain() *InterpreterState
 
-//go:linkname PyInterpreterState_Head C.PyInterpreterState_Head
-func PyInterpreterState_Head() *PyInterpreterState
+//go:linkname InterpreterStateHead C.PyInterpreterState_Head
+func InterpreterStateHead() *InterpreterState
 
-// llgo:link (*PyInterpreterState).Next C.PyInterpreterState_Next
-func (self *PyInterpreterState) Next() *PyInterpreterState {
+// llgo:link (*InterpreterState).Next C.PyInterpreterState_Next
+func (self *InterpreterState) Next() *InterpreterState {
 	return self
 }
 
-// llgo:link (*PyInterpreterState).ThreadHead C.PyInterpreterState_ThreadHead
-func (self *PyInterpreterState) ThreadHead() *PyThreadState {
+// llgo:link (*InterpreterState).ThreadHead C.PyInterpreterState_ThreadHead
+func (self *InterpreterState) ThreadHead() *ThreadState {
 	return nil
 }
 
-// llgo:link (*PyThreadState).GetNext C.PyThreadState_Next
-func (self *PyThreadState) GetNext() *PyThreadState {
+// llgo:link (*ThreadState).ThreadStateNext C.PyThreadState_Next
+func (self *ThreadState) ThreadStateNext() *ThreadState {
 	return self
 }
 
-//go:linkname PyThreadState_DeleteCurrent C.PyThreadState_DeleteCurrent
-func PyThreadState_DeleteCurrent()
+//go:linkname ThreadStateDeleteCurrent C.PyThreadState_DeleteCurrent
+func ThreadStateDeleteCurrent()
 
-// llgo:link (*PyInterpreterState).X_PyInterpreterState_GetEvalFrameFunc C._PyInterpreterState_GetEvalFrameFunc
-func (self *PyInterpreterState) X_PyInterpreterState_GetEvalFrameFunc() X_PyFrameEvalFunction {
-	return nil
-}
+//go:linkname X_InterpreterStateGetEvalFrameFunc C._PyInterpreterState_GetEvalFrameFunc
+func X_InterpreterStateGetEvalFrameFunc(interp *InterpreterState) X_FrameEvalFunction
 
-// llgo:link (*PyInterpreterState).X_PyInterpreterState_SetEvalFrameFunc C._PyInterpreterState_SetEvalFrameFunc
-func (self *PyInterpreterState) X_PyInterpreterState_SetEvalFrameFunc(eval_frame X_PyFrameEvalFunction) {
-}
+//go:linkname X_InterpreterStateSetEvalFrameFunc C._PyInterpreterState_SetEvalFrameFunc
+func X_InterpreterStateSetEvalFrameFunc(interp *InterpreterState, eval_frame X_FrameEvalFunction)

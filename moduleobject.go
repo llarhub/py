@@ -7,88 +7,98 @@ import (
 	"unsafe"
 )
 
-const PyModCreate = 1
-const PyModExec = 2
-const PyModMultipleInterpreters = 3
-const PyModGil = 4
-const X_PyModLAST_SLOT = 4
+const ModCreate = 1
+const ModExec = 2
+const ModMultipleInterpreters = 3
+const ModGil = 4
+const X_modLAST_SLOT = 4
 
-type PyModuleDef struct {
-	MBase     PyModuleDef_Base
+type ModuleDef struct {
+	MBase     ModuleDefBase
 	MName     *c.Char
 	MDoc      *c.Char
-	MSize     PySsizeT
-	MMethods  *PyMethodDef
-	MSlots    *PyModuleDef_Slot
+	MSize     SsizeT
+	MMethods  *MethodDef
+	MSlots    *ModuleDefSlot
 	MTraverse Traverseproc
 	MClear    Inquiry
 	MFree     Freefunc
 }
 
 // New in 3.5
-type PyModuleDef_Slot struct {
+type ModuleDefSlot struct {
 	Slot  c.Int
 	Value unsafe.Pointer
 }
-type PyModuleDef_Base struct {
-	ObBase PyObject
-	MInit  func() *PyObject
-	MIndex PySsizeT
-	MCopy  *PyObject
+
+// llgo:type C
+type ModuleDefBase struct {
+	ObBase Object
+	MInit  func() *Object
+	MIndex SsizeT
+	MCopy  *Object
 }
 
-//go:linkname PyModule_Type C.PyModule_Type
-var PyModule_Type PyTypeObject
+//go:linkname ModuleType C.PyModule_Type
+var ModuleType TypeObject
 
-// llgo:link (*PyObject).PyModule_NewObject C.PyModule_NewObject
-func (self *PyObject) PyModule_NewObject() *PyObject {
-	return self
+type Module struct {
+	X_object
 }
 
-//go:linkname PyModule_New C.PyModule_New
-func PyModule_New(name *c.Char) *PyObject
-
-// llgo:link (*PyObject).PyModule_GetDict C.PyModule_GetDict
-func (self *PyObject) PyModule_GetDict() *PyObject {
-	return self
+func (self *Object) AsModule() *Module {
+	return (*Module)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyModule_GetNameObject C.PyModule_GetNameObject
-func (self *PyObject) PyModule_GetNameObject() *PyObject {
-	return self
-}
-
-// llgo:link (*PyObject).PyModule_GetName C.PyModule_GetName
-func (self *PyObject) PyModule_GetName() *c.Char {
+// llgo:link (*Module).NewObject C.PyModule_NewObject
+func (self *Module) NewObject() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyModule_GetFilename C.PyModule_GetFilename
-func (self *PyObject) PyModule_GetFilename() *c.Char {
+//go:linkname ModuleNew C.PyModule_New
+func ModuleNew(name *c.Char) *Object
+
+// llgo:link (*Module).Dict C.PyModule_GetDict
+func (self *Module) Dict() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyModule_GetFilenameObject C.PyModule_GetFilenameObject
-func (self *PyObject) PyModule_GetFilenameObject() *PyObject {
-	return self
-}
-
-// llgo:link (*PyObject).PyModule_GetDef C.PyModule_GetDef
-func (self *PyObject) PyModule_GetDef() *PyModuleDef {
+// llgo:link (*Module).NameObject C.PyModule_GetNameObject
+func (self *Module) NameObject() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyModule_GetState C.PyModule_GetState
-func (self *PyObject) PyModule_GetState() unsafe.Pointer {
+// llgo:link (*Module).Name C.PyModule_GetName
+func (self *Module) Name() *c.Char {
+	return nil
+}
+
+// llgo:link (*Module).Filename C.PyModule_GetFilename
+func (self *Module) Filename() *c.Char {
+	return nil
+}
+
+// llgo:link (*Module).FilenameObject C.PyModule_GetFilenameObject
+func (self *Module) FilenameObject() *Object {
+	return nil
+}
+
+// llgo:link (*Module).Def C.PyModule_GetDef
+func (self *Module) Def() *ModuleDef {
+	return nil
+}
+
+// llgo:link (*Module).State C.PyModule_GetState
+func (self *Module) State() unsafe.Pointer {
 	return nil
 }
 
 // New in 3.5
 //
-// llgo:link (*PyModuleDef).Init C.PyModuleDef_Init
-func (self *PyModuleDef) Init() *PyObject {
+// llgo:link (*ModuleDef).Init C.PyModuleDef_Init
+func (self *ModuleDef) Init() *Object {
 	return nil
 }
 
-//go:linkname PyModuleDef_Type C.PyModuleDef_Type
-var PyModuleDef_Type PyTypeObject
+//go:linkname ModuleDefType C.PyModuleDef_Type
+var ModuleDefType TypeObject

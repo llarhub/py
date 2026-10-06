@@ -7,10 +7,10 @@ import (
 	_ "unsafe"
 )
 
-const PySingleInput = 256
-const PyFileInput = 257
-const PyEvalInput = 258
-const PyFuncTypeInput = 345
+const SingleInput = 256
+const FileInput = 257
+const EvalInput = 258
+const FuncTypeInput = 345
 const PyCF_MASK = 33423360
 const PyCF_MASK_OBSOLETE = 16
 const PyCF_SOURCE_IS_UTF8 = 256
@@ -33,13 +33,13 @@ const FUTURE_BARRY_AS_BDFL = "barry_as_FLUFL"
 const FUTURE_GENERATOR_STOP = "generator_stop"
 const FUTURE_ANNOTATIONS = "annotations"
 
-type PyCompilerFlags struct {
+type CompilerFlags struct {
 	CfFlags          c.Int
 	CfFeatureVersion c.Int
 }
 
-//go:linkname PyCompile_OpcodeStackEffect C.PyCompile_OpcodeStackEffect
-func PyCompile_OpcodeStackEffect(opcode c.Int, oparg c.Int) c.Int
+//go:linkname CompileOpcodeStackEffect C.PyCompile_OpcodeStackEffect
+func CompileOpcodeStackEffect(opcode c.Int, oparg c.Int) c.Int
 
-//go:linkname PyCompile_OpcodeStackEffectWithJump C.PyCompile_OpcodeStackEffectWithJump
-func PyCompile_OpcodeStackEffectWithJump(opcode c.Int, oparg c.Int, jump c.Int) c.Int
+//go:linkname CompileOpcodeStackEffectWithJump C.PyCompile_OpcodeStackEffectWithJump
+func CompileOpcodeStackEffectWithJump(opcode c.Int, oparg c.Int, jump c.Int) c.Int

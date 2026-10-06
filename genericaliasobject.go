@@ -4,10 +4,8 @@ package py
 
 import _ "unsafe"
 
-// llgo:link (*PyObject).Py_GenericAlias C.Py_GenericAlias
-func (self *PyObject) Py_GenericAlias(_llcppg_param2 *PyObject) *PyObject {
-	return self
-}
+//go:linkname GenericAlias C.Py_GenericAlias
+func GenericAlias(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object
 
-//go:linkname Py_GenericAliasType C.Py_GenericAliasType
-var Py_GenericAliasType PyTypeObject
+//go:linkname GenericAliasType C.Py_GenericAliasType
+var GenericAliasType TypeObject

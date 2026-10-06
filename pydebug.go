@@ -7,54 +7,54 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname Py_DebugFlag C.Py_DebugFlag
-var Py_DebugFlag c.Int
+//go:linkname DebugFlag C.Py_DebugFlag
+var DebugFlag c.Int
 
-//go:linkname Py_VerboseFlag C.Py_VerboseFlag
-var Py_VerboseFlag c.Int
+//go:linkname VerboseFlag C.Py_VerboseFlag
+var VerboseFlag c.Int
 
-//go:linkname Py_QuietFlag C.Py_QuietFlag
-var Py_QuietFlag c.Int
+//go:linkname QuietFlag C.Py_QuietFlag
+var QuietFlag c.Int
 
-//go:linkname Py_InteractiveFlag C.Py_InteractiveFlag
-var Py_InteractiveFlag c.Int
+//go:linkname InteractiveFlag C.Py_InteractiveFlag
+var InteractiveFlag c.Int
 
-//go:linkname Py_InspectFlag C.Py_InspectFlag
-var Py_InspectFlag c.Int
+//go:linkname InspectFlag C.Py_InspectFlag
+var InspectFlag c.Int
 
-//go:linkname Py_OptimizeFlag C.Py_OptimizeFlag
-var Py_OptimizeFlag c.Int
+//go:linkname OptimizeFlag C.Py_OptimizeFlag
+var OptimizeFlag c.Int
 
-//go:linkname Py_NoSiteFlag C.Py_NoSiteFlag
-var Py_NoSiteFlag c.Int
+//go:linkname NoSiteFlag C.Py_NoSiteFlag
+var NoSiteFlag c.Int
 
-//go:linkname Py_BytesWarningFlag C.Py_BytesWarningFlag
-var Py_BytesWarningFlag c.Int
+//go:linkname BytesWarningFlag C.Py_BytesWarningFlag
+var BytesWarningFlag c.Int
 
-//go:linkname Py_FrozenFlag C.Py_FrozenFlag
-var Py_FrozenFlag c.Int
+//go:linkname FrozenFlag C.Py_FrozenFlag
+var FrozenFlag c.Int
 
-//go:linkname Py_IgnoreEnvironmentFlag C.Py_IgnoreEnvironmentFlag
-var Py_IgnoreEnvironmentFlag c.Int
+//go:linkname IgnoreEnvironmentFlag C.Py_IgnoreEnvironmentFlag
+var IgnoreEnvironmentFlag c.Int
 
-//go:linkname Py_DontWriteBytecodeFlag C.Py_DontWriteBytecodeFlag
-var Py_DontWriteBytecodeFlag c.Int
+//go:linkname DontWriteBytecodeFlag C.Py_DontWriteBytecodeFlag
+var DontWriteBytecodeFlag c.Int
 
-//go:linkname Py_NoUserSiteDirectory C.Py_NoUserSiteDirectory
-var Py_NoUserSiteDirectory c.Int
+//go:linkname NoUserSiteDirectory C.Py_NoUserSiteDirectory
+var NoUserSiteDirectory c.Int
 
-//go:linkname Py_UnbufferedStdioFlag C.Py_UnbufferedStdioFlag
-var Py_UnbufferedStdioFlag c.Int
+//go:linkname UnbufferedStdioFlag C.Py_UnbufferedStdioFlag
+var UnbufferedStdioFlag c.Int
 
-//go:linkname Py_HashRandomizationFlag C.Py_HashRandomizationFlag
-var Py_HashRandomizationFlag c.Int
+//go:linkname HashRandomizationFlag C.Py_HashRandomizationFlag
+var HashRandomizationFlag c.Int
 
-//go:linkname Py_IsolatedFlag C.Py_IsolatedFlag
-var Py_IsolatedFlag c.Int
+//go:linkname IsolatedFlag C.Py_IsolatedFlag
+var IsolatedFlag c.Int
 
 // this is a wrapper around getenv() that pays attention to
 // Py_IgnoreEnvironmentFlag.  It should be used for getting variables like
 // PYTHONPATH and PYTHONHOME from the environment
 //
-//go:linkname Py_GETENV C.Py_GETENV
-func Py_GETENV(name *c.Char) *c.Char
+//go:linkname GETENV C.Py_GETENV
+func GETENV(name *c.Char) *c.Char

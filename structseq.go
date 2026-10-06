@@ -7,45 +7,45 @@ import (
 	_ "unsafe"
 )
 
-type PyStructSequence_Field struct {
+type StructSequenceField struct {
 	Name *c.Char
 	Doc  *c.Char
 }
-type PyStructSequence_Desc struct {
+type StructSequenceDesc struct {
 	Name        *c.Char
 	Doc         *c.Char
-	Fields      *PyStructSequence_Field
+	Fields      *StructSequenceField
 	NInSequence c.Int
 }
-type PyStructSequence = PyTupleObject
+type StructSequence = TupleObject
 
-//go:linkname PyStructSequence_UnnamedField C.PyStructSequence_UnnamedField
-var PyStructSequence_UnnamedField *c.Char
+//go:linkname StructSequenceUnnamedField C.PyStructSequence_UnnamedField
+var StructSequenceUnnamedField *c.Char
 
-// llgo:link (*PyTypeObject).PyStructSequence_InitType C.PyStructSequence_InitType
-func (self *PyTypeObject) PyStructSequence_InitType(desc *PyStructSequence_Desc) {
+// llgo:link (*TypeObject).StructSequenceInitType C.PyStructSequence_InitType
+func (self *TypeObject) StructSequenceInitType(desc *StructSequenceDesc) {
 }
 
-// llgo:link (*PyTypeObject).PyStructSequence_InitType2 C.PyStructSequence_InitType2
-func (self *PyTypeObject) PyStructSequence_InitType2(desc *PyStructSequence_Desc) c.Int {
+// llgo:link (*TypeObject).StructSequenceInitType2 C.PyStructSequence_InitType2
+func (self *TypeObject) StructSequenceInitType2(desc *StructSequenceDesc) c.Int {
 	return 0
 }
 
-// llgo:link (*PyStructSequence_Desc).PyStructSequence_NewType C.PyStructSequence_NewType
-func (self *PyStructSequence_Desc) PyStructSequence_NewType() *PyTypeObject {
+// llgo:link (*StructSequenceDesc).StructSequenceNewType C.PyStructSequence_NewType
+func (self *StructSequenceDesc) StructSequenceNewType() *TypeObject {
 	return nil
 }
 
-// llgo:link (*PyTypeObject).PyStructSequence_New C.PyStructSequence_New
-func (self *PyTypeObject) PyStructSequence_New() *PyObject {
+// llgo:link (*TypeObject).StructSequenceNew C.PyStructSequence_New
+func (self *TypeObject) StructSequenceNew() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyStructSequence_SetItem C.PyStructSequence_SetItem
-func (self *PyObject) PyStructSequence_SetItem(_llcppg_param2 PySsizeT, _llcppg_param3 *PyObject) {
+// llgo:link (*Object).StructSequenceSetItem C.PyStructSequence_SetItem
+func (self *Object) StructSequenceSetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) {
 }
 
-// llgo:link (*PyObject).PyStructSequence_GetItem C.PyStructSequence_GetItem
-func (self *PyObject) PyStructSequence_GetItem(_llcppg_param2 PySsizeT) *PyObject {
+// llgo:link (*Object).StructSequenceGetItem C.PyStructSequence_GetItem
+func (self *Object) StructSequenceGetItem(_llcppg_param2 SsizeT) *Object {
 	return self
 }

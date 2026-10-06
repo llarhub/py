@@ -2,4 +2,4 @@
 
 package py
 
-const X_Py_USE_GCC_BUILTIN_ATOMICS = 1
+const X_USE_GCC_BUILTIN_ATOMICS = 1

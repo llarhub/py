@@ -4,88 +4,96 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyListObject struct {
-	ObBase    PyVarObject
-	ObItem    **PyObject
-	Allocated PySsizeT
+type ListObject struct {
+	ObBase    VarObject
+	ObItem    **Object
+	Allocated SsizeT
 }
 
-//go:linkname PyList_Type C.PyList_Type
-var PyList_Type PyTypeObject
+//go:linkname ListType C.PyList_Type
+var ListType TypeObject
 
-//go:linkname PyListIter_Type C.PyListIter_Type
-var PyListIter_Type PyTypeObject
+//go:linkname ListIterType C.PyListIter_Type
+var ListIterType TypeObject
 
-//go:linkname PyListRevIter_Type C.PyListRevIter_Type
-var PyListRevIter_Type PyTypeObject
+//go:linkname ListRevIterType C.PyListRevIter_Type
+var ListRevIterType TypeObject
 
-//go:linkname PyList_New C.PyList_New
-func PyList_New(size PySsizeT) *PyObject
+//go:linkname ListNew C.PyList_New
+func ListNew(size SsizeT) *Object
 
-// llgo:link (*PyObject).PyList_Size C.PyList_Size
-func (self *PyObject) PyList_Size() PySsizeT {
+type List struct {
+	X_object
+}
+
+func (self *Object) AsList() *List {
+	return (*List)(unsafe.Pointer(self))
+}
+
+// llgo:link (*List).Size C.PyList_Size
+func (self *List) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_GetItem C.PyList_GetItem
-func (self *PyObject) PyList_GetItem(_llcppg_param2 PySsizeT) *PyObject {
-	return self
+// llgo:link (*List).Item C.PyList_GetItem
+func (self *List) Item(_llcppg_param2 SsizeT) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyList_GetItemRef C.PyList_GetItemRef
-func (self *PyObject) PyList_GetItemRef(_llcppg_param2 PySsizeT) *PyObject {
-	return self
+// llgo:link (*List).ItemRef C.PyList_GetItemRef
+func (self *List) ItemRef(_llcppg_param2 SsizeT) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyList_SetItem C.PyList_SetItem
-func (self *PyObject) PyList_SetItem(_llcppg_param2 PySsizeT, _llcppg_param3 *PyObject) c.Int {
+// llgo:link (*List).SetItem C.PyList_SetItem
+func (self *List) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_Insert C.PyList_Insert
-func (self *PyObject) PyList_Insert(_llcppg_param2 PySsizeT, _llcppg_param3 *PyObject) c.Int {
+// llgo:link (*List).Insert C.PyList_Insert
+func (self *List) Insert(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_Append C.PyList_Append
-func (self *PyObject) PyList_Append(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*List).Append C.PyList_Append
+func (self *List) Append(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_GetSlice C.PyList_GetSlice
-func (self *PyObject) PyList_GetSlice(_llcppg_param2 PySsizeT, _llcppg_param3 PySsizeT) *PyObject {
-	return self
+// llgo:link (*List).Slice C.PyList_GetSlice
+func (self *List) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyList_SetSlice C.PyList_SetSlice
-func (self *PyObject) PyList_SetSlice(_llcppg_param2 PySsizeT, _llcppg_param3 PySsizeT, _llcppg_param4 *PyObject) c.Int {
+// llgo:link (*List).SetSlice C.PyList_SetSlice
+func (self *List) SetSlice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT, _llcppg_param4 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_Sort C.PyList_Sort
-func (self *PyObject) PyList_Sort() c.Int {
+// llgo:link (*List).Sort C.PyList_Sort
+func (self *List) Sort() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_Reverse C.PyList_Reverse
-func (self *PyObject) PyList_Reverse() c.Int {
+// llgo:link (*List).Reverse C.PyList_Reverse
+func (self *List) Reverse() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_AsTuple C.PyList_AsTuple
-func (self *PyObject) PyList_AsTuple() *PyObject {
-	return self
+// llgo:link (*List).AsTuple C.PyList_AsTuple
+func (self *List) AsTuple() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyList_Extend C.PyList_Extend
-func (self *PyObject) PyList_Extend(iterable *PyObject) c.Int {
+// llgo:link (*List).Extend C.PyList_Extend
+func (self *List) Extend(iterable *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyList_Clear C.PyList_Clear
-func (self *PyObject) PyList_Clear() c.Int {
+// llgo:link (*List).Clear C.PyList_Clear
+func (self *List) Clear() c.Int {
 	return 0
 }

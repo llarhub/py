@@ -7,33 +7,33 @@ import (
 	"unsafe"
 )
 
-const Py_T_SHORT = 0
-const Py_T_INT = 1
-const Py_T_LONG = 2
-const Py_T_FLOAT = 3
-const Py_T_DOUBLE = 4
-const Py_T_STRING = 5
-const X_Py_T_OBJECT = 6
-const Py_T_CHAR = 7
-const Py_T_BYTE = 8
-const Py_T_UBYTE = 9
-const Py_T_USHORT = 10
-const Py_T_UINT = 11
-const Py_T_ULONG = 12
-const Py_T_STRING_INPLACE = 13
-const Py_T_BOOL = 14
-const Py_T_OBJECT_EX = 16
-const Py_T_LONGLONG = 17
-const Py_T_ULONGLONG = 18
-const Py_T_PYSSIZET = 19
-const X_Py_T_NONE = 20
-const Py_READONLY = 1
-const Py_AUDIT_READ = 2
-const X_Py_WRITE_RESTRICTED = 4
-const Py_RELATIVE_OFFSET = 8
+const T_SHORT = 0
+const T_INT = 1
+const T_LONG = 2
+const T_FLOAT = 3
+const T_DOUBLE = 4
+const T_STRING = 5
+const X_T_OBJECT = 6
+const T_CHAR = 7
+const T_BYTE = 8
+const T_UBYTE = 9
+const T_USHORT = 10
+const T_UINT = 11
+const T_ULONG = 12
+const T_STRING_INPLACE = 13
+const T_BOOL = 14
+const T_OBJECT_EX = 16
+const T_LONGLONG = 17
+const T_ULONGLONG = 18
+const T_PYSSIZET = 19
+const X_T_NONE = 20
+const READONLY = 1
+const AUDIT_READ = 2
+const X_WRITE_RESTRICTED = 4
+const RELATIVE_OFFSET = 8
 const PyWrapperFlag_KEYWORDS = 1
 
-type PyGetSetDef struct {
+type GetSetDef struct {
 	Name    *c.Char
 	Get     Getter
 	Set     Setter
@@ -46,25 +46,25 @@ type PyGetSetDef struct {
 // PyMember_GetOne() and set by PyMember_SetOne() (except if their READONLY
 // flag is set).  The array must be terminated with an entry whose name
 // pointer is NULL.
-type PyMemberDef struct {
+type MemberDef struct {
 	Name   *c.Char
 	Type   c.Int
-	Offset PySsizeT
+	Offset SsizeT
 	Flags  c.Int
 	Doc    *c.Char
 }
 
 // llgo:type C
-type Getter = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) *PyObject
+type Getter = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
 
 // llgo:type C
-type Setter = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer) c.Int
+type Setter = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) c.Int
 
 // llgo:type C
-type Wrapperfunc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer) *PyObject
+type Wrapperfunc = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) *Object
 
 // llgo:type C
-type WrapperfuncKwds = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *PyObject) *PyObject
+type WrapperfuncKwds = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *Object) *Object
 type Wrapperbase struct {
 	Name       *c.Char
 	Offset     c.Int
@@ -72,98 +72,122 @@ type Wrapperbase struct {
 	Wrapper    Wrapperfunc
 	Doc        *c.Char
 	Flags      c.Int
-	NameStrobj *PyObject
+	NameStrobj *Object
 }
 
 // Various kinds of descriptor objects
-type PyDescrObject struct {
-	ObBase    PyObject
-	DType     *PyTypeObject
-	DName     *PyObject
-	DQualname *PyObject
+type DescrObject struct {
+	ObBase    Object
+	DType     *TypeObject
+	DName     *Object
+	DQualname *Object
 }
-type PyMethodDescrObject struct {
-	DCommon    PyDescrObject
-	DMethod    *PyMethodDef
+type MethodDescrObject struct {
+	DCommon    DescrObject
+	DMethod    *MethodDef
 	Vectorcall Vectorcallfunc
 }
-type PyMemberDescrObject struct {
-	DCommon PyDescrObject
-	DMember *PyMemberDef
+type MemberDescrObject struct {
+	DCommon DescrObject
+	DMember *MemberDef
 }
-type PyGetSetDescrObject struct {
-	DCommon PyDescrObject
-	DGetset *PyGetSetDef
+type GetSetDescrObject struct {
+	DCommon DescrObject
+	DGetset *GetSetDef
 }
-type PyWrapperDescrObject struct {
-	DCommon  PyDescrObject
+type WrapperDescrObject struct {
+	DCommon  DescrObject
 	DBase    *Wrapperbase
 	DWrapped unsafe.Pointer
 }
 
-//go:linkname PyClassMethodDescr_Type C.PyClassMethodDescr_Type
-var PyClassMethodDescr_Type PyTypeObject
+//go:linkname ClassMethodDescrType C.PyClassMethodDescr_Type
+var ClassMethodDescrType TypeObject
 
-//go:linkname PyGetSetDescr_Type C.PyGetSetDescr_Type
-var PyGetSetDescr_Type PyTypeObject
+//go:linkname GetSetDescrType C.PyGetSetDescr_Type
+var GetSetDescrType TypeObject
 
-//go:linkname PyMemberDescr_Type C.PyMemberDescr_Type
-var PyMemberDescr_Type PyTypeObject
+//go:linkname MemberDescrType C.PyMemberDescr_Type
+var MemberDescrType TypeObject
 
-//go:linkname PyMethodDescr_Type C.PyMethodDescr_Type
-var PyMethodDescr_Type PyTypeObject
+//go:linkname MethodDescrType C.PyMethodDescr_Type
+var MethodDescrType TypeObject
 
-//go:linkname PyWrapperDescr_Type C.PyWrapperDescr_Type
-var PyWrapperDescr_Type PyTypeObject
+//go:linkname WrapperDescrType C.PyWrapperDescr_Type
+var WrapperDescrType TypeObject
 
-//go:linkname PyDictProxy_Type C.PyDictProxy_Type
-var PyDictProxy_Type PyTypeObject
+//go:linkname DictProxyType C.PyDictProxy_Type
+var DictProxyType TypeObject
 
-//go:linkname PyProperty_Type C.PyProperty_Type
-var PyProperty_Type PyTypeObject
+//go:linkname PropertyType C.PyProperty_Type
+var PropertyType TypeObject
 
-// llgo:link (*PyTypeObject).PyDescr_NewMethod C.PyDescr_NewMethod
-func (self *PyTypeObject) PyDescr_NewMethod(_llcppg_param2 *PyMethodDef) *PyObject {
+type Descr struct {
+	X_typeobject
+}
+
+func (self *TypeObject) AsDescr() *Descr {
+	return (*Descr)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Descr).NewMethod C.PyDescr_NewMethod
+func (self *Descr) NewMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*PyTypeObject).PyDescr_NewClassMethod C.PyDescr_NewClassMethod
-func (self *PyTypeObject) PyDescr_NewClassMethod(_llcppg_param2 *PyMethodDef) *PyObject {
+// llgo:link (*Descr).NewClassMethod C.PyDescr_NewClassMethod
+func (self *Descr) NewClassMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*PyTypeObject).PyDescr_NewMember C.PyDescr_NewMember
-func (self *PyTypeObject) PyDescr_NewMember(_llcppg_param2 *PyMemberDef) *PyObject {
+// llgo:link (*Descr).NewMember C.PyDescr_NewMember
+func (self *Descr) NewMember(_llcppg_param2 *MemberDef) *Object {
 	return nil
 }
 
-// llgo:link (*PyTypeObject).PyDescr_NewGetSet C.PyDescr_NewGetSet
-func (self *PyTypeObject) PyDescr_NewGetSet(_llcppg_param2 *PyGetSetDef) *PyObject {
+// llgo:link (*Descr).NewGetSet C.PyDescr_NewGetSet
+func (self *Descr) NewGetSet(_llcppg_param2 *GetSetDef) *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyDictProxy_New C.PyDictProxy_New
-func (self *PyObject) PyDictProxy_New() *PyObject {
-	return self
+type DictProxy struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyWrapper_New C.PyWrapper_New
-func (self *PyObject) PyWrapper_New(_llcppg_param2 *PyObject) *PyObject {
-	return self
+func (self *Object) AsDictProxy() *DictProxy {
+	return (*DictProxy)(unsafe.Pointer(self))
 }
 
-//go:linkname PyMember_GetOne C.PyMember_GetOne
-func PyMember_GetOne(_llcppg_param1 *c.Char, _llcppg_param2 *PyMemberDef) *PyObject
-
-//go:linkname PyMember_SetOne C.PyMember_SetOne
-func PyMember_SetOne(_llcppg_param1 *c.Char, _llcppg_param2 *PyMemberDef, _llcppg_param3 *PyObject) c.Int
-
-// llgo:link (*PyTypeObject).PyDescr_NewWrapper C.PyDescr_NewWrapper
-func (self *PyTypeObject) PyDescr_NewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *PyObject {
+// llgo:link (*DictProxy).New C.PyDictProxy_New
+func (self *DictProxy) New() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyDescr_IsData C.PyDescr_IsData
-func (self *PyObject) PyDescr_IsData() c.Int {
+type Wrapper struct {
+	X_object
+}
+
+func (self *Object) AsWrapper() *Wrapper {
+	return (*Wrapper)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Wrapper).New C.PyWrapper_New
+func (self *Wrapper) New(_llcppg_param2 *Object) *Object {
+	return nil
+}
+
+//go:linkname MemberGetOne C.PyMember_GetOne
+func MemberGetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef) *Object
+
+//go:linkname MemberSetOne C.PyMember_SetOne
+func MemberSetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef, _llcppg_param3 *Object) c.Int
+
+// llgo:link (*Descr).NewWrapper C.PyDescr_NewWrapper
+func (self *Descr) NewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *Object {
+	return nil
+}
+
+// llgo:link (*Descr).IsData C.PyDescr_IsData
+func (self *Descr) IsData() c.Int {
 	return 0
 }

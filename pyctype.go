@@ -7,19 +7,19 @@ import (
 	_ "unsafe"
 )
 
-const PY_CTF_LOWER = 1
-const PY_CTF_UPPER = 2
-const PY_CTF_ALPHA = 3
-const PY_CTF_DIGIT = 4
-const PY_CTF_ALNUM = 7
-const PY_CTF_SPACE = 8
-const PY_CTF_XDIGIT = 16
+const CTF_LOWER = 1
+const CTF_UPPER = 2
+const CTF_ALPHA = 3
+const CTF_DIGIT = 4
+const CTF_ALNUM = 7
+const CTF_SPACE = 8
+const CTF_XDIGIT = 16
 
-//go:linkname X_PyCtypeTable C._Py_ctype_table
-var X_PyCtypeTable [256]c.Uint
+//go:linkname X_ctypeTable C._Py_ctype_table
+var X_ctypeTable [256]c.Uint
 
-//go:linkname X_PyCtypeTolower C._Py_ctype_tolower
-var X_PyCtypeTolower [256]uint8
+//go:linkname X_ctypeTolower C._Py_ctype_tolower
+var X_ctypeTolower [256]uint8
 
-//go:linkname X_PyCtypeToupper C._Py_ctype_toupper
-var X_PyCtypeToupper [256]uint8
+//go:linkname X_ctypeToupper C._Py_ctype_toupper
+var X_ctypeToupper [256]uint8

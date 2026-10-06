@@ -10,11 +10,11 @@ import _ "unsafe"
 // Range objects behave like the corresponding tuple objects except that
 // they are represented by a start, stop, and step datamembers.
 //
-//go:linkname PyRange_Type C.PyRange_Type
-var PyRange_Type PyTypeObject
+//go:linkname RangeType C.PyRange_Type
+var RangeType TypeObject
 
-//go:linkname PyRangeIter_Type C.PyRangeIter_Type
-var PyRangeIter_Type PyTypeObject
+//go:linkname RangeIterType C.PyRangeIter_Type
+var RangeIterType TypeObject
 
-//go:linkname PyLongRangeIter_Type C.PyLongRangeIter_Type
-var PyLongRangeIter_Type PyTypeObject
+//go:linkname LongRangeIterType C.PyLongRangeIter_Type
+var LongRangeIterType TypeObject

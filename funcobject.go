@@ -4,28 +4,28 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyFunction_WatchEvent c.Uint
+type FunctionWatchEvent c.Uint
 
 const (
-	PyFunction_EVENT_CREATE            PyFunction_WatchEvent = 0
-	PyFunction_EVENT_DESTROY           PyFunction_WatchEvent = 1
-	PyFunction_EVENT_MODIFY_CODE       PyFunction_WatchEvent = 2
-	PyFunction_EVENT_MODIFY_DEFAULTS   PyFunction_WatchEvent = 3
-	PyFunction_EVENT_MODIFY_KWDEFAULTS PyFunction_WatchEvent = 4
+	PyFunction_EVENT_CREATE            FunctionWatchEvent = 0
+	PyFunction_EVENT_DESTROY           FunctionWatchEvent = 1
+	PyFunction_EVENT_MODIFY_CODE       FunctionWatchEvent = 2
+	PyFunction_EVENT_MODIFY_DEFAULTS   FunctionWatchEvent = 3
+	PyFunction_EVENT_MODIFY_KWDEFAULTS FunctionWatchEvent = 4
 )
 
-type PyFrameConstructor struct {
-	FcGlobals    *PyObject
-	FcBuiltins   *PyObject
-	FcName       *PyObject
-	FcQualname   *PyObject
-	FcCode       *PyObject
-	FcDefaults   *PyObject
-	FcKwdefaults *PyObject
-	FcClosure    *PyObject
+type FrameConstructor struct {
+	FcGlobals    *Object
+	FcBuiltins   *Object
+	FcName       *Object
+	FcQualname   *Object
+	FcCode       *Object
+	FcDefaults   *Object
+	FcKwdefaults *Object
+	FcClosure    *Object
 }
 
 // Function objects and code objects should not be confused with each other:
@@ -37,23 +37,23 @@ type PyFrameConstructor struct {
 // but each code object can be referenced by zero or many function objects
 // depending only on how many times the 'def' statement in the source was
 // executed so far.
-type PyFunctionObject struct {
-	ObBase          PyObject
-	FuncGlobals     *PyObject
-	FuncBuiltins    *PyObject
-	FuncName        *PyObject
-	FuncQualname    *PyObject
-	FuncCode        *PyObject
-	FuncDefaults    *PyObject
-	FuncKwdefaults  *PyObject
-	FuncClosure     *PyObject
-	FuncDoc         *PyObject
-	FuncDict        *PyObject
-	FuncWeakreflist *PyObject
-	FuncModule      *PyObject
-	FuncAnnotations *PyObject
-	FuncAnnotate    *PyObject
-	FuncTypeparams  *PyObject
+type FunctionObject struct {
+	ObBase          Object
+	FuncGlobals     *Object
+	FuncBuiltins    *Object
+	FuncName        *Object
+	FuncQualname    *Object
+	FuncCode        *Object
+	FuncDefaults    *Object
+	FuncKwdefaults  *Object
+	FuncClosure     *Object
+	FuncDoc         *Object
+	FuncDict        *Object
+	FuncWeakreflist *Object
+	FuncModule      *Object
+	FuncAnnotations *Object
+	FuncAnnotate    *Object
+	FuncTypeparams  *Object
 	Vectorcall      Vectorcallfunc
 	FuncVersion     c.Uint32T
 }
@@ -73,96 +73,120 @@ type PyFunctionObject struct {
 // it should return 0.
 //
 // llgo:type C
-type PyFunction_WatchCallback = func(_llcppg_param1 PyFunction_WatchEvent, _llcppg_param2 *PyFunctionObject, _llcppg_param3 *PyObject) c.Int
+type FunctionWatchCallback = func(_llcppg_param1 FunctionWatchEvent, _llcppg_param2 *FunctionObject, _llcppg_param3 *Object) c.Int
 
-//go:linkname PyFunction_Type C.PyFunction_Type
-var PyFunction_Type PyTypeObject
+//go:linkname FunctionType C.PyFunction_Type
+var FunctionType TypeObject
 
-// llgo:link (*PyObject).PyFunction_New C.PyFunction_New
-func (self *PyObject) PyFunction_New(_llcppg_param2 *PyObject) *PyObject {
-	return self
+type Function struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyFunction_NewWithQualName C.PyFunction_NewWithQualName
-func (self *PyObject) PyFunction_NewWithQualName(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
-	return self
+func (self *Object) AsFunction() *Function {
+	return (*Function)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyFunction_GetCode C.PyFunction_GetCode
-func (self *PyObject) PyFunction_GetCode() *PyObject {
-	return self
+// llgo:link (*Function).New C.PyFunction_New
+func (self *Function) New(_llcppg_param2 *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_GetGlobals C.PyFunction_GetGlobals
-func (self *PyObject) PyFunction_GetGlobals() *PyObject {
-	return self
+// llgo:link (*Function).NewWithQualName C.PyFunction_NewWithQualName
+func (self *Function) NewWithQualName(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_GetModule C.PyFunction_GetModule
-func (self *PyObject) PyFunction_GetModule() *PyObject {
-	return self
+// llgo:link (*Function).Code C.PyFunction_GetCode
+func (self *Function) Code() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_GetDefaults C.PyFunction_GetDefaults
-func (self *PyObject) PyFunction_GetDefaults() *PyObject {
-	return self
+// llgo:link (*Function).Globals C.PyFunction_GetGlobals
+func (self *Function) Globals() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_SetDefaults C.PyFunction_SetDefaults
-func (self *PyObject) PyFunction_SetDefaults(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Function).Module C.PyFunction_GetModule
+func (self *Function) Module() *Object {
+	return nil
+}
+
+// llgo:link (*Function).Defaults C.PyFunction_GetDefaults
+func (self *Function) Defaults() *Object {
+	return nil
+}
+
+// llgo:link (*Function).SetDefaults C.PyFunction_SetDefaults
+func (self *Function) SetDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyFunctionObject).PyFunction_SetVectorcall C.PyFunction_SetVectorcall
-func (self *PyFunctionObject) PyFunction_SetVectorcall(_llcppg_param2 Vectorcallfunc) {
+// llgo:link (*Function).SetVectorcall C.PyFunction_SetVectorcall
+func (self *Function) SetVectorcall(_llcppg_param2 Vectorcallfunc) {
 }
 
-// llgo:link (*PyObject).PyFunction_GetKwDefaults C.PyFunction_GetKwDefaults
-func (self *PyObject) PyFunction_GetKwDefaults() *PyObject {
-	return self
+// llgo:link (*Function).KwDefaults C.PyFunction_GetKwDefaults
+func (self *Function) KwDefaults() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_SetKwDefaults C.PyFunction_SetKwDefaults
-func (self *PyObject) PyFunction_SetKwDefaults(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Function).SetKwDefaults C.PyFunction_SetKwDefaults
+func (self *Function) SetKwDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyFunction_GetClosure C.PyFunction_GetClosure
-func (self *PyObject) PyFunction_GetClosure() *PyObject {
-	return self
+// llgo:link (*Function).Closure C.PyFunction_GetClosure
+func (self *Function) Closure() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_SetClosure C.PyFunction_SetClosure
-func (self *PyObject) PyFunction_SetClosure(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Function).SetClosure C.PyFunction_SetClosure
+func (self *Function) SetClosure(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyFunction_GetAnnotations C.PyFunction_GetAnnotations
-func (self *PyObject) PyFunction_GetAnnotations() *PyObject {
-	return self
+// llgo:link (*Function).Annotations C.PyFunction_GetAnnotations
+func (self *Function) Annotations() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyFunction_SetAnnotations C.PyFunction_SetAnnotations
-func (self *PyObject) PyFunction_SetAnnotations(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Function).SetAnnotations C.PyFunction_SetAnnotations
+func (self *Function) SetAnnotations(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
 // The classmethod and staticmethod types lives here, too
 //
-//go:linkname PyClassMethod_Type C.PyClassMethod_Type
-var PyClassMethod_Type PyTypeObject
+//go:linkname ClassMethodType C.PyClassMethod_Type
+var ClassMethodType TypeObject
 
-//go:linkname PyStaticMethod_Type C.PyStaticMethod_Type
-var PyStaticMethod_Type PyTypeObject
+//go:linkname StaticMethodType C.PyStaticMethod_Type
+var StaticMethodType TypeObject
 
-// llgo:link (*PyObject).PyClassMethod_New C.PyClassMethod_New
-func (self *PyObject) PyClassMethod_New() *PyObject {
-	return self
+type ClassMethod struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyStaticMethod_New C.PyStaticMethod_New
-func (self *PyObject) PyStaticMethod_New() *PyObject {
-	return self
+func (self *Object) AsClassMethod() *ClassMethod {
+	return (*ClassMethod)(unsafe.Pointer(self))
+}
+
+// llgo:link (*ClassMethod).New C.PyClassMethod_New
+func (self *ClassMethod) New() *Object {
+	return nil
+}
+
+type StaticMethod struct {
+	X_object
+}
+
+func (self *Object) AsStaticMethod() *StaticMethod {
+	return (*StaticMethod)(unsafe.Pointer(self))
+}
+
+// llgo:link (*StaticMethod).New C.PyStaticMethod_New
+func (self *StaticMethod) New() *Object {
+	return nil
 }
 
 // Register a per-interpreter callback that will be invoked for function lifecycle
@@ -171,12 +195,12 @@ func (self *PyObject) PyStaticMethod_New() *PyObject {
 // Returns a handle that may be passed to PyFunction_ClearWatcher on success,
 // or -1 and sets an error if no more handles are available.
 //
-//go:linkname PyFunction_AddWatcher C.PyFunction_AddWatcher
-func PyFunction_AddWatcher(callback PyFunction_WatchCallback) c.Int
+//go:linkname FunctionAddWatcher C.PyFunction_AddWatcher
+func FunctionAddWatcher(callback FunctionWatchCallback) c.Int
 
 // Clear the watcher associated with the watcher_id handle.
 //
 // Returns 0 on success or -1 if no watcher exists for the supplied id.
 //
-//go:linkname PyFunction_ClearWatcher C.PyFunction_ClearWatcher
-func PyFunction_ClearWatcher(watcher_id c.Int) c.Int
+//go:linkname FunctionClearWatcher C.PyFunction_ClearWatcher
+func FunctionClearWatcher(watcher_id c.Int) c.Int

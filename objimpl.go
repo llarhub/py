@@ -34,7 +34,9 @@ import (
 // Note that in C++, the use of the new operator usually implies that
 // the 1st step is performed automatically for you, so in a C++ class
 // constructor you would start directly with PyObject_Init/InitVar.
-type PyObjectArenaAllocator struct {
+//
+// llgo:type C
+type ObjectArenaAllocator struct {
 	Ctx   unsafe.Pointer
 	Alloc func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
 	Free  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 unsafe.Pointer, _llcppg_param3 c.SizeT)
@@ -54,7 +56,7 @@ type PyObjectArenaAllocator struct {
 // same objects multiple times or not at all.
 //
 // llgo:type C
-type GcvisitobjectsT = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) c.Int
+type GcvisitobjectsT = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) c.Int
 
 // Functions to call the same malloc/realloc/free as used by Python's
 // object allocator.  If WITH_PYMALLOC is enabled, these may differ from
@@ -79,133 +81,123 @@ type GcvisitobjectsT = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Poin
 // the object gets initialized via PyObject_{Init, InitVar} after obtaining
 // the raw memory.
 //
-//go:linkname PyObject_Malloc C.PyObject_Malloc
-func PyObject_Malloc(size c.SizeT) unsafe.Pointer
+//go:linkname ObjectMalloc C.PyObject_Malloc
+func ObjectMalloc(size c.SizeT) unsafe.Pointer
 
-//go:linkname PyObject_Calloc C.PyObject_Calloc
-func PyObject_Calloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
+//go:linkname ObjectCalloc C.PyObject_Calloc
+func ObjectCalloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
 
-//go:linkname PyObject_Realloc C.PyObject_Realloc
-func PyObject_Realloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
+//go:linkname ObjectRealloc C.PyObject_Realloc
+func ObjectRealloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 
-//go:linkname PyObject_Free C.PyObject_Free
-func PyObject_Free(ptr unsafe.Pointer)
+//go:linkname ObjectFree C.PyObject_Free
+func ObjectFree(ptr unsafe.Pointer)
 
 // Functions
 //
-// llgo:link (*PyObject).Init C.PyObject_Init
-func (self *PyObject) Init(_llcppg_param2 *PyTypeObject) *PyObject {
+// llgo:link (*Object).Init C.PyObject_Init
+func (self *Object) Init(_llcppg_param2 *TypeObject) *Object {
 	return self
 }
 
-// llgo:link (*PyVarObject).PyObject_InitVar C.PyObject_InitVar
-func (self *PyVarObject) PyObject_InitVar(_llcppg_param2 *PyTypeObject, _llcppg_param3 PySsizeT) *PyVarObject {
+// llgo:link (*VarObject).ObjectInitVar C.PyObject_InitVar
+func (self *VarObject) ObjectInitVar(_llcppg_param2 *TypeObject, _llcppg_param3 SsizeT) *VarObject {
 	return self
 }
 
-// llgo:link (*PyTypeObject).X_PyObject_New C._PyObject_New
-func (self *PyTypeObject) X_PyObject_New() *PyObject {
-	return nil
-}
+//go:linkname X_ObjectNew C._PyObject_New
+func X_ObjectNew(_llcppg_param1 *TypeObject) *Object
 
-// llgo:link (*PyTypeObject).X_PyObject_NewVar C._PyObject_NewVar
-func (self *PyTypeObject) X_PyObject_NewVar(_llcppg_param2 PySsizeT) *PyVarObject {
-	return nil
-}
+//go:linkname X_ObjectNewVar C._PyObject_NewVar
+func X_ObjectNewVar(_llcppg_param1 *TypeObject, _llcppg_param2 SsizeT) *VarObject
 
 // C equivalent of gc.collect().
 //
-//go:linkname PyGC_Collect C.PyGC_Collect
-func PyGC_Collect() PySsizeT
+//go:linkname GC_Collect C.PyGC_Collect
+func GC_Collect() SsizeT
 
 // C API for controlling the state of the garbage collector
 //
-//go:linkname PyGC_Enable C.PyGC_Enable
-func PyGC_Enable() c.Int
+//go:linkname GC_Enable C.PyGC_Enable
+func GC_Enable() c.Int
 
-//go:linkname PyGC_Disable C.PyGC_Disable
-func PyGC_Disable() c.Int
+//go:linkname GC_Disable C.PyGC_Disable
+func GC_Disable() c.Int
 
-//go:linkname PyGC_IsEnabled C.PyGC_IsEnabled
-func PyGC_IsEnabled() c.Int
+//go:linkname GC_IsEnabled C.PyGC_IsEnabled
+func GC_IsEnabled() c.Int
 
-// llgo:link (*PyVarObject).X_PyObject_GC_Resize C._PyObject_GC_Resize
-func (self *PyVarObject) X_PyObject_GC_Resize(_llcppg_param2 PySsizeT) *PyVarObject {
-	return self
-}
+//go:linkname X_Object_GC_Resize C._PyObject_GC_Resize
+func X_Object_GC_Resize(_llcppg_param1 *VarObject, _llcppg_param2 SsizeT) *VarObject
 
-// llgo:link (*PyTypeObject).X_PyObject_GC_New C._PyObject_GC_New
-func (self *PyTypeObject) X_PyObject_GC_New() *PyObject {
-	return nil
-}
+//go:linkname X_Object_GC_New C._PyObject_GC_New
+func X_Object_GC_New(_llcppg_param1 *TypeObject) *Object
 
-// llgo:link (*PyTypeObject).X_PyObject_GC_NewVar C._PyObject_GC_NewVar
-func (self *PyTypeObject) X_PyObject_GC_NewVar(_llcppg_param2 PySsizeT) *PyVarObject {
-	return nil
-}
+//go:linkname X_Object_GC_NewVar C._PyObject_GC_NewVar
+func X_Object_GC_NewVar(_llcppg_param1 *TypeObject, _llcppg_param2 SsizeT) *VarObject
 
 // Tell the GC to track this object.
 //
 // See also private _PyObject_GC_TRACK() macro.
 //
-//go:linkname PyObject_GC_Track C.PyObject_GC_Track
-func PyObject_GC_Track(_llcppg_param1 unsafe.Pointer)
+//go:linkname Object_GC_Track C.PyObject_GC_Track
+func Object_GC_Track(_llcppg_param1 unsafe.Pointer)
 
 // Tell the GC to stop tracking this object.
 //
 // See also private _PyObject_GC_UNTRACK() macro.
 //
-//go:linkname PyObject_GC_UnTrack C.PyObject_GC_UnTrack
-func PyObject_GC_UnTrack(_llcppg_param1 unsafe.Pointer)
+//go:linkname Object_GC_UnTrack C.PyObject_GC_UnTrack
+func Object_GC_UnTrack(_llcppg_param1 unsafe.Pointer)
 
-//go:linkname PyObject_GC_Del C.PyObject_GC_Del
-func PyObject_GC_Del(_llcppg_param1 unsafe.Pointer)
+//go:linkname Object_GC_Del C.PyObject_GC_Del
+func Object_GC_Del(_llcppg_param1 unsafe.Pointer)
 
-// llgo:link (*PyObject).GC_IsTracked C.PyObject_GC_IsTracked
-func (self *PyObject) GC_IsTracked() c.Int {
+// llgo:link (*Object).GC_IsTracked C.PyObject_GC_IsTracked
+func (self *Object) GC_IsTracked() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).GC_IsFinalized C.PyObject_GC_IsFinalized
-func (self *PyObject) GC_IsFinalized() c.Int {
+// llgo:link (*Object).GC_IsFinalized C.PyObject_GC_IsFinalized
+func (self *Object) GC_IsFinalized() c.Int {
 	return 0
 }
 
 // Get the arena allocator.
 //
-// llgo:link (*PyObjectArenaAllocator).PyObject_GetArenaAllocator C.PyObject_GetArenaAllocator
-func (self *PyObjectArenaAllocator) PyObject_GetArenaAllocator() {
+// llgo:link (*ObjectArenaAllocator).ObjectGetArenaAllocator C.PyObject_GetArenaAllocator
+func (self *ObjectArenaAllocator) ObjectGetArenaAllocator() {
 }
 
 // Set the arena allocator.
 //
-// llgo:link (*PyObjectArenaAllocator).PyObject_SetArenaAllocator C.PyObject_SetArenaAllocator
-func (self *PyObjectArenaAllocator) PyObject_SetArenaAllocator() {
+// llgo:link (*ObjectArenaAllocator).ObjectSetArenaAllocator C.PyObject_SetArenaAllocator
+func (self *ObjectArenaAllocator) ObjectSetArenaAllocator() {
 }
 
 // Test if an object implements the garbage collector protocol
 //
-// llgo:link (*PyObject).IS_GC C.PyObject_IS_GC
-func (self *PyObject) IS_GC() c.Int {
+// llgo:link (*Object).IS_GC C.PyObject_IS_GC
+func (self *Object) IS_GC() c.Int {
 	return 0
 }
 
 // Test if a type supports weak references
 //
-// llgo:link (*PyTypeObject).PyType_SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
-func (self *PyTypeObject) PyType_SUPPORTS_WEAKREFS() c.Int {
+// llgo:link (*Type).SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
+func (self *Type) SUPPORTS_WEAKREFS() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).GET_WEAKREFS_LISTPTR C.PyObject_GET_WEAKREFS_LISTPTR
-func (self *PyObject) GET_WEAKREFS_LISTPTR() **PyObject {
+// llgo:link (*Object).GET_WEAKREFS_LISTPTR C.PyObject_GET_WEAKREFS_LISTPTR
+func (self *Object) GET_WEAKREFS_LISTPTR() **Object {
 	return nil
 }
 
-// llgo:link (*PyTypeObject).PyUnstable_Object_GC_NewWithExtraData C.PyUnstable_Object_GC_NewWithExtraData
-func (self *PyTypeObject) PyUnstable_Object_GC_NewWithExtraData(_llcppg_param2 c.SizeT) *PyObject {
+// llgo:link (*Unstable).Object_GC_NewWithExtraData C.PyUnstable_Object_GC_NewWithExtraData
+func (self *Unstable) Object_GC_NewWithExtraData(_llcppg_param2 c.SizeT) *Object {
 	return nil
 }
 
-//go:linkname PyUnstable_GC_VisitObjects C.PyUnstable_GC_VisitObjects
-func PyUnstable_GC_VisitObjects(callback GcvisitobjectsT, arg unsafe.Pointer)
+//go:linkname Unstable_GC_VisitObjects C.PyUnstable_GC_VisitObjects
+func Unstable_GC_VisitObjects(callback GcvisitobjectsT, arg unsafe.Pointer)

@@ -4,129 +4,100 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-const PY_MONITORING_EVENT_PY_START = 0
-const PY_MONITORING_EVENT_PY_RESUME = 1
-const PY_MONITORING_EVENT_PY_RETURN = 2
-const PY_MONITORING_EVENT_PY_YIELD = 3
-const PY_MONITORING_EVENT_CALL = 4
-const PY_MONITORING_EVENT_LINE = 5
-const PY_MONITORING_EVENT_INSTRUCTION = 6
-const PY_MONITORING_EVENT_JUMP = 7
-const PY_MONITORING_EVENT_BRANCH_LEFT = 8
-const PY_MONITORING_EVENT_BRANCH_RIGHT = 9
-const PY_MONITORING_EVENT_STOP_ITERATION = 10
-const PY_MONITORING_EVENT_RAISE = 11
-const PY_MONITORING_EVENT_EXCEPTION_HANDLED = 12
-const PY_MONITORING_EVENT_PY_UNWIND = 13
-const PY_MONITORING_EVENT_PY_THROW = 14
-const PY_MONITORING_EVENT_RERAISE = 15
-const PY_MONITORING_EVENT_C_RETURN = 16
-const PY_MONITORING_EVENT_C_RAISE = 17
-const PY_MONITORING_EVENT_BRANCH = 18
+const MONITORING_EVENT_PY_START = 0
+const MONITORING_EVENT_PY_RESUME = 1
+const MONITORING_EVENT_PY_RETURN = 2
+const MONITORING_EVENT_PY_YIELD = 3
+const MONITORING_EVENT_CALL = 4
+const MONITORING_EVENT_LINE = 5
+const MONITORING_EVENT_INSTRUCTION = 6
+const MONITORING_EVENT_JUMP = 7
+const MONITORING_EVENT_BRANCH_LEFT = 8
+const MONITORING_EVENT_BRANCH_RIGHT = 9
+const MONITORING_EVENT_STOP_ITERATION = 10
+const MONITORING_EVENT_RAISE = 11
+const MONITORING_EVENT_EXCEPTION_HANDLED = 12
+const MONITORING_EVENT_PY_UNWIND = 13
+const MONITORING_EVENT_PY_THROW = 14
+const MONITORING_EVENT_RERAISE = 15
+const MONITORING_EVENT_C_RETURN = 16
+const MONITORING_EVENT_C_RAISE = 17
+const MONITORING_EVENT_BRANCH = 18
 
-type X_PyMonitoringState struct {
+type X_MonitoringState struct {
 	Active c.Uint8T
 	Opaque c.Uint8T
 }
-type PyMonitoringState = X_PyMonitoringState
+type MonitoringState = X_MonitoringState
+type Monitoring struct {
+	X_MonitoringState
+}
 
-// llgo:link (*PyMonitoringState).PyMonitoring_EnterScope C.PyMonitoring_EnterScope
-func (self *PyMonitoringState) PyMonitoring_EnterScope(version *c.Uint64T, event_types *c.Uint8T, length PySsizeT) c.Int {
+func (self *MonitoringState) AsMonitoring() *Monitoring {
+	return (*Monitoring)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Monitoring).EnterScope C.PyMonitoring_EnterScope
+func (self *Monitoring) EnterScope(version *c.Uint64T, event_types *c.Uint8T, length SsizeT) c.Int {
 	return 0
 }
 
-//go:linkname PyMonitoring_ExitScope C.PyMonitoring_ExitScope
-func PyMonitoring_ExitScope() c.Int
+//go:linkname MonitoringExitScope C.PyMonitoring_ExitScope
+func MonitoringExitScope() c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyStartEvent C._PyMonitoring_FirePyStartEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyStartEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyStartEvent C._PyMonitoring_FirePyStartEvent
+func X_MonitoringFirePyStartEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyResumeEvent C._PyMonitoring_FirePyResumeEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyResumeEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyResumeEvent C._PyMonitoring_FirePyResumeEvent
+func X_MonitoringFirePyResumeEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyReturnEvent C._PyMonitoring_FirePyReturnEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyReturnEvent(codelike *PyObject, offset c.Int32T, retval *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyReturnEvent C._PyMonitoring_FirePyReturnEvent
+func X_MonitoringFirePyReturnEvent(state *MonitoringState, codelike *Object, offset c.Int32T, retval *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyYieldEvent C._PyMonitoring_FirePyYieldEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyYieldEvent(codelike *PyObject, offset c.Int32T, retval *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyYieldEvent C._PyMonitoring_FirePyYieldEvent
+func X_MonitoringFirePyYieldEvent(state *MonitoringState, codelike *Object, offset c.Int32T, retval *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireCallEvent C._PyMonitoring_FireCallEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireCallEvent(codelike *PyObject, offset c.Int32T, callable *PyObject, arg0 *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireCallEvent C._PyMonitoring_FireCallEvent
+func X_MonitoringFireCallEvent(state *MonitoringState, codelike *Object, offset c.Int32T, callable *Object, arg0 *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireLineEvent C._PyMonitoring_FireLineEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireLineEvent(codelike *PyObject, offset c.Int32T, lineno c.Int) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireLineEvent C._PyMonitoring_FireLineEvent
+func X_MonitoringFireLineEvent(state *MonitoringState, codelike *Object, offset c.Int32T, lineno c.Int) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireJumpEvent C._PyMonitoring_FireJumpEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireJumpEvent(codelike *PyObject, offset c.Int32T, target_offset *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireJumpEvent C._PyMonitoring_FireJumpEvent
+func X_MonitoringFireJumpEvent(state *MonitoringState, codelike *Object, offset c.Int32T, target_offset *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireBranchEvent C._PyMonitoring_FireBranchEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireBranchEvent(codelike *PyObject, offset c.Int32T, target_offset *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireBranchEvent C._PyMonitoring_FireBranchEvent
+func X_MonitoringFireBranchEvent(state *MonitoringState, codelike *Object, offset c.Int32T, target_offset *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireBranchRightEvent C._PyMonitoring_FireBranchRightEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireBranchRightEvent(codelike *PyObject, offset c.Int32T, target_offset *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireBranchRightEvent C._PyMonitoring_FireBranchRightEvent
+func X_MonitoringFireBranchRightEvent(state *MonitoringState, codelike *Object, offset c.Int32T, target_offset *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireBranchLeftEvent C._PyMonitoring_FireBranchLeftEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireBranchLeftEvent(codelike *PyObject, offset c.Int32T, target_offset *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireBranchLeftEvent C._PyMonitoring_FireBranchLeftEvent
+func X_MonitoringFireBranchLeftEvent(state *MonitoringState, codelike *Object, offset c.Int32T, target_offset *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireCReturnEvent C._PyMonitoring_FireCReturnEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireCReturnEvent(codelike *PyObject, offset c.Int32T, retval *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireCReturnEvent C._PyMonitoring_FireCReturnEvent
+func X_MonitoringFireCReturnEvent(state *MonitoringState, codelike *Object, offset c.Int32T, retval *Object) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyThrowEvent C._PyMonitoring_FirePyThrowEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyThrowEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyThrowEvent C._PyMonitoring_FirePyThrowEvent
+func X_MonitoringFirePyThrowEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireRaiseEvent C._PyMonitoring_FireRaiseEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireRaiseEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireRaiseEvent C._PyMonitoring_FireRaiseEvent
+func X_MonitoringFireRaiseEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireReraiseEvent C._PyMonitoring_FireReraiseEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireReraiseEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireReraiseEvent C._PyMonitoring_FireReraiseEvent
+func X_MonitoringFireReraiseEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireExceptionHandledEvent C._PyMonitoring_FireExceptionHandledEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireExceptionHandledEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireExceptionHandledEvent C._PyMonitoring_FireExceptionHandledEvent
+func X_MonitoringFireExceptionHandledEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireCRaiseEvent C._PyMonitoring_FireCRaiseEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireCRaiseEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireCRaiseEvent C._PyMonitoring_FireCRaiseEvent
+func X_MonitoringFireCRaiseEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FirePyUnwindEvent C._PyMonitoring_FirePyUnwindEvent
-func (self *PyMonitoringState) X_PyMonitoring_FirePyUnwindEvent(codelike *PyObject, offset c.Int32T) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFirePyUnwindEvent C._PyMonitoring_FirePyUnwindEvent
+func X_MonitoringFirePyUnwindEvent(state *MonitoringState, codelike *Object, offset c.Int32T) c.Int
 
-// llgo:link (*PyMonitoringState).X_PyMonitoring_FireStopIterationEvent C._PyMonitoring_FireStopIterationEvent
-func (self *PyMonitoringState) X_PyMonitoring_FireStopIterationEvent(codelike *PyObject, offset c.Int32T, value *PyObject) c.Int {
-	return 0
-}
+//go:linkname X_MonitoringFireStopIterationEvent C._PyMonitoring_FireStopIterationEvent
+func X_MonitoringFireStopIterationEvent(state *MonitoringState, codelike *Object, offset c.Int32T, value *Object) c.Int

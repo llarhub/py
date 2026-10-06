@@ -7,19 +7,19 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname PyOS_InterruptOccurred C.PyOS_InterruptOccurred
-func PyOS_InterruptOccurred() c.Int
+//go:linkname OS_InterruptOccurred C.PyOS_InterruptOccurred
+func OS_InterruptOccurred() c.Int
 
-//go:linkname PyOS_BeforeFork C.PyOS_BeforeFork
-func PyOS_BeforeFork()
+//go:linkname OS_BeforeFork C.PyOS_BeforeFork
+func OS_BeforeFork()
 
-//go:linkname PyOS_AfterFork_Parent C.PyOS_AfterFork_Parent
-func PyOS_AfterFork_Parent()
+//go:linkname OS_AfterFork_Parent C.PyOS_AfterFork_Parent
+func OS_AfterFork_Parent()
 
-//go:linkname PyOS_AfterFork_Child C.PyOS_AfterFork_Child
-func PyOS_AfterFork_Child()
+//go:linkname OS_AfterFork_Child C.PyOS_AfterFork_Child
+func OS_AfterFork_Child()
 
 // Deprecated, please use PyOS_AfterFork_Child() instead
 //
-//go:linkname PyOS_AfterFork C.PyOS_AfterFork
-func PyOS_AfterFork()
+//go:linkname OS_AfterFork C.PyOS_AfterFork
+func OS_AfterFork()

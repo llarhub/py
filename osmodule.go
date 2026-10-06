@@ -2,7 +2,17 @@
 
 package py
 
-// llgo:link (*PyObject).PyOS_FSPath C.PyOS_FSPath
-func (self *PyObject) PyOS_FSPath() *PyObject {
-	return self
+import "unsafe"
+
+type OS struct {
+	X_object
+}
+
+func (self *Object) AsOS() *OS {
+	return (*OS)(unsafe.Pointer(self))
+}
+
+// llgo:link (*OS).FSPath C.PyOS_FSPath
+func (self *OS) FSPath() *Object {
+	return nil
 }

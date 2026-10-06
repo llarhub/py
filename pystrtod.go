@@ -7,19 +7,19 @@ import (
 	_ "unsafe"
 )
 
-const Py_DTSF_SIGN = 1
-const Py_DTSF_ADD_DOT_0 = 2
-const Py_DTSF_ALT = 4
-const Py_DTSF_NO_NEG_0 = 8
-const Py_DTST_FINITE = 0
-const Py_DTST_INFINITE = 1
-const Py_DTST_NAN = 2
+const DTSF_SIGN = 1
+const DTSF_ADD_DOT_0 = 2
+const DTSF_ALT = 4
+const DTSF_NO_NEG_0 = 8
+const DTST_FINITE = 0
+const DTST_INFINITE = 1
+const DTST_NAN = 2
 
-//go:linkname PyOSStringToDouble C.PyOS_string_to_double
-func PyOSStringToDouble(str *c.Char, endptr **c.Char, overflow_exception *PyObject) c.Double
+//go:linkname OSStringToDouble C.PyOS_string_to_double
+func OSStringToDouble(str *c.Char, endptr **c.Char, overflow_exception *Object) c.Double
 
 // The caller is responsible for calling PyMem_Free to free the buffer
 // that's is returned.
 //
-//go:linkname PyOSDoubleToString C.PyOS_double_to_string
-func PyOSDoubleToString(val c.Double, format_code c.Char, precision c.Int, flags c.Int, type_ *c.Int) *c.Char
+//go:linkname OSDoubleToString C.PyOS_double_to_string
+func OSDoubleToString(val c.Double, format_code c.Char, precision c.Int, flags c.Int, type_ *c.Int) *c.Char

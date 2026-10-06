@@ -2,57 +2,81 @@
 
 package py
 
-import _ "unsafe"
+import "unsafe"
 
-type X_PyGenObject struct {
+type X_GenObject struct {
 }
 
 // --- Generators ---------------------------------------------------------
-type PyGenObject = X_PyGenObject
-type X_PyCoroObject struct {
+type GenObject = X_GenObject
+type X_CoroObject struct {
 }
 
 // --- PyCoroObject -------------------------------------------------------
-type PyCoroObject = X_PyCoroObject
-type X_PyAsyncGenObject struct {
+type CoroObject = X_CoroObject
+type X_AsyncGenObject struct {
 }
 
 // --- Asynchronous Generators --------------------------------------------
-type PyAsyncGenObject = X_PyAsyncGenObject
+type AsyncGenObject = X_AsyncGenObject
 
-//go:linkname PyGen_Type C.PyGen_Type
-var PyGen_Type PyTypeObject
+//go:linkname GenType C.PyGen_Type
+var GenType TypeObject
 
-// llgo:link (*PyFrameObject).PyGen_New C.PyGen_New
-func (self *PyFrameObject) PyGen_New() *PyObject {
+type Gen struct {
+	X_frame
+}
+
+func (self *FrameObject) AsGen() *Gen {
+	return (*Gen)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Gen).New C.PyGen_New
+func (self *Gen) New() *Object {
 	return nil
 }
 
-// llgo:link (*PyFrameObject).PyGen_NewWithQualName C.PyGen_NewWithQualName
-func (self *PyFrameObject) PyGen_NewWithQualName(name *PyObject, qualname *PyObject) *PyObject {
+// llgo:link (*Gen).NewWithQualName C.PyGen_NewWithQualName
+func (self *Gen) NewWithQualName(name *Object, qualname *Object) *Object {
 	return nil
 }
 
-// llgo:link (*PyGenObject).PyGen_GetCode C.PyGen_GetCode
-func (self *PyGenObject) PyGen_GetCode() *PyCodeObject {
+// llgo:link (*Gen).Code C.PyGen_GetCode
+func (self *Gen) Code() *CodeObject {
 	return nil
 }
 
-//go:linkname PyCoro_Type C.PyCoro_Type
-var PyCoro_Type PyTypeObject
+//go:linkname CoroType C.PyCoro_Type
+var CoroType TypeObject
 
-// llgo:link (*PyFrameObject).PyCoro_New C.PyCoro_New
-func (self *PyFrameObject) PyCoro_New(name *PyObject, qualname *PyObject) *PyObject {
+type Coro struct {
+	X_frame
+}
+
+func (self *FrameObject) AsCoro() *Coro {
+	return (*Coro)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Coro).New C.PyCoro_New
+func (self *Coro) New(name *Object, qualname *Object) *Object {
 	return nil
 }
 
-//go:linkname PyAsyncGen_Type C.PyAsyncGen_Type
-var PyAsyncGen_Type PyTypeObject
+//go:linkname AsyncGenType C.PyAsyncGen_Type
+var AsyncGenType TypeObject
 
-//go:linkname X_PyAsyncGenASend_Type C._PyAsyncGenASend_Type
-var X_PyAsyncGenASend_Type PyTypeObject
+//go:linkname X_AsyncGenASendType C._PyAsyncGenASend_Type
+var X_AsyncGenASendType TypeObject
 
-// llgo:link (*PyFrameObject).PyAsyncGen_New C.PyAsyncGen_New
-func (self *PyFrameObject) PyAsyncGen_New(name *PyObject, qualname *PyObject) *PyObject {
+type AsyncGen struct {
+	X_frame
+}
+
+func (self *FrameObject) AsAsyncGen() *AsyncGen {
+	return (*AsyncGen)(unsafe.Pointer(self))
+}
+
+// llgo:link (*AsyncGen).New C.PyAsyncGen_New
+func (self *AsyncGen) New(name *Object, qualname *Object) *Object {
 	return nil
 }

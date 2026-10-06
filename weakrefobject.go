@@ -4,58 +4,65 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 // PyWeakReference is the base struct for the Python ReferenceType, ProxyType,
 // and CallableProxyType.
-type X_PyWeakReference struct {
-	ObBase     PyObject
-	WrObject   *PyObject
-	WrCallback *PyObject
-	Hash       PyHashT
-	WrPrev     *PyWeakReference
-	WrNext     *PyWeakReference
+type X_WeakReference struct {
+	ObBase     Object
+	WrObject   *Object
+	WrCallback *Object
+	Hash       HashT
+	WrPrev     *WeakReference
+	WrNext     *WeakReference
 	Vectorcall Vectorcallfunc
 }
-type PyWeakReference = X_PyWeakReference
+type WeakReference = X_WeakReference
 
-//go:linkname X_PyWeakref_RefType C._PyWeakref_RefType
-var X_PyWeakref_RefType PyTypeObject
+//go:linkname X_WeakrefRefType C._PyWeakref_RefType
+var X_WeakrefRefType TypeObject
 
-//go:linkname X_PyWeakref_ProxyType C._PyWeakref_ProxyType
-var X_PyWeakref_ProxyType PyTypeObject
+//go:linkname X_WeakrefProxyType C._PyWeakref_ProxyType
+var X_WeakrefProxyType TypeObject
 
-//go:linkname X_PyWeakref_CallableProxyType C._PyWeakref_CallableProxyType
-var X_PyWeakref_CallableProxyType PyTypeObject
+//go:linkname X_WeakrefCallableProxyType C._PyWeakref_CallableProxyType
+var X_WeakrefCallableProxyType TypeObject
 
-// llgo:link (*PyObject).PyWeakref_NewRef C.PyWeakref_NewRef
-func (self *PyObject) PyWeakref_NewRef(callback *PyObject) *PyObject {
-	return self
+type Weakref struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyWeakref_NewProxy C.PyWeakref_NewProxy
-func (self *PyObject) PyWeakref_NewProxy(callback *PyObject) *PyObject {
-	return self
+func (self *Object) AsWeakref() *Weakref {
+	return (*Weakref)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyWeakref_GetObject C.PyWeakref_GetObject
-func (self *PyObject) PyWeakref_GetObject() *PyObject {
-	return self
+// llgo:link (*Weakref).NewRef C.PyWeakref_NewRef
+func (self *Weakref) NewRef(callback *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyWeakref_GetRef C.PyWeakref_GetRef
-func (self *PyObject) PyWeakref_GetRef(pobj **PyObject) c.Int {
+// llgo:link (*Weakref).NewProxy C.PyWeakref_NewProxy
+func (self *Weakref) NewProxy(callback *Object) *Object {
+	return nil
+}
+
+// llgo:link (*Weakref).Object C.PyWeakref_GetObject
+func (self *Weakref) Object() *Object {
+	return nil
+}
+
+// llgo:link (*Weakref).Ref C.PyWeakref_GetRef
+func (self *Weakref) Ref(pobj **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyWeakReference).X_PyWeakref_ClearRef C._PyWeakref_ClearRef
-func (self *PyWeakReference) X_PyWeakref_ClearRef() {
-}
+//go:linkname X_WeakrefClearRef C._PyWeakref_ClearRef
+func X_WeakrefClearRef(self *WeakReference)
 
 // Test if a weak reference is dead.
 //
-// llgo:link (*PyObject).PyWeakref_IsDead C.PyWeakref_IsDead
-func (self *PyObject) PyWeakref_IsDead() c.Int {
+// llgo:link (*Weakref).IsDead C.PyWeakref_IsDead
+func (self *Weakref) IsDead() c.Int {
 	return 0
 }

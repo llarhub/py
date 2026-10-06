@@ -7,66 +7,74 @@ import (
 	"unsafe"
 )
 
-const PY_STDIOTEXTMODE = "b"
+const STDIOTEXTMODE = "b"
 
 // llgo:type C
-type Py_OpenCodeHookFunction = func(_llcppg_param1 *PyObject, _llcppg_param2 unsafe.Pointer) *PyObject
+type OpenCodeHookFunction = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
 
-//go:linkname PyFile_FromFd C.PyFile_FromFd
-func PyFile_FromFd(_llcppg_param1 c.Int, _llcppg_param2 *c.Char, _llcppg_param3 *c.Char, _llcppg_param4 c.Int, _llcppg_param5 *c.Char, _llcppg_param6 *c.Char, _llcppg_param7 *c.Char, _llcppg_param8 c.Int) *PyObject
+//go:linkname FileFromFd C.PyFile_FromFd
+func FileFromFd(_llcppg_param1 c.Int, _llcppg_param2 *c.Char, _llcppg_param3 *c.Char, _llcppg_param4 c.Int, _llcppg_param5 *c.Char, _llcppg_param6 *c.Char, _llcppg_param7 *c.Char, _llcppg_param8 c.Int) *Object
 
-// llgo:link (*PyObject).PyFile_GetLine C.PyFile_GetLine
-func (self *PyObject) PyFile_GetLine(_llcppg_param2 c.Int) *PyObject {
-	return self
+type File struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyFile_WriteObject C.PyFile_WriteObject
-func (self *PyObject) PyFile_WriteObject(_llcppg_param2 *PyObject, _llcppg_param3 c.Int) c.Int {
+func (self *Object) AsFile() *File {
+	return (*File)(unsafe.Pointer(self))
+}
+
+// llgo:link (*File).Line C.PyFile_GetLine
+func (self *File) Line(_llcppg_param2 c.Int) *Object {
+	return nil
+}
+
+// llgo:link (*File).WriteObject C.PyFile_WriteObject
+func (self *File) WriteObject(_llcppg_param2 *Object, _llcppg_param3 c.Int) c.Int {
 	return 0
 }
 
-//go:linkname PyFile_WriteString C.PyFile_WriteString
-func PyFile_WriteString(_llcppg_param1 *c.Char, _llcppg_param2 *PyObject) c.Int
+//go:linkname FileWriteString C.PyFile_WriteString
+func FileWriteString(_llcppg_param1 *c.Char, _llcppg_param2 *Object) c.Int
 
-// llgo:link (*PyObject).AsFileDescriptor C.PyObject_AsFileDescriptor
-func (self *PyObject) AsFileDescriptor() c.Int {
+// llgo:link (*Object).AsFileDescriptor C.PyObject_AsFileDescriptor
+func (self *Object) AsFileDescriptor() c.Int {
 	return 0
 }
 
 // The default encoding used by the platform file system APIs
 // If non-NULL, this is different than the default encoding for strings
 //
-//go:linkname Py_FileSystemDefaultEncoding C.Py_FileSystemDefaultEncoding
-var Py_FileSystemDefaultEncoding *c.Char
+//go:linkname FileSystemDefaultEncoding C.Py_FileSystemDefaultEncoding
+var FileSystemDefaultEncoding *c.Char
 
-//go:linkname Py_FileSystemDefaultEncodeErrors C.Py_FileSystemDefaultEncodeErrors
-var Py_FileSystemDefaultEncodeErrors *c.Char
+//go:linkname FileSystemDefaultEncodeErrors C.Py_FileSystemDefaultEncodeErrors
+var FileSystemDefaultEncodeErrors *c.Char
 
-//go:linkname Py_HasFileSystemDefaultEncoding C.Py_HasFileSystemDefaultEncoding
-var Py_HasFileSystemDefaultEncoding c.Int
+//go:linkname HasFileSystemDefaultEncoding C.Py_HasFileSystemDefaultEncoding
+var HasFileSystemDefaultEncoding c.Int
 
-//go:linkname Py_UTF8Mode C.Py_UTF8Mode
-var Py_UTF8Mode c.Int
+//go:linkname UTF8Mode C.Py_UTF8Mode
+var UTF8Mode c.Int
 
-//go:linkname Py_UniversalNewlineFgets C.Py_UniversalNewlineFgets
-func Py_UniversalNewlineFgets(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *c.FILE, _llcppg_param4 *PyObject) *c.Char
+//go:linkname UniversalNewlineFgets C.Py_UniversalNewlineFgets
+func UniversalNewlineFgets(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *c.FILE, _llcppg_param4 *Object) *c.Char
 
 // The std printer acts as a preliminary sys.stderr until the new io
 // infrastructure is in place.
 //
-//go:linkname PyFile_NewStdPrinter C.PyFile_NewStdPrinter
-func PyFile_NewStdPrinter(_llcppg_param1 c.Int) *PyObject
+//go:linkname FileNewStdPrinter C.PyFile_NewStdPrinter
+func FileNewStdPrinter(_llcppg_param1 c.Int) *Object
 
-//go:linkname PyStdPrinter_Type C.PyStdPrinter_Type
-var PyStdPrinter_Type PyTypeObject
+//go:linkname StdPrinterType C.PyStdPrinter_Type
+var StdPrinterType TypeObject
 
-//go:linkname PyFile_OpenCode C.PyFile_OpenCode
-func PyFile_OpenCode(utf8path *c.Char) *PyObject
+//go:linkname FileOpenCode C.PyFile_OpenCode
+func FileOpenCode(utf8path *c.Char) *Object
 
-// llgo:link (*PyObject).PyFile_OpenCodeObject C.PyFile_OpenCodeObject
-func (self *PyObject) PyFile_OpenCodeObject() *PyObject {
-	return self
+// llgo:link (*File).OpenCodeObject C.PyFile_OpenCodeObject
+func (self *File) OpenCodeObject() *Object {
+	return nil
 }
 
-//go:linkname PyFile_SetOpenCodeHook C.PyFile_SetOpenCodeHook
-func PyFile_SetOpenCodeHook(hook Py_OpenCodeHookFunction, userData unsafe.Pointer) c.Int
+//go:linkname FileSetOpenCodeHook C.PyFile_SetOpenCodeHook
+func FileSetOpenCodeHook(hook OpenCodeHookFunction, userData unsafe.Pointer) c.Int

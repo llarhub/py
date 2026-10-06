@@ -4,28 +4,36 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyCellObject struct {
-	ObBase PyObject
-	ObRef  *PyObject
+type CellObject struct {
+	ObBase Object
+	ObRef  *Object
 }
 
-//go:linkname PyCell_Type C.PyCell_Type
-var PyCell_Type PyTypeObject
+//go:linkname CellType C.PyCell_Type
+var CellType TypeObject
 
-// llgo:link (*PyObject).PyCell_New C.PyCell_New
-func (self *PyObject) PyCell_New() *PyObject {
-	return self
+type Cell struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyCell_Get C.PyCell_Get
-func (self *PyObject) PyCell_Get() *PyObject {
-	return self
+func (self *Object) AsCell() *Cell {
+	return (*Cell)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyCell_Set C.PyCell_Set
-func (self *PyObject) PyCell_Set(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Cell).New C.PyCell_New
+func (self *Cell) New() *Object {
+	return nil
+}
+
+// llgo:link (*Cell).Get C.PyCell_Get
+func (self *Cell) Get() *Object {
+	return nil
+}
+
+// llgo:link (*Cell).Set C.PyCell_Set
+func (self *Cell) Set(_llcppg_param2 *Object) c.Int {
 	return 0
 }

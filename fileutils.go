@@ -7,16 +7,14 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname Py_DecodeLocale C.Py_DecodeLocale
-func Py_DecodeLocale(arg *c.Char, size *c.SizeT) *c.WcharT
+//go:linkname DecodeLocale C.Py_DecodeLocale
+func DecodeLocale(arg *c.Char, size *c.SizeT) *c.WcharT
 
-//go:linkname Py_EncodeLocale C.Py_EncodeLocale
-func Py_EncodeLocale(text *c.WcharT, error_pos *c.SizeT) *c.Char
+//go:linkname EncodeLocale C.Py_EncodeLocale
+func EncodeLocale(text *c.WcharT, error_pos *c.SizeT) *c.Char
 
-// llgo:link (*PyObject).PyFopen C.Py_fopen
-func (self *PyObject) PyFopen(mode *c.Char) *c.FILE {
-	return nil
-}
+//go:linkname Fopen C.Py_fopen
+func Fopen(path *Object, mode *c.Char) *c.FILE
 
-//go:linkname PyFclose C.Py_fclose
-func PyFclose(file *c.FILE) c.Int
+//go:linkname Fclose C.Py_fclose
+func Fclose(file *c.FILE) c.Int

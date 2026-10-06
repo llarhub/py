@@ -4,31 +4,38 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 type X_traceback struct {
-	ObBase   PyObject
-	TbNext   *PyTracebackObject
-	TbFrame  *PyFrameObject
+	ObBase   Object
+	TbNext   *TracebackObject
+	TbFrame  *FrameObject
 	TbLasti  c.Int
 	TbLineno c.Int
 }
-type PyTracebackObject = X_traceback
+type TracebackObject = X_traceback
+type TraceBack struct {
+	X_frame
+}
+
+func (self *FrameObject) AsTraceBack() *TraceBack {
+	return (*TraceBack)(unsafe.Pointer(self))
+}
 
 // Traceback interface
 //
-// llgo:link (*PyFrameObject).PyTraceBack_Here C.PyTraceBack_Here
-func (self *PyFrameObject) PyTraceBack_Here() c.Int {
+// llgo:link (*TraceBack).Here C.PyTraceBack_Here
+func (self *TraceBack) Here() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyTraceBack_Print C.PyTraceBack_Print
-func (self *PyObject) PyTraceBack_Print(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*TraceBack).Print C.PyTraceBack_Print
+func (self *TraceBack) Print(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
 // Reveal traceback type so we can typecheck traceback objects
 //
-//go:linkname PyTraceBack_Type C.PyTraceBack_Type
-var PyTraceBack_Type PyTypeObject
+//go:linkname TraceBackType C.PyTraceBack_Type
+var TraceBackType TypeObject

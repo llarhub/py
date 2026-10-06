@@ -7,8 +7,8 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname PyOSMystrnicmp C.PyOS_mystrnicmp
-func PyOSMystrnicmp(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char, _llcppg_param3 PySsizeT) c.Int
+//go:linkname OSMystrnicmp C.PyOS_mystrnicmp
+func OSMystrnicmp(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char, _llcppg_param3 SsizeT) c.Int
 
-//go:linkname PyOSMystricmp C.PyOS_mystricmp
-func PyOSMystricmp(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char) c.Int
+//go:linkname OSMystricmp C.PyOS_mystricmp
+func OSMystricmp(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char) c.Int

@@ -4,11 +4,11 @@ package py
 
 import _ "unsafe"
 
-//go:linkname PyFilter_Type C.PyFilter_Type
-var PyFilter_Type PyTypeObject
+//go:linkname FilterType C.PyFilter_Type
+var FilterType TypeObject
 
-//go:linkname PyMap_Type C.PyMap_Type
-var PyMap_Type PyTypeObject
+//go:linkname MapType C.PyMap_Type
+var MapType TypeObject
 
-//go:linkname PyZip_Type C.PyZip_Type
-var PyZip_Type PyTypeObject
+//go:linkname ZipType C.PyZip_Type
+var ZipType TypeObject

@@ -4,12 +4,12 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyBytesObject struct {
-	ObBase  PyVarObject
-	ObShash PyHashT
+type BytesObject struct {
+	ObBase  VarObject
+	ObShash HashT
 	ObSval  [1]c.Char
 }
 
@@ -26,67 +26,75 @@ type PyBytesObject struct {
 // variant that assumes a zero-terminated string.  Note that none of the
 // functions should be applied to NULL pointer.
 //
-//go:linkname PyBytes_Type C.PyBytes_Type
-var PyBytes_Type PyTypeObject
+//go:linkname BytesType C.PyBytes_Type
+var BytesType TypeObject
 
-//go:linkname PyBytesIter_Type C.PyBytesIter_Type
-var PyBytesIter_Type PyTypeObject
+//go:linkname BytesIterType C.PyBytesIter_Type
+var BytesIterType TypeObject
 
-//go:linkname PyBytes_FromStringAndSize C.PyBytes_FromStringAndSize
-func PyBytes_FromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 PySsizeT) *PyObject
+//go:linkname BytesFromStringAndSize C.PyBytes_FromStringAndSize
+func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Object
 
-//go:linkname PyBytes_FromString C.PyBytes_FromString
-func PyBytes_FromString(_llcppg_param1 *c.Char) *PyObject
+//go:linkname BytesFromString C.PyBytes_FromString
+func BytesFromString(_llcppg_param1 *c.Char) *Object
 
-// llgo:link (*PyObject).PyBytes_FromObject C.PyBytes_FromObject
-func (self *PyObject) PyBytes_FromObject() *PyObject {
-	return self
+type Bytes struct {
+	X_object
 }
 
-//go:linkname PyBytes_FromFormatV C.PyBytes_FromFormatV
-func PyBytes_FromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *PyObject
-
-//go:linkname PyBytes_FromFormat C.PyBytes_FromFormat
-func PyBytes_FromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *PyObject
-
-// llgo:link (*PyObject).PyBytes_Size C.PyBytes_Size
-func (self *PyObject) PyBytes_Size() PySsizeT {
-	return 0
+func (self *Object) AsBytes() *Bytes {
+	return (*Bytes)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyBytes_AsString C.PyBytes_AsString
-func (self *PyObject) PyBytes_AsString() *c.Char {
+// llgo:link (*Bytes).FromObject C.PyBytes_FromObject
+func (self *Bytes) FromObject() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyBytes_Repr C.PyBytes_Repr
-func (self *PyObject) PyBytes_Repr(_llcppg_param2 c.Int) *PyObject {
-	return self
+//go:linkname Bytes_FromFormatV C.PyBytes_FromFormatV
+func Bytes_FromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *Object
+
+//go:linkname BytesFromFormat C.PyBytes_FromFormat
+func BytesFromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *Object
+
+// llgo:link (*Bytes).Size C.PyBytes_Size
+func (self *Bytes) Size() SsizeT {
+	return 0
 }
 
-//go:linkname PyBytes_Concat C.PyBytes_Concat
-func PyBytes_Concat(_llcppg_param1 **PyObject, _llcppg_param2 *PyObject)
+// llgo:link (*Bytes).AsString C.PyBytes_AsString
+func (self *Bytes) AsString() *c.Char {
+	return nil
+}
 
-//go:linkname PyBytes_ConcatAndDel C.PyBytes_ConcatAndDel
-func PyBytes_ConcatAndDel(_llcppg_param1 **PyObject, _llcppg_param2 *PyObject)
+// llgo:link (*Bytes).Repr C.PyBytes_Repr
+func (self *Bytes) Repr(_llcppg_param2 c.Int) *Object {
+	return nil
+}
 
-//go:linkname PyBytes_DecodeEscape C.PyBytes_DecodeEscape
-func PyBytes_DecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 PySsizeT, _llcppg_param3 *c.Char, _llcppg_param4 PySsizeT, _llcppg_param5 *c.Char) *PyObject
+//go:linkname BytesConcat C.PyBytes_Concat
+func BytesConcat(_llcppg_param1 **Object, _llcppg_param2 *Object)
+
+//go:linkname BytesConcatAndDel C.PyBytes_ConcatAndDel
+func BytesConcatAndDel(_llcppg_param1 **Object, _llcppg_param2 *Object)
+
+//go:linkname BytesDecodeEscape C.PyBytes_DecodeEscape
+func BytesDecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT, _llcppg_param3 *c.Char, _llcppg_param4 SsizeT, _llcppg_param5 *c.Char) *Object
 
 // Provides access to the internal data buffer and size of a bytes object.
 // Passing NULL as len parameter will force the string buffer to be
 // 0-terminated (passing a string with embedded NUL characters will
 // cause an exception).
 //
-// llgo:link (*PyObject).PyBytes_AsStringAndSize C.PyBytes_AsStringAndSize
-func (self *PyObject) PyBytes_AsStringAndSize(s **c.Char, len *PySsizeT) c.Int {
+// llgo:link (*Bytes).AsStringAndSize C.PyBytes_AsStringAndSize
+func (self *Bytes) AsStringAndSize(s **c.Char, len *SsizeT) c.Int {
 	return 0
 }
 
-//go:linkname X_PyBytes_Resize C._PyBytes_Resize
-func X_PyBytes_Resize(_llcppg_param1 **PyObject, _llcppg_param2 PySsizeT) c.Int
+//go:linkname X_BytesResize C._PyBytes_Resize
+func X_BytesResize(_llcppg_param1 **Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*PyObject).PyBytes_Join C.PyBytes_Join
-func (self *PyObject) PyBytes_Join(iterable *PyObject) *PyObject {
-	return self
+// llgo:link (*Bytes).Join C.PyBytes_Join
+func (self *Bytes) Join(iterable *Object) *Object {
+	return nil
 }

@@ -4,8 +4,8 @@ package py
 
 import _ "unsafe"
 
-//go:linkname PyEnum_Type C.PyEnum_Type
-var PyEnum_Type PyTypeObject
+//go:linkname EnumType C.PyEnum_Type
+var EnumType TypeObject
 
-//go:linkname PyReversed_Type C.PyReversed_Type
-var PyReversed_Type PyTypeObject
+//go:linkname ReversedType C.PyReversed_Type
+var ReversedType TypeObject

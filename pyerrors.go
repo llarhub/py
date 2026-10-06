@@ -4,188 +4,195 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyBaseExceptionObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type BaseExceptionObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
 }
-type PyBaseExceptionGroupObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type BaseExceptionGroupObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Msg             *PyObject
-	Excs            *PyObject
-	ExcsStr         *PyObject
+	Msg             *Object
+	Excs            *Object
+	ExcsStr         *Object
 }
-type PySyntaxErrorObject struct {
-	ObBase           PyObject
-	Dict             *PyObject
-	Args             *PyObject
-	Notes            *PyObject
-	Traceback        *PyObject
-	Context          *PyObject
-	Cause            *PyObject
+type SyntaxErrorObject struct {
+	ObBase           Object
+	Dict             *Object
+	Args             *Object
+	Notes            *Object
+	Traceback        *Object
+	Context          *Object
+	Cause            *Object
 	SuppressContext  c.Char
-	Msg              *PyObject
-	Filename         *PyObject
-	Lineno           *PyObject
-	Offset           *PyObject
-	EndLineno        *PyObject
-	EndOffset        *PyObject
-	Text             *PyObject
-	PrintFileAndLine *PyObject
-	Metadata         *PyObject
+	Msg              *Object
+	Filename         *Object
+	Lineno           *Object
+	Offset           *Object
+	EndLineno        *Object
+	EndOffset        *Object
+	Text             *Object
+	PrintFileAndLine *Object
+	Metadata         *Object
 }
-type PyImportErrorObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type ImportErrorObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Msg             *PyObject
-	Name            *PyObject
-	Path            *PyObject
-	NameFrom        *PyObject
+	Msg             *Object
+	Name            *Object
+	Path            *Object
+	NameFrom        *Object
 }
-type PyUnicodeErrorObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type UnicodeErrorObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Encoding        *PyObject
-	Object          *PyObject
-	Start           PySsizeT
-	End             PySsizeT
-	Reason          *PyObject
+	Encoding        *Object
+	Object          *Object
+	Start           SsizeT
+	End             SsizeT
+	Reason          *Object
 }
-type PySystemExitObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type SystemExitObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Code            *PyObject
+	Code            *Object
 }
-type PyOSErrorObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type OSErrorObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Myerrno         *PyObject
-	Strerror        *PyObject
-	Filename        *PyObject
-	Filename2       *PyObject
-	Written         PySsizeT
+	Myerrno         *Object
+	Strerror        *Object
+	Filename        *Object
+	Filename2       *Object
+	Written         SsizeT
 }
-type PyStopIterationObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type StopIterationObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Value           *PyObject
+	Value           *Object
 }
-type PyNameErrorObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type NameErrorObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Name            *PyObject
+	Name            *Object
 }
-type PyAttributeErrorObject struct {
-	ObBase          PyObject
-	Dict            *PyObject
-	Args            *PyObject
-	Notes           *PyObject
-	Traceback       *PyObject
-	Context         *PyObject
-	Cause           *PyObject
+type AttributeErrorObject struct {
+	ObBase          Object
+	Dict            *Object
+	Args            *Object
+	Notes           *Object
+	Traceback       *Object
+	Context         *Object
+	Cause           *Object
 	SuppressContext c.Char
-	Obj             *PyObject
-	Name            *PyObject
+	Obj             *Object
+	Name            *Object
 }
 
 // Compatibility typedefs
-type PyEnvironmentErrorObject = PyOSErrorObject
-
-// llgo:link (*PyObject).PyErr_SetNone C.PyErr_SetNone
-func (self *PyObject) PyErr_SetNone() {
+type EnvironmentErrorObject = OSErrorObject
+type Err struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyErr_SetObject C.PyErr_SetObject
-func (self *PyObject) PyErr_SetObject(_llcppg_param2 *PyObject) {
+func (self *Object) AsErr() *Err {
+	return (*Err)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyErr_SetString C.PyErr_SetString
-func (self *PyObject) PyErr_SetString(string *c.Char) {
+// llgo:link (*Err).SetNone C.PyErr_SetNone
+func (self *Err) SetNone() {
 }
 
-//go:linkname PyErr_Occurred C.PyErr_Occurred
-func PyErr_Occurred() *PyObject
-
-//go:linkname PyErr_Clear C.PyErr_Clear
-func PyErr_Clear()
-
-//go:linkname PyErr_Fetch C.PyErr_Fetch
-func PyErr_Fetch(_llcppg_param1 **PyObject, _llcppg_param2 **PyObject, _llcppg_param3 **PyObject)
-
-// llgo:link (*PyObject).PyErr_Restore C.PyErr_Restore
-func (self *PyObject) PyErr_Restore(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) {
+// llgo:link (*Err).SetObject C.PyErr_SetObject
+func (self *Err) SetObject(_llcppg_param2 *Object) {
 }
 
-//go:linkname PyErr_GetRaisedException C.PyErr_GetRaisedException
-func PyErr_GetRaisedException() *PyObject
-
-// llgo:link (*PyObject).PyErr_SetRaisedException C.PyErr_SetRaisedException
-func (self *PyObject) PyErr_SetRaisedException() {
+// llgo:link (*Err).SetString C.PyErr_SetString
+func (self *Err) SetString(string *c.Char) {
 }
 
-//go:linkname PyErr_GetHandledException C.PyErr_GetHandledException
-func PyErr_GetHandledException() *PyObject
+//go:linkname ErrOccurred C.PyErr_Occurred
+func ErrOccurred() *Object
 
-// llgo:link (*PyObject).PyErr_SetHandledException C.PyErr_SetHandledException
-func (self *PyObject) PyErr_SetHandledException() {
+//go:linkname ErrClear C.PyErr_Clear
+func ErrClear()
+
+//go:linkname ErrFetch C.PyErr_Fetch
+func ErrFetch(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
+
+// llgo:link (*Err).Restore C.PyErr_Restore
+func (self *Err) Restore(_llcppg_param2 *Object, _llcppg_param3 *Object) {
 }
 
-//go:linkname PyErr_GetExcInfo C.PyErr_GetExcInfo
-func PyErr_GetExcInfo(_llcppg_param1 **PyObject, _llcppg_param2 **PyObject, _llcppg_param3 **PyObject)
+//go:linkname ErrGetRaisedException C.PyErr_GetRaisedException
+func ErrGetRaisedException() *Object
 
-// llgo:link (*PyObject).PyErr_SetExcInfo C.PyErr_SetExcInfo
-func (self *PyObject) PyErr_SetExcInfo(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) {
+// llgo:link (*Err).SetRaisedException C.PyErr_SetRaisedException
+func (self *Err) SetRaisedException() {
+}
+
+//go:linkname ErrGetHandledException C.PyErr_GetHandledException
+func ErrGetHandledException() *Object
+
+// llgo:link (*Err).SetHandledException C.PyErr_SetHandledException
+func (self *Err) SetHandledException() {
+}
+
+//go:linkname ErrGetExcInfo C.PyErr_GetExcInfo
+func ErrGetExcInfo(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
+
+// llgo:link (*Err).SetExcInfo C.PyErr_SetExcInfo
+func (self *Err) SetExcInfo(_llcppg_param2 *Object, _llcppg_param3 *Object) {
 }
 
 // Defined in Python/pylifecycle.c
@@ -194,557 +201,596 @@ func (self *PyObject) PyErr_SetExcInfo(_llcppg_param2 *PyObject, _llcppg_param3 
 // automatically the name of the current function, unless the Py_LIMITED_API
 // macro is defined.
 //
-//go:linkname Py_FatalError C.Py_FatalError
-func Py_FatalError(message *c.Char)
+//go:linkname FatalError C.Py_FatalError
+func FatalError(message *c.Char)
 
 // Error testing and normalization
 //
-// llgo:link (*PyObject).PyErr_GivenExceptionMatches C.PyErr_GivenExceptionMatches
-func (self *PyObject) PyErr_GivenExceptionMatches(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Err).GivenExceptionMatches C.PyErr_GivenExceptionMatches
+func (self *Err) GivenExceptionMatches(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyErr_ExceptionMatches C.PyErr_ExceptionMatches
-func (self *PyObject) PyErr_ExceptionMatches() c.Int {
+// llgo:link (*Err).ExceptionMatches C.PyErr_ExceptionMatches
+func (self *Err) ExceptionMatches() c.Int {
 	return 0
 }
 
-//go:linkname PyErr_NormalizeException C.PyErr_NormalizeException
-func PyErr_NormalizeException(_llcppg_param1 **PyObject, _llcppg_param2 **PyObject, _llcppg_param3 **PyObject)
+//go:linkname ErrNormalizeException C.PyErr_NormalizeException
+func ErrNormalizeException(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
+
+type Exception struct {
+	X_object
+}
+
+func (self *Object) AsException() *Exception {
+	return (*Exception)(unsafe.Pointer(self))
+}
 
 // Traceback manipulation (PEP 3134)
 //
-// llgo:link (*PyObject).PyException_SetTraceback C.PyException_SetTraceback
-func (self *PyObject) PyException_SetTraceback(_llcppg_param2 *PyObject) c.Int {
+// llgo:link (*Exception).SetTraceback C.PyException_SetTraceback
+func (self *Exception) SetTraceback(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyException_GetTraceback C.PyException_GetTraceback
-func (self *PyObject) PyException_GetTraceback() *PyObject {
-	return self
+// llgo:link (*Exception).Traceback C.PyException_GetTraceback
+func (self *Exception) Traceback() *Object {
+	return nil
 }
 
 // Cause manipulation (PEP 3134)
 //
-// llgo:link (*PyObject).PyException_GetCause C.PyException_GetCause
-func (self *PyObject) PyException_GetCause() *PyObject {
-	return self
+// llgo:link (*Exception).Cause C.PyException_GetCause
+func (self *Exception) Cause() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyException_SetCause C.PyException_SetCause
-func (self *PyObject) PyException_SetCause(_llcppg_param2 *PyObject) {
+// llgo:link (*Exception).SetCause C.PyException_SetCause
+func (self *Exception) SetCause(_llcppg_param2 *Object) {
 }
 
 // Context manipulation (PEP 3134)
 //
-// llgo:link (*PyObject).PyException_GetContext C.PyException_GetContext
-func (self *PyObject) PyException_GetContext() *PyObject {
-	return self
+// llgo:link (*Exception).Context C.PyException_GetContext
+func (self *Exception) Context() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyException_SetContext C.PyException_SetContext
-func (self *PyObject) PyException_SetContext(_llcppg_param2 *PyObject) {
+// llgo:link (*Exception).SetContext C.PyException_SetContext
+func (self *Exception) SetContext(_llcppg_param2 *Object) {
 }
 
-// llgo:link (*PyObject).PyException_GetArgs C.PyException_GetArgs
-func (self *PyObject) PyException_GetArgs() *PyObject {
-	return self
+// llgo:link (*Exception).Args C.PyException_GetArgs
+func (self *Exception) Args() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyException_SetArgs C.PyException_SetArgs
-func (self *PyObject) PyException_SetArgs(_llcppg_param2 *PyObject) {
+// llgo:link (*Exception).SetArgs C.PyException_SetArgs
+func (self *Exception) SetArgs(_llcppg_param2 *Object) {
 }
 
-// llgo:link (*PyObject).PyExceptionClass_Name C.PyExceptionClass_Name
-func (self *PyObject) PyExceptionClass_Name() *c.Char {
+type ExceptionClass struct {
+	X_object
+}
+
+func (self *Object) AsExceptionClass() *ExceptionClass {
+	return (*ExceptionClass)(unsafe.Pointer(self))
+}
+
+// llgo:link (*ExceptionClass).Name C.PyExceptionClass_Name
+func (self *ExceptionClass) Name() *c.Char {
 	return nil
 }
 
 // Predefined exceptions
 //
-//go:linkname PyExc_BaseException C.PyExc_BaseException
-var PyExc_BaseException *PyObject
+//go:linkname ExcBaseException C.PyExc_BaseException
+var ExcBaseException *Object
 
-//go:linkname PyExc_Exception C.PyExc_Exception
-var PyExc_Exception *PyObject
+//go:linkname ExcException C.PyExc_Exception
+var ExcException *Object
 
-//go:linkname PyExc_BaseExceptionGroup C.PyExc_BaseExceptionGroup
-var PyExc_BaseExceptionGroup *PyObject
+//go:linkname ExcBaseExceptionGroup C.PyExc_BaseExceptionGroup
+var ExcBaseExceptionGroup *Object
 
-//go:linkname PyExc_StopAsyncIteration C.PyExc_StopAsyncIteration
-var PyExc_StopAsyncIteration *PyObject
+//go:linkname ExcStopAsyncIteration C.PyExc_StopAsyncIteration
+var ExcStopAsyncIteration *Object
 
-//go:linkname PyExc_StopIteration C.PyExc_StopIteration
-var PyExc_StopIteration *PyObject
+//go:linkname ExcStopIteration C.PyExc_StopIteration
+var ExcStopIteration *Object
 
-//go:linkname PyExc_GeneratorExit C.PyExc_GeneratorExit
-var PyExc_GeneratorExit *PyObject
+//go:linkname ExcGeneratorExit C.PyExc_GeneratorExit
+var ExcGeneratorExit *Object
 
-//go:linkname PyExc_ArithmeticError C.PyExc_ArithmeticError
-var PyExc_ArithmeticError *PyObject
+//go:linkname ExcArithmeticError C.PyExc_ArithmeticError
+var ExcArithmeticError *Object
 
-//go:linkname PyExc_LookupError C.PyExc_LookupError
-var PyExc_LookupError *PyObject
+//go:linkname ExcLookupError C.PyExc_LookupError
+var ExcLookupError *Object
 
-//go:linkname PyExc_AssertionError C.PyExc_AssertionError
-var PyExc_AssertionError *PyObject
+//go:linkname ExcAssertionError C.PyExc_AssertionError
+var ExcAssertionError *Object
 
-//go:linkname PyExc_AttributeError C.PyExc_AttributeError
-var PyExc_AttributeError *PyObject
+//go:linkname ExcAttributeError C.PyExc_AttributeError
+var ExcAttributeError *Object
 
-//go:linkname PyExc_BufferError C.PyExc_BufferError
-var PyExc_BufferError *PyObject
+//go:linkname ExcBufferError C.PyExc_BufferError
+var ExcBufferError *Object
 
-//go:linkname PyExc_EOFError C.PyExc_EOFError
-var PyExc_EOFError *PyObject
+//go:linkname ExcEOFError C.PyExc_EOFError
+var ExcEOFError *Object
 
-//go:linkname PyExc_FloatingPointError C.PyExc_FloatingPointError
-var PyExc_FloatingPointError *PyObject
+//go:linkname ExcFloatingPointError C.PyExc_FloatingPointError
+var ExcFloatingPointError *Object
 
-//go:linkname PyExc_OSError C.PyExc_OSError
-var PyExc_OSError *PyObject
+//go:linkname ExcOSError C.PyExc_OSError
+var ExcOSError *Object
 
-//go:linkname PyExc_ImportError C.PyExc_ImportError
-var PyExc_ImportError *PyObject
+//go:linkname ExcImportError C.PyExc_ImportError
+var ExcImportError *Object
 
-//go:linkname PyExc_ModuleNotFoundError C.PyExc_ModuleNotFoundError
-var PyExc_ModuleNotFoundError *PyObject
+//go:linkname ExcModuleNotFoundError C.PyExc_ModuleNotFoundError
+var ExcModuleNotFoundError *Object
 
-//go:linkname PyExc_IndexError C.PyExc_IndexError
-var PyExc_IndexError *PyObject
+//go:linkname ExcIndexError C.PyExc_IndexError
+var ExcIndexError *Object
 
-//go:linkname PyExc_KeyError C.PyExc_KeyError
-var PyExc_KeyError *PyObject
+//go:linkname ExcKeyError C.PyExc_KeyError
+var ExcKeyError *Object
 
-//go:linkname PyExc_KeyboardInterrupt C.PyExc_KeyboardInterrupt
-var PyExc_KeyboardInterrupt *PyObject
+//go:linkname ExcKeyboardInterrupt C.PyExc_KeyboardInterrupt
+var ExcKeyboardInterrupt *Object
 
-//go:linkname PyExc_MemoryError C.PyExc_MemoryError
-var PyExc_MemoryError *PyObject
+//go:linkname ExcMemoryError C.PyExc_MemoryError
+var ExcMemoryError *Object
 
-//go:linkname PyExc_NameError C.PyExc_NameError
-var PyExc_NameError *PyObject
+//go:linkname ExcNameError C.PyExc_NameError
+var ExcNameError *Object
 
-//go:linkname PyExc_OverflowError C.PyExc_OverflowError
-var PyExc_OverflowError *PyObject
+//go:linkname ExcOverflowError C.PyExc_OverflowError
+var ExcOverflowError *Object
 
-//go:linkname PyExc_RuntimeError C.PyExc_RuntimeError
-var PyExc_RuntimeError *PyObject
+//go:linkname ExcRuntimeError C.PyExc_RuntimeError
+var ExcRuntimeError *Object
 
-//go:linkname PyExc_RecursionError C.PyExc_RecursionError
-var PyExc_RecursionError *PyObject
+//go:linkname ExcRecursionError C.PyExc_RecursionError
+var ExcRecursionError *Object
 
-//go:linkname PyExc_NotImplementedError C.PyExc_NotImplementedError
-var PyExc_NotImplementedError *PyObject
+//go:linkname ExcNotImplementedError C.PyExc_NotImplementedError
+var ExcNotImplementedError *Object
 
-//go:linkname PyExc_SyntaxError C.PyExc_SyntaxError
-var PyExc_SyntaxError *PyObject
+//go:linkname ExcSyntaxError C.PyExc_SyntaxError
+var ExcSyntaxError *Object
 
-//go:linkname PyExc_IndentationError C.PyExc_IndentationError
-var PyExc_IndentationError *PyObject
+//go:linkname ExcIndentationError C.PyExc_IndentationError
+var ExcIndentationError *Object
 
-//go:linkname PyExc_TabError C.PyExc_TabError
-var PyExc_TabError *PyObject
+//go:linkname ExcTabError C.PyExc_TabError
+var ExcTabError *Object
 
-//go:linkname PyExc_ReferenceError C.PyExc_ReferenceError
-var PyExc_ReferenceError *PyObject
+//go:linkname ExcReferenceError C.PyExc_ReferenceError
+var ExcReferenceError *Object
 
-//go:linkname PyExc_SystemError C.PyExc_SystemError
-var PyExc_SystemError *PyObject
+//go:linkname ExcSystemError C.PyExc_SystemError
+var ExcSystemError *Object
 
-//go:linkname PyExc_SystemExit C.PyExc_SystemExit
-var PyExc_SystemExit *PyObject
+//go:linkname ExcSystemExit C.PyExc_SystemExit
+var ExcSystemExit *Object
 
-//go:linkname PyExc_TypeError C.PyExc_TypeError
-var PyExc_TypeError *PyObject
+//go:linkname ExcTypeError C.PyExc_TypeError
+var ExcTypeError *Object
 
-//go:linkname PyExc_UnboundLocalError C.PyExc_UnboundLocalError
-var PyExc_UnboundLocalError *PyObject
+//go:linkname ExcUnboundLocalError C.PyExc_UnboundLocalError
+var ExcUnboundLocalError *Object
 
-//go:linkname PyExc_UnicodeError C.PyExc_UnicodeError
-var PyExc_UnicodeError *PyObject
+//go:linkname ExcUnicodeError C.PyExc_UnicodeError
+var ExcUnicodeError *Object
 
-//go:linkname PyExc_UnicodeEncodeError C.PyExc_UnicodeEncodeError
-var PyExc_UnicodeEncodeError *PyObject
+//go:linkname ExcUnicodeEncodeError C.PyExc_UnicodeEncodeError
+var ExcUnicodeEncodeError *Object
 
-//go:linkname PyExc_UnicodeDecodeError C.PyExc_UnicodeDecodeError
-var PyExc_UnicodeDecodeError *PyObject
+//go:linkname ExcUnicodeDecodeError C.PyExc_UnicodeDecodeError
+var ExcUnicodeDecodeError *Object
 
-//go:linkname PyExc_UnicodeTranslateError C.PyExc_UnicodeTranslateError
-var PyExc_UnicodeTranslateError *PyObject
+//go:linkname ExcUnicodeTranslateError C.PyExc_UnicodeTranslateError
+var ExcUnicodeTranslateError *Object
 
-//go:linkname PyExc_ValueError C.PyExc_ValueError
-var PyExc_ValueError *PyObject
+//go:linkname ExcValueError C.PyExc_ValueError
+var ExcValueError *Object
 
-//go:linkname PyExc_ZeroDivisionError C.PyExc_ZeroDivisionError
-var PyExc_ZeroDivisionError *PyObject
+//go:linkname ExcZeroDivisionError C.PyExc_ZeroDivisionError
+var ExcZeroDivisionError *Object
 
-//go:linkname PyExc_BlockingIOError C.PyExc_BlockingIOError
-var PyExc_BlockingIOError *PyObject
+//go:linkname ExcBlockingIOError C.PyExc_BlockingIOError
+var ExcBlockingIOError *Object
 
-//go:linkname PyExc_BrokenPipeError C.PyExc_BrokenPipeError
-var PyExc_BrokenPipeError *PyObject
+//go:linkname ExcBrokenPipeError C.PyExc_BrokenPipeError
+var ExcBrokenPipeError *Object
 
-//go:linkname PyExc_ChildProcessError C.PyExc_ChildProcessError
-var PyExc_ChildProcessError *PyObject
+//go:linkname ExcChildProcessError C.PyExc_ChildProcessError
+var ExcChildProcessError *Object
 
-//go:linkname PyExc_ConnectionError C.PyExc_ConnectionError
-var PyExc_ConnectionError *PyObject
+//go:linkname ExcConnectionError C.PyExc_ConnectionError
+var ExcConnectionError *Object
 
-//go:linkname PyExc_ConnectionAbortedError C.PyExc_ConnectionAbortedError
-var PyExc_ConnectionAbortedError *PyObject
+//go:linkname ExcConnectionAbortedError C.PyExc_ConnectionAbortedError
+var ExcConnectionAbortedError *Object
 
-//go:linkname PyExc_ConnectionRefusedError C.PyExc_ConnectionRefusedError
-var PyExc_ConnectionRefusedError *PyObject
+//go:linkname ExcConnectionRefusedError C.PyExc_ConnectionRefusedError
+var ExcConnectionRefusedError *Object
 
-//go:linkname PyExc_ConnectionResetError C.PyExc_ConnectionResetError
-var PyExc_ConnectionResetError *PyObject
+//go:linkname ExcConnectionResetError C.PyExc_ConnectionResetError
+var ExcConnectionResetError *Object
 
-//go:linkname PyExc_FileExistsError C.PyExc_FileExistsError
-var PyExc_FileExistsError *PyObject
+//go:linkname ExcFileExistsError C.PyExc_FileExistsError
+var ExcFileExistsError *Object
 
-//go:linkname PyExc_FileNotFoundError C.PyExc_FileNotFoundError
-var PyExc_FileNotFoundError *PyObject
+//go:linkname ExcFileNotFoundError C.PyExc_FileNotFoundError
+var ExcFileNotFoundError *Object
 
-//go:linkname PyExc_InterruptedError C.PyExc_InterruptedError
-var PyExc_InterruptedError *PyObject
+//go:linkname ExcInterruptedError C.PyExc_InterruptedError
+var ExcInterruptedError *Object
 
-//go:linkname PyExc_IsADirectoryError C.PyExc_IsADirectoryError
-var PyExc_IsADirectoryError *PyObject
+//go:linkname ExcIsADirectoryError C.PyExc_IsADirectoryError
+var ExcIsADirectoryError *Object
 
-//go:linkname PyExc_NotADirectoryError C.PyExc_NotADirectoryError
-var PyExc_NotADirectoryError *PyObject
+//go:linkname ExcNotADirectoryError C.PyExc_NotADirectoryError
+var ExcNotADirectoryError *Object
 
-//go:linkname PyExc_PermissionError C.PyExc_PermissionError
-var PyExc_PermissionError *PyObject
+//go:linkname ExcPermissionError C.PyExc_PermissionError
+var ExcPermissionError *Object
 
-//go:linkname PyExc_ProcessLookupError C.PyExc_ProcessLookupError
-var PyExc_ProcessLookupError *PyObject
+//go:linkname ExcProcessLookupError C.PyExc_ProcessLookupError
+var ExcProcessLookupError *Object
 
-//go:linkname PyExc_TimeoutError C.PyExc_TimeoutError
-var PyExc_TimeoutError *PyObject
+//go:linkname ExcTimeoutError C.PyExc_TimeoutError
+var ExcTimeoutError *Object
 
 // Compatibility aliases
 //
-//go:linkname PyExc_EnvironmentError C.PyExc_EnvironmentError
-var PyExc_EnvironmentError *PyObject
+//go:linkname ExcEnvironmentError C.PyExc_EnvironmentError
+var ExcEnvironmentError *Object
 
-//go:linkname PyExc_IOError C.PyExc_IOError
-var PyExc_IOError *PyObject
+//go:linkname ExcIOError C.PyExc_IOError
+var ExcIOError *Object
 
 // Predefined warning categories
 //
-//go:linkname PyExc_Warning C.PyExc_Warning
-var PyExc_Warning *PyObject
+//go:linkname ExcWarning C.PyExc_Warning
+var ExcWarning *Object
 
-//go:linkname PyExc_UserWarning C.PyExc_UserWarning
-var PyExc_UserWarning *PyObject
+//go:linkname ExcUserWarning C.PyExc_UserWarning
+var ExcUserWarning *Object
 
-//go:linkname PyExc_DeprecationWarning C.PyExc_DeprecationWarning
-var PyExc_DeprecationWarning *PyObject
+//go:linkname ExcDeprecationWarning C.PyExc_DeprecationWarning
+var ExcDeprecationWarning *Object
 
-//go:linkname PyExc_PendingDeprecationWarning C.PyExc_PendingDeprecationWarning
-var PyExc_PendingDeprecationWarning *PyObject
+//go:linkname ExcPendingDeprecationWarning C.PyExc_PendingDeprecationWarning
+var ExcPendingDeprecationWarning *Object
 
-//go:linkname PyExc_SyntaxWarning C.PyExc_SyntaxWarning
-var PyExc_SyntaxWarning *PyObject
+//go:linkname ExcSyntaxWarning C.PyExc_SyntaxWarning
+var ExcSyntaxWarning *Object
 
-//go:linkname PyExc_RuntimeWarning C.PyExc_RuntimeWarning
-var PyExc_RuntimeWarning *PyObject
+//go:linkname ExcRuntimeWarning C.PyExc_RuntimeWarning
+var ExcRuntimeWarning *Object
 
-//go:linkname PyExc_FutureWarning C.PyExc_FutureWarning
-var PyExc_FutureWarning *PyObject
+//go:linkname ExcFutureWarning C.PyExc_FutureWarning
+var ExcFutureWarning *Object
 
-//go:linkname PyExc_ImportWarning C.PyExc_ImportWarning
-var PyExc_ImportWarning *PyObject
+//go:linkname ExcImportWarning C.PyExc_ImportWarning
+var ExcImportWarning *Object
 
-//go:linkname PyExc_UnicodeWarning C.PyExc_UnicodeWarning
-var PyExc_UnicodeWarning *PyObject
+//go:linkname ExcUnicodeWarning C.PyExc_UnicodeWarning
+var ExcUnicodeWarning *Object
 
-//go:linkname PyExc_BytesWarning C.PyExc_BytesWarning
-var PyExc_BytesWarning *PyObject
+//go:linkname ExcBytesWarning C.PyExc_BytesWarning
+var ExcBytesWarning *Object
 
-//go:linkname PyExc_EncodingWarning C.PyExc_EncodingWarning
-var PyExc_EncodingWarning *PyObject
+//go:linkname ExcEncodingWarning C.PyExc_EncodingWarning
+var ExcEncodingWarning *Object
 
-//go:linkname PyExc_ResourceWarning C.PyExc_ResourceWarning
-var PyExc_ResourceWarning *PyObject
+//go:linkname ExcResourceWarning C.PyExc_ResourceWarning
+var ExcResourceWarning *Object
 
 // Convenience functions
 //
-//go:linkname PyErr_BadArgument C.PyErr_BadArgument
-func PyErr_BadArgument() c.Int
+//go:linkname ErrBadArgument C.PyErr_BadArgument
+func ErrBadArgument() c.Int
 
-//go:linkname PyErr_NoMemory C.PyErr_NoMemory
-func PyErr_NoMemory() *PyObject
+//go:linkname ErrNoMemory C.PyErr_NoMemory
+func ErrNoMemory() *Object
 
-// llgo:link (*PyObject).PyErr_SetFromErrno C.PyErr_SetFromErrno
-func (self *PyObject) PyErr_SetFromErrno() *PyObject {
-	return self
+// llgo:link (*Err).SetFromErrno C.PyErr_SetFromErrno
+func (self *Err) SetFromErrno() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_SetFromErrnoWithFilenameObject C.PyErr_SetFromErrnoWithFilenameObject
-func (self *PyObject) PyErr_SetFromErrnoWithFilenameObject(_llcppg_param2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Err).ErrSetFromErrnoWithFilenameObject C.PyErr_SetFromErrnoWithFilenameObject
+func (self *Err) ErrSetFromErrnoWithFilenameObject(_llcppg_param2 *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_SetFromErrnoWithFilenameObjects C.PyErr_SetFromErrnoWithFilenameObjects
-func (self *PyObject) PyErr_SetFromErrnoWithFilenameObjects(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
-	return self
+// llgo:link (*Err).SetFromErrnoWithFilenameObjects C.PyErr_SetFromErrnoWithFilenameObjects
+func (self *Err) SetFromErrnoWithFilenameObjects(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_SetFromErrnoWithFilename C.PyErr_SetFromErrnoWithFilename
-func (self *PyObject) PyErr_SetFromErrnoWithFilename(filename *c.Char) *PyObject {
-	return self
+// llgo:link (*Err).SetFromErrnoWithFilename C.PyErr_SetFromErrnoWithFilename
+func (self *Err) SetFromErrnoWithFilename(filename *c.Char) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_Format C.PyErr_Format
-func (self *PyObject) PyErr_Format(format *c.Char, __llgo_va_list ...any) *PyObject {
-	return self
+// llgo:link (*Err).Format C.PyErr_Format
+func (self *Err) Format(format *c.Char, __llgo_va_list ...any) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_FormatV C.PyErr_FormatV
-func (self *PyObject) PyErr_FormatV(format *c.Char, vargs c.VaList) *PyObject {
-	return self
+// llgo:link (*Err).FormatV C.PyErr_FormatV
+func (self *Err) FormatV(format *c.Char, vargs c.VaList) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_SetImportErrorSubclass C.PyErr_SetImportErrorSubclass
-func (self *PyObject) PyErr_SetImportErrorSubclass(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 *PyObject) *PyObject {
-	return self
+// llgo:link (*Err).SetImportErrorSubclass C.PyErr_SetImportErrorSubclass
+func (self *Err) SetImportErrorSubclass(_llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyErr_SetImportError C.PyErr_SetImportError
-func (self *PyObject) PyErr_SetImportError(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
-	return self
+// llgo:link (*Err).SetImportError C.PyErr_SetImportError
+func (self *Err) SetImportError(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+	return nil
 }
 
 // Export the old function so that the existing API remains available:
 //
-//go:linkname PyErr_BadInternalCall C.PyErr_BadInternalCall
-func PyErr_BadInternalCall()
+//go:linkname ErrBadInternalCall C.PyErr_BadInternalCall
+func ErrBadInternalCall()
 
-//go:linkname X_PyErr_BadInternalCall C._PyErr_BadInternalCall
-func X_PyErr_BadInternalCall(filename *c.Char, lineno c.Int)
+//go:linkname X_ErrBadInternalCall C._PyErr_BadInternalCall
+func X_ErrBadInternalCall(filename *c.Char, lineno c.Int)
 
 // Function to create a new exception
 //
-//go:linkname PyErr_NewException C.PyErr_NewException
-func PyErr_NewException(name *c.Char, base *PyObject, dict *PyObject) *PyObject
+//go:linkname ErrNewException C.PyErr_NewException
+func ErrNewException(name *c.Char, base *Object, dict *Object) *Object
 
-//go:linkname PyErr_NewExceptionWithDoc C.PyErr_NewExceptionWithDoc
-func PyErr_NewExceptionWithDoc(name *c.Char, doc *c.Char, base *PyObject, dict *PyObject) *PyObject
+//go:linkname ErrNewExceptionWithDoc C.PyErr_NewExceptionWithDoc
+func ErrNewExceptionWithDoc(name *c.Char, doc *c.Char, base *Object, dict *Object) *Object
 
-// llgo:link (*PyObject).PyErr_WriteUnraisable C.PyErr_WriteUnraisable
-func (self *PyObject) PyErr_WriteUnraisable() {
+// llgo:link (*Err).WriteUnraisable C.PyErr_WriteUnraisable
+func (self *Err) WriteUnraisable() {
 }
 
 // In signalmodule.c
 //
-//go:linkname PyErr_CheckSignals C.PyErr_CheckSignals
-func PyErr_CheckSignals() c.Int
+//go:linkname ErrCheckSignals C.PyErr_CheckSignals
+func ErrCheckSignals() c.Int
 
-//go:linkname PyErr_SetInterrupt C.PyErr_SetInterrupt
-func PyErr_SetInterrupt()
+//go:linkname ErrSetInterrupt C.PyErr_SetInterrupt
+func ErrSetInterrupt()
 
-//go:linkname PyErr_SetInterruptEx C.PyErr_SetInterruptEx
-func PyErr_SetInterruptEx(signum c.Int) c.Int
+//go:linkname ErrSetInterruptEx C.PyErr_SetInterruptEx
+func ErrSetInterruptEx(signum c.Int) c.Int
 
 // Support for adding program text to SyntaxErrors
 //
-//go:linkname PyErr_SyntaxLocation C.PyErr_SyntaxLocation
-func PyErr_SyntaxLocation(filename *c.Char, lineno c.Int)
+//go:linkname ErrSyntaxLocation C.PyErr_SyntaxLocation
+func ErrSyntaxLocation(filename *c.Char, lineno c.Int)
 
-//go:linkname PyErr_SyntaxLocationEx C.PyErr_SyntaxLocationEx
-func PyErr_SyntaxLocationEx(filename *c.Char, lineno c.Int, col_offset c.Int)
+//go:linkname ErrSyntaxLocationEx C.PyErr_SyntaxLocationEx
+func ErrSyntaxLocationEx(filename *c.Char, lineno c.Int, col_offset c.Int)
 
-//go:linkname PyErr_ProgramText C.PyErr_ProgramText
-func PyErr_ProgramText(filename *c.Char, lineno c.Int) *PyObject
+//go:linkname ErrProgramText C.PyErr_ProgramText
+func ErrProgramText(filename *c.Char, lineno c.Int) *Object
 
 // create a UnicodeDecodeError object
 //
-//go:linkname PyUnicodeDecodeError_Create C.PyUnicodeDecodeError_Create
-func PyUnicodeDecodeError_Create(encoding *c.Char, object *c.Char, length PySsizeT, start PySsizeT, end PySsizeT, reason *c.Char) *PyObject
+//go:linkname UnicodeDecodeErrorCreate C.PyUnicodeDecodeError_Create
+func UnicodeDecodeErrorCreate(encoding *c.Char, object *c.Char, length SsizeT, start SsizeT, end SsizeT, reason *c.Char) *Object
+
+type UnicodeEncodeError struct {
+	X_object
+}
+
+func (self *Object) AsUnicodeEncodeError() *UnicodeEncodeError {
+	return (*UnicodeEncodeError)(unsafe.Pointer(self))
+}
 
 // get the encoding attribute
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_GetEncoding C.PyUnicodeEncodeError_GetEncoding
-func (self *PyObject) PyUnicodeEncodeError_GetEncoding() *PyObject {
-	return self
+// llgo:link (*UnicodeEncodeError).Encoding C.PyUnicodeEncodeError_GetEncoding
+func (self *UnicodeEncodeError) Encoding() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_GetEncoding C.PyUnicodeDecodeError_GetEncoding
-func (self *PyObject) PyUnicodeDecodeError_GetEncoding() *PyObject {
-	return self
+type UnicodeDecodeError struct {
+	X_object
+}
+
+func (self *Object) AsUnicodeDecodeError() *UnicodeDecodeError {
+	return (*UnicodeDecodeError)(unsafe.Pointer(self))
+}
+
+// llgo:link (*UnicodeDecodeError).Encoding C.PyUnicodeDecodeError_GetEncoding
+func (self *UnicodeDecodeError) Encoding() *Object {
+	return nil
 }
 
 // get the object attribute
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_GetObject C.PyUnicodeEncodeError_GetObject
-func (self *PyObject) PyUnicodeEncodeError_GetObject() *PyObject {
-	return self
+// llgo:link (*UnicodeEncodeError).Object C.PyUnicodeEncodeError_GetObject
+func (self *UnicodeEncodeError) Object() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_GetObject C.PyUnicodeDecodeError_GetObject
-func (self *PyObject) PyUnicodeDecodeError_GetObject() *PyObject {
-	return self
+// llgo:link (*UnicodeDecodeError).Object C.PyUnicodeDecodeError_GetObject
+func (self *UnicodeDecodeError) Object() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_GetObject C.PyUnicodeTranslateError_GetObject
-func (self *PyObject) PyUnicodeTranslateError_GetObject() *PyObject {
-	return self
+type UnicodeTranslateError struct {
+	X_object
+}
+
+func (self *Object) AsUnicodeTranslateError() *UnicodeTranslateError {
+	return (*UnicodeTranslateError)(unsafe.Pointer(self))
+}
+
+// llgo:link (*UnicodeTranslateError).Object C.PyUnicodeTranslateError_GetObject
+func (self *UnicodeTranslateError) Object() *Object {
+	return nil
 }
 
 // get the value of the start attribute (the int * may not be NULL)
 // return 0 on success, -1 on failure
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_GetStart C.PyUnicodeEncodeError_GetStart
-func (self *PyObject) PyUnicodeEncodeError_GetStart(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeEncodeError).Start C.PyUnicodeEncodeError_GetStart
+func (self *UnicodeEncodeError) Start(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_GetStart C.PyUnicodeDecodeError_GetStart
-func (self *PyObject) PyUnicodeDecodeError_GetStart(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeDecodeError).Start C.PyUnicodeDecodeError_GetStart
+func (self *UnicodeDecodeError) Start(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_GetStart C.PyUnicodeTranslateError_GetStart
-func (self *PyObject) PyUnicodeTranslateError_GetStart(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeTranslateError).Start C.PyUnicodeTranslateError_GetStart
+func (self *UnicodeTranslateError) Start(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
 // assign a new value to the start attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_SetStart C.PyUnicodeEncodeError_SetStart
-func (self *PyObject) PyUnicodeEncodeError_SetStart(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeEncodeError).SetStart C.PyUnicodeEncodeError_SetStart
+func (self *UnicodeEncodeError) SetStart(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_SetStart C.PyUnicodeDecodeError_SetStart
-func (self *PyObject) PyUnicodeDecodeError_SetStart(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeDecodeError).SetStart C.PyUnicodeDecodeError_SetStart
+func (self *UnicodeDecodeError) SetStart(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_SetStart C.PyUnicodeTranslateError_SetStart
-func (self *PyObject) PyUnicodeTranslateError_SetStart(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeTranslateError).SetStart C.PyUnicodeTranslateError_SetStart
+func (self *UnicodeTranslateError) SetStart(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
 // get the value of the end attribute (the int *may not be NULL)
 // return 0 on success, -1 on failure
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_GetEnd C.PyUnicodeEncodeError_GetEnd
-func (self *PyObject) PyUnicodeEncodeError_GetEnd(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeEncodeError).End C.PyUnicodeEncodeError_GetEnd
+func (self *UnicodeEncodeError) End(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_GetEnd C.PyUnicodeDecodeError_GetEnd
-func (self *PyObject) PyUnicodeDecodeError_GetEnd(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeDecodeError).End C.PyUnicodeDecodeError_GetEnd
+func (self *UnicodeDecodeError) End(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_GetEnd C.PyUnicodeTranslateError_GetEnd
-func (self *PyObject) PyUnicodeTranslateError_GetEnd(_llcppg_param2 *PySsizeT) c.Int {
+// llgo:link (*UnicodeTranslateError).End C.PyUnicodeTranslateError_GetEnd
+func (self *UnicodeTranslateError) End(_llcppg_param2 *SsizeT) c.Int {
 	return 0
 }
 
 // assign a new value to the end attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_SetEnd C.PyUnicodeEncodeError_SetEnd
-func (self *PyObject) PyUnicodeEncodeError_SetEnd(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeEncodeError).SetEnd C.PyUnicodeEncodeError_SetEnd
+func (self *UnicodeEncodeError) SetEnd(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_SetEnd C.PyUnicodeDecodeError_SetEnd
-func (self *PyObject) PyUnicodeDecodeError_SetEnd(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeDecodeError).SetEnd C.PyUnicodeDecodeError_SetEnd
+func (self *UnicodeDecodeError) SetEnd(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_SetEnd C.PyUnicodeTranslateError_SetEnd
-func (self *PyObject) PyUnicodeTranslateError_SetEnd(_llcppg_param2 PySsizeT) c.Int {
+// llgo:link (*UnicodeTranslateError).SetEnd C.PyUnicodeTranslateError_SetEnd
+func (self *UnicodeTranslateError) SetEnd(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 
 // get the value of the reason attribute
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_GetReason C.PyUnicodeEncodeError_GetReason
-func (self *PyObject) PyUnicodeEncodeError_GetReason() *PyObject {
-	return self
+// llgo:link (*UnicodeEncodeError).Reason C.PyUnicodeEncodeError_GetReason
+func (self *UnicodeEncodeError) Reason() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_GetReason C.PyUnicodeDecodeError_GetReason
-func (self *PyObject) PyUnicodeDecodeError_GetReason() *PyObject {
-	return self
+// llgo:link (*UnicodeDecodeError).Reason C.PyUnicodeDecodeError_GetReason
+func (self *UnicodeDecodeError) Reason() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_GetReason C.PyUnicodeTranslateError_GetReason
-func (self *PyObject) PyUnicodeTranslateError_GetReason() *PyObject {
-	return self
+// llgo:link (*UnicodeTranslateError).Reason C.PyUnicodeTranslateError_GetReason
+func (self *UnicodeTranslateError) Reason() *Object {
+	return nil
 }
 
 // assign a new value to the reason attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*PyObject).PyUnicodeEncodeError_SetReason C.PyUnicodeEncodeError_SetReason
-func (self *PyObject) PyUnicodeEncodeError_SetReason(reason *c.Char) c.Int {
+// llgo:link (*UnicodeEncodeError).SetReason C.PyUnicodeEncodeError_SetReason
+func (self *UnicodeEncodeError) SetReason(reason *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeDecodeError_SetReason C.PyUnicodeDecodeError_SetReason
-func (self *PyObject) PyUnicodeDecodeError_SetReason(reason *c.Char) c.Int {
+// llgo:link (*UnicodeDecodeError).SetReason C.PyUnicodeDecodeError_SetReason
+func (self *UnicodeDecodeError) SetReason(reason *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnicodeTranslateError_SetReason C.PyUnicodeTranslateError_SetReason
-func (self *PyObject) PyUnicodeTranslateError_SetReason(reason *c.Char) c.Int {
+// llgo:link (*UnicodeTranslateError).SetReason C.PyUnicodeTranslateError_SetReason
+func (self *UnicodeTranslateError) SetReason(reason *c.Char) c.Int {
 	return 0
 }
 
-//go:linkname PyOSSnprintf C.PyOS_snprintf
-func PyOSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any) c.Int
+//go:linkname OSSnprintf C.PyOS_snprintf
+func OSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any) c.Int
 
-//go:linkname PyOSVsnprintf C.PyOS_vsnprintf
-func PyOSVsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
+//go:linkname OSVsnprintf C.PyOS_vsnprintf
+func OSVsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
 
 // Context manipulation (PEP 3134)
 //
-// llgo:link (*PyObject).X_PyErr_ChainExceptions1 C._PyErr_ChainExceptions1
-func (self *PyObject) X_PyErr_ChainExceptions1() {
-}
+//go:linkname X_ErrChainExceptions1 C._PyErr_ChainExceptions1
+func X_ErrChainExceptions1(_llcppg_param1 *Object)
 
 // In exceptions.c
 //
-// llgo:link (*PyObject).PyUnstable_Exc_PrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
-func (self *PyObject) PyUnstable_Exc_PrepReraiseStar(excs *PyObject) *PyObject {
-	return self
+// llgo:link (*Unstable).ExcPrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
+func (self *Unstable) ExcPrepReraiseStar(excs *Object) *Object {
+	return nil
 }
 
 // In signalmodule.c
 //
-//go:linkname PySignal_SetWakeupFd C.PySignal_SetWakeupFd
-func PySignal_SetWakeupFd(fd c.Int) c.Int
+//go:linkname SignalSetWakeupFd C.PySignal_SetWakeupFd
+func SignalSetWakeupFd(fd c.Int) c.Int
 
 // Support for adding program text to SyntaxErrors
 //
-// llgo:link (*PyObject).PyErr_SyntaxLocationObject C.PyErr_SyntaxLocationObject
-func (self *PyObject) PyErr_SyntaxLocationObject(lineno c.Int, col_offset c.Int) {
+// llgo:link (*Err).SyntaxLocationObject C.PyErr_SyntaxLocationObject
+func (self *Err) SyntaxLocationObject(lineno c.Int, col_offset c.Int) {
 }
 
-// llgo:link (*PyObject).PyErr_RangedSyntaxLocationObject C.PyErr_RangedSyntaxLocationObject
-func (self *PyObject) PyErr_RangedSyntaxLocationObject(lineno c.Int, col_offset c.Int, end_lineno c.Int, end_col_offset c.Int) {
+// llgo:link (*Err).RangedSyntaxLocationObject C.PyErr_RangedSyntaxLocationObject
+func (self *Err) RangedSyntaxLocationObject(lineno c.Int, col_offset c.Int, end_lineno c.Int, end_col_offset c.Int) {
 }
 
-// llgo:link (*PyObject).PyErr_ProgramTextObject C.PyErr_ProgramTextObject
-func (self *PyObject) PyErr_ProgramTextObject(lineno c.Int) *PyObject {
-	return self
+// llgo:link (*Err).ProgramTextObject C.PyErr_ProgramTextObject
+func (self *Err) ProgramTextObject(lineno c.Int) *Object {
+	return nil
 }
 
-//go:linkname X_Py_FatalErrorFunc C._Py_FatalErrorFunc
-func X_Py_FatalErrorFunc(func_ *c.Char, message *c.Char)
+//go:linkname X_FatalErrorFunc C._Py_FatalErrorFunc
+func X_FatalErrorFunc(func_ *c.Char, message *c.Char)
 
-//go:linkname PyErr_FormatUnraisable C.PyErr_FormatUnraisable
-func PyErr_FormatUnraisable(_llcppg_param1 *c.Char, __llgo_va_list ...any)
+//go:linkname ErrFormatUnraisable C.PyErr_FormatUnraisable
+func ErrFormatUnraisable(_llcppg_param1 *c.Char, __llgo_va_list ...any)
 
-//go:linkname PyExc_PythonFinalizationError C.PyExc_PythonFinalizationError
-var PyExc_PythonFinalizationError *PyObject
+//go:linkname ExcPythonFinalizationError C.PyExc_PythonFinalizationError
+var ExcPythonFinalizationError *Object

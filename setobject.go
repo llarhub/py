@@ -4,14 +4,14 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 const PySet_MINSIZE = 8
 
 type Setentry struct {
-	Key  *PyObject
-	Hash PyHashT
+	Key  *Object
+	Hash HashT
 }
 
 // The SetObject data structure is shared by set and frozenset objects.
@@ -22,63 +22,79 @@ type Setentry struct {
 // Invariants for frozensets:
 // - data is immutable.
 // - hash is the hash of the frozenset or -1 if not computed yet.
-type PySetObject struct {
-	ObBase      PyObject
-	Fill        PySsizeT
-	Used        PySsizeT
-	Mask        PySsizeT
+type SetObject struct {
+	ObBase      Object
+	Fill        SsizeT
+	Used        SsizeT
+	Mask        SsizeT
 	Table       *Setentry
-	Hash        PyHashT
-	Finger      PySsizeT
+	Hash        HashT
+	Finger      SsizeT
 	Smalltable  [8]Setentry
-	Weakreflist *PyObject
+	Weakreflist *Object
 }
 
-//go:linkname PySet_Type C.PySet_Type
-var PySet_Type PyTypeObject
+//go:linkname SetType C.PySet_Type
+var SetType TypeObject
 
-//go:linkname PyFrozenSet_Type C.PyFrozenSet_Type
-var PyFrozenSet_Type PyTypeObject
+//go:linkname FrozenSetType C.PyFrozenSet_Type
+var FrozenSetType TypeObject
 
-//go:linkname PySetIter_Type C.PySetIter_Type
-var PySetIter_Type PyTypeObject
+//go:linkname SetIterType C.PySetIter_Type
+var SetIterType TypeObject
 
-// llgo:link (*PyObject).PySet_New C.PySet_New
-func (self *PyObject) PySet_New() *PyObject {
-	return self
+type Set struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyFrozenSet_New C.PyFrozenSet_New
-func (self *PyObject) PyFrozenSet_New() *PyObject {
-	return self
+func (self *Object) AsSet() *Set {
+	return (*Set)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PySet_Add C.PySet_Add
-func (self *PyObject) PySet_Add(key *PyObject) c.Int {
+// llgo:link (*Set).New C.PySet_New
+func (self *Set) New() *Object {
+	return nil
+}
+
+type FrozenSet struct {
+	X_object
+}
+
+func (self *Object) AsFrozenSet() *FrozenSet {
+	return (*FrozenSet)(unsafe.Pointer(self))
+}
+
+// llgo:link (*FrozenSet).New C.PyFrozenSet_New
+func (self *FrozenSet) New() *Object {
+	return nil
+}
+
+// llgo:link (*Set).Add C.PySet_Add
+func (self *Set) Add(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySet_Clear C.PySet_Clear
-func (self *PyObject) PySet_Clear() c.Int {
+// llgo:link (*Set).Clear C.PySet_Clear
+func (self *Set) Clear() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySet_Contains C.PySet_Contains
-func (self *PyObject) PySet_Contains(key *PyObject) c.Int {
+// llgo:link (*Set).Contains C.PySet_Contains
+func (self *Set) Contains(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySet_Discard C.PySet_Discard
-func (self *PyObject) PySet_Discard(key *PyObject) c.Int {
+// llgo:link (*Set).Discard C.PySet_Discard
+func (self *Set) Discard(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySet_Pop C.PySet_Pop
-func (self *PyObject) PySet_Pop() *PyObject {
-	return self
+// llgo:link (*Set).Pop C.PySet_Pop
+func (self *Set) Pop() *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PySet_Size C.PySet_Size
-func (self *PyObject) PySet_Size() PySsizeT {
+// llgo:link (*Set).Size C.PySet_Size
+func (self *Set) Size() SsizeT {
 	return 0
 }

@@ -29,38 +29,38 @@ const CO_HAS_DOCSTRING = 67108864
 const CO_METHOD = 134217728
 const CO_MAXBLOCKS = 21
 
-type PyCodeEvent c.Uint
+type CodeEvent c.Uint
 
 const (
-	PY_CODE_EVENT_CREATE  PyCodeEvent = 0
-	PY_CODE_EVENT_DESTROY PyCodeEvent = 1
+	CODE_EVENT_CREATE  CodeEvent = 0
+	CODE_EVENT_DESTROY CodeEvent = 1
 )
 
-type X_PyCodeLocationInfoKind c.Uint
+type X_CodeLocationInfoKind c.Uint
 
 const (
 	// short forms are 0 to 9
-	PY_CODE_LOCATION_INFO_SHORT0 X_PyCodeLocationInfoKind = 0
+	CODE_LOCATION_INFO_SHORT0 X_CodeLocationInfoKind = 0
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_ONE_LINE0 X_PyCodeLocationInfoKind = 10
+	CODE_LOCATION_INFO_ONE_LINE0 X_CodeLocationInfoKind = 10
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_ONE_LINE1 X_PyCodeLocationInfoKind = 11
+	CODE_LOCATION_INFO_ONE_LINE1 X_CodeLocationInfoKind = 11
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_ONE_LINE2 X_PyCodeLocationInfoKind = 12
+	CODE_LOCATION_INFO_ONE_LINE2 X_CodeLocationInfoKind = 12
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_NO_COLUMNS X_PyCodeLocationInfoKind = 13
+	CODE_LOCATION_INFO_NO_COLUMNS X_CodeLocationInfoKind = 13
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_LONG X_PyCodeLocationInfoKind = 14
+	CODE_LOCATION_INFO_LONG X_CodeLocationInfoKind = 14
 	// one lineforms are 10 to 12
-	PY_CODE_LOCATION_INFO_NONE X_PyCodeLocationInfoKind = 15
+	CODE_LOCATION_INFO_NONE X_CodeLocationInfoKind = 15
 )
 
 // Bytecode object
-type PyCodeObject struct {
-	ObBase                     PyVarObject
-	CoConsts                   *PyObject
-	CoNames                    *PyObject
-	CoExceptiontable           *PyObject
+type CodeObject struct {
+	ObBase                     VarObject
+	CoConsts                   *Object
+	CoNames                    *Object
+	CoExceptiontable           *Object
 	CoFlags                    c.Int
 	CoArgcount                 c.Int
 	CoPosonlyargcount          c.Int
@@ -73,36 +73,36 @@ type PyCodeObject struct {
 	CoNcellvars                c.Int
 	CoNfreevars                c.Int
 	CoVersion                  c.Uint32T
-	CoLocalsplusnames          *PyObject
-	CoLocalspluskinds          *PyObject
-	CoFilename                 *PyObject
-	CoName                     *PyObject
-	CoQualname                 *PyObject
-	CoLinetable                *PyObject
-	CoWeakreflist              *PyObject
-	CoExecutors                *X_PyExecutorArray
-	X_coCached                 *X_PyCoCached
+	CoLocalsplusnames          *Object
+	CoLocalspluskinds          *Object
+	CoFilename                 *Object
+	CoName                     *Object
+	CoQualname                 *Object
+	CoLinetable                *Object
+	CoWeakreflist              *Object
+	CoExecutors                *X_ExecutorArray
+	X_coCached                 *X_CoCached
 	X_coInstrumentationVersion c.UintptrT
-	X_coMonitoring             *X_PyCoMonitoringData
-	X_coUniqueId               PySsizeT
+	X_coMonitoring             *X_CoMonitoringData
+	X_coUniqueId               SsizeT
 	X_coFirsttraceable         c.Int
 	CoExtra                    unsafe.Pointer
 	CoCodeAdaptive             [1]c.Char
 }
-type X_PyCoCached struct {
-	X_coCode     *PyObject
-	X_coVarnames *PyObject
-	X_coCellvars *PyObject
-	X_coFreevars *PyObject
+type X_CoCached struct {
+	X_coCode     *Object
+	X_coVarnames *Object
+	X_coCellvars *Object
+	X_coFreevars *Object
 }
-type X_PyExecutorArray struct {
+type X_ExecutorArray struct {
 	Size      c.Int
 	Capacity  c.Int
-	Executors [1]*X_PyExecutorObject
+	Executors [1]*X_ExecutorObject
 }
-type X_PyExecutorObject struct {
+type X_ExecutorObject struct {
 }
-type X_PyCoMonitoringData struct {
+type X_CoMonitoringData struct {
 }
 
 // A callback that is invoked for different events in a code object's lifecycle.
@@ -114,7 +114,7 @@ type X_PyCoMonitoringData struct {
 // it should return 0.
 //
 // llgo:type C
-type PyCode_WatchCallback = func(_llcppg_param1 PyCodeEvent, _llcppg_param2 *PyCodeObject) c.Int
+type CodeWatchCallback = func(_llcppg_param1 CodeEvent, _llcppg_param2 *CodeObject) c.Int
 
 // for internal use only
 type X_opaque struct {
@@ -128,35 +128,43 @@ type X_lineOffsets struct {
 	ArLine  c.Int
 	Opaque  X_opaque
 }
-type PyCodeAddressRange = X_lineOffsets
+type CodeAddressRange = X_lineOffsets
 
-//go:linkname PyCode_Type C.PyCode_Type
-var PyCode_Type PyTypeObject
+//go:linkname CodeType C.PyCode_Type
+var CodeType TypeObject
 
 // Unstable public interface
 //
-//go:linkname PyUnstable_Code_New C.PyUnstable_Code_New
-func PyUnstable_Code_New(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 *PyObject, _llcppg_param7 *PyObject, _llcppg_param8 *PyObject, _llcppg_param9 *PyObject, _llcppg_param10 *PyObject, _llcppg_param11 *PyObject, _llcppg_param12 *PyObject, _llcppg_param13 *PyObject, _llcppg_param14 *PyObject, _llcppg_param15 c.Int, _llcppg_param16 *PyObject, _llcppg_param17 *PyObject) *PyCodeObject
+//go:linkname UnstableCodeNew C.PyUnstable_Code_New
+func UnstableCodeNew(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 *Object, _llcppg_param7 *Object, _llcppg_param8 *Object, _llcppg_param9 *Object, _llcppg_param10 *Object, _llcppg_param11 *Object, _llcppg_param12 *Object, _llcppg_param13 *Object, _llcppg_param14 *Object, _llcppg_param15 c.Int, _llcppg_param16 *Object, _llcppg_param17 *Object) *CodeObject
 
-//go:linkname PyUnstable_Code_NewWithPosOnlyArgs C.PyUnstable_Code_NewWithPosOnlyArgs
-func PyUnstable_Code_NewWithPosOnlyArgs(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 c.Int, _llcppg_param7 *PyObject, _llcppg_param8 *PyObject, _llcppg_param9 *PyObject, _llcppg_param10 *PyObject, _llcppg_param11 *PyObject, _llcppg_param12 *PyObject, _llcppg_param13 *PyObject, _llcppg_param14 *PyObject, _llcppg_param15 *PyObject, _llcppg_param16 c.Int, _llcppg_param17 *PyObject, _llcppg_param18 *PyObject) *PyCodeObject
+//go:linkname UnstableCodeNewWithPosOnlyArgs C.PyUnstable_Code_NewWithPosOnlyArgs
+func UnstableCodeNewWithPosOnlyArgs(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 c.Int, _llcppg_param7 *Object, _llcppg_param8 *Object, _llcppg_param9 *Object, _llcppg_param10 *Object, _llcppg_param11 *Object, _llcppg_param12 *Object, _llcppg_param13 *Object, _llcppg_param14 *Object, _llcppg_param15 *Object, _llcppg_param16 c.Int, _llcppg_param17 *Object, _llcppg_param18 *Object) *CodeObject
 
 // Creates a new empty code object with the specified source location.
 //
-//go:linkname PyCode_NewEmpty C.PyCode_NewEmpty
-func PyCode_NewEmpty(filename *c.Char, funcname *c.Char, firstlineno c.Int) *PyCodeObject
+//go:linkname CodeNewEmpty C.PyCode_NewEmpty
+func CodeNewEmpty(filename *c.Char, funcname *c.Char, firstlineno c.Int) *CodeObject
+
+type Code struct {
+	CodeObject
+}
+
+func (self *CodeObject) AsCode() *Code {
+	return (*Code)(unsafe.Pointer(self))
+}
 
 // Return the line number associated with the specified bytecode index
 // in this code object.  If you just need the line number of a frame,
 // use PyFrame_GetLineNumber() instead.
 //
-// llgo:link (*PyCodeObject).PyCode_Addr2Line C.PyCode_Addr2Line
-func (self *PyCodeObject) PyCode_Addr2Line(_llcppg_param2 c.Int) c.Int {
+// llgo:link (*Code).Addr2Line C.PyCode_Addr2Line
+func (self *Code) Addr2Line(_llcppg_param2 c.Int) c.Int {
 	return 0
 }
 
-// llgo:link (*PyCodeObject).PyCode_Addr2Location C.PyCode_Addr2Location
-func (self *PyCodeObject) PyCode_Addr2Location(_llcppg_param2 c.Int, _llcppg_param3 *c.Int, _llcppg_param4 *c.Int, _llcppg_param5 *c.Int, _llcppg_param6 *c.Int) c.Int {
+// llgo:link (*Code).Addr2Location C.PyCode_Addr2Location
+func (self *Code) Addr2Location(_llcppg_param2 c.Int, _llcppg_param3 *c.Int, _llcppg_param4 *c.Int, _llcppg_param5 *c.Int, _llcppg_param6 *c.Int) c.Int {
 	return 0
 }
 
@@ -166,21 +174,21 @@ func (self *PyCodeObject) PyCode_Addr2Location(_llcppg_param2 c.Int, _llcppg_par
 // Returns a handle that may be passed to PyCode_ClearWatcher on success,
 // or -1 and sets an error if no more handles are available.
 //
-//go:linkname PyCode_AddWatcher C.PyCode_AddWatcher
-func PyCode_AddWatcher(callback PyCode_WatchCallback) c.Int
+//go:linkname CodeAddWatcher C.PyCode_AddWatcher
+func CodeAddWatcher(callback CodeWatchCallback) c.Int
 
 // Clear the watcher associated with the watcher_id handle.
 //
 // Returns 0 on success or -1 if no watcher exists for the provided id.
 //
-//go:linkname PyCode_ClearWatcher C.PyCode_ClearWatcher
-func PyCode_ClearWatcher(watcher_id c.Int) c.Int
+//go:linkname CodeClearWatcher C.PyCode_ClearWatcher
+func CodeClearWatcher(watcher_id c.Int) c.Int
 
 // Update *bounds to describe the first and one-past-the-last instructions in the
 // same line as lasti.  Return the number of that line.
 //
-//go:linkname X_PyCode_CheckLineNumber C._PyCode_CheckLineNumber
-func X_PyCode_CheckLineNumber(lasti c.Int, bounds *PyCodeAddressRange) c.Int
+//go:linkname X_CodeCheckLineNumber C._PyCode_CheckLineNumber
+func X_CodeCheckLineNumber(lasti c.Int, bounds *CodeAddressRange) c.Int
 
 // Create a comparable key used to compare constants taking in account the
 // object type. It is used to make sure types are not coerced (e.g., float and
@@ -190,51 +198,49 @@ func X_PyCode_CheckLineNumber(lasti c.Int, bounds *PyCodeAddressRange) c.Int
 // depending on the type and the value. The type is the first item to not
 // compare bytes and str which can raise a BytesWarning exception.
 //
-// llgo:link (*PyObject).X_PyCode_ConstantKey C._PyCode_ConstantKey
-func (self *PyObject) X_PyCode_ConstantKey() *PyObject {
-	return self
+//go:linkname X_CodeConstantKey C._PyCode_ConstantKey
+func X_CodeConstantKey(obj *Object) *Object
+
+// llgo:link (*Code).Optimize C.PyCode_Optimize
+func (self *Code) Optimize(consts *Object, names *Object, lnotab *Object) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyCode_Optimize C.PyCode_Optimize
-func (self *PyObject) PyCode_Optimize(consts *PyObject, names *PyObject, lnotab *PyObject) *PyObject {
-	return self
-}
-
-// llgo:link (*PyObject).PyUnstable_Code_GetExtra C.PyUnstable_Code_GetExtra
-func (self *PyObject) PyUnstable_Code_GetExtra(index PySsizeT, extra *unsafe.Pointer) c.Int {
+// llgo:link (*Unstable).CodeGetExtra C.PyUnstable_Code_GetExtra
+func (self *Unstable) CodeGetExtra(index SsizeT, extra *unsafe.Pointer) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyUnstable_Code_SetExtra C.PyUnstable_Code_SetExtra
-func (self *PyObject) PyUnstable_Code_SetExtra(index PySsizeT, extra unsafe.Pointer) c.Int {
+// llgo:link (*Unstable).CodeSetExtra C.PyUnstable_Code_SetExtra
+func (self *Unstable) CodeSetExtra(index SsizeT, extra unsafe.Pointer) c.Int {
 	return 0
 }
 
 // Equivalent to getattr(code, 'co_code') in Python.
 // Returns a strong reference to a bytes object.
 //
-// llgo:link (*PyCodeObject).PyCode_GetCode C.PyCode_GetCode
-func (self *PyCodeObject) PyCode_GetCode() *PyObject {
+// llgo:link (*Code).Get C.PyCode_GetCode
+func (self *Code) Get() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_varnames') in Python.
 //
-// llgo:link (*PyCodeObject).PyCode_GetVarnames C.PyCode_GetVarnames
-func (self *PyCodeObject) PyCode_GetVarnames() *PyObject {
+// llgo:link (*Code).Varnames C.PyCode_GetVarnames
+func (self *Code) Varnames() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_cellvars') in Python.
 //
-// llgo:link (*PyCodeObject).PyCode_GetCellvars C.PyCode_GetCellvars
-func (self *PyCodeObject) PyCode_GetCellvars() *PyObject {
+// llgo:link (*Code).Cellvars C.PyCode_GetCellvars
+func (self *Code) Cellvars() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_freevars') in Python.
 //
-// llgo:link (*PyCodeObject).PyCode_GetFreevars C.PyCode_GetFreevars
-func (self *PyCodeObject) PyCode_GetFreevars() *PyObject {
+// llgo:link (*Code).Freevars C.PyCode_GetFreevars
+func (self *Code) Freevars() *Object {
 	return nil
 }

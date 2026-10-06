@@ -18,70 +18,70 @@ const METH_FASTCALL = 128
 const METH_STACKLESS = 0
 const METH_METHOD = 512
 
-type PyMethodDef struct {
+type MethodDef struct {
 	MlName  *c.Char
-	MlMeth  PyCFunction
+	MlMeth  CFunction
 	MlFlags c.Int
 	MlDoc   *c.Char
 }
 
 // llgo:type C
-type PyCFunction = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject) *PyObject
+type CFunction = func(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object
 
 // llgo:type C
-type PyCFunctionFast = func(_llcppg_param1 *PyObject, _llcppg_param2 **PyObject, _llcppg_param3 PySsizeT) *PyObject
+type CFunctionFast = func(_llcppg_param1 *Object, _llcppg_param2 **Object, _llcppg_param3 SsizeT) *Object
 
 // llgo:type C
-type PyCFunctionWithKeywords = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject
+type CFunctionWithKeywords = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object) *Object
 
 // llgo:type C
-type PyCFunctionFastWithKeywords = func(_llcppg_param1 *PyObject, _llcppg_param2 **PyObject, _llcppg_param3 PySsizeT, _llcppg_param4 *PyObject) *PyObject
+type CFunctionFastWithKeywords = func(_llcppg_param1 *Object, _llcppg_param2 **Object, _llcppg_param3 SsizeT, _llcppg_param4 *Object) *Object
 
 // llgo:type C
-type PyCMethod = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyTypeObject, _llcppg_param3 **PyObject, _llcppg_param4 PySsizeT, _llcppg_param5 *PyObject) *PyObject
+type CMethod = func(_llcppg_param1 *Object, _llcppg_param2 *TypeObject, _llcppg_param3 **Object, _llcppg_param4 SsizeT, _llcppg_param5 *Object) *Object
 
 // For backwards compatibility. `METH_FASTCALL` was added to the stable API in
 // 3.10 alongside `_PyCFunctionFastWithKeywords` and `_PyCFunctionFast`.
 // Note that the underscore-prefixed names were documented in public docs;
 // people may be using them.
-type X_PyCFunctionFast = PyCFunctionFast
-type X_PyCFunctionFastWithKeywords = PyCFunctionFastWithKeywords
+type X_CFunctionFast = CFunctionFast
+type X_CFunctionFastWithKeywords = CFunctionFastWithKeywords
 
 // PyCFunctionObject structure
-type PyCFunctionObject struct {
-	ObBase       PyObject
-	MMl          *PyMethodDef
-	MSelf        *PyObject
-	MModule      *PyObject
-	MWeakreflist *PyObject
+type CFunctionObject struct {
+	ObBase       Object
+	MMl          *MethodDef
+	MSelf        *Object
+	MModule      *Object
+	MWeakreflist *Object
 	Vectorcall   Vectorcallfunc
 }
 
 // PyCMethodObject structure
-type PyCMethodObject struct {
-	Func    PyCFunctionObject
-	MmClass *PyTypeObject
+type CMethodObject struct {
+	Func    CFunctionObject
+	MmClass *TypeObject
 }
 
 // This is about the type 'builtin_function_or_method',
 // not Python methods in user-defined classes.  See classobject.h
 // for the latter.
 //
-//go:linkname PyCFunction_Type C.PyCFunction_Type
-var PyCFunction_Type PyTypeObject
+//go:linkname CFunctionType C.PyCFunction_Type
+var CFunctionType TypeObject
 
-// llgo:link (*PyObject).PyCFunction_GetFunction C.PyCFunction_GetFunction
-func (self *PyObject) PyCFunction_GetFunction() PyCFunction {
+// llgo:link (*Object).CFunctionGetFunction C.PyCFunction_GetFunction
+func (self *Object) CFunctionGetFunction() CFunction {
 	return nil
 }
 
-// llgo:link (*PyObject).PyCFunction_GetSelf C.PyCFunction_GetSelf
-func (self *PyObject) PyCFunction_GetSelf() *PyObject {
+// llgo:link (*Object).CFunctionGetSelf C.PyCFunction_GetSelf
+func (self *Object) CFunctionGetSelf() *Object {
 	return self
 }
 
-// llgo:link (*PyObject).PyCFunction_GetFlags C.PyCFunction_GetFlags
-func (self *PyObject) PyCFunction_GetFlags() c.Int {
+// llgo:link (*Object).CFunctionGetFlags C.PyCFunction_GetFlags
+func (self *Object) CFunctionGetFlags() c.Int {
 	return 0
 }
 
@@ -89,22 +89,22 @@ func (self *PyObject) PyCFunction_GetFlags() c.Int {
 // needed for e.g. GCC with -fvisibility=hidden), but redefined as a macro
 // that calls PyCFunction_NewEx.
 //
-// llgo:link (*PyMethodDef).PyCFunction_New C.PyCFunction_New
-func (self *PyMethodDef) PyCFunction_New(_llcppg_param2 *PyObject) *PyObject {
+// llgo:link (*MethodDef).CFunctionNew C.PyCFunction_New
+func (self *MethodDef) CFunctionNew(_llcppg_param2 *Object) *Object {
 	return nil
 }
 
 // PyCFunction_NewEx is similar: on 3.9+, this calls PyCMethod_New.
 //
-// llgo:link (*PyMethodDef).PyCFunction_NewEx C.PyCFunction_NewEx
-func (self *PyMethodDef) PyCFunction_NewEx(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
+// llgo:link (*MethodDef).CFunctionNewEx C.PyCFunction_NewEx
+func (self *MethodDef) CFunctionNewEx(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*PyMethodDef).PyCMethod_New C.PyCMethod_New
-func (self *PyMethodDef) PyCMethod_New(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject, _llcppg_param4 *PyTypeObject) *PyObject {
+// llgo:link (*MethodDef).CMethodNew C.PyCMethod_New
+func (self *MethodDef) CMethodNew(_llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *TypeObject) *Object {
 	return nil
 }
 
-//go:linkname PyCMethod_Type C.PyCMethod_Type
-var PyCMethod_Type PyTypeObject
+//go:linkname CMethodType C.PyCMethod_Type
+var CMethodType TypeObject

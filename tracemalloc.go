@@ -15,13 +15,13 @@ import (
 //
 // If memory block is already tracked, update the existing trace.
 //
-//go:linkname PyTraceMalloc_Track C.PyTraceMalloc_Track
-func PyTraceMalloc_Track(domain c.Uint, ptr c.UintptrT, size c.SizeT) c.Int
+//go:linkname TraceMallocTrack C.PyTraceMalloc_Track
+func TraceMallocTrack(domain c.Uint, ptr c.UintptrT, size c.SizeT) c.Int
 
 // Untrack an allocated memory block in the tracemalloc module.
 // Do nothing if the block was not tracked.
 //
 // Return -2 if tracemalloc is disabled, otherwise return 0.
 //
-//go:linkname PyTraceMalloc_Untrack C.PyTraceMalloc_Untrack
-func PyTraceMalloc_Untrack(domain c.Uint, ptr c.UintptrT) c.Int
+//go:linkname TraceMallocUntrack C.PyTraceMalloc_Untrack
+func TraceMallocUntrack(domain c.Uint, ptr c.UintptrT) c.Int

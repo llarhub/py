@@ -35,30 +35,30 @@ const PyBUF_WRITE = 512
 // Py_buffer struct layout and size is now part of the stable abi3. The
 // struct layout and size must not be changed in any way, as it would
 // break the ABI.
-type PyBuffer struct {
+type Buffer struct {
 	Buf        unsafe.Pointer
-	Obj        *PyObject
-	Len        PySsizeT
-	Itemsize   PySsizeT
+	Obj        *Object
+	Len        SsizeT
+	Itemsize   SsizeT
 	Readonly   c.Int
 	Ndim       c.Int
 	Format     *c.Char
-	Shape      *PySsizeT
-	Strides    *PySsizeT
-	Suboffsets *PySsizeT
+	Shape      *SsizeT
+	Strides    *SsizeT
+	Suboffsets *SsizeT
 	Internal   unsafe.Pointer
 }
 
 // llgo:type C
-type Getbufferproc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyBuffer, _llcppg_param3 c.Int) c.Int
+type Getbufferproc = func(_llcppg_param1 *Object, _llcppg_param2 *Buffer, _llcppg_param3 c.Int) c.Int
 
 // llgo:type C
-type Releasebufferproc = func(_llcppg_param1 *PyObject, _llcppg_param2 *PyBuffer)
+type Releasebufferproc = func(_llcppg_param1 *Object, _llcppg_param2 *Buffer)
 
 // Return 1 if the getbuffer function is available, otherwise return 0.
 //
-// llgo:link (*PyObject).CheckBuffer C.PyObject_CheckBuffer
-func (self *PyObject) CheckBuffer() c.Int {
+// llgo:link (*Object).CheckBuffer C.PyObject_CheckBuffer
+func (self *Object) CheckBuffer() c.Int {
 	return 0
 }
 
@@ -68,32 +68,32 @@ func (self *PyObject) CheckBuffer() c.Int {
 //
 // Returns -1 and raises an error on failure and returns 0 on success.
 //
-// llgo:link (*PyObject).Buffer C.PyObject_GetBuffer
-func (self *PyObject) Buffer(view *PyBuffer, flags c.Int) c.Int {
+// llgo:link (*Object).Buffer C.PyObject_GetBuffer
+func (self *Object) Buffer(view *Buffer, flags c.Int) c.Int {
 	return 0
 }
 
 // Get the memory area pointed to by the indices for the buffer given.
 // Note that view->ndim is the assumed size of indices.
 //
-// llgo:link (*PyBuffer).Pointer C.PyBuffer_GetPointer
-func (self *PyBuffer) Pointer(indices *PySsizeT) unsafe.Pointer {
+// llgo:link (*Buffer).Pointer C.PyBuffer_GetPointer
+func (self *Buffer) Pointer(indices *SsizeT) unsafe.Pointer {
 	return nil
 }
 
 // Return the implied itemsize of the data-format area from a
 // struct-style description.
 //
-//go:linkname PyBuffer_SizeFromFormat C.PyBuffer_SizeFromFormat
-func PyBuffer_SizeFromFormat(format *c.Char) PySsizeT
+//go:linkname BufferSizeFromFormat C.PyBuffer_SizeFromFormat
+func BufferSizeFromFormat(format *c.Char) SsizeT
 
 // Implementation in memoryobject.c
 //
-//go:linkname PyBuffer_ToContiguous C.PyBuffer_ToContiguous
-func PyBuffer_ToContiguous(buf unsafe.Pointer, view *PyBuffer, len PySsizeT, order c.Char) c.Int
+//go:linkname BufferToContiguous C.PyBuffer_ToContiguous
+func BufferToContiguous(buf unsafe.Pointer, view *Buffer, len SsizeT, order c.Char) c.Int
 
-// llgo:link (*PyBuffer).FromContiguous C.PyBuffer_FromContiguous
-func (self *PyBuffer) FromContiguous(buf unsafe.Pointer, len PySsizeT, order c.Char) c.Int {
+// llgo:link (*Buffer).FromContiguous C.PyBuffer_FromContiguous
+func (self *Buffer) FromContiguous(buf unsafe.Pointer, len SsizeT, order c.Char) c.Int {
 	return 0
 }
 
@@ -111,15 +111,15 @@ func (self *PyBuffer) FromContiguous(buf unsafe.Pointer, len PySsizeT, order c.C
 // is 'A', then it does not matter and the copy will be made
 // in whatever way is more efficient.
 //
-// llgo:link (*PyObject).CopyData C.PyObject_CopyData
-func (self *PyObject) CopyData(src *PyObject) c.Int {
+// llgo:link (*Object).CopyData C.PyObject_CopyData
+func (self *Object) CopyData(src *Object) c.Int {
 	return 0
 }
 
 // Copy the data from the src buffer to the buffer of destination.
 //
-// llgo:link (*PyBuffer).IsContiguous C.PyBuffer_IsContiguous
-func (self *PyBuffer) IsContiguous(fort c.Char) c.Int {
+// llgo:link (*Buffer).IsContiguous C.PyBuffer_IsContiguous
+func (self *Buffer) IsContiguous(fort c.Char) c.Int {
 	return 0
 }
 
@@ -128,8 +128,8 @@ func (self *PyBuffer) IsContiguous(fort c.Char) c.Int {
 // array of the given shape with the given number of bytes
 // per element.
 //
-//go:linkname PyBuffer_FillContiguousStrides C.PyBuffer_FillContiguousStrides
-func PyBuffer_FillContiguousStrides(ndims c.Int, shape *PySsizeT, strides *PySsizeT, itemsize c.Int, fort c.Char)
+//go:linkname BufferFillContiguousStrides C.PyBuffer_FillContiguousStrides
+func BufferFillContiguousStrides(ndims c.Int, shape *SsizeT, strides *SsizeT, itemsize c.Int, fort c.Char)
 
 // Fills in a buffer-info structure correctly for an exporter
 // that can only share a contiguous chunk of memory of
@@ -137,13 +137,13 @@ func PyBuffer_FillContiguousStrides(ndims c.Int, shape *PySsizeT, strides *PySsi
 //
 // Returns 0 on success and -1 (with raising an error) on error.
 //
-// llgo:link (*PyBuffer).FillInfo C.PyBuffer_FillInfo
-func (self *PyBuffer) FillInfo(o *PyObject, buf unsafe.Pointer, len PySsizeT, readonly c.Int, flags c.Int) c.Int {
+// llgo:link (*Buffer).FillInfo C.PyBuffer_FillInfo
+func (self *Buffer) FillInfo(o *Object, buf unsafe.Pointer, len SsizeT, readonly c.Int, flags c.Int) c.Int {
 	return 0
 }
 
 // Releases a Py_buffer obtained from getbuffer ParseTuple's "s*".
 //
-// llgo:link (*PyBuffer).Release C.PyBuffer_Release
-func (self *PyBuffer) Release() {
+// llgo:link (*Buffer).Release C.PyBuffer_Release
+func (self *Buffer) Release() {
 }

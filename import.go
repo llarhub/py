@@ -7,9 +7,10 @@ import (
 	_ "unsafe"
 )
 
+// llgo:type C
 type X_inittab struct {
 	Name     *c.Char
-	Initfunc func() *PyObject
+	Initfunc func() *Object
 }
 type X_frozen struct {
 	Name      *c.Char
@@ -18,105 +19,85 @@ type X_frozen struct {
 	IsPackage c.Int
 }
 
-//go:linkname PyImport_GetMagicNumber C.PyImport_GetMagicNumber
-func PyImport_GetMagicNumber() c.Long
+//go:linkname ImportGetMagicNumber C.PyImport_GetMagicNumber
+func ImportGetMagicNumber() c.Long
 
-//go:linkname PyImport_GetMagicTag C.PyImport_GetMagicTag
-func PyImport_GetMagicTag() *c.Char
+//go:linkname ImportGetMagicTag C.PyImport_GetMagicTag
+func ImportGetMagicTag() *c.Char
 
-//go:linkname PyImport_ExecCodeModule C.PyImport_ExecCodeModule
-func PyImport_ExecCodeModule(name *c.Char, co *PyObject) *PyObject
+//go:linkname ImportExecCodeModule C.PyImport_ExecCodeModule
+func ImportExecCodeModule(name *c.Char, co *Object) *Object
 
-//go:linkname PyImport_ExecCodeModuleEx C.PyImport_ExecCodeModuleEx
-func PyImport_ExecCodeModuleEx(name *c.Char, co *PyObject, pathname *c.Char) *PyObject
+//go:linkname ImportExecCodeModuleEx C.PyImport_ExecCodeModuleEx
+func ImportExecCodeModuleEx(name *c.Char, co *Object, pathname *c.Char) *Object
 
-//go:linkname PyImport_ExecCodeModuleWithPathnames C.PyImport_ExecCodeModuleWithPathnames
-func PyImport_ExecCodeModuleWithPathnames(name *c.Char, co *PyObject, pathname *c.Char, cpathname *c.Char) *PyObject
+//go:linkname ImportExecCodeModuleWithPathnames C.PyImport_ExecCodeModuleWithPathnames
+func ImportExecCodeModuleWithPathnames(name *c.Char, co *Object, pathname *c.Char, cpathname *c.Char) *Object
 
-// llgo:link (*PyObject).PyImport_ExecCodeModuleObject C.PyImport_ExecCodeModuleObject
-func (self *PyObject) PyImport_ExecCodeModuleObject(co *PyObject, pathname *PyObject, cpathname *PyObject) *PyObject {
-	return self
-}
+//go:linkname ImportExecCodeModuleObject C.PyImport_ExecCodeModuleObject
+func ImportExecCodeModuleObject(name *Object, co *Object, pathname *Object, cpathname *Object) *Object
 
-//go:linkname PyImport_GetModuleDict C.PyImport_GetModuleDict
-func PyImport_GetModuleDict() *PyObject
+//go:linkname ImportGetModuleDict C.PyImport_GetModuleDict
+func ImportGetModuleDict() *Object
 
-// llgo:link (*PyObject).PyImport_GetModule C.PyImport_GetModule
-func (self *PyObject) PyImport_GetModule() *PyObject {
-	return self
-}
+//go:linkname ImportGetModule C.PyImport_GetModule
+func ImportGetModule(name *Object) *Object
 
-// llgo:link (*PyObject).PyImport_AddModuleObject C.PyImport_AddModuleObject
-func (self *PyObject) PyImport_AddModuleObject() *PyObject {
-	return self
-}
+//go:linkname ImportAddModuleObject C.PyImport_AddModuleObject
+func ImportAddModuleObject(name *Object) *Object
 
-//go:linkname PyImport_AddModule C.PyImport_AddModule
-func PyImport_AddModule(name *c.Char) *PyObject
+//go:linkname ImportAddModule C.PyImport_AddModule
+func ImportAddModule(name *c.Char) *Object
 
-//go:linkname PyImport_AddModuleRef C.PyImport_AddModuleRef
-func PyImport_AddModuleRef(name *c.Char) *PyObject
+//go:linkname ImportAddModuleRef C.PyImport_AddModuleRef
+func ImportAddModuleRef(name *c.Char) *Object
 
-//go:linkname PyImport_ImportModule C.PyImport_ImportModule
-func PyImport_ImportModule(name *c.Char) *PyObject
+//go:linkname ImportImportModule C.PyImport_ImportModule
+func ImportImportModule(name *c.Char) *Object
 
-//go:linkname PyImport_ImportModuleNoBlock C.PyImport_ImportModuleNoBlock
-func PyImport_ImportModuleNoBlock(name *c.Char) *PyObject
+//go:linkname ImportImportModuleNoBlock C.PyImport_ImportModuleNoBlock
+func ImportImportModuleNoBlock(name *c.Char) *Object
 
-//go:linkname PyImport_ImportModuleLevel C.PyImport_ImportModuleLevel
-func PyImport_ImportModuleLevel(name *c.Char, globals *PyObject, locals *PyObject, fromlist *PyObject, level c.Int) *PyObject
+//go:linkname ImportImportModuleLevel C.PyImport_ImportModuleLevel
+func ImportImportModuleLevel(name *c.Char, globals *Object, locals *Object, fromlist *Object, level c.Int) *Object
 
-// llgo:link (*PyObject).PyImport_ImportModuleLevelObject C.PyImport_ImportModuleLevelObject
-func (self *PyObject) PyImport_ImportModuleLevelObject(globals *PyObject, locals *PyObject, fromlist *PyObject, level c.Int) *PyObject {
-	return self
-}
+//go:linkname ImportImportModuleLevelObject C.PyImport_ImportModuleLevelObject
+func ImportImportModuleLevelObject(name *Object, globals *Object, locals *Object, fromlist *Object, level c.Int) *Object
 
-// llgo:link (*PyObject).PyImport_GetImporter C.PyImport_GetImporter
-func (self *PyObject) PyImport_GetImporter() *PyObject {
-	return self
-}
+//go:linkname ImportGetImporter C.PyImport_GetImporter
+func ImportGetImporter(path *Object) *Object
 
-// llgo:link (*PyObject).PyImport_Import C.PyImport_Import
-func (self *PyObject) PyImport_Import() *PyObject {
-	return self
-}
+//go:linkname Import C.PyImport_Import
+func Import(name *Object) *Object
 
-// llgo:link (*PyObject).PyImport_ReloadModule C.PyImport_ReloadModule
-func (self *PyObject) PyImport_ReloadModule() *PyObject {
-	return self
-}
+//go:linkname ImportReloadModule C.PyImport_ReloadModule
+func ImportReloadModule(m *Object) *Object
 
-// llgo:link (*PyObject).PyImport_ImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
-func (self *PyObject) PyImport_ImportFrozenModuleObject() c.Int {
-	return 0
-}
+//go:linkname ImportImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
+func ImportImportFrozenModuleObject(name *Object) c.Int
 
-//go:linkname PyImport_ImportFrozenModule C.PyImport_ImportFrozenModule
-func PyImport_ImportFrozenModule(name *c.Char) c.Int
+//go:linkname ImportImportFrozenModule C.PyImport_ImportFrozenModule
+func ImportImportFrozenModule(name *c.Char) c.Int
 
-//go:linkname PyImport_AppendInittab C.PyImport_AppendInittab
-func PyImport_AppendInittab(name *c.Char, initfunc func() *PyObject) c.Int
+//go:linkname ImportAppendInittab C.PyImport_AppendInittab
+func ImportAppendInittab(name *c.Char, initfunc func() *Object) c.Int
 
 // This is not used after Py_Initialize() is called.
 //
-//go:linkname PyImport_Inittab C.PyImport_Inittab
-var PyImport_Inittab *X_inittab
+//go:linkname ImportInittab C.PyImport_Inittab
+var ImportInittab *X_inittab
 
-// llgo:link (*X_inittab).PyImport_ExtendInittab C.PyImport_ExtendInittab
-func (self *X_inittab) PyImport_ExtendInittab() c.Int {
-	return 0
-}
+//go:linkname ImportExtendInittab C.PyImport_ExtendInittab
+func ImportExtendInittab(newtab *X_inittab) c.Int
 
 // Embedding apps may change this pointer to point to their favorite
 // collection of frozen modules:
 //
-//go:linkname PyImport_FrozenModules C.PyImport_FrozenModules
-var PyImport_FrozenModules *X_frozen
+//go:linkname ImportFrozenModules C.PyImport_FrozenModules
+var ImportFrozenModules *X_frozen
 
-// llgo:link (*PyObject).PyImport_ImportModuleAttr C.PyImport_ImportModuleAttr
-func (self *PyObject) PyImport_ImportModuleAttr(attr_name *PyObject) *PyObject {
-	return self
-}
+//go:linkname ImportImportModuleAttr C.PyImport_ImportModuleAttr
+func ImportImportModuleAttr(mod_name *Object, attr_name *Object) *Object
 
-//go:linkname PyImport_ImportModuleAttrString C.PyImport_ImportModuleAttrString
-func PyImport_ImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *PyObject
+//go:linkname ImportImportModuleAttrString C.PyImport_ImportModuleAttrString
+func ImportImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *Object

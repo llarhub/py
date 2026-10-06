@@ -8,58 +8,66 @@ import (
 )
 
 // llgo:type C
-type PyCapsule_Destructor = func(_llcppg_param1 *PyObject)
+type CapsuleDestructor = func(_llcppg_param1 *Object)
 
-//go:linkname PyCapsule_Type C.PyCapsule_Type
-var PyCapsule_Type PyTypeObject
+//go:linkname CapsuleType C.PyCapsule_Type
+var CapsuleType TypeObject
 
-//go:linkname PyCapsule_New C.PyCapsule_New
-func PyCapsule_New(pointer unsafe.Pointer, name *c.Char, destructor PyCapsule_Destructor) *PyObject
+//go:linkname CapsuleNew C.PyCapsule_New
+func CapsuleNew(pointer unsafe.Pointer, name *c.Char, destructor CapsuleDestructor) *Object
 
-// llgo:link (*PyObject).PyCapsule_GetPointer C.PyCapsule_GetPointer
-func (self *PyObject) PyCapsule_GetPointer(name *c.Char) unsafe.Pointer {
+type Capsule struct {
+	X_object
+}
+
+func (self *Object) AsCapsule() *Capsule {
+	return (*Capsule)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Capsule).Pointer C.PyCapsule_GetPointer
+func (self *Capsule) Pointer(name *c.Char) unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*PyObject).PyCapsule_GetDestructor C.PyCapsule_GetDestructor
-func (self *PyObject) PyCapsule_GetDestructor() PyCapsule_Destructor {
+// llgo:link (*Capsule).Destructor C.PyCapsule_GetDestructor
+func (self *Capsule) Destructor() CapsuleDestructor {
 	return nil
 }
 
-// llgo:link (*PyObject).PyCapsule_GetName C.PyCapsule_GetName
-func (self *PyObject) PyCapsule_GetName() *c.Char {
+// llgo:link (*Capsule).Name C.PyCapsule_GetName
+func (self *Capsule) Name() *c.Char {
 	return nil
 }
 
-// llgo:link (*PyObject).PyCapsule_GetContext C.PyCapsule_GetContext
-func (self *PyObject) PyCapsule_GetContext() unsafe.Pointer {
+// llgo:link (*Capsule).Context C.PyCapsule_GetContext
+func (self *Capsule) Context() unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*PyObject).PyCapsule_IsValid C.PyCapsule_IsValid
-func (self *PyObject) PyCapsule_IsValid(name *c.Char) c.Int {
+// llgo:link (*Capsule).IsValid C.PyCapsule_IsValid
+func (self *Capsule) IsValid(name *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyCapsule_SetPointer C.PyCapsule_SetPointer
-func (self *PyObject) PyCapsule_SetPointer(pointer unsafe.Pointer) c.Int {
+// llgo:link (*Capsule).SetPointer C.PyCapsule_SetPointer
+func (self *Capsule) SetPointer(pointer unsafe.Pointer) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyCapsule_SetDestructor C.PyCapsule_SetDestructor
-func (self *PyObject) PyCapsule_SetDestructor(destructor PyCapsule_Destructor) c.Int {
+// llgo:link (*Capsule).SetDestructor C.PyCapsule_SetDestructor
+func (self *Capsule) SetDestructor(destructor CapsuleDestructor) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyCapsule_SetName C.PyCapsule_SetName
-func (self *PyObject) PyCapsule_SetName(name *c.Char) c.Int {
+// llgo:link (*Capsule).SetName C.PyCapsule_SetName
+func (self *Capsule) SetName(name *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyCapsule_SetContext C.PyCapsule_SetContext
-func (self *PyObject) PyCapsule_SetContext(context unsafe.Pointer) c.Int {
+// llgo:link (*Capsule).SetContext C.PyCapsule_SetContext
+func (self *Capsule) SetContext(context unsafe.Pointer) c.Int {
 	return 0
 }
 
-//go:linkname PyCapsule_Import C.PyCapsule_Import
-func PyCapsule_Import(name *c.Char, no_block c.Int) unsafe.Pointer
+//go:linkname CapsuleImport C.PyCapsule_Import
+func CapsuleImport(name *c.Char, no_block c.Int) unsafe.Pointer

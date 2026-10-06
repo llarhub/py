@@ -13,8 +13,8 @@ const X_PyLong_SIGN_MASK = 3
 const X_PyLong_NON_SIZE_BITS = 3
 
 type X_longobject struct {
-	ObBase    PyObject
-	LongValue X_PyLongValue
+	ObBase    Object
+	LongValue X_LongValue
 }
 type Digit = c.Uint32T
 type Sdigit = c.Int32T
@@ -48,61 +48,59 @@ type Stwodigits = c.Int64T
 // We always allocate memory for at least one digit, so accessing ob_digit[0]
 // is always safe. However, in the case ndigits == 0, the contents of
 // ob_digit[0] may be undefined.
-type X_PyLongValue struct {
+type X_LongValue struct {
 	LvTag   c.UintptrT
 	ObDigit [1]Digit
 }
 
 // --- Import/Export API --------------------------------------------------
-type PyLongLayout struct {
+type LongLayout struct {
 	BitsPerDigit    c.Uint8T
 	DigitSize       c.Uint8T
 	DigitsOrder     c.Int8T
 	DigitEndianness c.Int8T
 }
-type PyLongExport struct {
+type LongExport struct {
 	Value      c.Int64T
 	Negative   c.Uint8T
-	Ndigits    PySsizeT
+	Ndigits    SsizeT
 	Digits     unsafe.Pointer
-	X_reserved PyUintptrT
+	X_reserved UintptrT
 }
-type PyLongWriter struct {
+type LongWriter struct {
 }
 
-//go:linkname X_PyLong_New C._PyLong_New
-func X_PyLong_New(_llcppg_param1 PySsizeT) *PyLongObject
+//go:linkname X_LongNew C._PyLong_New
+func X_LongNew(_llcppg_param1 SsizeT) *LongObject
 
 // Return a copy of src.
 //
-// llgo:link (*PyLongObject).X_PyLong_Copy C._PyLong_Copy
-func (self *PyLongObject) X_PyLong_Copy() *PyObject {
-	return nil
-}
+//go:linkname X_LongCopy C._PyLong_Copy
+func X_LongCopy(src *LongObject) *Object
 
-//go:linkname X_PyLong_FromDigits C._PyLong_FromDigits
-func X_PyLong_FromDigits(negative c.Int, digit_count PySsizeT, digits *Digit) *PyLongObject
+//go:linkname X_LongFromDigits C._PyLong_FromDigits
+func X_LongFromDigits(negative c.Int, digit_count SsizeT, digits *Digit) *LongObject
 
-//go:linkname PyLong_GetNativeLayout C.PyLong_GetNativeLayout
-func PyLong_GetNativeLayout() *PyLongLayout
+//go:linkname LongGetNativeLayout C.PyLong_GetNativeLayout
+func LongGetNativeLayout() *LongLayout
 
-// llgo:link (*PyObject).PyLong_Export C.PyLong_Export
-func (self *PyObject) PyLong_Export(export_long *PyLongExport) c.Int {
+// llgo:link (*Long).Export C.PyLong_Export
+func (self *Long) Export(export_long *LongExport) c.Int {
 	return 0
 }
 
-// llgo:link (*PyLongExport).PyLong_FreeExport C.PyLong_FreeExport
-func (self *PyLongExport) PyLong_FreeExport() {
+// llgo:link (*Long).FreeExport C.PyLong_FreeExport
+func (self *Long) FreeExport() {
 }
 
-//go:linkname PyLongWriter_Create C.PyLongWriter_Create
-func PyLongWriter_Create(negative c.Int, ndigits PySsizeT, digits *unsafe.Pointer) *PyLongWriter
+//go:linkname LongWriterCreate C.PyLongWriter_Create
+func LongWriterCreate(negative c.Int, ndigits SsizeT, digits *unsafe.Pointer) *LongWriter
 
-// llgo:link (*PyLongWriter).Finish C.PyLongWriter_Finish
-func (self *PyLongWriter) Finish() *PyObject {
+// llgo:link (*LongWriter).Finish C.PyLongWriter_Finish
+func (self *LongWriter) Finish() *Object {
 	return nil
 }
 
-// llgo:link (*PyLongWriter).Discard C.PyLongWriter_Discard
-func (self *PyLongWriter) Discard() {
+// llgo:link (*LongWriter).Discard C.PyLongWriter_Discard
+func (self *LongWriter) Discard() {
 }

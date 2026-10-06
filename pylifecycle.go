@@ -15,8 +15,8 @@ const X_PyInterpreterConfig_LEGACY_CHECK_MULTI_INTERP_EXTENSIONS = 0
 // Signals
 //
 // llgo:type C
-type PyOSSighandlerT = func(_llcppg_param1 c.Int)
-type PyInterpreterConfig struct {
+type OSSighandlerT = func(_llcppg_param1 c.Int)
+type InterpreterConfig struct {
 	UseMainObmalloc            c.Int
 	AllowFork                  c.Int
 	AllowExec                  c.Int
@@ -31,146 +31,136 @@ type AtexitDatacallbackfunc = func(_llcppg_param1 unsafe.Pointer)
 
 // Initialization and finalization
 //
-//go:linkname Py_Initialize C.Py_Initialize
-func Py_Initialize()
+//go:linkname Initialize C.Py_Initialize
+func Initialize()
 
-//go:linkname Py_InitializeEx C.Py_InitializeEx
-func Py_InitializeEx(_llcppg_param1 c.Int)
+//go:linkname InitializeEx C.Py_InitializeEx
+func InitializeEx(_llcppg_param1 c.Int)
 
-//go:linkname Py_Finalize C.Py_Finalize
-func Py_Finalize()
+//go:linkname Finalize C.Py_Finalize
+func Finalize()
 
-//go:linkname Py_FinalizeEx C.Py_FinalizeEx
-func Py_FinalizeEx() c.Int
+//go:linkname FinalizeEx C.Py_FinalizeEx
+func FinalizeEx() c.Int
 
-//go:linkname Py_IsInitialized C.Py_IsInitialized
-func Py_IsInitialized() c.Int
+//go:linkname IsInitialized C.Py_IsInitialized
+func IsInitialized() c.Int
 
 // Subinterpreter support
 //
-//go:linkname Py_NewInterpreter C.Py_NewInterpreter
-func Py_NewInterpreter() *PyThreadState
+//go:linkname NewInterpreter C.Py_NewInterpreter
+func NewInterpreter() *ThreadState
 
-// llgo:link (*PyThreadState).Py_EndInterpreter C.Py_EndInterpreter
-func (self *PyThreadState) Py_EndInterpreter() {
-}
+//go:linkname EndInterpreter C.Py_EndInterpreter
+func EndInterpreter(_llcppg_param1 *ThreadState)
 
 // Py_PyAtExit is for the atexit module, Py_AtExit is for low-level
 // exit functions.
 //
-//go:linkname Py_AtExit C.Py_AtExit
-func Py_AtExit(func_ func()) c.Int
+//go:linkname AtExit C.Py_AtExit
+func AtExit(func_ func()) c.Int
 
-//go:linkname Py_Exit C.Py_Exit
-func Py_Exit(_llcppg_param1 c.Int)
+//go:linkname Exit C.Py_Exit
+func Exit(_llcppg_param1 c.Int)
 
 // Bootstrap __main__ (defined in Modules/main.c)
 //
-//go:linkname Py_Main C.Py_Main
-func Py_Main(argc c.Int, argv **c.WcharT) c.Int
+//go:linkname Main C.Py_Main
+func Main(argc c.Int, argv **c.WcharT) c.Int
 
-//go:linkname Py_BytesMain C.Py_BytesMain
-func Py_BytesMain(argc c.Int, argv **c.Char) c.Int
+//go:linkname BytesMain C.Py_BytesMain
+func BytesMain(argc c.Int, argv **c.Char) c.Int
 
 // In pathconfig.c
 //
-//go:linkname Py_SetProgramName C.Py_SetProgramName
-func Py_SetProgramName(_llcppg_param1 *c.WcharT)
+//go:linkname SetProgramName C.Py_SetProgramName
+func SetProgramName(_llcppg_param1 *c.WcharT)
 
-//go:linkname Py_GetProgramName C.Py_GetProgramName
-func Py_GetProgramName() *c.WcharT
+//go:linkname GetProgramName C.Py_GetProgramName
+func GetProgramName() *c.WcharT
 
-//go:linkname Py_SetPythonHome C.Py_SetPythonHome
-func Py_SetPythonHome(_llcppg_param1 *c.WcharT)
+//go:linkname SetPythonHome C.Py_SetPythonHome
+func SetPythonHome(_llcppg_param1 *c.WcharT)
 
-//go:linkname Py_GetPythonHome C.Py_GetPythonHome
-func Py_GetPythonHome() *c.WcharT
+//go:linkname GetPythonHome C.Py_GetPythonHome
+func GetPythonHome() *c.WcharT
 
-//go:linkname Py_GetProgramFullPath C.Py_GetProgramFullPath
-func Py_GetProgramFullPath() *c.WcharT
+//go:linkname GetProgramFullPath C.Py_GetProgramFullPath
+func GetProgramFullPath() *c.WcharT
 
-//go:linkname Py_GetPrefix C.Py_GetPrefix
-func Py_GetPrefix() *c.WcharT
+//go:linkname GetPrefix C.Py_GetPrefix
+func GetPrefix() *c.WcharT
 
-//go:linkname Py_GetExecPrefix C.Py_GetExecPrefix
-func Py_GetExecPrefix() *c.WcharT
+//go:linkname GetExecPrefix C.Py_GetExecPrefix
+func GetExecPrefix() *c.WcharT
 
-//go:linkname Py_GetPath C.Py_GetPath
-func Py_GetPath() *c.WcharT
+//go:linkname GetPath C.Py_GetPath
+func GetPath() *c.WcharT
 
 // In their own files
 //
-//go:linkname Py_GetVersion C.Py_GetVersion
-func Py_GetVersion() *c.Char
+//go:linkname GetVersion C.Py_GetVersion
+func GetVersion() *c.Char
 
-//go:linkname Py_GetPlatform C.Py_GetPlatform
-func Py_GetPlatform() *c.Char
+//go:linkname GetPlatform C.Py_GetPlatform
+func GetPlatform() *c.Char
 
-//go:linkname Py_GetCopyright C.Py_GetCopyright
-func Py_GetCopyright() *c.Char
+//go:linkname GetCopyright C.Py_GetCopyright
+func GetCopyright() *c.Char
 
-//go:linkname Py_GetCompiler C.Py_GetCompiler
-func Py_GetCompiler() *c.Char
+//go:linkname GetCompiler C.Py_GetCompiler
+func GetCompiler() *c.Char
 
-//go:linkname Py_GetBuildInfo C.Py_GetBuildInfo
-func Py_GetBuildInfo() *c.Char
+//go:linkname GetBuildInfo C.Py_GetBuildInfo
+func GetBuildInfo() *c.Char
 
-//go:linkname PyOSGetsig C.PyOS_getsig
-func PyOSGetsig(_llcppg_param1 c.Int) PyOSSighandlerT
+//go:linkname OSGetsig C.PyOS_getsig
+func OSGetsig(_llcppg_param1 c.Int) OSSighandlerT
 
-//go:linkname PyOSSetsig C.PyOS_setsig
-func PyOSSetsig(_llcppg_param1 c.Int, _llcppg_param2 PyOSSighandlerT) PyOSSighandlerT
+//go:linkname OSSetsig C.PyOS_setsig
+func OSSetsig(_llcppg_param1 c.Int, _llcppg_param2 OSSighandlerT) OSSighandlerT
 
-//go:linkname Py_Version C.Py_Version
-var Py_Version c.Ulong
+//go:linkname Version C.Py_Version
+var Version c.Ulong
 
-//go:linkname Py_IsFinalizing C.Py_IsFinalizing
-func Py_IsFinalizing() c.Int
+//go:linkname IsFinalizing C.Py_IsFinalizing
+func IsFinalizing() c.Int
 
 // Py_FrozenMain is kept out of the Limited API until documented and present
 // in all builds of Python
 //
-//go:linkname Py_FrozenMain C.Py_FrozenMain
-func Py_FrozenMain(argc c.Int, argv **c.Char) c.Int
+//go:linkname FrozenMain C.Py_FrozenMain
+func FrozenMain(argc c.Int, argv **c.Char) c.Int
 
 // PEP 432 Multi-phase initialization API (Private while provisional!)
 //
-// llgo:link (*PyPreConfig).Py_PreInitialize C.Py_PreInitialize
-func (self *PyPreConfig) Py_PreInitialize() PyStatus {
-	return PyStatus{}
-}
+//go:linkname PreInitialize C.Py_PreInitialize
+func PreInitialize(src_config *PreConfig) Status
 
-// llgo:link (*PyPreConfig).Py_PreInitializeFromBytesArgs C.Py_PreInitializeFromBytesArgs
-func (self *PyPreConfig) Py_PreInitializeFromBytesArgs(argc PySsizeT, argv **c.Char) PyStatus {
-	return PyStatus{}
-}
+//go:linkname PreInitializeFromBytesArgs C.Py_PreInitializeFromBytesArgs
+func PreInitializeFromBytesArgs(src_config *PreConfig, argc SsizeT, argv **c.Char) Status
 
-// llgo:link (*PyPreConfig).Py_PreInitializeFromArgs C.Py_PreInitializeFromArgs
-func (self *PyPreConfig) Py_PreInitializeFromArgs(argc PySsizeT, argv **c.WcharT) PyStatus {
-	return PyStatus{}
-}
+//go:linkname PreInitializeFromArgs C.Py_PreInitializeFromArgs
+func PreInitializeFromArgs(src_config *PreConfig, argc SsizeT, argv **c.WcharT) Status
 
 // Initialization and finalization
 //
-// llgo:link (*PyConfig).Py_InitializeFromConfig C.Py_InitializeFromConfig
-func (self *PyConfig) Py_InitializeFromConfig() PyStatus {
-	return PyStatus{}
-}
+//go:linkname InitializeFromConfig C.Py_InitializeFromConfig
+func InitializeFromConfig(config *Config) Status
 
-//go:linkname Py_RunMain C.Py_RunMain
-func Py_RunMain() c.Int
+//go:linkname RunMain C.Py_RunMain
+func RunMain() c.Int
 
-// llgo:link PyStatus.Py_ExitStatusException C.Py_ExitStatusException
-func (self PyStatus) Py_ExitStatusException() {
-}
+//go:linkname ExitStatusException C.Py_ExitStatusException
+func ExitStatusException(err Status)
 
-//go:linkname Py_FdIsInteractive C.Py_FdIsInteractive
-func Py_FdIsInteractive(_llcppg_param1 *c.FILE, _llcppg_param2 *c.Char) c.Int
+//go:linkname FdIsInteractive C.Py_FdIsInteractive
+func FdIsInteractive(_llcppg_param1 *c.FILE, _llcppg_param2 *c.Char) c.Int
 
-//go:linkname Py_NewInterpreterFromConfig C.Py_NewInterpreterFromConfig
-func Py_NewInterpreterFromConfig(tstate_p **PyThreadState, config *PyInterpreterConfig) PyStatus
+//go:linkname NewInterpreterFromConfig C.Py_NewInterpreterFromConfig
+func NewInterpreterFromConfig(tstate_p **ThreadState, config *InterpreterConfig) Status
 
-// llgo:link (*PyInterpreterState).PyUnstable_AtExit C.PyUnstable_AtExit
-func (self *PyInterpreterState) PyUnstable_AtExit(_llcppg_param2 AtexitDatacallbackfunc, _llcppg_param3 unsafe.Pointer) c.Int {
+// llgo:link (*Unstable).AtExit C.PyUnstable_AtExit
+func (self *Unstable) AtExit(_llcppg_param2 AtexitDatacallbackfunc, _llcppg_param3 unsafe.Pointer) c.Int {
 	return 0
 }

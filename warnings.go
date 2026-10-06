@@ -4,34 +4,34 @@ package py
 
 import "github.com/goplus/lib/c"
 
-// llgo:link (*PyObject).PyErr_WarnEx C.PyErr_WarnEx
-func (self *PyObject) PyErr_WarnEx(message *c.Char, stack_level PySsizeT) c.Int {
+// llgo:link (*Err).WarnEx C.PyErr_WarnEx
+func (self *Err) WarnEx(message *c.Char, stack_level SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyErr_WarnFormat C.PyErr_WarnFormat
-func (self *PyObject) PyErr_WarnFormat(stack_level PySsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
+// llgo:link (*Err).WarnFormat C.PyErr_WarnFormat
+func (self *Err) WarnFormat(stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
 // Emit a ResourceWarning warning
 //
-// llgo:link (*PyObject).PyErr_ResourceWarning C.PyErr_ResourceWarning
-func (self *PyObject) PyErr_ResourceWarning(stack_level PySsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
+// llgo:link (*Err).ResourceWarning C.PyErr_ResourceWarning
+func (self *Err) ResourceWarning(stack_level SsizeT, format *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyErr_WarnExplicit C.PyErr_WarnExplicit
-func (self *PyObject) PyErr_WarnExplicit(message *c.Char, filename *c.Char, lineno c.Int, module *c.Char, registry *PyObject) c.Int {
+// llgo:link (*Err).WarnExplicit C.PyErr_WarnExplicit
+func (self *Err) WarnExplicit(message *c.Char, filename *c.Char, lineno c.Int, module *c.Char, registry *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyErr_WarnExplicitObject C.PyErr_WarnExplicitObject
-func (self *PyObject) PyErr_WarnExplicitObject(message *PyObject, filename *PyObject, lineno c.Int, module *PyObject, registry *PyObject) c.Int {
+// llgo:link (*Err).WarnExplicitObject C.PyErr_WarnExplicitObject
+func (self *Err) WarnExplicitObject(message *Object, filename *Object, lineno c.Int, module *Object, registry *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyErr_WarnExplicitFormat C.PyErr_WarnExplicitFormat
-func (self *PyObject) PyErr_WarnExplicitFormat(filename *c.Char, lineno c.Int, module *c.Char, registry *PyObject, format *c.Char, __llgo_va_list ...any) c.Int {
+// llgo:link (*Err).WarnExplicitFormat C.PyErr_WarnExplicitFormat
+func (self *Err) WarnExplicitFormat(filename *c.Char, lineno c.Int, module *c.Char, registry *Object, format *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }

@@ -7,32 +7,32 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname PySys_GetObject C.PySys_GetObject
-func PySys_GetObject(_llcppg_param1 *c.Char) *PyObject
+//go:linkname SysGetObject C.PySys_GetObject
+func SysGetObject(_llcppg_param1 *c.Char) *Object
 
-//go:linkname PySys_SetObject C.PySys_SetObject
-func PySys_SetObject(_llcppg_param1 *c.Char, _llcppg_param2 *PyObject) c.Int
+//go:linkname SysSetObject C.PySys_SetObject
+func SysSetObject(_llcppg_param1 *c.Char, _llcppg_param2 *Object) c.Int
 
-//go:linkname PySys_SetArgv C.PySys_SetArgv
-func PySys_SetArgv(_llcppg_param1 c.Int, _llcppg_param2 **c.WcharT)
+//go:linkname SysSetArgv C.PySys_SetArgv
+func SysSetArgv(_llcppg_param1 c.Int, _llcppg_param2 **c.WcharT)
 
-//go:linkname PySys_SetArgvEx C.PySys_SetArgvEx
-func PySys_SetArgvEx(_llcppg_param1 c.Int, _llcppg_param2 **c.WcharT, _llcppg_param3 c.Int)
+//go:linkname SysSetArgvEx C.PySys_SetArgvEx
+func SysSetArgvEx(_llcppg_param1 c.Int, _llcppg_param2 **c.WcharT, _llcppg_param3 c.Int)
 
-//go:linkname PySys_WriteStdout C.PySys_WriteStdout
-func PySys_WriteStdout(format *c.Char, __llgo_va_list ...any)
+//go:linkname SysWriteStdout C.PySys_WriteStdout
+func SysWriteStdout(format *c.Char, __llgo_va_list ...any)
 
-//go:linkname PySys_WriteStderr C.PySys_WriteStderr
-func PySys_WriteStderr(format *c.Char, __llgo_va_list ...any)
+//go:linkname SysWriteStderr C.PySys_WriteStderr
+func SysWriteStderr(format *c.Char, __llgo_va_list ...any)
 
-//go:linkname PySys_FormatStdout C.PySys_FormatStdout
-func PySys_FormatStdout(format *c.Char, __llgo_va_list ...any)
+//go:linkname SysFormatStdout C.PySys_FormatStdout
+func SysFormatStdout(format *c.Char, __llgo_va_list ...any)
 
-//go:linkname PySys_FormatStderr C.PySys_FormatStderr
-func PySys_FormatStderr(format *c.Char, __llgo_va_list ...any)
+//go:linkname SysFormatStderr C.PySys_FormatStderr
+func SysFormatStderr(format *c.Char, __llgo_va_list ...any)
 
-//go:linkname PySys_ResetWarnOptions C.PySys_ResetWarnOptions
-func PySys_ResetWarnOptions()
+//go:linkname SysResetWarnOptions C.PySys_ResetWarnOptions
+func SysResetWarnOptions()
 
-//go:linkname PySys_GetXOptions C.PySys_GetXOptions
-func PySys_GetXOptions() *PyObject
+//go:linkname SysGetXOptions C.PySys_GetXOptions
+func SysGetXOptions() *Object

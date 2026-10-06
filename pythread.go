@@ -13,33 +13,33 @@ const NOWAIT_LOCK = 0
 
 // Return status codes for Python lock acquisition.  Chosen for maximum
 // backwards compatibility, ie failure -> 0, success -> 1.
-type PyLockStatus c.Uint
+type LockStatus c.Uint
 
 const (
-	PY_LOCK_FAILURE  PyLockStatus = 0
-	PY_LOCK_ACQUIRED PyLockStatus = 1
-	PY_LOCK_INTR     PyLockStatus = 2
+	LOCK_FAILURE  LockStatus = 0
+	LOCK_ACQUIRED LockStatus = 1
+	LOCK_INTR     LockStatus = 2
 )
 
-type PyThreadTypeLock uintptr
+type ThreadTypeLock uintptr
 
 // When Py_LIMITED_API is not defined, the type layout of Py_tss_t is
 // exposed to allow static allocation in the API clients.  Even in this case,
 // you must handle TSS keys through API functions due to compatibility.
-type X_PyTssT struct {
+type X_tssT struct {
 	X_isInitialized c.Int
 	X_key           pthread.Key
 }
 
-// New in 3.7 */
-// /* Thread Specific Storage (TSS) API
-type PyTssT = X_PyTssT
+// New in 3.7
+// Thread Specific Storage (TSS) API
+type TssT = X_tssT
 
-//go:linkname PyThreadInitThread C.PyThread_init_thread
-func PyThreadInitThread()
+//go:linkname ThreadInitThread C.PyThread_init_thread
+func ThreadInitThread()
 
-//go:linkname PyThreadStartNewThread C.PyThread_start_new_thread
-func PyThreadStartNewThread(_llcppg_param1 func(_llcppg_param1 unsafe.Pointer), _llcppg_param2 unsafe.Pointer) c.Ulong
+//go:linkname ThreadStartNewThread C.PyThread_start_new_thread
+func ThreadStartNewThread(_llcppg_param1 func(_llcppg_param1 unsafe.Pointer), _llcppg_param2 unsafe.Pointer) c.Ulong
 
 // Terminates the current thread. Considered unsafe.
 //
@@ -59,24 +59,24 @@ func PyThreadStartNewThread(_llcppg_param1 func(_llcppg_param1 unsafe.Pointer), 
 // In either case there is a risk of invalid references remaining to data on the
 // thread stack.
 //
-//go:linkname PyThreadExitThread C.PyThread_exit_thread
-func PyThreadExitThread()
+//go:linkname ThreadExitThread C.PyThread_exit_thread
+func ThreadExitThread()
 
-//go:linkname PyThreadGetThreadIdent C.PyThread_get_thread_ident
-func PyThreadGetThreadIdent() c.Ulong
+//go:linkname ThreadGetThreadIdent C.PyThread_get_thread_ident
+func ThreadGetThreadIdent() c.Ulong
 
-//go:linkname PyThreadGetThreadNativeId C.PyThread_get_thread_native_id
-func PyThreadGetThreadNativeId() c.Ulong
+//go:linkname ThreadGetThreadNativeId C.PyThread_get_thread_native_id
+func ThreadGetThreadNativeId() c.Ulong
 
-//go:linkname PyThreadAllocateLock C.PyThread_allocate_lock
-func PyThreadAllocateLock() PyThreadTypeLock
+//go:linkname ThreadAllocateLock C.PyThread_allocate_lock
+func ThreadAllocateLock() ThreadTypeLock
 
-// llgo:link PyThreadTypeLock.PyThreadFreeLock C.PyThread_free_lock
-func (self PyThreadTypeLock) PyThreadFreeLock() {
+// llgo:link ThreadTypeLock.ThreadFreeLock C.PyThread_free_lock
+func (self ThreadTypeLock) ThreadFreeLock() {
 }
 
-// llgo:link PyThreadTypeLock.PyThreadAcquireLock C.PyThread_acquire_lock
-func (self PyThreadTypeLock) PyThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
+// llgo:link ThreadTypeLock.ThreadAcquireLock C.PyThread_acquire_lock
+func (self ThreadTypeLock) ThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
 	return 0
 }
 
@@ -92,23 +92,23 @@ func (self PyThreadTypeLock) PyThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
 // call will return PY_LOCK_INTR.  The caller may reattempt to acquire the
 // lock.
 //
-// llgo:link PyThreadTypeLock.PyThreadAcquireLockTimed C.PyThread_acquire_lock_timed
-func (self PyThreadTypeLock) PyThreadAcquireLockTimed(microseconds c.LongLong, intr_flag c.Int) PyLockStatus {
+// llgo:link ThreadTypeLock.ThreadAcquireLockTimed C.PyThread_acquire_lock_timed
+func (self ThreadTypeLock) ThreadAcquireLockTimed(microseconds c.LongLong, intr_flag c.Int) LockStatus {
 	return 0
 }
 
-// llgo:link PyThreadTypeLock.PyThreadReleaseLock C.PyThread_release_lock
-func (self PyThreadTypeLock) PyThreadReleaseLock() {
+// llgo:link ThreadTypeLock.ThreadReleaseLock C.PyThread_release_lock
+func (self ThreadTypeLock) ThreadReleaseLock() {
 }
 
-//go:linkname PyThreadGetStacksize C.PyThread_get_stacksize
-func PyThreadGetStacksize() c.SizeT
+//go:linkname ThreadGetStacksize C.PyThread_get_stacksize
+func ThreadGetStacksize() c.SizeT
 
-//go:linkname PyThreadSetStacksize C.PyThread_set_stacksize
-func PyThreadSetStacksize(_llcppg_param1 c.SizeT) c.Int
+//go:linkname ThreadSetStacksize C.PyThread_set_stacksize
+func ThreadSetStacksize(_llcppg_param1 c.SizeT) c.Int
 
-//go:linkname PyThread_GetInfo C.PyThread_GetInfo
-func PyThread_GetInfo() *PyObject
+//go:linkname ThreadGetInfo C.PyThread_GetInfo
+func ThreadGetInfo() *Object
 
 // Thread Local Storage (TLS) API
 // TLS API is DEPRECATED.  Use Thread Specific Storage (TSS) API.
@@ -117,56 +117,64 @@ func PyThread_GetInfo() *PyObject
 // platforms, but it is not POSIX-compliant.  Therefore, the new TSS API uses
 // opaque data type to represent TSS keys to be compatible (see PEP 539).
 //
-//go:linkname PyThreadCreateKey C.PyThread_create_key
-func PyThreadCreateKey() c.Int
+//go:linkname ThreadCreateKey C.PyThread_create_key
+func ThreadCreateKey() c.Int
 
-//go:linkname PyThreadDeleteKey C.PyThread_delete_key
-func PyThreadDeleteKey(key c.Int)
+//go:linkname ThreadDeleteKey C.PyThread_delete_key
+func ThreadDeleteKey(key c.Int)
 
-//go:linkname PyThreadSetKeyValue C.PyThread_set_key_value
-func PyThreadSetKeyValue(key c.Int, value unsafe.Pointer) c.Int
+//go:linkname ThreadSetKeyValue C.PyThread_set_key_value
+func ThreadSetKeyValue(key c.Int, value unsafe.Pointer) c.Int
 
-//go:linkname PyThreadGetKeyValue C.PyThread_get_key_value
-func PyThreadGetKeyValue(key c.Int) unsafe.Pointer
+//go:linkname ThreadGetKeyValue C.PyThread_get_key_value
+func ThreadGetKeyValue(key c.Int) unsafe.Pointer
 
-//go:linkname PyThreadDeleteKeyValue C.PyThread_delete_key_value
-func PyThreadDeleteKeyValue(key c.Int)
+//go:linkname ThreadDeleteKeyValue C.PyThread_delete_key_value
+func ThreadDeleteKeyValue(key c.Int)
 
 // Cleanup after a fork
 //
-//go:linkname PyThread_ReInitTLS C.PyThread_ReInitTLS
-func PyThread_ReInitTLS()
+//go:linkname Thread_ReInitTLS C.PyThread_ReInitTLS
+func Thread_ReInitTLS()
 
-//go:linkname PyThreadTssAlloc C.PyThread_tss_alloc
-func PyThreadTssAlloc() *PyTssT
+//go:linkname ThreadTssAlloc C.PyThread_tss_alloc
+func ThreadTssAlloc() *TssT
 
-// llgo:link (*PyTssT).PyThreadTssFree C.PyThread_tss_free
-func (self *PyTssT) PyThreadTssFree() {
+type Thread struct {
+	X_tssT
+}
+
+func (self *TssT) AsThread() *Thread {
+	return (*Thread)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Thread).TssFree C.PyThread_tss_free
+func (self *Thread) TssFree() {
 }
 
 // The parameter key must not be NULL.
 //
-// llgo:link (*PyTssT).PyThreadTssIsCreated C.PyThread_tss_is_created
-func (self *PyTssT) PyThreadTssIsCreated() c.Int {
+// llgo:link (*Thread).TssIsCreated C.PyThread_tss_is_created
+func (self *Thread) TssIsCreated() c.Int {
 	return 0
 }
 
-// llgo:link (*PyTssT).PyThreadTssCreate C.PyThread_tss_create
-func (self *PyTssT) PyThreadTssCreate() c.Int {
+// llgo:link (*Thread).TssCreate C.PyThread_tss_create
+func (self *Thread) TssCreate() c.Int {
 	return 0
 }
 
-// llgo:link (*PyTssT).PyThreadTssDelete C.PyThread_tss_delete
-func (self *PyTssT) PyThreadTssDelete() {
+// llgo:link (*Thread).TssDelete C.PyThread_tss_delete
+func (self *Thread) TssDelete() {
 }
 
-// llgo:link (*PyTssT).PyThreadTssSet C.PyThread_tss_set
-func (self *PyTssT) PyThreadTssSet(value unsafe.Pointer) c.Int {
+// llgo:link (*Thread).TssSet C.PyThread_tss_set
+func (self *Thread) TssSet(value unsafe.Pointer) c.Int {
 	return 0
 }
 
-// llgo:link (*PyTssT).PyThreadTssGet C.PyThread_tss_get
-func (self *PyTssT) PyThreadTssGet() unsafe.Pointer {
+// llgo:link (*Thread).TssGet C.PyThread_tss_get
+func (self *Thread) TssGet() unsafe.Pointer {
 	return nil
 }
 
@@ -177,5 +185,5 @@ func (self *PyTssT) PyThreadTssGet() unsafe.Pointer {
 // exposes a higher-level API, with timeouts expressed in seconds and
 // floating-point numbers allowed.
 //
-//go:linkname PY_TIMEOUT_MAX C.PY_TIMEOUT_MAX
-var PY_TIMEOUT_MAX c.LongLong
+//go:linkname TIMEOUT_MAX C.PY_TIMEOUT_MAX
+var TIMEOUT_MAX c.LongLong

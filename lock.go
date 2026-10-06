@@ -4,8 +4,8 @@ package py
 
 import "github.com/goplus/lib/c"
 
-const X_Py_UNLOCKED = 0
-const X_Py_LOCKED = 1
+const X_UNLOCKED = 0
+const X_LOCKED = 1
 
 // A mutex that occupies one byte. The lock can be zero initialized to
 // represent the unlocked state.
@@ -28,25 +28,25 @@ const X_Py_LOCKED = 1
 // 0b01: locked
 // 0b10: unlocked and has parked threads
 // 0b11: locked and has parked threads
-type PyMutex struct {
+type Mutex struct {
 	X_bits c.Uint8T
 }
 
 // exported function for locking the mutex
 //
-// llgo:link (*PyMutex).Lock C.PyMutex_Lock
-func (self *PyMutex) Lock() {
+// llgo:link (*Mutex).Lock C.PyMutex_Lock
+func (self *Mutex) Lock() {
 }
 
 // exported function for unlocking the mutex
 //
-// llgo:link (*PyMutex).Unlock C.PyMutex_Unlock
-func (self *PyMutex) Unlock() {
+// llgo:link (*Mutex).Unlock C.PyMutex_Unlock
+func (self *Mutex) Unlock() {
 }
 
 // exported function for checking if the mutex is locked
 //
-// llgo:link (*PyMutex).IsLocked C.PyMutex_IsLocked
-func (self *PyMutex) IsLocked() c.Int {
+// llgo:link (*Mutex).IsLocked C.PyMutex_IsLocked
+func (self *Mutex) IsLocked() c.Int {
 	return 0
 }

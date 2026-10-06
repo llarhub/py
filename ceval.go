@@ -18,45 +18,52 @@ const FVS_HAVE_SPEC = 4
 // Trampoline API
 type PerfMapState struct {
 	PerfMap *c.FILE
-	MapLock PyThreadTypeLock
+	MapLock ThreadTypeLock
+}
+type Eval struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyEval_EvalCode C.PyEval_EvalCode
-func (self *PyObject) PyEval_EvalCode(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) *PyObject {
-	return self
+func (self *Object) AsEval() *Eval {
+	return (*Eval)(unsafe.Pointer(self))
 }
 
-// llgo:link (*PyObject).PyEval_EvalCodeEx C.PyEval_EvalCodeEx
-func (self *PyObject) PyEval_EvalCodeEx(globals *PyObject, locals *PyObject, args **PyObject, argc c.Int, kwds **PyObject, kwdc c.Int, defs **PyObject, defc c.Int, kwdefs *PyObject, closure *PyObject) *PyObject {
-	return self
+// llgo:link (*Eval).Code C.PyEval_EvalCode
+func (self *Eval) Code(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+	return nil
 }
 
-//go:linkname PyEval_GetBuiltins C.PyEval_GetBuiltins
-func PyEval_GetBuiltins() *PyObject
+// llgo:link (*Eval).CodeEx C.PyEval_EvalCodeEx
+func (self *Eval) CodeEx(globals *Object, locals *Object, args **Object, argc c.Int, kwds **Object, kwdc c.Int, defs **Object, defc c.Int, kwdefs *Object, closure *Object) *Object {
+	return nil
+}
 
-//go:linkname PyEval_GetGlobals C.PyEval_GetGlobals
-func PyEval_GetGlobals() *PyObject
+//go:linkname EvalGetBuiltins C.PyEval_GetBuiltins
+func EvalGetBuiltins() *Object
 
-//go:linkname PyEval_GetLocals C.PyEval_GetLocals
-func PyEval_GetLocals() *PyObject
+//go:linkname EvalGetGlobals C.PyEval_GetGlobals
+func EvalGetGlobals() *Object
 
-//go:linkname PyEval_GetFrame C.PyEval_GetFrame
-func PyEval_GetFrame() *PyFrameObject
+//go:linkname EvalGetLocals C.PyEval_GetLocals
+func EvalGetLocals() *Object
 
-//go:linkname PyEval_GetFrameBuiltins C.PyEval_GetFrameBuiltins
-func PyEval_GetFrameBuiltins() *PyObject
+//go:linkname EvalGetFrame C.PyEval_GetFrame
+func EvalGetFrame() *FrameObject
 
-//go:linkname PyEval_GetFrameGlobals C.PyEval_GetFrameGlobals
-func PyEval_GetFrameGlobals() *PyObject
+//go:linkname EvalGetFrameBuiltins C.PyEval_GetFrameBuiltins
+func EvalGetFrameBuiltins() *Object
 
-//go:linkname PyEval_GetFrameLocals C.PyEval_GetFrameLocals
-func PyEval_GetFrameLocals() *PyObject
+//go:linkname EvalGetFrameGlobals C.PyEval_GetFrameGlobals
+func EvalGetFrameGlobals() *Object
 
-//go:linkname Py_AddPendingCall C.Py_AddPendingCall
-func Py_AddPendingCall(func_ func(_llcppg_param1 unsafe.Pointer) c.Int, arg unsafe.Pointer) c.Int
+//go:linkname EvalGetFrameLocals C.PyEval_GetFrameLocals
+func EvalGetFrameLocals() *Object
 
-//go:linkname Py_MakePendingCalls C.Py_MakePendingCalls
-func Py_MakePendingCalls() c.Int
+//go:linkname AddPendingCall C.Py_AddPendingCall
+func AddPendingCall(func_ func(_llcppg_param1 unsafe.Pointer) c.Int, arg unsafe.Pointer) c.Int
+
+//go:linkname MakePendingCalls C.Py_MakePendingCalls
+func MakePendingCalls() c.Int
 
 // Protection against deeply nested recursive calls
 //
@@ -83,35 +90,35 @@ func Py_MakePendingCalls() c.Int
 // http://mail.python.org/pipermail/python-dev/2008-August/082106.html
 // for some observations.
 //
-//go:linkname Py_SetRecursionLimit C.Py_SetRecursionLimit
-func Py_SetRecursionLimit(_llcppg_param1 c.Int)
+//go:linkname SetRecursionLimit C.Py_SetRecursionLimit
+func SetRecursionLimit(_llcppg_param1 c.Int)
 
-//go:linkname Py_GetRecursionLimit C.Py_GetRecursionLimit
-func Py_GetRecursionLimit() c.Int
+//go:linkname GetRecursionLimit C.Py_GetRecursionLimit
+func GetRecursionLimit() c.Int
 
-//go:linkname Py_EnterRecursiveCall C.Py_EnterRecursiveCall
-func Py_EnterRecursiveCall(where *c.Char) c.Int
+//go:linkname EnterRecursiveCall C.Py_EnterRecursiveCall
+func EnterRecursiveCall(where *c.Char) c.Int
 
-//go:linkname Py_LeaveRecursiveCall C.Py_LeaveRecursiveCall
-func Py_LeaveRecursiveCall()
+//go:linkname LeaveRecursiveCall C.Py_LeaveRecursiveCall
+func LeaveRecursiveCall()
 
-// llgo:link (*PyObject).PyEval_GetFuncName C.PyEval_GetFuncName
-func (self *PyObject) PyEval_GetFuncName() *c.Char {
+// llgo:link (*Eval).FuncName C.PyEval_GetFuncName
+func (self *Eval) FuncName() *c.Char {
 	return nil
 }
 
-// llgo:link (*PyObject).PyEval_GetFuncDesc C.PyEval_GetFuncDesc
-func (self *PyObject) PyEval_GetFuncDesc() *c.Char {
+// llgo:link (*Eval).FuncDesc C.PyEval_GetFuncDesc
+func (self *Eval) FuncDesc() *c.Char {
 	return nil
 }
 
-// llgo:link (*PyFrameObject).PyEval_EvalFrame C.PyEval_EvalFrame
-func (self *PyFrameObject) PyEval_EvalFrame() *PyObject {
+// llgo:link (*Eval).Frame C.PyEval_EvalFrame
+func (self *Eval) Frame() *Object {
 	return nil
 }
 
-// llgo:link (*PyFrameObject).PyEval_EvalFrameEx C.PyEval_EvalFrameEx
-func (self *PyFrameObject) PyEval_EvalFrameEx(exc c.Int) *PyObject {
+// llgo:link (*Eval).FrameEx C.PyEval_EvalFrameEx
+func (self *Eval) FrameEx(exc c.Int) *Object {
 	return nil
 }
 
@@ -156,79 +163,73 @@ func (self *PyFrameObject) PyEval_EvalFrameEx(exc c.Int) *PyObject {
 // Note that not yet all candidates have been converted to use this
 // mechanism!
 //
-//go:linkname PyEval_SaveThread C.PyEval_SaveThread
-func PyEval_SaveThread() *PyThreadState
+//go:linkname EvalSaveThread C.PyEval_SaveThread
+func EvalSaveThread() *ThreadState
 
-// llgo:link (*PyThreadState).PyEval_RestoreThread C.PyEval_RestoreThread
-func (self *PyThreadState) PyEval_RestoreThread() {
+// llgo:link (*Eval).RestoreThread C.PyEval_RestoreThread
+func (self *Eval) RestoreThread() {
 }
 
-//go:linkname PyEval_InitThreads C.PyEval_InitThreads
-func PyEval_InitThreads()
+//go:linkname EvalInitThreads C.PyEval_InitThreads
+func EvalInitThreads()
 
-// llgo:link (*PyThreadState).PyEval_AcquireThread C.PyEval_AcquireThread
-func (self *PyThreadState) PyEval_AcquireThread() {
+// llgo:link (*Eval).AcquireThread C.PyEval_AcquireThread
+func (self *Eval) AcquireThread() {
 }
 
-// llgo:link (*PyThreadState).PyEval_ReleaseThread C.PyEval_ReleaseThread
-func (self *PyThreadState) PyEval_ReleaseThread() {
+// llgo:link (*Eval).ReleaseThread C.PyEval_ReleaseThread
+func (self *Eval) ReleaseThread() {
 }
 
-//go:linkname PyEval_SetProfile C.PyEval_SetProfile
-func PyEval_SetProfile(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+//go:linkname EvalSetProfile C.PyEval_SetProfile
+func EvalSetProfile(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
 
-//go:linkname PyEval_SetProfileAllThreads C.PyEval_SetProfileAllThreads
-func PyEval_SetProfileAllThreads(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+//go:linkname EvalSetProfileAllThreads C.PyEval_SetProfileAllThreads
+func EvalSetProfileAllThreads(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
 
-//go:linkname PyEval_SetTrace C.PyEval_SetTrace
-func PyEval_SetTrace(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+//go:linkname EvalSetTrace C.PyEval_SetTrace
+func EvalSetTrace(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
 
-//go:linkname PyEval_SetTraceAllThreads C.PyEval_SetTraceAllThreads
-func PyEval_SetTraceAllThreads(_llcppg_param1 PyTracefunc, _llcppg_param2 *PyObject)
+//go:linkname EvalSetTraceAllThreads C.PyEval_SetTraceAllThreads
+func EvalSetTraceAllThreads(_llcppg_param1 Tracefunc, _llcppg_param2 *Object)
 
 // Look at the current frame's (if any) code's co_flags, and turn on
 // the corresponding compiler flags in cf->cf_flags.  Return 1 if any
 // flag was set, else return 0.
 //
-// llgo:link (*PyCompilerFlags).PyEval_MergeCompilerFlags C.PyEval_MergeCompilerFlags
-func (self *PyCompilerFlags) PyEval_MergeCompilerFlags() c.Int {
+// llgo:link (*Eval).MergeCompilerFlags C.PyEval_MergeCompilerFlags
+func (self *Eval) MergeCompilerFlags() c.Int {
 	return 0
 }
 
-// llgo:link (*PyThreadState).X_PyEval_EvalFrameDefault C._PyEval_EvalFrameDefault
-func (self *PyThreadState) X_PyEval_EvalFrameDefault(f *X_PyInterpreterFrame, exc c.Int) *PyObject {
-	return nil
-}
+//go:linkname X_EvalEvalFrameDefault C._PyEval_EvalFrameDefault
+func X_EvalEvalFrameDefault(tstate *ThreadState, f *X_InterpreterFrame, exc c.Int) *Object
 
-//go:linkname PyUnstable_Eval_RequestCodeExtraIndex C.PyUnstable_Eval_RequestCodeExtraIndex
-func PyUnstable_Eval_RequestCodeExtraIndex(_llcppg_param1 Freefunc) PySsizeT
+//go:linkname UnstableEvalRequestCodeExtraIndex C.PyUnstable_Eval_RequestCodeExtraIndex
+func UnstableEvalRequestCodeExtraIndex(_llcppg_param1 Freefunc) SsizeT
 
-// llgo:link (*PyObject).X_PyEval_SliceIndex C._PyEval_SliceIndex
-func (self *PyObject) X_PyEval_SliceIndex(_llcppg_param2 *PySsizeT) c.Int {
+//go:linkname X_EvalSliceIndex C._PyEval_SliceIndex
+func X_EvalSliceIndex(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
+
+//go:linkname X_EvalSliceIndexNotNone C._PyEval_SliceIndexNotNone
+func X_EvalSliceIndexNotNone(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
+
+//go:linkname UnstablePerfMapStateInit C.PyUnstable_PerfMapState_Init
+func UnstablePerfMapStateInit() c.Int
+
+//go:linkname UnstableWritePerfMapEntry C.PyUnstable_WritePerfMapEntry
+func UnstableWritePerfMapEntry(code_addr unsafe.Pointer, code_size c.Uint, entry_name *c.Char) c.Int
+
+//go:linkname UnstablePerfMapStateFini C.PyUnstable_PerfMapState_Fini
+func UnstablePerfMapStateFini()
+
+//go:linkname UnstableCopyPerfMapFile C.PyUnstable_CopyPerfMapFile
+func UnstableCopyPerfMapFile(parent_filename *c.Char) c.Int
+
+// llgo:link (*Unstable).PerfTrampolineCompileCode C.PyUnstable_PerfTrampoline_CompileCode
+func (self *Unstable) PerfTrampolineCompileCode() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).X_PyEval_SliceIndexNotNone C._PyEval_SliceIndexNotNone
-func (self *PyObject) X_PyEval_SliceIndexNotNone(_llcppg_param2 *PySsizeT) c.Int {
-	return 0
-}
-
-//go:linkname PyUnstable_PerfMapState_Init C.PyUnstable_PerfMapState_Init
-func PyUnstable_PerfMapState_Init() c.Int
-
-//go:linkname PyUnstable_WritePerfMapEntry C.PyUnstable_WritePerfMapEntry
-func PyUnstable_WritePerfMapEntry(code_addr unsafe.Pointer, code_size c.Uint, entry_name *c.Char) c.Int
-
-//go:linkname PyUnstable_PerfMapState_Fini C.PyUnstable_PerfMapState_Fini
-func PyUnstable_PerfMapState_Fini()
-
-//go:linkname PyUnstable_CopyPerfMapFile C.PyUnstable_CopyPerfMapFile
-func PyUnstable_CopyPerfMapFile(parent_filename *c.Char) c.Int
-
-// llgo:link (*PyCodeObject).PyUnstable_PerfTrampoline_CompileCode C.PyUnstable_PerfTrampoline_CompileCode
-func (self *PyCodeObject) PyUnstable_PerfTrampoline_CompileCode() c.Int {
-	return 0
-}
-
-//go:linkname PyUnstable_PerfTrampoline_SetPersistAfterFork C.PyUnstable_PerfTrampoline_SetPersistAfterFork
-func PyUnstable_PerfTrampoline_SetPersistAfterFork(enable c.Int) c.Int
+//go:linkname UnstablePerfTrampolineSetPersistAfterFork C.PyUnstable_PerfTrampoline_SetPersistAfterFork
+func UnstablePerfTrampolineSetPersistAfterFork(enable c.Int) c.Int

@@ -4,13 +4,13 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyTupleObject struct {
-	ObBase PyVarObject
-	ObHash PyHashT
-	ObItem [1]*PyObject
+type TupleObject struct {
+	ObBase VarObject
+	ObHash HashT
+	ObItem [1]*Object
 }
 
 // Another generally useful object type is a tuple of object pointers.
@@ -25,37 +25,45 @@ type PyTupleObject struct {
 // inserted in the tuple.  Similarly, PyTuple_GetItem does not increment the
 // returned item's reference count.
 //
-//go:linkname PyTuple_Type C.PyTuple_Type
-var PyTuple_Type PyTypeObject
+//go:linkname TupleType C.PyTuple_Type
+var TupleType TypeObject
 
-//go:linkname PyTupleIter_Type C.PyTupleIter_Type
-var PyTupleIter_Type PyTypeObject
+//go:linkname TupleIterType C.PyTupleIter_Type
+var TupleIterType TypeObject
 
-//go:linkname PyTuple_New C.PyTuple_New
-func PyTuple_New(size PySsizeT) *PyObject
+//go:linkname TupleNew C.PyTuple_New
+func TupleNew(size SsizeT) *Object
 
-// llgo:link (*PyObject).PyTuple_Size C.PyTuple_Size
-func (self *PyObject) PyTuple_Size() PySsizeT {
+type Tuple struct {
+	X_object
+}
+
+func (self *Object) AsTuple() *Tuple {
+	return (*Tuple)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Tuple).Size C.PyTuple_Size
+func (self *Tuple) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*PyObject).PyTuple_GetItem C.PyTuple_GetItem
-func (self *PyObject) PyTuple_GetItem(_llcppg_param2 PySsizeT) *PyObject {
-	return self
+// llgo:link (*Tuple).Item C.PyTuple_GetItem
+func (self *Tuple) Item(_llcppg_param2 SsizeT) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyTuple_SetItem C.PyTuple_SetItem
-func (self *PyObject) PyTuple_SetItem(_llcppg_param2 PySsizeT, _llcppg_param3 *PyObject) c.Int {
+// llgo:link (*Tuple).SetItem C.PyTuple_SetItem
+func (self *Tuple) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyTuple_GetSlice C.PyTuple_GetSlice
-func (self *PyObject) PyTuple_GetSlice(_llcppg_param2 PySsizeT, _llcppg_param3 PySsizeT) *PyObject {
-	return self
+// llgo:link (*Tuple).Slice C.PyTuple_GetSlice
+func (self *Tuple) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
+	return nil
 }
 
-//go:linkname PyTuple_Pack C.PyTuple_Pack
-func PyTuple_Pack(_llcppg_param1 PySsizeT, __llgo_va_list ...any) *PyObject
+//go:linkname TuplePack C.PyTuple_Pack
+func TuplePack(_llcppg_param1 SsizeT, __llgo_va_list ...any) *Object
 
-//go:linkname X_PyTuple_Resize C._PyTuple_Resize
-func X_PyTuple_Resize(_llcppg_param1 **PyObject, _llcppg_param2 PySsizeT) c.Int
+//go:linkname X_TupleResize C._PyTuple_Resize
+func X_TupleResize(_llcppg_param1 **Object, _llcppg_param2 SsizeT) c.Int

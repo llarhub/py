@@ -7,106 +7,106 @@ import (
 	_ "unsafe"
 )
 
-//go:linkname Py_CompileString C.Py_CompileString
-func Py_CompileString(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char, _llcppg_param3 c.Int) *PyObject
+//go:linkname CompileString C.Py_CompileString
+func CompileString(_llcppg_param1 *c.Char, _llcppg_param2 *c.Char, _llcppg_param3 c.Int) *Object
 
-//go:linkname PyErr_Print C.PyErr_Print
-func PyErr_Print()
+//go:linkname ErrPrint C.PyErr_Print
+func ErrPrint()
 
-//go:linkname PyErr_PrintEx C.PyErr_PrintEx
-func PyErr_PrintEx(_llcppg_param1 c.Int)
+//go:linkname ErrPrintEx C.PyErr_PrintEx
+func ErrPrintEx(_llcppg_param1 c.Int)
 
-// llgo:link (*PyObject).PyErr_Display C.PyErr_Display
-func (self *PyObject) PyErr_Display(_llcppg_param2 *PyObject, _llcppg_param3 *PyObject) {
+// llgo:link (*Err).Display C.PyErr_Display
+func (self *Err) Display(_llcppg_param2 *Object, _llcppg_param3 *Object) {
 }
 
-// llgo:link (*PyObject).PyErr_DisplayException C.PyErr_DisplayException
-func (self *PyObject) PyErr_DisplayException() {
+// llgo:link (*Err).DisplayException C.PyErr_DisplayException
+func (self *Err) DisplayException() {
 }
 
 // Stuff with no proper home (yet)
 //
-//go:linkname PyOS_InputHook C.PyOS_InputHook
-var PyOS_InputHook func() c.Int
+//go:linkname OS_InputHook C.PyOS_InputHook
+var OS_InputHook func() c.Int
 
-//go:linkname PyRun_SimpleStringFlags C.PyRun_SimpleStringFlags
-func PyRun_SimpleStringFlags(_llcppg_param1 *c.Char, _llcppg_param2 *PyCompilerFlags) c.Int
+//go:linkname RunSimpleStringFlags C.PyRun_SimpleStringFlags
+func RunSimpleStringFlags(_llcppg_param1 *c.Char, _llcppg_param2 *CompilerFlags) c.Int
 
-//go:linkname PyRun_AnyFileExFlags C.PyRun_AnyFileExFlags
-func PyRun_AnyFileExFlags(fp *c.FILE, filename *c.Char, closeit c.Int, flags *PyCompilerFlags) c.Int
+//go:linkname RunAnyFileExFlags C.PyRun_AnyFileExFlags
+func RunAnyFileExFlags(fp *c.FILE, filename *c.Char, closeit c.Int, flags *CompilerFlags) c.Int
 
-//go:linkname PyRun_SimpleFileExFlags C.PyRun_SimpleFileExFlags
-func PyRun_SimpleFileExFlags(fp *c.FILE, filename *c.Char, closeit c.Int, flags *PyCompilerFlags) c.Int
+//go:linkname RunSimpleFileExFlags C.PyRun_SimpleFileExFlags
+func RunSimpleFileExFlags(fp *c.FILE, filename *c.Char, closeit c.Int, flags *CompilerFlags) c.Int
 
-//go:linkname PyRun_InteractiveOneFlags C.PyRun_InteractiveOneFlags
-func PyRun_InteractiveOneFlags(fp *c.FILE, filename *c.Char, flags *PyCompilerFlags) c.Int
+//go:linkname RunInteractiveOneFlags C.PyRun_InteractiveOneFlags
+func RunInteractiveOneFlags(fp *c.FILE, filename *c.Char, flags *CompilerFlags) c.Int
 
-//go:linkname PyRun_InteractiveOneObject C.PyRun_InteractiveOneObject
-func PyRun_InteractiveOneObject(fp *c.FILE, filename *PyObject, flags *PyCompilerFlags) c.Int
+//go:linkname RunInteractiveOneObject C.PyRun_InteractiveOneObject
+func RunInteractiveOneObject(fp *c.FILE, filename *Object, flags *CompilerFlags) c.Int
 
-//go:linkname PyRun_InteractiveLoopFlags C.PyRun_InteractiveLoopFlags
-func PyRun_InteractiveLoopFlags(fp *c.FILE, filename *c.Char, flags *PyCompilerFlags) c.Int
+//go:linkname RunInteractiveLoopFlags C.PyRun_InteractiveLoopFlags
+func RunInteractiveLoopFlags(fp *c.FILE, filename *c.Char, flags *CompilerFlags) c.Int
 
-//go:linkname PyRun_StringFlags C.PyRun_StringFlags
-func PyRun_StringFlags(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *PyObject, _llcppg_param4 *PyObject, _llcppg_param5 *PyCompilerFlags) *PyObject
+//go:linkname RunStringFlags C.PyRun_StringFlags
+func RunStringFlags(_llcppg_param1 *c.Char, _llcppg_param2 c.Int, _llcppg_param3 *Object, _llcppg_param4 *Object, _llcppg_param5 *CompilerFlags) *Object
 
-//go:linkname PyRun_FileExFlags C.PyRun_FileExFlags
-func PyRun_FileExFlags(fp *c.FILE, filename *c.Char, start c.Int, globals *PyObject, locals *PyObject, closeit c.Int, flags *PyCompilerFlags) *PyObject
+//go:linkname RunFileExFlags C.PyRun_FileExFlags
+func RunFileExFlags(fp *c.FILE, filename *c.Char, start c.Int, globals *Object, locals *Object, closeit c.Int, flags *CompilerFlags) *Object
 
-//go:linkname Py_CompileStringFlags C.Py_CompileStringFlags
-func Py_CompileStringFlags(str *c.Char, filename *c.Char, start c.Int, flags *PyCompilerFlags) *PyObject
+//go:linkname CompileStringFlags C.Py_CompileStringFlags
+func CompileStringFlags(str *c.Char, filename *c.Char, start c.Int, flags *CompilerFlags) *Object
 
-//go:linkname Py_CompileStringExFlags C.Py_CompileStringExFlags
-func Py_CompileStringExFlags(str *c.Char, filename *c.Char, start c.Int, flags *PyCompilerFlags, optimize c.Int) *PyObject
+//go:linkname CompileStringExFlags C.Py_CompileStringExFlags
+func CompileStringExFlags(str *c.Char, filename *c.Char, start c.Int, flags *CompilerFlags, optimize c.Int) *Object
 
-//go:linkname Py_CompileStringObject C.Py_CompileStringObject
-func Py_CompileStringObject(str *c.Char, filename *PyObject, start c.Int, flags *PyCompilerFlags, optimize c.Int) *PyObject
+//go:linkname CompileStringObject C.Py_CompileStringObject
+func CompileStringObject(str *c.Char, filename *Object, start c.Int, flags *CompilerFlags, optimize c.Int) *Object
 
 // A function flavor is also exported by libpython. It is required when
 // libpython is accessed directly rather than using header files which defines
 // macros below. On Windows, for example, PyAPI_FUNC() uses dllexport to
 // export functions in pythonXX.dll.
 //
-//go:linkname PyRun_String C.PyRun_String
-func PyRun_String(str *c.Char, s c.Int, g *PyObject, l *PyObject) *PyObject
+//go:linkname RunString C.PyRun_String
+func RunString(str *c.Char, s c.Int, g *Object, l *Object) *Object
 
-//go:linkname PyRun_AnyFile C.PyRun_AnyFile
-func PyRun_AnyFile(fp *c.FILE, name *c.Char) c.Int
+//go:linkname RunAnyFile C.PyRun_AnyFile
+func RunAnyFile(fp *c.FILE, name *c.Char) c.Int
 
-//go:linkname PyRun_AnyFileEx C.PyRun_AnyFileEx
-func PyRun_AnyFileEx(fp *c.FILE, name *c.Char, closeit c.Int) c.Int
+//go:linkname RunAnyFileEx C.PyRun_AnyFileEx
+func RunAnyFileEx(fp *c.FILE, name *c.Char, closeit c.Int) c.Int
 
-//go:linkname PyRun_AnyFileFlags C.PyRun_AnyFileFlags
-func PyRun_AnyFileFlags(_llcppg_param1 *c.FILE, _llcppg_param2 *c.Char, _llcppg_param3 *PyCompilerFlags) c.Int
+//go:linkname RunAnyFileFlags C.PyRun_AnyFileFlags
+func RunAnyFileFlags(_llcppg_param1 *c.FILE, _llcppg_param2 *c.Char, _llcppg_param3 *CompilerFlags) c.Int
 
-//go:linkname PyRun_SimpleString C.PyRun_SimpleString
-func PyRun_SimpleString(s *c.Char) c.Int
+//go:linkname RunSimpleString C.PyRun_SimpleString
+func RunSimpleString(s *c.Char) c.Int
 
-//go:linkname PyRun_SimpleFile C.PyRun_SimpleFile
-func PyRun_SimpleFile(f *c.FILE, p *c.Char) c.Int
+//go:linkname RunSimpleFile C.PyRun_SimpleFile
+func RunSimpleFile(f *c.FILE, p *c.Char) c.Int
 
-//go:linkname PyRun_SimpleFileEx C.PyRun_SimpleFileEx
-func PyRun_SimpleFileEx(f *c.FILE, p *c.Char, c c.Int) c.Int
+//go:linkname RunSimpleFileEx C.PyRun_SimpleFileEx
+func RunSimpleFileEx(f *c.FILE, p *c.Char, c c.Int) c.Int
 
-//go:linkname PyRun_InteractiveOne C.PyRun_InteractiveOne
-func PyRun_InteractiveOne(f *c.FILE, p *c.Char) c.Int
+//go:linkname RunInteractiveOne C.PyRun_InteractiveOne
+func RunInteractiveOne(f *c.FILE, p *c.Char) c.Int
 
-//go:linkname PyRun_InteractiveLoop C.PyRun_InteractiveLoop
-func PyRun_InteractiveLoop(f *c.FILE, p *c.Char) c.Int
+//go:linkname RunInteractiveLoop C.PyRun_InteractiveLoop
+func RunInteractiveLoop(f *c.FILE, p *c.Char) c.Int
 
-//go:linkname PyRun_File C.PyRun_File
-func PyRun_File(fp *c.FILE, p *c.Char, s c.Int, g *PyObject, l *PyObject) *PyObject
+//go:linkname RunFile C.PyRun_File
+func RunFile(fp *c.FILE, p *c.Char, s c.Int, g *Object, l *Object) *Object
 
-//go:linkname PyRun_FileEx C.PyRun_FileEx
-func PyRun_FileEx(fp *c.FILE, p *c.Char, s c.Int, g *PyObject, l *PyObject, c c.Int) *PyObject
+//go:linkname RunFileEx C.PyRun_FileEx
+func RunFileEx(fp *c.FILE, p *c.Char, s c.Int, g *Object, l *Object, c c.Int) *Object
 
-//go:linkname PyRun_FileFlags C.PyRun_FileFlags
-func PyRun_FileFlags(fp *c.FILE, p *c.Char, s c.Int, g *PyObject, l *PyObject, flags *PyCompilerFlags) *PyObject
+//go:linkname RunFileFlags C.PyRun_FileFlags
+func RunFileFlags(fp *c.FILE, p *c.Char, s c.Int, g *Object, l *Object, flags *CompilerFlags) *Object
 
 // Stuff with no proper home (yet)
 //
-//go:linkname PyOS_Readline C.PyOS_Readline
-func PyOS_Readline(_llcppg_param1 *c.FILE, _llcppg_param2 *c.FILE, _llcppg_param3 *c.Char) *c.Char
+//go:linkname OS_Readline C.PyOS_Readline
+func OS_Readline(_llcppg_param1 *c.FILE, _llcppg_param2 *c.FILE, _llcppg_param3 *c.Char) *c.Char
 
-//go:linkname PyOS_ReadlineFunctionPointer C.PyOS_ReadlineFunctionPointer
-var PyOS_ReadlineFunctionPointer func(_llcppg_param1 *c.FILE, _llcppg_param2 *c.FILE, _llcppg_param3 *c.Char) *c.Char
+//go:linkname OS_ReadlineFunctionPointer C.PyOS_ReadlineFunctionPointer
+var OS_ReadlineFunctionPointer func(_llcppg_param1 *c.FILE, _llcppg_param2 *c.FILE, _llcppg_param3 *c.Char) *c.Char

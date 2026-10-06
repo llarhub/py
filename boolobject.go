@@ -9,27 +9,23 @@ import (
 
 // Don't use these directly
 //
-//go:linkname X_Py_FalseStruct C._Py_FalseStruct
-var X_Py_FalseStruct PyLongObject
+//go:linkname X_FalseStruct C._Py_FalseStruct
+var X_FalseStruct LongObject
 
-//go:linkname X_Py_TrueStruct C._Py_TrueStruct
-var X_Py_TrueStruct PyLongObject
+//go:linkname X_TrueStruct C._Py_TrueStruct
+var X_TrueStruct LongObject
 
 // Test if an object is the True singleton, the same as "x is True" in Python.
 //
-// llgo:link (*PyObject).Py_IsTrue C.Py_IsTrue
-func (self *PyObject) Py_IsTrue() c.Int {
-	return 0
-}
+//go:linkname IsTrue C.Py_IsTrue
+func IsTrue(x *Object) c.Int
 
 // Test if an object is the False singleton, the same as "x is False" in Python.
 //
-// llgo:link (*PyObject).Py_IsFalse C.Py_IsFalse
-func (self *PyObject) Py_IsFalse() c.Int {
-	return 0
-}
+//go:linkname IsFalse C.Py_IsFalse
+func IsFalse(x *Object) c.Int
 
 // Function to return a bool from a C long
 //
-//go:linkname PyBool_FromLong C.PyBool_FromLong
-func PyBool_FromLong(_llcppg_param1 c.Long) *PyObject
+//go:linkname BoolFromLong C.PyBool_FromLong
+func BoolFromLong(_llcppg_param1 c.Long) *Object

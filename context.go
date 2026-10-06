@@ -7,23 +7,23 @@ import (
 	_ "unsafe"
 )
 
-type PyContextEvent c.Uint
+type ContextEvent c.Uint
 
 const
 // The current context has switched to a different context.  The object
 // passed to the watch callback is the now-current contextvars.Context
 // object, or None if no context is current.
-Py_CONTEXT_SWITCHED PyContextEvent = 1
+Py_CONTEXT_SWITCHED ContextEvent = 1
 
 type X_pycontextobject struct {
 }
-type PyContext = X_pycontextobject
+type Context = X_pycontextobject
 type X_pycontextvarobject struct {
 }
-type PyContextVar = X_pycontextvarobject
+type ContextVar = X_pycontextvarobject
 type X_pycontexttokenobject struct {
 }
-type PyContextToken = X_pycontexttokenobject
+type ContextToken = X_pycontexttokenobject
 
 // Context object watcher callback function.  The object passed to the callback
 // is event-specific; see PyContextEvent for details.
@@ -32,35 +32,35 @@ type PyContextToken = X_pycontexttokenobject
 // it should return 0
 //
 // llgo:type C
-type PyContext_WatchCallback = func(_llcppg_param1 PyContextEvent, _llcppg_param2 *PyObject) c.Int
+type ContextWatchCallback = func(_llcppg_param1 ContextEvent, _llcppg_param2 *Object) c.Int
 
-//go:linkname PyContext_Type C.PyContext_Type
-var PyContext_Type PyTypeObject
+//go:linkname ContextType C.PyContext_Type
+var ContextType TypeObject
 
-//go:linkname PyContextVar_Type C.PyContextVar_Type
-var PyContextVar_Type PyTypeObject
+//go:linkname ContextVarType C.PyContextVar_Type
+var ContextVarType TypeObject
 
-//go:linkname PyContextToken_Type C.PyContextToken_Type
-var PyContextToken_Type PyTypeObject
+//go:linkname ContextTokenType C.PyContextToken_Type
+var ContextTokenType TypeObject
 
-//go:linkname PyContext_New C.PyContext_New
-func PyContext_New() *PyObject
+//go:linkname ContextNew C.PyContext_New
+func ContextNew() *Object
 
-// llgo:link (*PyObject).PyContext_Copy C.PyContext_Copy
-func (self *PyObject) PyContext_Copy() *PyObject {
+// llgo:link (*Object).ContextCopy C.PyContext_Copy
+func (self *Object) ContextCopy() *Object {
 	return self
 }
 
-//go:linkname PyContext_CopyCurrent C.PyContext_CopyCurrent
-func PyContext_CopyCurrent() *PyObject
+//go:linkname ContextCopyCurrent C.PyContext_CopyCurrent
+func ContextCopyCurrent() *Object
 
-// llgo:link (*PyObject).PyContext_Enter C.PyContext_Enter
-func (self *PyObject) PyContext_Enter() c.Int {
+// llgo:link (*Object).ContextEnter C.PyContext_Enter
+func (self *Object) ContextEnter() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyContext_Exit C.PyContext_Exit
-func (self *PyObject) PyContext_Exit() c.Int {
+// llgo:link (*Object).ContextExit C.PyContext_Exit
+func (self *Object) ContextExit() c.Int {
 	return 0
 }
 
@@ -70,22 +70,22 @@ func (self *PyObject) PyContext_Exit() c.Int {
 // Returns a handle that may be passed to PyContext_ClearWatcher on success,
 // or -1 and sets and error if no more handles are available.
 //
-//go:linkname PyContext_AddWatcher C.PyContext_AddWatcher
-func PyContext_AddWatcher(callback PyContext_WatchCallback) c.Int
+//go:linkname ContextAddWatcher C.PyContext_AddWatcher
+func ContextAddWatcher(callback ContextWatchCallback) c.Int
 
 // Clear the watcher associated with the watcher_id handle.
 //
 // Returns 0 on success or -1 if no watcher exists for the provided id.
 //
-//go:linkname PyContext_ClearWatcher C.PyContext_ClearWatcher
-func PyContext_ClearWatcher(watcher_id c.Int) c.Int
+//go:linkname ContextClearWatcher C.PyContext_ClearWatcher
+func ContextClearWatcher(watcher_id c.Int) c.Int
 
 // Create a new context variable.
 //
 // default_value can be NULL.
 //
-//go:linkname PyContextVar_New C.PyContextVar_New
-func PyContextVar_New(name *c.Char, default_value *PyObject) *PyObject
+//go:linkname ContextVarNew C.PyContextVar_New
+func ContextVarNew(name *c.Char, default_value *Object) *Object
 
 // Get a value for the variable.
 //
@@ -102,23 +102,23 @@ func PyContextVar_New(name *c.Char, default_value *PyObject) *PyObject
 //
 // '*value' will be a new ref, if not NULL.
 //
-// llgo:link (*PyObject).PyContextVar_Get C.PyContextVar_Get
-func (self *PyObject) PyContextVar_Get(default_value *PyObject, value **PyObject) c.Int {
+// llgo:link (*Object).ContextVarGet C.PyContextVar_Get
+func (self *Object) ContextVarGet(default_value *Object, value **Object) c.Int {
 	return 0
 }
 
 // Set a new value for the variable.
 // Returns NULL if an error occurs.
 //
-// llgo:link (*PyObject).PyContextVar_Set C.PyContextVar_Set
-func (self *PyObject) PyContextVar_Set(value *PyObject) *PyObject {
+// llgo:link (*Object).ContextVarSet C.PyContextVar_Set
+func (self *Object) ContextVarSet(value *Object) *Object {
 	return self
 }
 
 // Reset a variable to its previous value.
 // Returns 0 on success, -1 on error.
 //
-// llgo:link (*PyObject).PyContextVar_Reset C.PyContextVar_Reset
-func (self *PyObject) PyContextVar_Reset(token *PyObject) c.Int {
+// llgo:link (*Object).ContextVarReset C.PyContextVar_Reset
+func (self *Object) ContextVarReset(token *Object) c.Int {
 	return 0
 }

@@ -4,37 +4,45 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 type X_odictobject struct {
 }
-type PyODictObject = X_odictobject
+type ODictObject = X_odictobject
 
-//go:linkname PyODict_Type C.PyODict_Type
-var PyODict_Type PyTypeObject
+//go:linkname ODictType C.PyODict_Type
+var ODictType TypeObject
 
-//go:linkname PyODictIter_Type C.PyODictIter_Type
-var PyODictIter_Type PyTypeObject
+//go:linkname ODictIterType C.PyODictIter_Type
+var ODictIterType TypeObject
 
-//go:linkname PyODictKeys_Type C.PyODictKeys_Type
-var PyODictKeys_Type PyTypeObject
+//go:linkname ODictKeysType C.PyODictKeys_Type
+var ODictKeysType TypeObject
 
-//go:linkname PyODictItems_Type C.PyODictItems_Type
-var PyODictItems_Type PyTypeObject
+//go:linkname ODictItemsType C.PyODictItems_Type
+var ODictItemsType TypeObject
 
-//go:linkname PyODictValues_Type C.PyODictValues_Type
-var PyODictValues_Type PyTypeObject
+//go:linkname ODictValuesType C.PyODictValues_Type
+var ODictValuesType TypeObject
 
-//go:linkname PyODict_New C.PyODict_New
-func PyODict_New() *PyObject
+//go:linkname ODictNew C.PyODict_New
+func ODictNew() *Object
 
-// llgo:link (*PyObject).PyODict_SetItem C.PyODict_SetItem
-func (self *PyObject) PyODict_SetItem(key *PyObject, item *PyObject) c.Int {
+type ODict struct {
+	X_object
+}
+
+func (self *Object) AsODict() *ODict {
+	return (*ODict)(unsafe.Pointer(self))
+}
+
+// llgo:link (*ODict).SetItem C.PyODict_SetItem
+func (self *ODict) SetItem(key *Object, item *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyODict_DelItem C.PyODict_DelItem
-func (self *PyObject) PyODict_DelItem(key *PyObject) c.Int {
+// llgo:link (*ODict).DelItem C.PyODict_DelItem
+func (self *ODict) DelItem(key *Object) c.Int {
 	return 0
 }

@@ -2,31 +2,31 @@
 
 package py
 
-type PyCriticalSection struct {
+type CriticalSection struct {
 }
-type PyCriticalSection2 struct {
-}
-
-// llgo:link (*PyCriticalSection).Begin C.PyCriticalSection_Begin
-func (self *PyCriticalSection) Begin(op *PyObject) {
+type CriticalSection2 struct {
 }
 
-// llgo:link (*PyCriticalSection).BeginMutex C.PyCriticalSection_BeginMutex
-func (self *PyCriticalSection) BeginMutex(m *PyMutex) {
+// llgo:link (*CriticalSection).Begin C.PyCriticalSection_Begin
+func (self *CriticalSection) Begin(op *Object) {
 }
 
-// llgo:link (*PyCriticalSection).End C.PyCriticalSection_End
-func (self *PyCriticalSection) End() {
+// llgo:link (*CriticalSection).BeginMutex C.PyCriticalSection_BeginMutex
+func (self *CriticalSection) BeginMutex(m *Mutex) {
 }
 
-// llgo:link (*PyCriticalSection2).Begin C.PyCriticalSection2_Begin
-func (self *PyCriticalSection2) Begin(a *PyObject, b *PyObject) {
+// llgo:link (*CriticalSection).End C.PyCriticalSection_End
+func (self *CriticalSection) End() {
 }
 
-// llgo:link (*PyCriticalSection2).BeginMutex C.PyCriticalSection2_BeginMutex
-func (self *PyCriticalSection2) BeginMutex(m1 *PyMutex, m2 *PyMutex) {
+// llgo:link (*CriticalSection2).Begin C.PyCriticalSection2_Begin
+func (self *CriticalSection2) Begin(a *Object, b *Object) {
 }
 
-// llgo:link (*PyCriticalSection2).End C.PyCriticalSection2_End
-func (self *PyCriticalSection2) End() {
+// llgo:link (*CriticalSection2).BeginMutex C.PyCriticalSection2_BeginMutex
+func (self *CriticalSection2) BeginMutex(m1 *Mutex, m2 *Mutex) {
+}
+
+// llgo:link (*CriticalSection2).End C.PyCriticalSection2_End
+func (self *CriticalSection2) End() {
 }

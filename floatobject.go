@@ -4,60 +4,68 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PyFloatObject struct {
-	ObBase PyObject
+type FloatObject struct {
+	ObBase Object
 	ObFval c.Double
 }
 
-//go:linkname PyFloat_Type C.PyFloat_Type
-var PyFloat_Type PyTypeObject
+//go:linkname FloatType C.PyFloat_Type
+var FloatType TypeObject
 
-//go:linkname PyFloat_GetMax C.PyFloat_GetMax
-func PyFloat_GetMax() c.Double
+//go:linkname FloatGetMax C.PyFloat_GetMax
+func FloatGetMax() c.Double
 
-//go:linkname PyFloat_GetMin C.PyFloat_GetMin
-func PyFloat_GetMin() c.Double
+//go:linkname FloatGetMin C.PyFloat_GetMin
+func FloatGetMin() c.Double
 
-//go:linkname PyFloat_GetInfo C.PyFloat_GetInfo
-func PyFloat_GetInfo() *PyObject
+//go:linkname FloatGetInfo C.PyFloat_GetInfo
+func FloatGetInfo() *Object
+
+type Float struct {
+	X_object
+}
+
+func (self *Object) AsFloat() *Float {
+	return (*Float)(unsafe.Pointer(self))
+}
 
 // Return Python float from string PyObject.
 //
-// llgo:link (*PyObject).PyFloat_FromString C.PyFloat_FromString
-func (self *PyObject) PyFloat_FromString() *PyObject {
-	return self
+// llgo:link (*Float).FromString C.PyFloat_FromString
+func (self *Float) FromString() *Object {
+	return nil
 }
 
 // Return Python float from C double.
 //
-//go:linkname PyFloat_FromDouble C.PyFloat_FromDouble
-func PyFloat_FromDouble(_llcppg_param1 c.Double) *PyObject
+//go:linkname FloatFromDouble C.PyFloat_FromDouble
+func FloatFromDouble(_llcppg_param1 c.Double) *Object
 
 // Extract C double from Python float.  The macro version trades safety for
 // speed.
 //
-// llgo:link (*PyObject).PyFloat_AsDouble C.PyFloat_AsDouble
-func (self *PyObject) PyFloat_AsDouble() c.Double {
+// llgo:link (*Float).AsDouble C.PyFloat_AsDouble
+func (self *Float) AsDouble() c.Double {
 	return 0
 }
 
-//go:linkname PyFloat_Pack2 C.PyFloat_Pack2
-func PyFloat_Pack2(x c.Double, p *c.Char, le c.Int) c.Int
+//go:linkname FloatPack2 C.PyFloat_Pack2
+func FloatPack2(x c.Double, p *c.Char, le c.Int) c.Int
 
-//go:linkname PyFloat_Pack4 C.PyFloat_Pack4
-func PyFloat_Pack4(x c.Double, p *c.Char, le c.Int) c.Int
+//go:linkname FloatPack4 C.PyFloat_Pack4
+func FloatPack4(x c.Double, p *c.Char, le c.Int) c.Int
 
-//go:linkname PyFloat_Pack8 C.PyFloat_Pack8
-func PyFloat_Pack8(x c.Double, p *c.Char, le c.Int) c.Int
+//go:linkname FloatPack8 C.PyFloat_Pack8
+func FloatPack8(x c.Double, p *c.Char, le c.Int) c.Int
 
-//go:linkname PyFloat_Unpack2 C.PyFloat_Unpack2
-func PyFloat_Unpack2(p *c.Char, le c.Int) c.Double
+//go:linkname FloatUnpack2 C.PyFloat_Unpack2
+func FloatUnpack2(p *c.Char, le c.Int) c.Double
 
-//go:linkname PyFloat_Unpack4 C.PyFloat_Unpack4
-func PyFloat_Unpack4(p *c.Char, le c.Int) c.Double
+//go:linkname FloatUnpack4 C.PyFloat_Unpack4
+func FloatUnpack4(p *c.Char, le c.Int) c.Double
 
-//go:linkname PyFloat_Unpack8 C.PyFloat_Unpack8
-func PyFloat_Unpack8(p *c.Char, le c.Int) c.Double
+//go:linkname FloatUnpack8 C.PyFloat_Unpack8
+func FloatUnpack8(p *c.Char, le c.Int) c.Double

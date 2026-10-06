@@ -2,13 +2,13 @@
 
 package py
 
-type PyObject = X_object
-type PyLongObject = X_longobject
-type PyTypeObject = X_typeobject
+type Object = X_object
+type LongObject = X_longobject
+type TypeObject = X_typeobject
 type X_frame struct {
 }
-type PyFrameObject = X_frame
-type PyThreadState = X_ts
+type FrameObject = X_frame
+type ThreadState = X_ts
 type X_is struct {
 }
-type PyInterpreterState = X_is
+type InterpreterState = X_is

@@ -7,32 +7,33 @@ import (
 	"unsafe"
 )
 
-type PyMemAllocatorDomain c.Uint
+type MemAllocatorDomain c.Uint
 
 const (
 	// PyMem_RawMalloc(), PyMem_RawRealloc() and PyMem_RawFree()
-	PYMEM_DOMAIN_RAW PyMemAllocatorDomain = 0
+	PYMEM_DOMAIN_RAW MemAllocatorDomain = 0
 	// PyMem_Malloc(), PyMem_Realloc() and PyMem_Free()
-	PYMEM_DOMAIN_MEM PyMemAllocatorDomain = 1
+	PYMEM_DOMAIN_MEM MemAllocatorDomain = 1
 	// PyObject_Malloc(), PyObject_Realloc() and PyObject_Free()
-	PYMEM_DOMAIN_OBJ PyMemAllocatorDomain = 2
+	PYMEM_DOMAIN_OBJ MemAllocatorDomain = 2
 )
 
-type PyMemAllocatorName c.Uint
+type MemAllocatorName c.Uint
 
 const (
-	PYMEM_ALLOCATOR_NOT_SET        PyMemAllocatorName = 0
-	PYMEM_ALLOCATOR_DEFAULT        PyMemAllocatorName = 1
-	PYMEM_ALLOCATOR_DEBUG          PyMemAllocatorName = 2
-	PYMEM_ALLOCATOR_MALLOC         PyMemAllocatorName = 3
-	PYMEM_ALLOCATOR_MALLOC_DEBUG   PyMemAllocatorName = 4
-	PYMEM_ALLOCATOR_PYMALLOC       PyMemAllocatorName = 5
-	PYMEM_ALLOCATOR_PYMALLOC_DEBUG PyMemAllocatorName = 6
-	PYMEM_ALLOCATOR_MIMALLOC       PyMemAllocatorName = 7
-	PYMEM_ALLOCATOR_MIMALLOC_DEBUG PyMemAllocatorName = 8
+	PYMEM_ALLOCATOR_NOT_SET        MemAllocatorName = 0
+	PYMEM_ALLOCATOR_DEFAULT        MemAllocatorName = 1
+	PYMEM_ALLOCATOR_DEBUG          MemAllocatorName = 2
+	PYMEM_ALLOCATOR_MALLOC         MemAllocatorName = 3
+	PYMEM_ALLOCATOR_MALLOC_DEBUG   MemAllocatorName = 4
+	PYMEM_ALLOCATOR_PYMALLOC       MemAllocatorName = 5
+	PYMEM_ALLOCATOR_PYMALLOC_DEBUG MemAllocatorName = 6
+	PYMEM_ALLOCATOR_MIMALLOC       MemAllocatorName = 7
+	PYMEM_ALLOCATOR_MIMALLOC_DEBUG MemAllocatorName = 8
 )
 
-type PyMemAllocatorEx struct {
+// llgo:type C
+type MemAllocatorEx struct {
 	Ctx     unsafe.Pointer
 	Malloc  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
 	Calloc  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT, _llcppg_param3 c.SizeT) unsafe.Pointer
@@ -49,39 +50,39 @@ type PyMemAllocatorEx struct {
 // Returned pointers must be checked for NULL explicitly.  No action is
 // performed on failure (no exception is set, no warning is printed, etc).
 //
-//go:linkname PyMem_Malloc C.PyMem_Malloc
-func PyMem_Malloc(size c.SizeT) unsafe.Pointer
+//go:linkname MemMalloc C.PyMem_Malloc
+func MemMalloc(size c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_Calloc C.PyMem_Calloc
-func PyMem_Calloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
+//go:linkname MemCalloc C.PyMem_Calloc
+func MemCalloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_Realloc C.PyMem_Realloc
-func PyMem_Realloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
+//go:linkname MemRealloc C.PyMem_Realloc
+func MemRealloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_Free C.PyMem_Free
-func PyMem_Free(ptr unsafe.Pointer)
+//go:linkname MemFree C.PyMem_Free
+func MemFree(ptr unsafe.Pointer)
 
 // Memory allocator which doesn't require the GIL to be held.
 // Usually, it's just a thin wrapper to functions of the standard C library:
 // malloc(), calloc(), realloc() and free(). The difference is that
 // tracemalloc can track these memory allocations.
 //
-//go:linkname PyMem_RawMalloc C.PyMem_RawMalloc
-func PyMem_RawMalloc(size c.SizeT) unsafe.Pointer
+//go:linkname MemRawMalloc C.PyMem_RawMalloc
+func MemRawMalloc(size c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_RawCalloc C.PyMem_RawCalloc
-func PyMem_RawCalloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
+//go:linkname MemRawCalloc C.PyMem_RawCalloc
+func MemRawCalloc(nelem c.SizeT, elsize c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_RawRealloc C.PyMem_RawRealloc
-func PyMem_RawRealloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
+//go:linkname MemRawRealloc C.PyMem_RawRealloc
+func MemRawRealloc(ptr unsafe.Pointer, new_size c.SizeT) unsafe.Pointer
 
-//go:linkname PyMem_RawFree C.PyMem_RawFree
-func PyMem_RawFree(ptr unsafe.Pointer)
+//go:linkname MemRawFree C.PyMem_RawFree
+func MemRawFree(ptr unsafe.Pointer)
 
 // Get the memory block allocator of the specified domain.
 //
-// llgo:link PyMemAllocatorDomain.PyMem_GetAllocator C.PyMem_GetAllocator
-func (self PyMemAllocatorDomain) PyMem_GetAllocator(allocator *PyMemAllocatorEx) {
+// llgo:link MemAllocatorDomain.MemGetAllocator C.PyMem_GetAllocator
+func (self MemAllocatorDomain) MemGetAllocator(allocator *MemAllocatorEx) {
 }
 
 // Set the memory block allocator of the specified domain.
@@ -96,8 +97,8 @@ func (self PyMemAllocatorDomain) PyMem_GetAllocator(allocator *PyMemAllocatorEx)
 // PyMem_SetupDebugHooks() function must be called to reinstall the debug hooks
 // on top on the new allocator.
 //
-// llgo:link PyMemAllocatorDomain.PyMem_SetAllocator C.PyMem_SetAllocator
-func (self PyMemAllocatorDomain) PyMem_SetAllocator(allocator *PyMemAllocatorEx) {
+// llgo:link MemAllocatorDomain.MemSetAllocator C.PyMem_SetAllocator
+func (self MemAllocatorDomain) MemSetAllocator(allocator *MemAllocatorEx) {
 }
 
 // Setup hooks to detect bugs in the following Python memory allocator
@@ -117,5 +118,5 @@ func (self PyMemAllocatorDomain) PyMem_SetAllocator(allocator *PyMemAllocatorEx)
 //
 // The function does nothing if Python is not compiled is debug mode.
 //
-//go:linkname PyMem_SetupDebugHooks C.PyMem_SetupDebugHooks
-func PyMem_SetupDebugHooks()
+//go:linkname MemSetupDebugHooks C.PyMem_SetupDebugHooks
+func MemSetupDebugHooks()

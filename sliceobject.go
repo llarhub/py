@@ -4,54 +4,60 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-type PySliceObject struct {
-	ObBase PyObject
-	Start  *PyObject
-	Stop   *PyObject
-	Step   *PyObject
+type SliceObject struct {
+	ObBase Object
+	Start  *Object
+	Stop   *Object
+	Step   *Object
 }
 
 // Don't use this directly
 //
-//go:linkname X_Py_EllipsisObject C._Py_EllipsisObject
-var X_Py_EllipsisObject PyObject
+//go:linkname X_EllipsisObject C._Py_EllipsisObject
+var X_EllipsisObject Object
 
-//go:linkname PySlice_Type C.PySlice_Type
-var PySlice_Type PyTypeObject
+//go:linkname SliceType C.PySlice_Type
+var SliceType TypeObject
 
-//go:linkname PyEllipsis_Type C.PyEllipsis_Type
-var PyEllipsis_Type PyTypeObject
+//go:linkname EllipsisType C.PyEllipsis_Type
+var EllipsisType TypeObject
 
-// llgo:link (*PyObject).PySlice_New C.PySlice_New
-func (self *PyObject) PySlice_New(stop *PyObject, step *PyObject) *PyObject {
-	return self
+type Slice struct {
+	X_object
 }
 
-//go:linkname X_PySlice_FromIndices C._PySlice_FromIndices
-func X_PySlice_FromIndices(start PySsizeT, stop PySsizeT) *PyObject
+func (self *Object) AsSlice() *Slice {
+	return (*Slice)(unsafe.Pointer(self))
+}
 
-// llgo:link (*PySliceObject).X_PySlice_GetLongIndices C._PySlice_GetLongIndices
-func (self *PySliceObject) X_PySlice_GetLongIndices(length *PyObject, start_ptr **PyObject, stop_ptr **PyObject, step_ptr **PyObject) c.Int {
+// llgo:link (*Slice).New C.PySlice_New
+func (self *Slice) New(stop *Object, step *Object) *Object {
+	return nil
+}
+
+//go:linkname X_SliceFromIndices C._PySlice_FromIndices
+func X_SliceFromIndices(start SsizeT, stop SsizeT) *Object
+
+//go:linkname X_SliceGetLongIndices C._PySlice_GetLongIndices
+func X_SliceGetLongIndices(self *SliceObject, length *Object, start_ptr **Object, stop_ptr **Object, step_ptr **Object) c.Int
+
+// llgo:link (*Slice).Indices C.PySlice_GetIndices
+func (self *Slice) Indices(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySlice_GetIndices C.PySlice_GetIndices
-func (self *PyObject) PySlice_GetIndices(length PySsizeT, start *PySsizeT, stop *PySsizeT, step *PySsizeT) c.Int {
+// llgo:link (*Slice).IndicesEx C.PySlice_GetIndicesEx
+func (self *Slice) IndicesEx(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT, slicelength *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySlice_GetIndicesEx C.PySlice_GetIndicesEx
-func (self *PyObject) PySlice_GetIndicesEx(length PySsizeT, start *PySsizeT, stop *PySsizeT, step *PySsizeT, slicelength *PySsizeT) c.Int {
+// llgo:link (*Slice).Unpack C.PySlice_Unpack
+func (self *Slice) Unpack(start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PySlice_Unpack C.PySlice_Unpack
-func (self *PyObject) PySlice_Unpack(start *PySsizeT, stop *PySsizeT, step *PySsizeT) c.Int {
-	return 0
-}
-
-//go:linkname PySlice_AdjustIndices C.PySlice_AdjustIndices
-func PySlice_AdjustIndices(length PySsizeT, start *PySsizeT, stop *PySsizeT, step PySsizeT) PySsizeT
+//go:linkname SliceAdjustIndices C.PySlice_AdjustIndices
+func SliceAdjustIndices(length SsizeT, start *SsizeT, stop *SsizeT, step SsizeT) SsizeT

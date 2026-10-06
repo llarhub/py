@@ -4,52 +4,60 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-const X_Py_MANAGED_BUFFER_RELEASED = 1
-const X_Py_MANAGED_BUFFER_FREE_FORMAT = 2
-const X_Py_MEMORYVIEW_RELEASED = 1
-const X_Py_MEMORYVIEW_C = 2
-const X_Py_MEMORYVIEW_FORTRAN = 4
-const X_Py_MEMORYVIEW_SCALAR = 8
-const X_Py_MEMORYVIEW_PIL = 16
-const X_Py_MEMORYVIEW_RESTRICTED = 32
+const X_MANAGED_BUFFER_RELEASED = 1
+const X_MANAGED_BUFFER_FREE_FORMAT = 2
+const X_MEMORYVIEW_RELEASED = 1
+const X_MEMORYVIEW_C = 2
+const X_MEMORYVIEW_FORTRAN = 4
+const X_MEMORYVIEW_SCALAR = 8
+const X_MEMORYVIEW_PIL = 16
+const X_MEMORYVIEW_RESTRICTED = 32
 
-type X_PyManagedBufferObject struct {
-	ObBase  PyObject
+type X_ManagedBufferObject struct {
+	ObBase  Object
 	Flags   c.Int
-	Exports PySsizeT
-	Master  PyBuffer
+	Exports SsizeT
+	Master  Buffer
 }
-type PyMemoryViewObject struct {
-	ObBase      PyVarObject
-	Mbuf        *X_PyManagedBufferObject
-	Hash        PyHashT
+type MemoryViewObject struct {
+	ObBase      VarObject
+	Mbuf        *X_ManagedBufferObject
+	Hash        HashT
 	Flags       c.Int
-	Exports     PySsizeT
-	View        PyBuffer
-	Weakreflist *PyObject
-	ObArray     [1]PySsizeT
+	Exports     SsizeT
+	View        Buffer
+	Weakreflist *Object
+	ObArray     [1]SsizeT
 }
 
-//go:linkname PyMemoryView_Type C.PyMemoryView_Type
-var PyMemoryView_Type PyTypeObject
+//go:linkname MemoryViewType C.PyMemoryView_Type
+var MemoryViewType TypeObject
 
-// llgo:link (*PyObject).PyMemoryView_FromObject C.PyMemoryView_FromObject
-func (self *PyObject) PyMemoryView_FromObject() *PyObject {
-	return self
+type MemoryView struct {
+	X_object
 }
 
-//go:linkname PyMemoryView_FromMemory C.PyMemoryView_FromMemory
-func PyMemoryView_FromMemory(mem *c.Char, size PySsizeT, flags c.Int) *PyObject
+func (self *Object) AsMemoryView() *MemoryView {
+	return (*MemoryView)(unsafe.Pointer(self))
+}
 
-// llgo:link (*PyBuffer).PyMemoryView_FromBuffer C.PyMemoryView_FromBuffer
-func (self *PyBuffer) PyMemoryView_FromBuffer() *PyObject {
+// llgo:link (*MemoryView).FromObject C.PyMemoryView_FromObject
+func (self *MemoryView) FromObject() *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).PyMemoryView_GetContiguous C.PyMemoryView_GetContiguous
-func (self *PyObject) PyMemoryView_GetContiguous(buffertype c.Int, order c.Char) *PyObject {
-	return self
+//go:linkname MemoryViewFromMemory C.PyMemoryView_FromMemory
+func MemoryViewFromMemory(mem *c.Char, size SsizeT, flags c.Int) *Object
+
+// llgo:link (*MemoryView).FromBuffer C.PyMemoryView_FromBuffer
+func (self *MemoryView) FromBuffer() *Object {
+	return nil
+}
+
+// llgo:link (*MemoryView).Contiguous C.PyMemoryView_GetContiguous
+func (self *MemoryView) Contiguous(buffertype c.Int, order c.Char) *Object {
+	return nil
 }

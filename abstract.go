@@ -4,13 +4,13 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
 // Call a callable Python object without any arguments
 //
-// llgo:link (*PyObject).CallNoArgs C.PyObject_CallNoArgs
-func (self *PyObject) CallNoArgs() *PyObject {
+// llgo:link (*Object).CallNoArgs C.PyObject_CallNoArgs
+func (self *Object) CallNoArgs() *Object {
 	return self
 }
 
@@ -23,8 +23,8 @@ func (self *PyObject) CallNoArgs() *PyObject {
 // This is the equivalent of the Python expression:
 // callable(*args, **kwargs).
 //
-// llgo:link (*PyObject).Call C.PyObject_Call
-func (self *PyObject) Call(args *PyObject, kwargs *PyObject) *PyObject {
+// llgo:link (*Object).Call C.PyObject_Call
+func (self *Object) Call(args *Object, kwargs *Object) *Object {
 	return self
 }
 
@@ -36,8 +36,8 @@ func (self *PyObject) Call(args *PyObject, kwargs *PyObject) *PyObject {
 // This is the equivalent of the Python expression:
 // callable(*args).
 //
-// llgo:link (*PyObject).CallObject C.PyObject_CallObject
-func (self *PyObject) CallObject(args *PyObject) *PyObject {
+// llgo:link (*Object).ObjectCallObject C.PyObject_CallObject
+func (self *Object) ObjectCallObject(args *Object) *Object {
 	return self
 }
 
@@ -52,8 +52,8 @@ func (self *PyObject) CallObject(args *PyObject) *PyObject {
 // This is the equivalent of the Python expression:
 // callable(arg1, arg2, ...).
 //
-// llgo:link (*PyObject).CallFunction C.PyObject_CallFunction
-func (self *PyObject) CallFunction(format *c.Char, __llgo_va_list ...any) *PyObject {
+// llgo:link (*Object).CallFunction C.PyObject_CallFunction
+func (self *Object) CallFunction(format *c.Char, __llgo_va_list ...any) *Object {
 	return self
 }
 
@@ -67,8 +67,8 @@ func (self *PyObject) CallFunction(format *c.Char, __llgo_va_list ...any) *PyObj
 // This is the equivalent of the Python expression:
 // obj.name(arg1, arg2, ...).
 //
-// llgo:link (*PyObject).CallMethod C.PyObject_CallMethod
-func (self *PyObject) CallMethod(name *c.Char, format *c.Char, __llgo_va_list ...any) *PyObject {
+// llgo:link (*Object).CallMethod C.PyObject_CallMethod
+func (self *Object) CallMethod(name *c.Char, format *c.Char, __llgo_va_list ...any) *Object {
 	return self
 }
 
@@ -81,8 +81,8 @@ func (self *PyObject) CallMethod(name *c.Char, format *c.Char, __llgo_va_list ..
 // This is the equivalent of the Python expression:
 // callable(arg1, arg2, ...).
 //
-// llgo:link (*PyObject).CallFunctionObjArgs C.PyObject_CallFunctionObjArgs
-func (self *PyObject) CallFunctionObjArgs(__llgo_va_list ...any) *PyObject {
+// llgo:link (*Object).CallFunctionObjArgs C.PyObject_CallFunctionObjArgs
+func (self *Object) CallFunctionObjArgs(__llgo_va_list ...any) *Object {
 	return self
 }
 
@@ -94,8 +94,8 @@ func (self *PyObject) CallFunctionObjArgs(__llgo_va_list ...any) *PyObject {
 //
 // This is the equivalent of the Python expression: obj.name(*args).
 //
-// llgo:link (*PyObject).CallMethodObjArgs C.PyObject_CallMethodObjArgs
-func (self *PyObject) CallMethodObjArgs(name *PyObject, __llgo_va_list ...any) *PyObject {
+// llgo:link (*Object).CallMethodObjArgs C.PyObject_CallMethodObjArgs
+func (self *Object) CallMethodObjArgs(name *Object, __llgo_va_list ...any) *Object {
 	return self
 }
 
@@ -103,28 +103,36 @@ func (self *PyObject) CallMethodObjArgs(name *PyObject, __llgo_va_list ...any) *
 // (For use outside the limited API, this is re-defined as a static inline
 // function in cpython/abstract.h)
 //
-//go:linkname PyVectorcall_NARGS C.PyVectorcall_NARGS
-func PyVectorcall_NARGS(nargsf c.SizeT) PySsizeT
+//go:linkname Vectorcall_NARGS C.PyVectorcall_NARGS
+func Vectorcall_NARGS(nargsf c.SizeT) SsizeT
+
+type Vectorcall struct {
+	X_object
+}
+
+func (self *Object) AsVectorcall() *Vectorcall {
+	return (*Vectorcall)(unsafe.Pointer(self))
+}
 
 // Call "callable" (which must support vectorcall) with positional arguments
 // "tuple" and keyword arguments "dict". "dict" may also be NULL
 //
-// llgo:link (*PyObject).PyVectorcall_Call C.PyVectorcall_Call
-func (self *PyObject) PyVectorcall_Call(tuple *PyObject, dict *PyObject) *PyObject {
-	return self
+// llgo:link (*Vectorcall).Call C.PyVectorcall_Call
+func (self *Vectorcall) Call(tuple *Object, dict *Object) *Object {
+	return nil
 }
 
 // Perform a PEP 590-style vector call on 'callable'
 //
-// llgo:link (*PyObject).Vectorcall C.PyObject_Vectorcall
-func (self *PyObject) Vectorcall(args **PyObject, nargsf c.SizeT, kwnames *PyObject) *PyObject {
+// llgo:link (*Object).Vectorcall C.PyObject_Vectorcall
+func (self *Object) Vectorcall(args **Object, nargsf c.SizeT, kwnames *Object) *Object {
 	return self
 }
 
 // Call the method 'name' on args[0] with arguments in args[1..nargsf-1].
 //
-// llgo:link (*PyObject).VectorcallMethod C.PyObject_VectorcallMethod
-func (self *PyObject) VectorcallMethod(args **PyObject, nargsf c.SizeT, kwnames *PyObject) *PyObject {
+// llgo:link (*Object).VectorcallMethod C.PyObject_VectorcallMethod
+func (self *Object) VectorcallMethod(args **Object, nargsf c.SizeT, kwnames *Object) *Object {
 	return self
 }
 
@@ -135,8 +143,8 @@ func (self *PyObject) VectorcallMethod(args **PyObject, nargsf c.SizeT, kwnames 
 //
 // This is equivalent to the Python expression: type(o)
 //
-// llgo:link (*PyObject).Type C.PyObject_Type
-func (self *PyObject) Type() *PyObject {
+// llgo:link (*Object).Type C.PyObject_Type
+func (self *Object) Type() *Object {
 	return self
 }
 
@@ -147,13 +155,13 @@ func (self *PyObject) Type() *PyObject {
 //
 // This is the equivalent to the Python expression: len(o)
 //
-// llgo:link (*PyObject).Size C.PyObject_Size
-func (self *PyObject) Size() PySsizeT {
+// llgo:link (*Object).Size C.PyObject_Size
+func (self *Object) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*PyObject).Length C.PyObject_Length
-func (self *PyObject) Length() PySsizeT {
+// llgo:link (*Object).Length C.PyObject_Length
+func (self *Object) Length() SsizeT {
 	return 0
 }
 
@@ -162,8 +170,8 @@ func (self *PyObject) Length() PySsizeT {
 //
 // This is the equivalent of the Python expression: o[key]
 //
-// llgo:link (*PyObject).Item C.PyObject_GetItem
-func (self *PyObject) Item(key *PyObject) *PyObject {
+// llgo:link (*Object).Item C.PyObject_GetItem
+func (self *Object) Item(key *Object) *Object {
 	return self
 }
 
@@ -173,8 +181,8 @@ func (self *PyObject) Item(key *PyObject) *PyObject {
 //
 // This is the equivalent of the Python statement: o[key]=v.
 //
-// llgo:link (*PyObject).SetItem C.PyObject_SetItem
-func (self *PyObject) SetItem(key *PyObject, v *PyObject) c.Int {
+// llgo:link (*Object).SetItem C.PyObject_SetItem
+func (self *Object) SetItem(key *Object, v *Object) c.Int {
 	return 0
 }
 
@@ -183,8 +191,8 @@ func (self *PyObject) SetItem(key *PyObject, v *PyObject) c.Int {
 //
 // This is equivalent to the Python statement: del o[key].
 //
-// llgo:link (*PyObject).DelItemString C.PyObject_DelItemString
-func (self *PyObject) DelItemString(key *c.Char) c.Int {
+// llgo:link (*Object).DelItemString C.PyObject_DelItemString
+func (self *Object) DelItemString(key *c.Char) c.Int {
 	return 0
 }
 
@@ -193,16 +201,16 @@ func (self *PyObject) DelItemString(key *c.Char) c.Int {
 //
 // This is the equivalent of the Python statement: del o[key].
 //
-// llgo:link (*PyObject).DelItem C.PyObject_DelItem
-func (self *PyObject) DelItem(key *PyObject) c.Int {
+// llgo:link (*Object).DelItem C.PyObject_DelItem
+func (self *Object) DelItem(key *Object) c.Int {
 	return 0
 }
 
 // Takes an arbitrary object and returns the result of calling
 // obj.__format__(format_spec).
 //
-// llgo:link (*PyObject).Format C.PyObject_Format
-func (self *PyObject) Format(format_spec *PyObject) *PyObject {
+// llgo:link (*Object).Format C.PyObject_Format
+func (self *Object) Format(format_spec *Object) *Object {
 	return self
 }
 
@@ -210,8 +218,8 @@ func (self *PyObject) Format(format_spec *PyObject) *PyObject {
 // This is typically a new iterator but if the argument is an iterator, this
 // returns itself.
 //
-// llgo:link (*PyObject).Iter C.PyObject_GetIter
-func (self *PyObject) Iter() *PyObject {
+// llgo:link (*Object).Iter C.PyObject_GetIter
+func (self *Object) Iter() *Object {
 	return self
 }
 
@@ -219,26 +227,42 @@ func (self *PyObject) Iter() *PyObject {
 // This is typically a new iterator but if the argument is an AsyncIterator,
 // this returns itself.
 //
-// llgo:link (*PyObject).AIter C.PyObject_GetAIter
-func (self *PyObject) AIter() *PyObject {
+// llgo:link (*Object).AIter C.PyObject_GetAIter
+func (self *Object) AIter() *Object {
 	return self
+}
+
+type Iter struct {
+	X_object
+}
+
+func (self *Object) AsIter() *Iter {
+	return (*Iter)(unsafe.Pointer(self))
 }
 
 // Returns non-zero if the object 'obj' provides iterator protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyIter_Check C.PyIter_Check
-func (self *PyObject) PyIter_Check() c.Int {
+// llgo:link (*Iter).Check C.PyIter_Check
+func (self *Iter) Check() c.Int {
 	return 0
+}
+
+type AIter struct {
+	X_object
+}
+
+func (self *Object) AsAIter() *AIter {
+	return (*AIter)(unsafe.Pointer(self))
 }
 
 // Returns non-zero if the object 'obj' provides AsyncIterator protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyAIter_Check C.PyAIter_Check
-func (self *PyObject) PyAIter_Check() c.Int {
+// llgo:link (*AIter).Check C.PyAIter_Check
+func (self *AIter) Check() c.Int {
 	return 0
 }
 
@@ -246,8 +270,8 @@ func (self *PyObject) PyAIter_Check() c.Int {
 // Return 0 and set 'item' to NULL when there are no remaining values.
 // Return -1, set 'item' to NULL and set an exception on error.
 //
-// llgo:link (*PyObject).PyIter_NextItem C.PyIter_NextItem
-func (self *PyObject) PyIter_NextItem(item **PyObject) c.Int {
+// llgo:link (*Iter).NextItem C.PyIter_NextItem
+func (self *Iter) NextItem(item **Object) c.Int {
 	return 0
 }
 
@@ -261,9 +285,9 @@ func (self *PyObject) PyIter_NextItem(item **PyObject) c.Int {
 //
 // Prefer PyIter_NextItem() instead.
 //
-// llgo:link (*PyObject).PyIter_Next C.PyIter_Next
-func (self *PyObject) PyIter_Next() *PyObject {
-	return self
+// llgo:link (*Iter).Next C.PyIter_Next
+func (self *Iter) Next() *Object {
+	return nil
 }
 
 // Takes generator, coroutine or iterator object and sends the value into it.
@@ -275,17 +299,25 @@ func (self *PyObject) PyIter_Next() *PyObject {
 // - PYGEN_NEXT (1) if generator has yielded.
 // 'result' parameter is filled with yielded value.
 //
-// llgo:link (*PyObject).PyIter_Send C.PyIter_Send
-func (self *PyObject) PyIter_Send(_llcppg_param2 *PyObject, _llcppg_param3 **PyObject) PySendResult {
+// llgo:link (*Iter).Send C.PyIter_Send
+func (self *Iter) Send(_llcppg_param2 *Object, _llcppg_param3 **Object) SendResult {
 	return 0
+}
+
+type Number struct {
+	X_object
+}
+
+func (self *Object) AsNumber() *Number {
+	return (*Number)(unsafe.Pointer(self))
 }
 
 // Returns 1 if the object 'o' provides numeric protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyNumber_Check C.PyNumber_Check
-func (self *PyObject) PyNumber_Check() c.Int {
+// llgo:link (*Number).Check C.PyNumber_Check
+func (self *Number) Check() c.Int {
 	return 0
 }
 
@@ -293,34 +325,34 @@ func (self *PyObject) PyNumber_Check() c.Int {
 //
 // This is the equivalent of the Python expression: o1 + o2.
 //
-// llgo:link (*PyObject).PyNumber_Add C.PyNumber_Add
-func (self *PyObject) PyNumber_Add(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Add C.PyNumber_Add
+func (self *Number) Add(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of subtracting o2 from o1, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 - o2.
 //
-// llgo:link (*PyObject).PyNumber_Subtract C.PyNumber_Subtract
-func (self *PyObject) PyNumber_Subtract(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Subtract C.PyNumber_Subtract
+func (self *Number) Subtract(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of multiplying o1 and o2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 * o2.
 //
-// llgo:link (*PyObject).PyNumber_Multiply C.PyNumber_Multiply
-func (self *PyObject) PyNumber_Multiply(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Multiply C.PyNumber_Multiply
+func (self *Number) Multiply(o2 *Object) *Object {
+	return nil
 }
 
 // This is the equivalent of the Python expression: o1 @ o2.
 //
-// llgo:link (*PyObject).PyNumber_MatrixMultiply C.PyNumber_MatrixMultiply
-func (self *PyObject) PyNumber_MatrixMultiply(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).MatrixMultiply C.PyNumber_MatrixMultiply
+func (self *Number) MatrixMultiply(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of dividing o1 by o2 giving an integral result,
@@ -328,9 +360,9 @@ func (self *PyObject) PyNumber_MatrixMultiply(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 // o2.
 //
-// llgo:link (*PyObject).PyNumber_FloorDivide C.PyNumber_FloorDivide
-func (self *PyObject) PyNumber_FloorDivide(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).FloorDivide C.PyNumber_FloorDivide
+func (self *Number) FloorDivide(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of dividing o1 by o2 giving a float result, or NULL on
@@ -338,18 +370,18 @@ func (self *PyObject) PyNumber_FloorDivide(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 / o2.
 //
-// llgo:link (*PyObject).PyNumber_TrueDivide C.PyNumber_TrueDivide
-func (self *PyObject) PyNumber_TrueDivide(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).TrueDivide C.PyNumber_TrueDivide
+func (self *Number) TrueDivide(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the remainder of dividing o1 by o2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 % o2.
 //
-// llgo:link (*PyObject).PyNumber_Remainder C.PyNumber_Remainder
-func (self *PyObject) PyNumber_Remainder(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Remainder C.PyNumber_Remainder
+func (self *Number) Remainder(o2 *Object) *Object {
+	return nil
 }
 
 // See the built-in function divmod.
@@ -358,9 +390,9 @@ func (self *PyObject) PyNumber_Remainder(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: divmod(o1, o2).
 //
-// llgo:link (*PyObject).PyNumber_Divmod C.PyNumber_Divmod
-func (self *PyObject) PyNumber_Divmod(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Divmod C.PyNumber_Divmod
+func (self *Number) Divmod(o2 *Object) *Object {
+	return nil
 }
 
 // See the built-in function pow. Returns NULL on failure.
@@ -368,54 +400,54 @@ func (self *PyObject) PyNumber_Divmod(o2 *PyObject) *PyObject {
 // This is the equivalent of the Python expression: pow(o1, o2, o3),
 // where o3 is optional.
 //
-// llgo:link (*PyObject).PyNumber_Power C.PyNumber_Power
-func (self *PyObject) PyNumber_Power(o2 *PyObject, o3 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Power C.PyNumber_Power
+func (self *Number) Power(o2 *Object, o3 *Object) *Object {
+	return nil
 }
 
 // Returns the negation of o on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: -o.
 //
-// llgo:link (*PyObject).PyNumber_Negative C.PyNumber_Negative
-func (self *PyObject) PyNumber_Negative() *PyObject {
-	return self
+// llgo:link (*Number).Negative C.PyNumber_Negative
+func (self *Number) Negative() *Object {
+	return nil
 }
 
 // Returns the positive of o on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: +o.
 //
-// llgo:link (*PyObject).PyNumber_Positive C.PyNumber_Positive
-func (self *PyObject) PyNumber_Positive() *PyObject {
-	return self
+// llgo:link (*Number).Positive C.PyNumber_Positive
+func (self *Number) Positive() *Object {
+	return nil
 }
 
 // Returns the absolute value of 'o', or NULL on failure.
 //
 // This is the equivalent of the Python expression: abs(o).
 //
-// llgo:link (*PyObject).PyNumber_Absolute C.PyNumber_Absolute
-func (self *PyObject) PyNumber_Absolute() *PyObject {
-	return self
+// llgo:link (*Number).Absolute C.PyNumber_Absolute
+func (self *Number) Absolute() *Object {
+	return nil
 }
 
 // Returns the bitwise negation of 'o' on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: ~o.
 //
-// llgo:link (*PyObject).PyNumber_Invert C.PyNumber_Invert
-func (self *PyObject) PyNumber_Invert() *PyObject {
-	return self
+// llgo:link (*Number).Invert C.PyNumber_Invert
+func (self *Number) Invert() *Object {
+	return nil
 }
 
 // Returns the result of left shifting o1 by o2 on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 << o2.
 //
-// llgo:link (*PyObject).PyNumber_Lshift C.PyNumber_Lshift
-func (self *PyObject) PyNumber_Lshift(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Lshift C.PyNumber_Lshift
+func (self *Number) Lshift(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of right shifting o1 by o2 on success, or NULL on
@@ -423,9 +455,9 @@ func (self *PyObject) PyNumber_Lshift(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 >> o2.
 //
-// llgo:link (*PyObject).PyNumber_Rshift C.PyNumber_Rshift
-func (self *PyObject) PyNumber_Rshift(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Rshift C.PyNumber_Rshift
+func (self *Number) Rshift(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of bitwise and of o1 and o2 on success, or NULL on
@@ -433,18 +465,18 @@ func (self *PyObject) PyNumber_Rshift(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 & o2.
 //
-// llgo:link (*PyObject).PyNumber_And C.PyNumber_And
-func (self *PyObject) PyNumber_And(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).And C.PyNumber_And
+func (self *Number) And(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the bitwise exclusive or of o1 by o2 on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 ^ o2.
 //
-// llgo:link (*PyObject).PyNumber_Xor C.PyNumber_Xor
-func (self *PyObject) PyNumber_Xor(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Xor C.PyNumber_Xor
+func (self *Number) Xor(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of bitwise or on o1 and o2 on success, or NULL on
@@ -452,25 +484,33 @@ func (self *PyObject) PyNumber_Xor(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 | o2.
 //
-// llgo:link (*PyObject).PyNumber_Or C.PyNumber_Or
-func (self *PyObject) PyNumber_Or(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).Or C.PyNumber_Or
+func (self *Number) Or(o2 *Object) *Object {
+	return nil
+}
+
+type Index struct {
+	X_object
+}
+
+func (self *Object) AsIndex() *Index {
+	return (*Index)(unsafe.Pointer(self))
 }
 
 // Returns 1 if obj is an index integer (has the nb_index slot of the
 // tp_as_number structure filled in), and 0 otherwise.
 //
-// llgo:link (*PyObject).PyIndex_Check C.PyIndex_Check
-func (self *PyObject) PyIndex_Check() c.Int {
+// llgo:link (*Index).Check C.PyIndex_Check
+func (self *Index) Check() c.Int {
 	return 0
 }
 
 // Returns the object 'o' converted to a Python int, or NULL with an exception
 // raised on failure.
 //
-// llgo:link (*PyObject).PyNumber_Index C.PyNumber_Index
-func (self *PyObject) PyNumber_Index() *PyObject {
-	return self
+// llgo:link (*Number).Index C.PyNumber_Index
+func (self *Number) Index() *Object {
+	return nil
 }
 
 // Returns the object 'o' converted to Py_ssize_t by going through
@@ -480,8 +520,8 @@ func (self *PyObject) PyNumber_Index() *PyObject {
 // second argument 'exc' is the error-type to return.  If it is NULL, then the
 // overflow error is cleared and the value is clipped.
 //
-// llgo:link (*PyObject).PyNumberAsSsizeT C.PyNumber_AsSsize_t
-func (self *PyObject) PyNumberAsSsizeT(exc *PyObject) PySsizeT {
+// llgo:link (*Number).AsSsizeT C.PyNumber_AsSsize_t
+func (self *Number) AsSsizeT(exc *Object) SsizeT {
 	return 0
 }
 
@@ -490,9 +530,9 @@ func (self *PyObject) PyNumberAsSsizeT(exc *PyObject) PySsizeT {
 //
 // This is the equivalent of the Python expression: int(o).
 //
-// llgo:link (*PyObject).PyNumber_Long C.PyNumber_Long
-func (self *PyObject) PyNumber_Long() *PyObject {
-	return self
+// llgo:link (*Number).Long C.PyNumber_Long
+func (self *Number) Long() *Object {
+	return nil
 }
 
 // Returns the object 'o' converted to a float object on success, or NULL
@@ -500,9 +540,9 @@ func (self *PyObject) PyNumber_Long() *PyObject {
 //
 // This is the equivalent of the Python expression: float(o).
 //
-// llgo:link (*PyObject).PyNumber_Float C.PyNumber_Float
-func (self *PyObject) PyNumber_Float() *PyObject {
-	return self
+// llgo:link (*Number).Float C.PyNumber_Float
+func (self *Number) Float() *Object {
+	return nil
 }
 
 // Returns the result of adding o2 to o1, possibly in-place, or NULL
@@ -510,9 +550,9 @@ func (self *PyObject) PyNumber_Float() *PyObject {
 //
 // This is the equivalent of the Python expression: o1 += o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceAdd C.PyNumber_InPlaceAdd
-func (self *PyObject) PyNumber_InPlaceAdd(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceAdd C.PyNumber_InPlaceAdd
+func (self *Number) InPlaceAdd(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of subtracting o2 from o1, possibly in-place or
@@ -520,9 +560,9 @@ func (self *PyObject) PyNumber_InPlaceAdd(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 -= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceSubtract C.PyNumber_InPlaceSubtract
-func (self *PyObject) PyNumber_InPlaceSubtract(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceSubtract C.PyNumber_InPlaceSubtract
+func (self *Number) InPlaceSubtract(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of multiplying o1 by o2, possibly in-place, or NULL on
@@ -530,16 +570,16 @@ func (self *PyObject) PyNumber_InPlaceSubtract(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 *= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceMultiply C.PyNumber_InPlaceMultiply
-func (self *PyObject) PyNumber_InPlaceMultiply(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceMultiply C.PyNumber_InPlaceMultiply
+func (self *Number) InPlaceMultiply(o2 *Object) *Object {
+	return nil
 }
 
 // This is the equivalent of the Python expression: o1 @= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceMatrixMultiply C.PyNumber_InPlaceMatrixMultiply
-func (self *PyObject) PyNumber_InPlaceMatrixMultiply(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceMatrixMultiply C.PyNumber_InPlaceMatrixMultiply
+func (self *Number) InPlaceMatrixMultiply(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of dividing o1 by o2 giving an integral result, possibly
@@ -547,9 +587,9 @@ func (self *PyObject) PyNumber_InPlaceMatrixMultiply(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 /= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceFloorDivide C.PyNumber_InPlaceFloorDivide
-func (self *PyObject) PyNumber_InPlaceFloorDivide(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceFloorDivide C.PyNumber_InPlaceFloorDivide
+func (self *Number) InPlaceFloorDivide(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of dividing o1 by o2 giving a float result, possibly
@@ -557,9 +597,9 @@ func (self *PyObject) PyNumber_InPlaceFloorDivide(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 /= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceTrueDivide C.PyNumber_InPlaceTrueDivide
-func (self *PyObject) PyNumber_InPlaceTrueDivide(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceTrueDivide C.PyNumber_InPlaceTrueDivide
+func (self *Number) InPlaceTrueDivide(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the remainder of dividing o1 by o2, possibly in-place, or NULL on
@@ -567,9 +607,9 @@ func (self *PyObject) PyNumber_InPlaceTrueDivide(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 %= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceRemainder C.PyNumber_InPlaceRemainder
-func (self *PyObject) PyNumber_InPlaceRemainder(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceRemainder C.PyNumber_InPlaceRemainder
+func (self *Number) InPlaceRemainder(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of raising o1 to the power of o2, possibly in-place,
@@ -578,9 +618,9 @@ func (self *PyObject) PyNumber_InPlaceRemainder(o2 *PyObject) *PyObject {
 // This is the equivalent of the Python expression: o1 **= o2,
 // or o1 = pow(o1, o2, o3) if o3 is present.
 //
-// llgo:link (*PyObject).PyNumber_InPlacePower C.PyNumber_InPlacePower
-func (self *PyObject) PyNumber_InPlacePower(o2 *PyObject, o3 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlacePower C.PyNumber_InPlacePower
+func (self *Number) InPlacePower(o2 *Object, o3 *Object) *Object {
+	return nil
 }
 
 // Returns the result of left shifting o1 by o2, possibly in-place, or NULL
@@ -588,9 +628,9 @@ func (self *PyObject) PyNumber_InPlacePower(o2 *PyObject, o3 *PyObject) *PyObjec
 //
 // This is the equivalent of the Python expression: o1 <<= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceLshift C.PyNumber_InPlaceLshift
-func (self *PyObject) PyNumber_InPlaceLshift(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceLshift C.PyNumber_InPlaceLshift
+func (self *Number) InPlaceLshift(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of right shifting o1 by o2, possibly in-place or NULL
@@ -598,9 +638,9 @@ func (self *PyObject) PyNumber_InPlaceLshift(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 >>= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceRshift C.PyNumber_InPlaceRshift
-func (self *PyObject) PyNumber_InPlaceRshift(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceRshift C.PyNumber_InPlaceRshift
+func (self *Number) InPlaceRshift(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of bitwise and of o1 and o2, possibly in-place, or NULL
@@ -608,9 +648,9 @@ func (self *PyObject) PyNumber_InPlaceRshift(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 &= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceAnd C.PyNumber_InPlaceAnd
-func (self *PyObject) PyNumber_InPlaceAnd(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceAnd C.PyNumber_InPlaceAnd
+func (self *Number) InPlaceAnd(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the bitwise exclusive or of o1 by o2, possibly in-place, or NULL
@@ -618,9 +658,9 @@ func (self *PyObject) PyNumber_InPlaceAnd(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 ^= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceXor C.PyNumber_InPlaceXor
-func (self *PyObject) PyNumber_InPlaceXor(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceXor C.PyNumber_InPlaceXor
+func (self *Number) InPlaceXor(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the result of bitwise or of o1 and o2, possibly in-place,
@@ -628,9 +668,9 @@ func (self *PyObject) PyNumber_InPlaceXor(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 |= o2.
 //
-// llgo:link (*PyObject).PyNumber_InPlaceOr C.PyNumber_InPlaceOr
-func (self *PyObject) PyNumber_InPlaceOr(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Number).InPlaceOr C.PyNumber_InPlaceOr
+func (self *Number) InPlaceOr(o2 *Object) *Object {
+	return nil
 }
 
 // Returns the integer n converted to a string with a base, with a base
@@ -638,9 +678,17 @@ func (self *PyObject) PyNumber_InPlaceOr(o2 *PyObject) *PyObject {
 //
 // If n is not an int object, it is converted with PyNumber_Index first.
 //
-// llgo:link (*PyObject).PyNumber_ToBase C.PyNumber_ToBase
-func (self *PyObject) PyNumber_ToBase(base c.Int) *PyObject {
-	return self
+// llgo:link (*Number).ToBase C.PyNumber_ToBase
+func (self *Number) ToBase(base c.Int) *Object {
+	return nil
+}
+
+type Sequence struct {
+	X_object
+}
+
+func (self *Object) AsSequence() *Sequence {
+	return (*Sequence)(unsafe.Pointer(self))
 }
 
 // Return 1 if the object provides sequence protocol, and zero
@@ -648,20 +696,20 @@ func (self *PyObject) PyNumber_ToBase(base c.Int) *PyObject {
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PySequence_Check C.PySequence_Check
-func (self *PyObject) PySequence_Check() c.Int {
+// llgo:link (*Sequence).Check C.PySequence_Check
+func (self *Sequence) Check() c.Int {
 	return 0
 }
 
 // Return the size of sequence object o, or -1 on failure.
 //
-// llgo:link (*PyObject).PySequence_Size C.PySequence_Size
-func (self *PyObject) PySequence_Size() PySsizeT {
+// llgo:link (*Sequence).Size C.PySequence_Size
+func (self *Sequence) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*PyObject).PySequence_Length C.PySequence_Length
-func (self *PyObject) PySequence_Length() PySsizeT {
+// llgo:link (*Sequence).Length C.PySequence_Length
+func (self *Sequence) Length() SsizeT {
 	return 0
 }
 
@@ -669,9 +717,9 @@ func (self *PyObject) PySequence_Length() PySsizeT {
 //
 // This is the equivalent of the Python expression: o1 + o2.
 //
-// llgo:link (*PyObject).PySequence_Concat C.PySequence_Concat
-func (self *PyObject) PySequence_Concat(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Sequence).Concat C.PySequence_Concat
+func (self *Sequence) Concat(o2 *Object) *Object {
+	return nil
 }
 
 // Return the result of repeating sequence object 'o' 'count' times,
@@ -679,27 +727,27 @@ func (self *PyObject) PySequence_Concat(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o * count.
 //
-// llgo:link (*PyObject).PySequence_Repeat C.PySequence_Repeat
-func (self *PyObject) PySequence_Repeat(count PySsizeT) *PyObject {
-	return self
+// llgo:link (*Sequence).Repeat C.PySequence_Repeat
+func (self *Sequence) Repeat(count SsizeT) *Object {
+	return nil
 }
 
 // Return the ith element of o, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[i].
 //
-// llgo:link (*PyObject).PySequence_GetItem C.PySequence_GetItem
-func (self *PyObject) PySequence_GetItem(i PySsizeT) *PyObject {
-	return self
+// llgo:link (*Sequence).Item C.PySequence_GetItem
+func (self *Sequence) Item(i SsizeT) *Object {
+	return nil
 }
 
 // Return the slice of sequence object o between i1 and i2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[i1:i2].
 //
-// llgo:link (*PyObject).PySequence_GetSlice C.PySequence_GetSlice
-func (self *PyObject) PySequence_GetSlice(i1 PySsizeT, i2 PySsizeT) *PyObject {
-	return self
+// llgo:link (*Sequence).Slice C.PySequence_GetSlice
+func (self *Sequence) Slice(i1 SsizeT, i2 SsizeT) *Object {
+	return nil
 }
 
 // Assign object 'v' to the ith element of the sequence 'o'. Raise an exception
@@ -707,8 +755,8 @@ func (self *PyObject) PySequence_GetSlice(i1 PySsizeT, i2 PySsizeT) *PyObject {
 //
 // This is the equivalent of the Python statement o[i] = v.
 //
-// llgo:link (*PyObject).PySequence_SetItem C.PySequence_SetItem
-func (self *PyObject) PySequence_SetItem(i PySsizeT, v *PyObject) c.Int {
+// llgo:link (*Sequence).SetItem C.PySequence_SetItem
+func (self *Sequence) SetItem(i SsizeT, v *Object) c.Int {
 	return 0
 }
 
@@ -716,8 +764,8 @@ func (self *PyObject) PySequence_SetItem(i PySsizeT, v *PyObject) c.Int {
 //
 // This is the equivalent of the Python statement: del o[i].
 //
-// llgo:link (*PyObject).PySequence_DelItem C.PySequence_DelItem
-func (self *PyObject) PySequence_DelItem(i PySsizeT) c.Int {
+// llgo:link (*Sequence).DelItem C.PySequence_DelItem
+func (self *Sequence) DelItem(i SsizeT) c.Int {
 	return 0
 }
 
@@ -726,8 +774,8 @@ func (self *PyObject) PySequence_DelItem(i PySsizeT) c.Int {
 //
 // This is the equivalent of the Python statement: o[i1:i2] = v.
 //
-// llgo:link (*PyObject).PySequence_SetSlice C.PySequence_SetSlice
-func (self *PyObject) PySequence_SetSlice(i1 PySsizeT, i2 PySsizeT, v *PyObject) c.Int {
+// llgo:link (*Sequence).SetSlice C.PySequence_SetSlice
+func (self *Sequence) SetSlice(i1 SsizeT, i2 SsizeT, v *Object) c.Int {
 	return 0
 }
 
@@ -736,8 +784,8 @@ func (self *PyObject) PySequence_SetSlice(i1 PySsizeT, i2 PySsizeT, v *PyObject)
 //
 // This is the equivalent of the Python statement: del o[i1:i2].
 //
-// llgo:link (*PyObject).PySequence_DelSlice C.PySequence_DelSlice
-func (self *PyObject) PySequence_DelSlice(i1 PySsizeT, i2 PySsizeT) c.Int {
+// llgo:link (*Sequence).DelSlice C.PySequence_DelSlice
+func (self *Sequence) DelSlice(i1 SsizeT, i2 SsizeT) c.Int {
 	return 0
 }
 
@@ -745,17 +793,17 @@ func (self *PyObject) PySequence_DelSlice(i1 PySsizeT, i2 PySsizeT) c.Int {
 //
 // This is equivalent to the Python expression: tuple(o).
 //
-// llgo:link (*PyObject).PySequence_Tuple C.PySequence_Tuple
-func (self *PyObject) PySequence_Tuple() *PyObject {
-	return self
+// llgo:link (*Sequence).Tuple C.PySequence_Tuple
+func (self *Sequence) Tuple() *Object {
+	return nil
 }
 
 // Returns the sequence 'o' as a list on success, and NULL on failure.
 // This is equivalent to the Python expression: list(o)
 //
-// llgo:link (*PyObject).PySequence_List C.PySequence_List
-func (self *PyObject) PySequence_List() *PyObject {
-	return self
+// llgo:link (*Sequence).List C.PySequence_List
+func (self *Sequence) List() *Object {
+	return nil
 }
 
 // Return the sequence 'o' as a list, unless it's already a tuple or list.
@@ -766,9 +814,9 @@ func (self *PyObject) PySequence_List() *PyObject {
 // Returns NULL on failure.  If the object does not support iteration, raises a
 // TypeError exception with 'm' as the message text.
 //
-// llgo:link (*PyObject).PySequence_Fast C.PySequence_Fast
-func (self *PyObject) PySequence_Fast(m *c.Char) *PyObject {
-	return self
+// llgo:link (*Sequence).Fast C.PySequence_Fast
+func (self *Sequence) Fast(m *c.Char) *Object {
+	return nil
 }
 
 // Return the number of occurrences on value on 'o', that is, return
@@ -777,8 +825,8 @@ func (self *PyObject) PySequence_Fast(m *c.Char) *PyObject {
 // On failure, return -1.  This is equivalent to the Python expression:
 // o.count(value).
 //
-// llgo:link (*PyObject).PySequence_Count C.PySequence_Count
-func (self *PyObject) PySequence_Count(value *PyObject) PySsizeT {
+// llgo:link (*Sequence).Count C.PySequence_Count
+func (self *Sequence) Count(value *Object) SsizeT {
 	return 0
 }
 
@@ -787,8 +835,8 @@ func (self *PyObject) PySequence_Count(value *PyObject) PySsizeT {
 //
 // Use __contains__ if possible, else _PySequence_IterSearch().
 //
-// llgo:link (*PyObject).PySequence_Contains C.PySequence_Contains
-func (self *PyObject) PySequence_Contains(ob *PyObject) c.Int {
+// llgo:link (*Sequence).Contains C.PySequence_Contains
+func (self *Sequence) Contains(ob *Object) c.Int {
 	return 0
 }
 
@@ -797,8 +845,8 @@ func (self *PyObject) PySequence_Contains(ob *PyObject) c.Int {
 //
 // This is equivalent to the Python expression: value in o.
 //
-// llgo:link (*PyObject).PySequence_In C.PySequence_In
-func (self *PyObject) PySequence_In(value *PyObject) c.Int {
+// llgo:link (*Sequence).In C.PySequence_In
+func (self *Sequence) In(value *Object) c.Int {
 	return 0
 }
 
@@ -807,8 +855,8 @@ func (self *PyObject) PySequence_In(value *PyObject) c.Int {
 //
 // This is equivalent to the Python expression: o.index(value).
 //
-// llgo:link (*PyObject).PySequence_Index C.PySequence_Index
-func (self *PyObject) PySequence_Index(value *PyObject) PySsizeT {
+// llgo:link (*Sequence).Index C.PySequence_Index
+func (self *Sequence) Index(value *Object) SsizeT {
 	return 0
 }
 
@@ -817,9 +865,9 @@ func (self *PyObject) PySequence_Index(value *PyObject) PySsizeT {
 //
 // This is the equivalent of the Python expression: o1 += o2.
 //
-// llgo:link (*PyObject).PySequence_InPlaceConcat C.PySequence_InPlaceConcat
-func (self *PyObject) PySequence_InPlaceConcat(o2 *PyObject) *PyObject {
-	return self
+// llgo:link (*Sequence).InPlaceConcat C.PySequence_InPlaceConcat
+func (self *Sequence) InPlaceConcat(o2 *Object) *Object {
+	return nil
 }
 
 // Repeat sequence 'o' by 'count', in-place when possible. Return the resulting
@@ -827,30 +875,38 @@ func (self *PyObject) PySequence_InPlaceConcat(o2 *PyObject) *PyObject {
 //
 // This is the equivalent of the Python expression: o1 *= count.
 //
-// llgo:link (*PyObject).PySequence_InPlaceRepeat C.PySequence_InPlaceRepeat
-func (self *PyObject) PySequence_InPlaceRepeat(count PySsizeT) *PyObject {
-	return self
+// llgo:link (*Sequence).InPlaceRepeat C.PySequence_InPlaceRepeat
+func (self *Sequence) InPlaceRepeat(count SsizeT) *Object {
+	return nil
+}
+
+type Mapping struct {
+	X_object
+}
+
+func (self *Object) AsMapping() *Mapping {
+	return (*Mapping)(unsafe.Pointer(self))
 }
 
 // Return 1 if the object provides mapping protocol, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyMapping_Check C.PyMapping_Check
-func (self *PyObject) PyMapping_Check() c.Int {
+// llgo:link (*Mapping).Check C.PyMapping_Check
+func (self *Mapping) Check() c.Int {
 	return 0
 }
 
 // Returns the number of keys in mapping object 'o' on success, and -1 on
 // failure. This is equivalent to the Python expression: len(o).
 //
-// llgo:link (*PyObject).PyMapping_Size C.PyMapping_Size
-func (self *PyObject) PyMapping_Size() PySsizeT {
+// llgo:link (*Mapping).Size C.PyMapping_Size
+func (self *Mapping) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*PyObject).PyMapping_Length C.PyMapping_Length
-func (self *PyObject) PyMapping_Length() PySsizeT {
+// llgo:link (*Mapping).Length C.PyMapping_Length
+func (self *Mapping) Length() SsizeT {
 	return 0
 }
 
@@ -861,8 +917,8 @@ func (self *PyObject) PyMapping_Length() PySsizeT {
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyMapping_HasKeyString C.PyMapping_HasKeyString
-func (self *PyObject) PyMapping_HasKeyString(key *c.Char) c.Int {
+// llgo:link (*Mapping).HasKeyString C.PyMapping_HasKeyString
+func (self *Mapping) HasKeyString(key *c.Char) c.Int {
 	return 0
 }
 
@@ -872,8 +928,8 @@ func (self *PyObject) PyMapping_HasKeyString(key *c.Char) c.Int {
 //
 // This function always succeeds.
 //
-// llgo:link (*PyObject).PyMapping_HasKey C.PyMapping_HasKey
-func (self *PyObject) PyMapping_HasKey(key *PyObject) c.Int {
+// llgo:link (*Mapping).HasKey C.PyMapping_HasKey
+func (self *Mapping) HasKey(key *Object) c.Int {
 	return 0
 }
 
@@ -881,8 +937,8 @@ func (self *PyObject) PyMapping_HasKey(key *PyObject) c.Int {
 // This is equivalent to the Python expression: key in o.
 // On failure, return -1.
 //
-// llgo:link (*PyObject).PyMapping_HasKeyWithError C.PyMapping_HasKeyWithError
-func (self *PyObject) PyMapping_HasKeyWithError(key *PyObject) c.Int {
+// llgo:link (*Mapping).HasKeyWithError C.PyMapping_HasKeyWithError
+func (self *Mapping) HasKeyWithError(key *Object) c.Int {
 	return 0
 }
 
@@ -890,52 +946,52 @@ func (self *PyObject) PyMapping_HasKeyWithError(key *PyObject) c.Int {
 // This is equivalent to the Python expression: key in o.
 // On failure, return -1.
 //
-// llgo:link (*PyObject).PyMapping_HasKeyStringWithError C.PyMapping_HasKeyStringWithError
-func (self *PyObject) PyMapping_HasKeyStringWithError(key *c.Char) c.Int {
+// llgo:link (*Mapping).HasKeyStringWithError C.PyMapping_HasKeyStringWithError
+func (self *Mapping) HasKeyStringWithError(key *c.Char) c.Int {
 	return 0
 }
 
 // On success, return a list of the keys in mapping object 'o'.
 // On failure, return NULL.
 //
-// llgo:link (*PyObject).PyMapping_Keys C.PyMapping_Keys
-func (self *PyObject) PyMapping_Keys() *PyObject {
-	return self
+// llgo:link (*Mapping).Keys C.PyMapping_Keys
+func (self *Mapping) Keys() *Object {
+	return nil
 }
 
 // On success, return a list of the values in mapping object 'o'.
 // On failure, return NULL.
 //
-// llgo:link (*PyObject).PyMapping_Values C.PyMapping_Values
-func (self *PyObject) PyMapping_Values() *PyObject {
-	return self
+// llgo:link (*Mapping).Values C.PyMapping_Values
+func (self *Mapping) Values() *Object {
+	return nil
 }
 
 // On success, return a list of the items in mapping object 'o',
 // where each item is a tuple containing a key-value pair. On failure, return
 // NULL.
 //
-// llgo:link (*PyObject).PyMapping_Items C.PyMapping_Items
-func (self *PyObject) PyMapping_Items() *PyObject {
-	return self
+// llgo:link (*Mapping).Items C.PyMapping_Items
+func (self *Mapping) Items() *Object {
+	return nil
 }
 
 // Return element of 'o' corresponding to the string 'key' or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[key].
 //
-// llgo:link (*PyObject).PyMapping_GetItemString C.PyMapping_GetItemString
-func (self *PyObject) PyMapping_GetItemString(key *c.Char) *PyObject {
-	return self
+// llgo:link (*Mapping).ItemString C.PyMapping_GetItemString
+func (self *Mapping) ItemString(key *c.Char) *Object {
+	return nil
 }
 
-// llgo:link (*PyObject).PyMapping_GetOptionalItem C.PyMapping_GetOptionalItem
-func (self *PyObject) PyMapping_GetOptionalItem(_llcppg_param2 *PyObject, _llcppg_param3 **PyObject) c.Int {
+// llgo:link (*Mapping).OptionalItem C.PyMapping_GetOptionalItem
+func (self *Mapping) OptionalItem(_llcppg_param2 *Object, _llcppg_param3 **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyMapping_GetOptionalItemString C.PyMapping_GetOptionalItemString
-func (self *PyObject) PyMapping_GetOptionalItemString(_llcppg_param2 *c.Char, _llcppg_param3 **PyObject) c.Int {
+// llgo:link (*Mapping).OptionalItemString C.PyMapping_GetOptionalItemString
+func (self *Mapping) OptionalItemString(_llcppg_param2 *c.Char, _llcppg_param3 **Object) c.Int {
 	return 0
 }
 
@@ -944,32 +1000,30 @@ func (self *PyObject) PyMapping_GetOptionalItemString(_llcppg_param2 *c.Char, _l
 //
 // This is the equivalent of the Python statement: o[key]=v.
 //
-// llgo:link (*PyObject).PyMapping_SetItemString C.PyMapping_SetItemString
-func (self *PyObject) PyMapping_SetItemString(key *c.Char, value *PyObject) c.Int {
+// llgo:link (*Mapping).SetItemString C.PyMapping_SetItemString
+func (self *Mapping) SetItemString(key *c.Char, value *Object) c.Int {
 	return 0
 }
 
 // isinstance(object, typeorclass)
 //
-// llgo:link (*PyObject).IsInstance C.PyObject_IsInstance
-func (self *PyObject) IsInstance(typeorclass *PyObject) c.Int {
+// llgo:link (*Object).IsInstance C.PyObject_IsInstance
+func (self *Object) IsInstance(typeorclass *Object) c.Int {
 	return 0
 }
 
 // issubclass(object, typeorclass)
 //
-// llgo:link (*PyObject).IsSubclass C.PyObject_IsSubclass
-func (self *PyObject) IsSubclass(typeorclass *PyObject) c.Int {
+// llgo:link (*Object).IsSubclass C.PyObject_IsSubclass
+func (self *Object) IsSubclass(typeorclass *Object) c.Int {
 	return 0
 }
 
 // Like PyObject_CallMethod(), but expect a _Py_Identifier*
 // as the method name.
 //
-// llgo:link (*PyObject).X_PyObject_CallMethodId C._PyObject_CallMethodId
-func (self *PyObject) X_PyObject_CallMethodId(name *X_Py_Identifier, format *c.Char, __llgo_va_list ...any) *PyObject {
-	return self
-}
+//go:linkname X_ObjectCallMethodId C._PyObject_CallMethodId
+func X_ObjectCallMethodId(obj *Object, name *X_Identifier, format *c.Char, __llgo_va_list ...any) *Object
 
 // Convert keyword arguments from the FASTCALL (stack: C array, kwnames: tuple)
 // format to a Python dictionary ("kwargs" dict).
@@ -982,24 +1036,24 @@ func (self *PyObject) X_PyObject_CallMethodId(name *X_Py_Identifier, format *c.C
 // an exception, the caller is responsible to implement an explicit keys on
 // kwnames.
 //
-//go:linkname X_PyStack_AsDict C._PyStack_AsDict
-func X_PyStack_AsDict(values **PyObject, kwnames *PyObject) *PyObject
+//go:linkname X_StackAsDict C._PyStack_AsDict
+func X_StackAsDict(values **Object, kwnames *Object) *Object
 
-// llgo:link (*PyObject).PyVectorcall_Function C.PyVectorcall_Function
-func (self *PyObject) PyVectorcall_Function() Vectorcallfunc {
+// llgo:link (*Vectorcall).Function C.PyVectorcall_Function
+func (self *Vectorcall) Function() Vectorcallfunc {
 	return nil
 }
 
 // Same as PyObject_Vectorcall except that keyword arguments are passed as
 // dict, which may be NULL if there are no keyword arguments.
 //
-// llgo:link (*PyObject).VectorcallDict C.PyObject_VectorcallDict
-func (self *PyObject) VectorcallDict(args **PyObject, nargsf c.SizeT, kwargs *PyObject) *PyObject {
+// llgo:link (*Object).VectorcallDict C.PyObject_VectorcallDict
+func (self *Object) VectorcallDict(args **Object, nargsf c.SizeT, kwargs *Object) *Object {
 	return self
 }
 
-// llgo:link (*PyObject).CallOneArg C.PyObject_CallOneArg
-func (self *PyObject) CallOneArg(arg *PyObject) *PyObject {
+// llgo:link (*Object).CallOneArg C.PyObject_CallOneArg
+func (self *Object) CallOneArg(arg *Object) *Object {
 	return self
 }
 
@@ -1007,7 +1061,7 @@ func (self *PyObject) CallOneArg(arg *PyObject) *PyObject {
 // If neither of those return a non-negative value, then return the default
 // value.  If one of the calls fails, this function returns -1.
 //
-// llgo:link (*PyObject).LengthHint C.PyObject_LengthHint
-func (self *PyObject) LengthHint(_llcppg_param2 PySsizeT) PySsizeT {
+// llgo:link (*Object).LengthHint C.PyObject_LengthHint
+func (self *Object) LengthHint(_llcppg_param2 SsizeT) SsizeT {
 	return 0
 }

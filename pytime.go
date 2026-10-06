@@ -7,25 +7,25 @@ import (
 	_ "unsafe"
 )
 
-type PyTimeT = c.Int64T
+type TimeT = c.Int64T
 
-//go:linkname PyTime_AsSecondsDouble C.PyTime_AsSecondsDouble
-func PyTime_AsSecondsDouble(t PyTimeT) c.Double
+//go:linkname TimeAsSecondsDouble C.PyTime_AsSecondsDouble
+func TimeAsSecondsDouble(t TimeT) c.Double
 
-//go:linkname PyTime_Monotonic C.PyTime_Monotonic
-func PyTime_Monotonic(result *PyTimeT) c.Int
+//go:linkname TimeMonotonic C.PyTime_Monotonic
+func TimeMonotonic(result *TimeT) c.Int
 
-//go:linkname PyTime_PerfCounter C.PyTime_PerfCounter
-func PyTime_PerfCounter(result *PyTimeT) c.Int
+//go:linkname TimePerfCounter C.PyTime_PerfCounter
+func TimePerfCounter(result *TimeT) c.Int
 
-//go:linkname PyTime_Time C.PyTime_Time
-func PyTime_Time(result *PyTimeT) c.Int
+//go:linkname TimeTime C.PyTime_Time
+func TimeTime(result *TimeT) c.Int
 
-//go:linkname PyTime_MonotonicRaw C.PyTime_MonotonicRaw
-func PyTime_MonotonicRaw(result *PyTimeT) c.Int
+//go:linkname TimeMonotonicRaw C.PyTime_MonotonicRaw
+func TimeMonotonicRaw(result *TimeT) c.Int
 
-//go:linkname PyTime_PerfCounterRaw C.PyTime_PerfCounterRaw
-func PyTime_PerfCounterRaw(result *PyTimeT) c.Int
+//go:linkname TimePerfCounterRaw C.PyTime_PerfCounterRaw
+func TimePerfCounterRaw(result *TimeT) c.Int
 
-//go:linkname PyTime_TimeRaw C.PyTime_TimeRaw
-func PyTime_TimeRaw(result *PyTimeT) c.Int
+//go:linkname TimeTimeRaw C.PyTime_TimeRaw
+func TimeTimeRaw(result *TimeT) c.Int

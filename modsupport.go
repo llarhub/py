@@ -4,10 +4,10 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	_ "unsafe"
+	"unsafe"
 )
 
-const Py_CLEANUP_SUPPORTED = 131072
+const CLEANUP_SUPPORTED = 131072
 const PYTHON_API_VERSION = 1013
 const PYTHON_API_STRING = "1013"
 const PYTHON_ABI_VERSION = 3
@@ -15,77 +15,84 @@ const PYTHON_ABI_STRING = "3"
 
 // A data structure that can be used to run initialization code once in a
 // thread-safe manner. The C++11 equivalent is std::call_once.
-type X_PyOnceFlag struct {
+type X_OnceFlag struct {
 	V c.Uint8T
 }
-type X_PyArg_Parser struct {
+type X_ArgParser struct {
 	Format         *c.Char
 	Keywords       **c.Char
 	Fname          *c.Char
 	CustomMsg      *c.Char
-	Once           X_PyOnceFlag
+	Once           X_OnceFlag
 	IsKwtupleOwned c.Int
 	Pos            c.Int
 	Min            c.Int
 	Max            c.Int
-	Kwtuple        *PyObject
-	Next           *X_PyArg_Parser
+	Kwtuple        *Object
+	Next           *X_ArgParser
+}
+type Arg struct {
+	X_object
 }
 
-// llgo:link (*PyObject).PyArg_Parse C.PyArg_Parse
-func (self *PyObject) PyArg_Parse(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
+func (self *Object) AsArg() *Arg {
+	return (*Arg)(unsafe.Pointer(self))
+}
+
+// llgo:link (*Arg).Parse C.PyArg_Parse
+func (self *Arg) Parse(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_ParseTuple C.PyArg_ParseTuple
-func (self *PyObject) PyArg_ParseTuple(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
+// llgo:link (*Arg).ParseTuple C.PyArg_ParseTuple
+func (self *Arg) ParseTuple(_llcppg_param2 *c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_ParseTupleAndKeywords C.PyArg_ParseTupleAndKeywords
-func (self *PyObject) PyArg_ParseTupleAndKeywords(_llcppg_param2 *PyObject, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, __llgo_va_list ...any) c.Int {
+// llgo:link (*Arg).ParseTupleAndKeywords C.PyArg_ParseTupleAndKeywords
+func (self *Arg) ParseTupleAndKeywords(_llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_VaParse C.PyArg_VaParse
-func (self *PyObject) PyArg_VaParse(_llcppg_param2 *c.Char, _llcppg_param3 c.VaList) c.Int {
+// llgo:link (*Arg).VaParse C.PyArg_VaParse
+func (self *Arg) VaParse(_llcppg_param2 *c.Char, _llcppg_param3 c.VaList) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_VaParseTupleAndKeywords C.PyArg_VaParseTupleAndKeywords
-func (self *PyObject) PyArg_VaParseTupleAndKeywords(_llcppg_param2 *PyObject, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, _llcppg_param5 c.VaList) c.Int {
+// llgo:link (*Arg).VaParseTupleAndKeywords C.PyArg_VaParseTupleAndKeywords
+func (self *Arg) VaParseTupleAndKeywords(_llcppg_param2 *Object, _llcppg_param3 *c.Char, _llcppg_param4 **c.Char, _llcppg_param5 c.VaList) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_ValidateKeywordArguments C.PyArg_ValidateKeywordArguments
-func (self *PyObject) PyArg_ValidateKeywordArguments() c.Int {
+// llgo:link (*Arg).ValidateKeywordArguments C.PyArg_ValidateKeywordArguments
+func (self *Arg) ValidateKeywordArguments() c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyArg_UnpackTuple C.PyArg_UnpackTuple
-func (self *PyObject) PyArg_UnpackTuple(_llcppg_param2 *c.Char, _llcppg_param3 PySsizeT, _llcppg_param4 PySsizeT, __llgo_va_list ...any) c.Int {
+// llgo:link (*Arg).UnpackTuple C.PyArg_UnpackTuple
+func (self *Arg) UnpackTuple(_llcppg_param2 *c.Char, _llcppg_param3 SsizeT, _llcppg_param4 SsizeT, __llgo_va_list ...any) c.Int {
 	return 0
 }
 
-//go:linkname Py_BuildValue C.Py_BuildValue
-func Py_BuildValue(_llcppg_param1 *c.Char, __llgo_va_list ...any) *PyObject
+//go:linkname BuildValue C.Py_BuildValue
+func BuildValue(_llcppg_param1 *c.Char, __llgo_va_list ...any) *Object
 
-//go:linkname Py_VaBuildValue C.Py_VaBuildValue
-func Py_VaBuildValue(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *PyObject
+//go:linkname VaBuildValue C.Py_VaBuildValue
+func VaBuildValue(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *Object
 
 // Add an attribute with name 'name' and value 'obj' to the module 'mod.
 // On success, return 0.
 // On error, raise an exception and return -1.
 //
-// llgo:link (*PyObject).PyModule_AddObjectRef C.PyModule_AddObjectRef
-func (self *PyObject) PyModule_AddObjectRef(name *c.Char, value *PyObject) c.Int {
+// llgo:link (*Module).AddObjectRef C.PyModule_AddObjectRef
+func (self *Module) AddObjectRef(name *c.Char, value *Object) c.Int {
 	return 0
 }
 
 // Similar to PyModule_AddObjectRef() but steal a reference to 'value'.
 //
-// llgo:link (*PyObject).PyModule_Add C.PyModule_Add
-func (self *PyObject) PyModule_Add(name *c.Char, value *PyObject) c.Int {
+// llgo:link (*Module).Add C.PyModule_Add
+func (self *Module) Add(name *c.Char, value *Object) c.Int {
 	return 0
 }
 
@@ -93,58 +100,56 @@ func (self *PyObject) PyModule_Add(name *c.Char, value *PyObject) c.Int {
 // a reference to 'value' on success and only on success.
 // Errorprone. Should not be used in new code.
 //
-// llgo:link (*PyObject).PyModule_AddObject C.PyModule_AddObject
-func (self *PyObject) PyModule_AddObject(_llcppg_param2 *c.Char, value *PyObject) c.Int {
+// llgo:link (*Module).AddObject C.PyModule_AddObject
+func (self *Module) AddObject(_llcppg_param2 *c.Char, value *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyModule_AddIntConstant C.PyModule_AddIntConstant
-func (self *PyObject) PyModule_AddIntConstant(_llcppg_param2 *c.Char, _llcppg_param3 c.Long) c.Int {
+// llgo:link (*Module).AddIntConstant C.PyModule_AddIntConstant
+func (self *Module) AddIntConstant(_llcppg_param2 *c.Char, _llcppg_param3 c.Long) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyModule_AddStringConstant C.PyModule_AddStringConstant
-func (self *PyObject) PyModule_AddStringConstant(_llcppg_param2 *c.Char, _llcppg_param3 *c.Char) c.Int {
+// llgo:link (*Module).AddStringConstant C.PyModule_AddStringConstant
+func (self *Module) AddStringConstant(_llcppg_param2 *c.Char, _llcppg_param3 *c.Char) c.Int {
 	return 0
 }
 
 // New in 3.9
 //
-// llgo:link (*PyObject).PyModule_AddType C.PyModule_AddType
-func (self *PyObject) PyModule_AddType(type_ *PyTypeObject) c.Int {
+// llgo:link (*Module).AddType C.PyModule_AddType
+func (self *Module) AddType(type_ *TypeObject) c.Int {
 	return 0
 }
 
 // New in 3.5
 //
-// llgo:link (*PyObject).PyModule_SetDocString C.PyModule_SetDocString
-func (self *PyObject) PyModule_SetDocString(_llcppg_param2 *c.Char) c.Int {
+// llgo:link (*Module).SetDocString C.PyModule_SetDocString
+func (self *Module) SetDocString(_llcppg_param2 *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyModule_AddFunctions C.PyModule_AddFunctions
-func (self *PyObject) PyModule_AddFunctions(_llcppg_param2 *PyMethodDef) c.Int {
+// llgo:link (*Module).AddFunctions C.PyModule_AddFunctions
+func (self *Module) AddFunctions(_llcppg_param2 *MethodDef) c.Int {
 	return 0
 }
 
-// llgo:link (*PyObject).PyModule_ExecDef C.PyModule_ExecDef
-func (self *PyObject) PyModule_ExecDef(def *PyModuleDef) c.Int {
+// llgo:link (*Module).ExecDef C.PyModule_ExecDef
+func (self *Module) ExecDef(def *ModuleDef) c.Int {
 	return 0
 }
 
-// llgo:link (*PyModuleDef).PyModule_Create2 C.PyModule_Create2
-func (self *PyModuleDef) PyModule_Create2(apiver c.Int) *PyObject {
+// llgo:link (*Module).Create2 C.PyModule_Create2
+func (self *Module) Create2(apiver c.Int) *Object {
 	return nil
 }
 
 // New in 3.5
 //
-// llgo:link (*PyModuleDef).PyModule_FromDefAndSpec2 C.PyModule_FromDefAndSpec2
-func (self *PyModuleDef) PyModule_FromDefAndSpec2(spec *PyObject, module_api_version c.Int) *PyObject {
+// llgo:link (*Module).FromDefAndSpec2 C.PyModule_FromDefAndSpec2
+func (self *Module) FromDefAndSpec2(spec *Object, module_api_version c.Int) *Object {
 	return nil
 }
 
-// llgo:link (*PyObject).X_PyArg_ParseTupleAndKeywordsFast C._PyArg_ParseTupleAndKeywordsFast
-func (self *PyObject) X_PyArg_ParseTupleAndKeywordsFast(_llcppg_param2 *PyObject, _llcppg_param3 *X_PyArg_Parser, __llgo_va_list ...any) c.Int {
-	return 0
-}
+//go:linkname X_ArgParseTupleAndKeywordsFast C._PyArg_ParseTupleAndKeywordsFast
+func X_ArgParseTupleAndKeywordsFast(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *X_ArgParser, __llgo_va_list ...any) c.Int

@@ -8,7 +8,7 @@ import (
 )
 
 // --- PyStatus -----------------------------------------------
-type PyStatus struct {
+type Status struct {
 	X_type   _llcppg_anon_4
 	Func     *c.Char
 	ErrMsg   *c.Char
@@ -23,13 +23,13 @@ const (
 )
 
 // --- PyWideStringList ------------------------------------------------
-type PyWideStringList struct {
-	Length PySsizeT
+type WideStringList struct {
+	Length SsizeT
 	Items  **c.WcharT
 }
 
 // --- PyPreConfig -----------------------------------------------
-type PyPreConfig struct {
+type PreConfig struct {
 	X_configInit      c.Int
 	ParseArgv         c.Int
 	Isolated          c.Int
@@ -43,7 +43,7 @@ type PyPreConfig struct {
 }
 
 // This structure is best documented in the Doc/c-api/init_config.rst file.
-type PyConfig struct {
+type Config struct {
 	X_configInit          c.Int
 	Isolated              c.Int
 	UseEnvironment        c.Int
@@ -65,10 +65,10 @@ type PyConfig struct {
 	FilesystemErrors      *c.WcharT
 	PycachePrefix         *c.WcharT
 	ParseArgv             c.Int
-	OrigArgv              PyWideStringList
-	Argv                  PyWideStringList
-	Xoptions              PyWideStringList
-	Warnoptions           PyWideStringList
+	OrigArgv              WideStringList
+	Argv                  WideStringList
+	Xoptions              WideStringList
+	Warnoptions           WideStringList
 	SiteImport            c.Int
 	BytesWarning          c.Int
 	WarnDefaultEncoding   c.Int
@@ -98,7 +98,7 @@ type PyConfig struct {
 	Home                  *c.WcharT
 	Platlibdir            *c.WcharT
 	ModuleSearchPathsSet  c.Int
-	ModuleSearchPaths     PyWideStringList
+	ModuleSearchPaths     WideStringList
 	StdlibDir             *c.WcharT
 	Executable            *c.WcharT
 	BaseExecutable        *c.WcharT
@@ -115,178 +115,176 @@ type PyConfig struct {
 	X_initMain            c.Int
 	X_isPythonBuild       c.Int
 }
-type PyInitConfig struct {
+type InitConfig struct {
 }
 
-//go:linkname PyStatus_Ok C.PyStatus_Ok
-func PyStatus_Ok() PyStatus
+//go:linkname StatusOk C.PyStatus_Ok
+func StatusOk() Status
 
-//go:linkname PyStatus_Error C.PyStatus_Error
-func PyStatus_Error(err_msg *c.Char) PyStatus
+//go:linkname StatusError C.PyStatus_Error
+func StatusError(err_msg *c.Char) Status
 
-//go:linkname PyStatus_NoMemory C.PyStatus_NoMemory
-func PyStatus_NoMemory() PyStatus
+//go:linkname StatusNoMemory C.PyStatus_NoMemory
+func StatusNoMemory() Status
 
-//go:linkname PyStatus_Exit C.PyStatus_Exit
-func PyStatus_Exit(exitcode c.Int) PyStatus
+//go:linkname StatusExit C.PyStatus_Exit
+func StatusExit(exitcode c.Int) Status
 
-// llgo:link PyStatus.IsError C.PyStatus_IsError
-func (self PyStatus) IsError() c.Int {
+// llgo:link Status.IsError C.PyStatus_IsError
+func (self Status) IsError() c.Int {
 	return 0
 }
 
-// llgo:link PyStatus.IsExit C.PyStatus_IsExit
-func (self PyStatus) IsExit() c.Int {
+// llgo:link Status.IsExit C.PyStatus_IsExit
+func (self Status) IsExit() c.Int {
 	return 0
 }
 
-// llgo:link PyStatus.Exception C.PyStatus_Exception
-func (self PyStatus) Exception() c.Int {
+// llgo:link Status.Exception C.PyStatus_Exception
+func (self Status) Exception() c.Int {
 	return 0
 }
 
-// llgo:link (*PyWideStringList).Append C.PyWideStringList_Append
-func (self *PyWideStringList) Append(item *c.WcharT) PyStatus {
-	return PyStatus{}
+// llgo:link (*WideStringList).Append C.PyWideStringList_Append
+func (self *WideStringList) Append(item *c.WcharT) Status {
+	return Status{}
 }
 
-// llgo:link (*PyWideStringList).Insert C.PyWideStringList_Insert
-func (self *PyWideStringList) Insert(index PySsizeT, item *c.WcharT) PyStatus {
-	return PyStatus{}
+// llgo:link (*WideStringList).Insert C.PyWideStringList_Insert
+func (self *WideStringList) Insert(index SsizeT, item *c.WcharT) Status {
+	return Status{}
 }
 
-// llgo:link (*PyPreConfig).InitPythonConfig C.PyPreConfig_InitPythonConfig
-func (self *PyPreConfig) InitPythonConfig() {
+// llgo:link (*PreConfig).InitPythonConfig C.PyPreConfig_InitPythonConfig
+func (self *PreConfig) InitPythonConfig() {
 }
 
-// llgo:link (*PyPreConfig).InitIsolatedConfig C.PyPreConfig_InitIsolatedConfig
-func (self *PyPreConfig) InitIsolatedConfig() {
+// llgo:link (*PreConfig).InitIsolatedConfig C.PyPreConfig_InitIsolatedConfig
+func (self *PreConfig) InitIsolatedConfig() {
 }
 
-// llgo:link (*PyConfig).InitPythonConfig C.PyConfig_InitPythonConfig
-func (self *PyConfig) InitPythonConfig() {
+// llgo:link (*Config).InitPython C.PyConfig_InitPythonConfig
+func (self *Config) InitPython() {
 }
 
-// llgo:link (*PyConfig).InitIsolatedConfig C.PyConfig_InitIsolatedConfig
-func (self *PyConfig) InitIsolatedConfig() {
+// llgo:link (*Config).InitIsolated C.PyConfig_InitIsolatedConfig
+func (self *Config) InitIsolated() {
 }
 
-// llgo:link (*PyConfig).Clear C.PyConfig_Clear
-func (self *PyConfig) Clear() {
+// llgo:link (*Config).Clear C.PyConfig_Clear
+func (self *Config) Clear() {
 }
 
-// llgo:link (*PyConfig).SetString C.PyConfig_SetString
-func (self *PyConfig) SetString(config_str **c.WcharT, str *c.WcharT) PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).SetString C.PyConfig_SetString
+func (self *Config) SetString(config_str **c.WcharT, str *c.WcharT) Status {
+	return Status{}
 }
 
-// llgo:link (*PyConfig).SetBytesString C.PyConfig_SetBytesString
-func (self *PyConfig) SetBytesString(config_str **c.WcharT, str *c.Char) PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).SetBytesString C.PyConfig_SetBytesString
+func (self *Config) SetBytesString(config_str **c.WcharT, str *c.Char) Status {
+	return Status{}
 }
 
-// llgo:link (*PyConfig).Read C.PyConfig_Read
-func (self *PyConfig) Read() PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).Read C.PyConfig_Read
+func (self *Config) Read() Status {
+	return Status{}
 }
 
-// llgo:link (*PyConfig).SetBytesArgv C.PyConfig_SetBytesArgv
-func (self *PyConfig) SetBytesArgv(argc PySsizeT, argv **c.Char) PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).SetBytesArgv C.PyConfig_SetBytesArgv
+func (self *Config) SetBytesArgv(argc SsizeT, argv **c.Char) Status {
+	return Status{}
 }
 
-// llgo:link (*PyConfig).SetArgv C.PyConfig_SetArgv
-func (self *PyConfig) SetArgv(argc PySsizeT, argv **c.WcharT) PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).SetArgv C.PyConfig_SetArgv
+func (self *Config) SetArgv(argc SsizeT, argv **c.WcharT) Status {
+	return Status{}
 }
 
-// llgo:link (*PyConfig).SetWideStringList C.PyConfig_SetWideStringList
-func (self *PyConfig) SetWideStringList(list *PyWideStringList, length PySsizeT, items **c.WcharT) PyStatus {
-	return PyStatus{}
+// llgo:link (*Config).SetWideStringList C.PyConfig_SetWideStringList
+func (self *Config) SetWideStringList(list *WideStringList, length SsizeT, items **c.WcharT) Status {
+	return Status{}
 }
 
 // --- PyConfig_Get() -----------------------------------------
 //
-//go:linkname PyConfig_Get C.PyConfig_Get
-func PyConfig_Get(name *c.Char) *PyObject
+//go:linkname ConfigGet C.PyConfig_Get
+func ConfigGet(name *c.Char) *Object
 
-//go:linkname PyConfig_GetInt C.PyConfig_GetInt
-func PyConfig_GetInt(name *c.Char, value *c.Int) c.Int
+//go:linkname ConfigGetInt C.PyConfig_GetInt
+func ConfigGetInt(name *c.Char, value *c.Int) c.Int
 
-//go:linkname PyConfig_Names C.PyConfig_Names
-func PyConfig_Names() *PyObject
+//go:linkname ConfigNames C.PyConfig_Names
+func ConfigNames() *Object
 
-//go:linkname PyConfig_Set C.PyConfig_Set
-func PyConfig_Set(name *c.Char, value *PyObject) c.Int
+//go:linkname ConfigSet C.PyConfig_Set
+func ConfigSet(name *c.Char, value *Object) c.Int
 
 // Get the original command line arguments, before Python modified them.
 //
 // See also PyConfig.orig_argv.
 //
-//go:linkname Py_GetArgcArgv C.Py_GetArgcArgv
-func Py_GetArgcArgv(argc *c.Int, argv ***c.WcharT)
+//go:linkname GetArgcArgv C.Py_GetArgcArgv
+func GetArgcArgv(argc *c.Int, argv ***c.WcharT)
 
-//go:linkname PyInitConfig_Create C.PyInitConfig_Create
-func PyInitConfig_Create() *PyInitConfig
+//go:linkname InitConfigCreate C.PyInitConfig_Create
+func InitConfigCreate() *InitConfig
 
-// llgo:link (*PyInitConfig).Free C.PyInitConfig_Free
-func (self *PyInitConfig) Free() {
+// llgo:link (*InitConfig).Free C.PyInitConfig_Free
+func (self *InitConfig) Free() {
 }
 
-// llgo:link (*PyInitConfig).Error C.PyInitConfig_GetError
-func (self *PyInitConfig) Error(err_msg **c.Char) c.Int {
+// llgo:link (*InitConfig).Error C.PyInitConfig_GetError
+func (self *InitConfig) Error(err_msg **c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).ExitCode C.PyInitConfig_GetExitCode
-func (self *PyInitConfig) ExitCode(exitcode *c.Int) c.Int {
+// llgo:link (*InitConfig).ExitCode C.PyInitConfig_GetExitCode
+func (self *InitConfig) ExitCode(exitcode *c.Int) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).HasOption C.PyInitConfig_HasOption
-func (self *PyInitConfig) HasOption(name *c.Char) c.Int {
+// llgo:link (*InitConfig).HasOption C.PyInitConfig_HasOption
+func (self *InitConfig) HasOption(name *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).Int C.PyInitConfig_GetInt
-func (self *PyInitConfig) Int(name *c.Char, value *c.Int64T) c.Int {
+// llgo:link (*InitConfig).Int C.PyInitConfig_GetInt
+func (self *InitConfig) Int(name *c.Char, value *c.Int64T) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).Str C.PyInitConfig_GetStr
-func (self *PyInitConfig) Str(name *c.Char, value **c.Char) c.Int {
+// llgo:link (*InitConfig).Str C.PyInitConfig_GetStr
+func (self *InitConfig) Str(name *c.Char, value **c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).StrList C.PyInitConfig_GetStrList
-func (self *PyInitConfig) StrList(name *c.Char, length *c.SizeT, items ***c.Char) c.Int {
+// llgo:link (*InitConfig).StrList C.PyInitConfig_GetStrList
+func (self *InitConfig) StrList(name *c.Char, length *c.SizeT, items ***c.Char) c.Int {
 	return 0
 }
 
-//go:linkname PyInitConfig_FreeStrList C.PyInitConfig_FreeStrList
-func PyInitConfig_FreeStrList(length c.SizeT, items **c.Char)
+//go:linkname InitConfigFreeStrList C.PyInitConfig_FreeStrList
+func InitConfigFreeStrList(length c.SizeT, items **c.Char)
 
-// llgo:link (*PyInitConfig).SetInt C.PyInitConfig_SetInt
-func (self *PyInitConfig) SetInt(name *c.Char, value c.Int64T) c.Int {
+// llgo:link (*InitConfig).SetInt C.PyInitConfig_SetInt
+func (self *InitConfig) SetInt(name *c.Char, value c.Int64T) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).SetStr C.PyInitConfig_SetStr
-func (self *PyInitConfig) SetStr(name *c.Char, value *c.Char) c.Int {
+// llgo:link (*InitConfig).SetStr C.PyInitConfig_SetStr
+func (self *InitConfig) SetStr(name *c.Char, value *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).SetStrList C.PyInitConfig_SetStrList
-func (self *PyInitConfig) SetStrList(name *c.Char, length c.SizeT, items **c.Char) c.Int {
+// llgo:link (*InitConfig).SetStrList C.PyInitConfig_SetStrList
+func (self *InitConfig) SetStrList(name *c.Char, length c.SizeT, items **c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).AddModule C.PyInitConfig_AddModule
-func (self *PyInitConfig) AddModule(name *c.Char, initfunc func() *PyObject) c.Int {
+// llgo:link (*InitConfig).AddModule C.PyInitConfig_AddModule
+func (self *InitConfig) AddModule(name *c.Char, initfunc func() *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*PyInitConfig).Py_InitializeFromInitConfig C.Py_InitializeFromInitConfig
-func (self *PyInitConfig) Py_InitializeFromInitConfig() c.Int {
-	return 0
-}
+//go:linkname InitializeFromInitConfig C.Py_InitializeFromInitConfig
+func InitializeFromInitConfig(config *InitConfig) c.Int

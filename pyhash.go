@@ -7,20 +7,22 @@ import (
 	"unsafe"
 )
 
-const Py_HASH_CUTOFF = 0
-const Py_HASH_EXTERNAL = 0
-const Py_HASH_SIPHASH24 = 1
-const Py_HASH_FNV = 2
-const Py_HASH_SIPHASH13 = 3
-const Py_HASH_ALGORITHM = 3
+const HASH_CUTOFF = 0
+const HASH_EXTERNAL = 0
+const HASH_SIPHASH24 = 1
+const HASH_FNV = 2
+const HASH_SIPHASH13 = 3
+const HASH_ALGORITHM = 3
 const PyHASH_BITS = 61
 const PyHASH_INF = 314159
 const X_PyHASH_BITS = 61
 const X_PyHASH_INF = 314159
 
 // hash function definition
-type PyHash_FuncDef struct {
-	Hash     func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 PySsizeT) PyHashT
+//
+// llgo:type C
+type HashFuncDef struct {
+	Hash     func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 SsizeT) HashT
 	Name     *c.Char
 	HashBits c.Int
 	SeedBits c.Int
@@ -28,21 +30,19 @@ type PyHash_FuncDef struct {
 
 // Helpers for hash functions
 //
-// llgo:link (*PyObject).X_Py_HashDouble C._Py_HashDouble
-func (self *PyObject) X_Py_HashDouble(_llcppg_param2 c.Double) PyHashT {
+//go:linkname X_HashDouble C._Py_HashDouble
+func X_HashDouble(_llcppg_param1 *Object, _llcppg_param2 c.Double) HashT
+
+//go:linkname HashGetFuncDef C.PyHash_GetFuncDef
+func HashGetFuncDef() *HashFuncDef
+
+//go:linkname HashPointer C.Py_HashPointer
+func HashPointer(ptr unsafe.Pointer) HashT
+
+// llgo:link (*Object).GenericHash C.PyObject_GenericHash
+func (self *Object) GenericHash() HashT {
 	return 0
 }
 
-//go:linkname PyHash_GetFuncDef C.PyHash_GetFuncDef
-func PyHash_GetFuncDef() *PyHash_FuncDef
-
-//go:linkname Py_HashPointer C.Py_HashPointer
-func Py_HashPointer(ptr unsafe.Pointer) PyHashT
-
-// llgo:link (*PyObject).GenericHash C.PyObject_GenericHash
-func (self *PyObject) GenericHash() PyHashT {
-	return 0
-}
-
-//go:linkname Py_HashBuffer C.Py_HashBuffer
-func Py_HashBuffer(ptr unsafe.Pointer, len PySsizeT) PyHashT
+//go:linkname HashBuffer C.Py_HashBuffer
+func HashBuffer(ptr unsafe.Pointer, len SsizeT) HashT
