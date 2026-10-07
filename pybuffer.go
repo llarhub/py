@@ -76,8 +76,10 @@ func (self *Object) Buffer(view *Buffer, flags c.Int) c.Int {
 // Get the memory area pointed to by the indices for the buffer given.
 // Note that view->ndim is the assumed size of indices.
 //
-//go:linkname BufferGetPointer C.PyBuffer_GetPointer
-func BufferGetPointer(view *Buffer, indices *SsizeT) unsafe.Pointer
+// llgo:link (*Buffer).Pointer C.PyBuffer_GetPointer
+func (self *Buffer) Pointer(indices *SsizeT) unsafe.Pointer {
+	return nil
+}
 
 // Return the implied itemsize of the data-format area from a
 // struct-style description.
@@ -114,8 +116,10 @@ func (self *Object) CopyData(src *Object) c.Int {
 
 // Copy the data from the src buffer to the buffer of destination.
 //
-//go:linkname BufferIsContiguous C.PyBuffer_IsContiguous
-func BufferIsContiguous(view *Buffer, fort c.Char) c.Int
+// llgo:link (*Buffer).IsContiguous C.PyBuffer_IsContiguous
+func (self *Buffer) IsContiguous(fort c.Char) c.Int {
+	return 0
+}
 
 // Fill the strides array with byte-strides of a contiguous
 // (Fortran-style if fort is 'F' or C-style otherwise)
@@ -131,10 +135,13 @@ func BufferFillContiguousStrides(ndims c.Int, shape *SsizeT, strides *SsizeT, it
 //
 // Returns 0 on success and -1 (with raising an error) on error.
 //
-//go:linkname BufferFillInfo C.PyBuffer_FillInfo
-func BufferFillInfo(view *Buffer, o *Object, buf unsafe.Pointer, len SsizeT, readonly c.Int, flags c.Int) c.Int
+// llgo:link (*Buffer).FillInfo C.PyBuffer_FillInfo
+func (self *Buffer) FillInfo(o *Object, buf unsafe.Pointer, len SsizeT, readonly c.Int, flags c.Int) c.Int {
+	return 0
+}
 
 // Releases a Py_buffer obtained from getbuffer ParseTuple's "s*".
 //
-//go:linkname BufferRelease C.PyBuffer_Release
-func BufferRelease(view *Buffer)
+// llgo:link (*Buffer).Release C.PyBuffer_Release
+func (self *Buffer) Release() {
+}
