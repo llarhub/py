@@ -96,13 +96,13 @@ var UnicodeIterType TypeObject
 // Similar to PyUnicode_FromUnicode(), but u points to UTF-8 encoded bytes
 //
 //go:linkname UnicodeFromStringAndSize C.PyUnicode_FromStringAndSize
-func UnicodeFromStringAndSize(u *c.Char, size SsizeT) *Object
+func UnicodeFromStringAndSize(u *c.Char, size SsizeT) *UnicodeObject
 
 // Similar to PyUnicode_FromUnicode(), but u points to null-terminated
 // UTF-8 encoded bytes.  The size is determined with strlen().
 //
 //go:linkname UnicodeFromString C.PyUnicode_FromString
-func UnicodeFromString(u *c.Char) *Object
+func UnicodeFromString(u *c.Char) *UnicodeObject
 
 // llgo:link (*UnicodeObject).Substring C.PyUnicode_Substring
 func (self *UnicodeObject) Substring(start SsizeT, end SsizeT) *Object {
@@ -181,10 +181,8 @@ func UnicodeResize(unicode **Object, length SsizeT) c.Int
 // The API returns NULL in case of an error. The caller is responsible
 // for decref'ing the returned objects.
 //
-// llgo:link (*UnicodeObject).FromEncodedObject C.PyUnicode_FromEncodedObject
-func (self *UnicodeObject) FromEncodedObject(encoding *c.Char, errors *c.Char) *Object {
-	return nil
-}
+//go:linkname UnicodeFromEncodedObject C.PyUnicode_FromEncodedObject
+func UnicodeFromEncodedObject(obj *Object, encoding *c.Char, errors *c.Char) *UnicodeObject
 
 // Copy an instance of a Unicode subtype to a new true Unicode object if
 // necessary. If obj is already a true Unicode object (not a subtype), return
@@ -198,11 +196,11 @@ func (self *Object) AsUnicode() *UnicodeObject {
 	return nil
 }
 
-//go:linkname Unicode_FromFormatV C.PyUnicode_FromFormatV
-func Unicode_FromFormatV(format *c.Char, vargs c.VaList) *Object
+//go:linkname UnicodeFromFormatV C.PyUnicode_FromFormatV
+func UnicodeFromFormatV(format *c.Char, vargs c.VaList) *UnicodeObject
 
 //go:linkname UnicodeFromFormat C.PyUnicode_FromFormat
-func UnicodeFromFormat(format *c.Char, __llgo_va_list ...any) *Object
+func UnicodeFromFormat(format *c.Char, __llgo_va_list ...any) *UnicodeObject
 
 //go:linkname UnicodeInternInPlace C.PyUnicode_InternInPlace
 func UnicodeInternInPlace(_llcppg_param1 **Object)
@@ -216,7 +214,7 @@ func UnicodeInternFromString(u *c.Char) *Object
 // The buffer is copied into the new object.
 //
 //go:linkname UnicodeFromWideChar C.PyUnicode_FromWideChar
-func UnicodeFromWideChar(w *c.WcharT, size SsizeT) *Object
+func UnicodeFromWideChar(w *c.WcharT, size SsizeT) *UnicodeObject
 
 // Copies the Unicode Object contents into the wchar_t buffer w.  At
 // most size wchar_t characters are copied.
@@ -254,7 +252,7 @@ func (self *UnicodeObject) AsWideCharString(size *SsizeT) *c.WcharT {
 // raised in case it is not.
 //
 //go:linkname UnicodeFromOrdinal C.PyUnicode_FromOrdinal
-func UnicodeFromOrdinal(ordinal c.Int) *Object
+func UnicodeFromOrdinal(ordinal c.Int) *UnicodeObject
 
 // Returns "utf-8".
 //
@@ -898,7 +896,7 @@ func (self *UnicodeObject) Fill(start SsizeT, length SsizeT, fill_char UCS4) Ssi
 // Scan the string to find the maximum character.
 //
 //go:linkname UnicodeFromKindAndData C.PyUnicode_FromKindAndData
-func UnicodeFromKindAndData(kind c.Int, buffer unsafe.Pointer, size SsizeT) *Object
+func UnicodeFromKindAndData(kind c.Int, buffer unsafe.Pointer, size SsizeT) *UnicodeObject
 
 //go:linkname UnicodeWriterCreate C.PyUnicodeWriter_Create
 func UnicodeWriterCreate(length SsizeT) *UnicodeWriter

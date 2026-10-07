@@ -19,19 +19,19 @@ const X_PARSE_INTPTR = "l"
 const X_PARSE_UINTPTR = "k"
 
 //go:linkname LongFromLong C.PyLong_FromLong
-func LongFromLong(_llcppg_param1 c.Long) *Object
+func LongFromLong(_llcppg_param1 c.Long) *LongObject
 
 //go:linkname LongFromUnsignedLong C.PyLong_FromUnsignedLong
-func LongFromUnsignedLong(_llcppg_param1 c.Ulong) *Object
+func LongFromUnsignedLong(_llcppg_param1 c.Ulong) *LongObject
 
-//go:linkname LongFromSizeT C.PyLong_FromSize_t
-func LongFromSizeT(_llcppg_param1 c.SizeT) *Object
+//go:linkname LongFromSize_t C.PyLong_FromSize_t
+func LongFromSize_t(_llcppg_param1 c.SizeT) *LongObject
 
-//go:linkname LongFromSsizeT C.PyLong_FromSsize_t
-func LongFromSsizeT(_llcppg_param1 SsizeT) *Object
+//go:linkname LongFromSsize_t C.PyLong_FromSsize_t
+func LongFromSsize_t(_llcppg_param1 SsizeT) *LongObject
 
 //go:linkname LongFromDouble C.PyLong_FromDouble
-func LongFromDouble(_llcppg_param1 c.Double) *Object
+func LongFromDouble(_llcppg_param1 c.Double) *LongObject
 
 // llgo:link (*LongObject).As C.PyLong_AsLong
 func (self *LongObject) As() c.Long {
@@ -69,16 +69,16 @@ func (self *LongObject) AsInt() c.Int {
 }
 
 //go:linkname LongFromInt32 C.PyLong_FromInt32
-func LongFromInt32(value c.Int32T) *Object
+func LongFromInt32(value c.Int32T) *LongObject
 
 //go:linkname LongFromUInt32 C.PyLong_FromUInt32
-func LongFromUInt32(value c.Uint32T) *Object
+func LongFromUInt32(value c.Uint32T) *LongObject
 
 //go:linkname LongFromInt64 C.PyLong_FromInt64
-func LongFromInt64(value c.Int64T) *Object
+func LongFromInt64(value c.Int64T) *LongObject
 
 //go:linkname LongFromUInt64 C.PyLong_FromUInt64
-func LongFromUInt64(value c.Uint64T) *Object
+func LongFromUInt64(value c.Uint64T) *LongObject
 
 // llgo:link (*LongObject).AsInt32 C.PyLong_AsInt32
 func (self *LongObject) AsInt32(value *c.Int32T) c.Int {
@@ -142,10 +142,10 @@ func (self *LongObject) AsNativeBytes(buffer unsafe.Pointer, n_bytes SsizeT, fla
 // Returns the int object, or NULL with an exception set.
 //
 //go:linkname LongFromNativeBytes C.PyLong_FromNativeBytes
-func LongFromNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c.Int) *Object
+func LongFromNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c.Int) *LongObject
 
 //go:linkname LongFromUnsignedNativeBytes C.PyLong_FromUnsignedNativeBytes
-func LongFromUnsignedNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c.Int) *Object
+func LongFromUnsignedNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c.Int) *LongObject
 
 //go:linkname LongGetInfo C.PyLong_GetInfo
 func LongGetInfo() *Object
@@ -156,7 +156,7 @@ func (self *LongObject) AsDouble() c.Double {
 }
 
 //go:linkname LongFromVoidPtr C.PyLong_FromVoidPtr
-func LongFromVoidPtr(_llcppg_param1 unsafe.Pointer) *Object
+func LongFromVoidPtr(_llcppg_param1 unsafe.Pointer) *LongObject
 
 // llgo:link (*LongObject).AsVoidPtr C.PyLong_AsVoidPtr
 func (self *LongObject) AsVoidPtr() unsafe.Pointer {
@@ -164,10 +164,10 @@ func (self *LongObject) AsVoidPtr() unsafe.Pointer {
 }
 
 //go:linkname LongFromLongLong C.PyLong_FromLongLong
-func LongFromLongLong(_llcppg_param1 c.LongLong) *Object
+func LongFromLongLong(_llcppg_param1 c.LongLong) *LongObject
 
 //go:linkname LongFromUnsignedLongLong C.PyLong_FromUnsignedLongLong
-func LongFromUnsignedLongLong(_llcppg_param1 c.UlongLong) *Object
+func LongFromUnsignedLongLong(_llcppg_param1 c.UlongLong) *LongObject
 
 // llgo:link (*LongObject).AsLong C.PyLong_AsLongLong
 func (self *LongObject) AsLong() c.LongLong {
@@ -190,7 +190,7 @@ func (self *LongObject) AsLongLongAndOverflow(_llcppg_param2 *c.Int) c.LongLong 
 }
 
 //go:linkname LongFromString C.PyLong_FromString
-func LongFromString(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) *Object
+func LongFromString(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) *LongObject
 
 // These aren't really part of the int object, but they're handy. The
 // functions are in Python/mystrtoul.c.
@@ -201,10 +201,8 @@ func OSStrtoul(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c
 //go:linkname OSStrtol C.PyOS_strtol
 func OSStrtol(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Long
 
-// llgo:link (*LongObject).FromUnicodeObject C.PyLong_FromUnicodeObject
-func (self *LongObject) FromUnicodeObject(base c.Int) *Object {
-	return nil
-}
+//go:linkname LongFromUnicodeObject C.PyLong_FromUnicodeObject
+func LongFromUnicodeObject(u *Object, base c.Int) *LongObject
 
 //go:linkname UnstableLongIsCompact C.PyUnstable_Long_IsCompact
 func UnstableLongIsCompact(op *LongObject) c.Int

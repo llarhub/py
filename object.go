@@ -393,25 +393,19 @@ var LongType TypeObject
 //go:linkname BoolType C.PyBool_Type
 var BoolType TypeObject
 
-// llgo:link (*TypeSpec).TypeFromSpec C.PyType_FromSpec
-func (self *TypeSpec) TypeFromSpec() *Object {
-	return nil
-}
+//go:linkname TypeFromSpec C.PyType_FromSpec
+func TypeFromSpec(_llcppg_param1 *TypeSpec) *TypeObject
 
-// llgo:link (*TypeSpec).TypeFromSpecWithBases C.PyType_FromSpecWithBases
-func (self *TypeSpec) TypeFromSpecWithBases(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname TypeFromSpecWithBases C.PyType_FromSpecWithBases
+func TypeFromSpecWithBases(_llcppg_param1 *TypeSpec, _llcppg_param2 *Object) *TypeObject
 
 // llgo:link (*TypeObject).Slot C.PyType_GetSlot
 func (self *TypeObject) Slot(_llcppg_param2 c.Int) unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*TypeObject).FromModuleAndSpec C.PyType_FromModuleAndSpec
-func (self *TypeObject) FromModuleAndSpec(_llcppg_param2 *TypeSpec, _llcppg_param3 *Object) *Object {
-	return nil
-}
+//go:linkname TypeFromModuleAndSpec C.PyType_FromModuleAndSpec
+func TypeFromModuleAndSpec(_llcppg_param1 *Object, _llcppg_param2 *TypeSpec, _llcppg_param3 *Object) *TypeObject
 
 // llgo:link (*TypeObject).Module C.PyType_GetModule
 func (self *TypeObject) Module() *Object {
@@ -443,10 +437,8 @@ func (self *TypeObject) ModuleName() *Object {
 	return nil
 }
 
-// llgo:link (*TypeObject).FromMetaclass C.PyType_FromMetaclass
-func (self *TypeObject) FromMetaclass(_llcppg_param2 *Object, _llcppg_param3 *TypeSpec, _llcppg_param4 *Object) *Object {
-	return nil
-}
+//go:linkname TypeFromMetaclass C.PyType_FromMetaclass
+func TypeFromMetaclass(_llcppg_param1 *TypeObject, _llcppg_param2 *Object, _llcppg_param3 *TypeSpec, _llcppg_param4 *Object) *TypeObject
 
 // llgo:link (*Object).TypeData C.PyObject_GetTypeData
 func (self *Object) TypeData(cls *TypeObject) unsafe.Pointer {

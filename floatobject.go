@@ -26,15 +26,13 @@ func FloatGetInfo() *Object
 
 // Return Python float from string PyObject.
 //
-// llgo:link (*FloatObject).FromString C.PyFloat_FromString
-func (self *FloatObject) FromString() *Object {
-	return nil
-}
+//go:linkname FloatFromString C.PyFloat_FromString
+func FloatFromString(_llcppg_param1 *Object) *FloatObject
 
 // Return Python float from C double.
 //
 //go:linkname FloatFromDouble C.PyFloat_FromDouble
-func FloatFromDouble(_llcppg_param1 c.Double) *Object
+func FloatFromDouble(_llcppg_param1 c.Double) *FloatObject
 
 // Extract C double from Python float.  The macro version trades safety for
 // speed.

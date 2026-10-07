@@ -25,7 +25,7 @@ type ComplexObject struct {
 var ComplexType TypeObject
 
 //go:linkname ComplexFromDoubles C.PyComplex_FromDoubles
-func ComplexFromDoubles(real c.Double, imag c.Double) *Object
+func ComplexFromDoubles(real c.Double, imag c.Double) *ComplexObject
 
 // llgo:link (*ComplexObject).RealAsDouble C.PyComplex_RealAsDouble
 func (self *ComplexObject) RealAsDouble() c.Double {
@@ -60,10 +60,8 @@ func X_cPow(_llcppg_param1 Complex, _llcppg_param2 Complex) Complex
 //go:linkname X_cAbs C._Py_c_abs
 func X_cAbs(_llcppg_param1 Complex) c.Double
 
-// llgo:link Complex.FromC C.PyComplex_FromCComplex
-func (self Complex) FromC() *Object {
-	return nil
-}
+//go:linkname ComplexFromCComplex C.PyComplex_FromCComplex
+func ComplexFromCComplex(_llcppg_param1 Complex) *ComplexObject
 
 // llgo:link (*ComplexObject).AsC C.PyComplex_AsCComplex
 func (self *ComplexObject) AsC() Complex {

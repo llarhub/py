@@ -33,21 +33,21 @@ var BytesType TypeObject
 var BytesIterType TypeObject
 
 //go:linkname BytesFromStringAndSize C.PyBytes_FromStringAndSize
-func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Object
+func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *BytesObject
 
 //go:linkname BytesFromString C.PyBytes_FromString
-func BytesFromString(_llcppg_param1 *c.Char) *Object
+func BytesFromString(_llcppg_param1 *c.Char) *BytesObject
 
 // llgo:link (*Object).AsBytes C.PyBytes_FromObject
 func (self *Object) AsBytes() *BytesObject {
 	return nil
 }
 
-//go:linkname Bytes_FromFormatV C.PyBytes_FromFormatV
-func Bytes_FromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *Object
+//go:linkname BytesFromFormatV C.PyBytes_FromFormatV
+func BytesFromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *BytesObject
 
 //go:linkname BytesFromFormat C.PyBytes_FromFormat
-func BytesFromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *Object
+func BytesFromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *BytesObject
 
 // llgo:link (*BytesObject).Size C.PyBytes_Size
 func (self *BytesObject) Size() SsizeT {

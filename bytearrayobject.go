@@ -37,7 +37,7 @@ func (self *ByteArrayObject) Concat(_llcppg_param2 *Object) *Object {
 }
 
 //go:linkname ByteArrayFromStringAndSize C.PyByteArray_FromStringAndSize
-func ByteArrayFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Object
+func ByteArrayFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *ByteArrayObject
 
 // llgo:link (*ByteArrayObject).Size C.PyByteArray_Size
 func (self *ByteArrayObject) Size() SsizeT {

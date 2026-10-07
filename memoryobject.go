@@ -42,12 +42,10 @@ func (self *Object) AsMemoryView() *MemoryViewObject {
 }
 
 //go:linkname MemoryViewFromMemory C.PyMemoryView_FromMemory
-func MemoryViewFromMemory(mem *c.Char, size SsizeT, flags c.Int) *Object
+func MemoryViewFromMemory(mem *c.Char, size SsizeT, flags c.Int) *MemoryViewObject
 
-// llgo:link (*Buffer).MemoryViewFrom C.PyMemoryView_FromBuffer
-func (self *Buffer) MemoryViewFrom() *Object {
-	return nil
-}
+//go:linkname MemoryViewFromBuffer C.PyMemoryView_FromBuffer
+func MemoryViewFromBuffer(info *Buffer) *MemoryViewObject
 
 // llgo:link (*MemoryViewObject).Contiguous C.PyMemoryView_GetContiguous
 func (self *MemoryViewObject) Contiguous(buffertype c.Int, order c.Char) *Object {
