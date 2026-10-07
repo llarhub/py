@@ -26,8 +26,8 @@ var ByteArrayIterType TypeObject
 
 // Direct API functions
 //
-// llgo:link (*ByteArrayObject).FromObject C.PyByteArray_FromObject
-func (self *ByteArrayObject) FromObject() *Object {
+// llgo:link (*Object).AsByteArray C.PyByteArray_FromObject
+func (self *Object) AsByteArray() *ByteArrayObject {
 	return nil
 }
 

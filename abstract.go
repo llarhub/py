@@ -36,8 +36,8 @@ func (self *Object) Call(args *Object, kwargs *Object) *Object {
 // This is the equivalent of the Python expression:
 // callable(*args).
 //
-// llgo:link (*Object).ObjectCallObject C.PyObject_CallObject
-func (self *Object) ObjectCallObject(args *Object) *Object {
+// llgo:link (*Object).CallObject C.PyObject_CallObject
+func (self *Object) CallObject(args *Object) *Object {
 	return self
 }
 

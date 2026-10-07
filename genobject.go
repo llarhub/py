@@ -23,10 +23,8 @@ type AsyncGenObject = X_AsyncGenObject
 //go:linkname GenType C.PyGen_Type
 var GenType TypeObject
 
-// llgo:link (*FrameObject).GenNew C.PyGen_New
-func (self *FrameObject) GenNew() *Object {
-	return nil
-}
+//go:linkname GenNew C.PyGen_New
+func GenNew(_llcppg_param1 *FrameObject) *Object
 
 // llgo:link (*FrameObject).GenNewWithQualName C.PyGen_NewWithQualName
 func (self *FrameObject) GenNewWithQualName(name *Object, qualname *Object) *Object {
@@ -41,10 +39,8 @@ func (self *GenObject) Code() *CodeObject {
 //go:linkname CoroType C.PyCoro_Type
 var CoroType TypeObject
 
-// llgo:link (*FrameObject).CoroNew C.PyCoro_New
-func (self *FrameObject) CoroNew(name *Object, qualname *Object) *Object {
-	return nil
-}
+//go:linkname CoroNew C.PyCoro_New
+func CoroNew(_llcppg_param1 *FrameObject, name *Object, qualname *Object) *Object
 
 //go:linkname AsyncGenType C.PyAsyncGen_Type
 var AsyncGenType TypeObject
@@ -52,7 +48,5 @@ var AsyncGenType TypeObject
 //go:linkname X_AsyncGenASendType C._PyAsyncGenASend_Type
 var X_AsyncGenASendType TypeObject
 
-// llgo:link (*FrameObject).AsyncGenNew C.PyAsyncGen_New
-func (self *FrameObject) AsyncGenNew(name *Object, qualname *Object) *Object {
-	return nil
-}
+//go:linkname AsyncGenNew C.PyAsyncGen_New
+func AsyncGenNew(_llcppg_param1 *FrameObject, name *Object, qualname *Object) *Object

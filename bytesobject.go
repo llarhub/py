@@ -38,8 +38,8 @@ func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Obje
 //go:linkname BytesFromString C.PyBytes_FromString
 func BytesFromString(_llcppg_param1 *c.Char) *Object
 
-// llgo:link (*BytesObject).FromObject C.PyBytes_FromObject
-func (self *BytesObject) FromObject() *Object {
+// llgo:link (*Object).AsBytes C.PyBytes_FromObject
+func (self *Object) AsBytes() *BytesObject {
 	return nil
 }
 

@@ -89,10 +89,8 @@ func (self *CFunctionObject) Flags() c.Int {
 // needed for e.g. GCC with -fvisibility=hidden), but redefined as a macro
 // that calls PyCFunction_NewEx.
 //
-// llgo:link (*MethodDef).CFunctionNew C.PyCFunction_New
-func (self *MethodDef) CFunctionNew(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname NewCFunction C.PyCFunction_New
+func NewCFunction(_llcppg_param1 *MethodDef, _llcppg_param2 *Object) *CFunctionObject
 
 // PyCFunction_NewEx is similar: on 3.9+, this calls PyCMethod_New.
 //
@@ -101,10 +99,8 @@ func (self *MethodDef) CFunctionNewEx(_llcppg_param2 *Object, _llcppg_param3 *Ob
 	return nil
 }
 
-// llgo:link (*MethodDef).CMethodNew C.PyCMethod_New
-func (self *MethodDef) CMethodNew(_llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *TypeObject) *Object {
-	return nil
-}
+//go:linkname NewCMethod C.PyCMethod_New
+func NewCMethod(_llcppg_param1 *MethodDef, _llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *TypeObject) *CMethodObject
 
 //go:linkname CMethodType C.PyCMethod_Type
 var CMethodType TypeObject

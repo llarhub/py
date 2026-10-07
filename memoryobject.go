@@ -36,8 +36,8 @@ type MemoryViewObject struct {
 //go:linkname MemoryViewType C.PyMemoryView_Type
 var MemoryViewType TypeObject
 
-// llgo:link (*MemoryViewObject).FromObject C.PyMemoryView_FromObject
-func (self *MemoryViewObject) FromObject() *Object {
+// llgo:link (*Object).AsMemoryView C.PyMemoryView_FromObject
+func (self *Object) AsMemoryView() *MemoryViewObject {
 	return nil
 }
 

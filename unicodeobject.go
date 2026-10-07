@@ -193,8 +193,8 @@ func (self *UnicodeObject) FromEncodedObject(encoding *c.Char, errors *c.Char) *
 // The API returns NULL in case of an error. The caller is responsible
 // for decref'ing the returned objects.
 //
-// llgo:link (*UnicodeObject).FromObject C.PyUnicode_FromObject
-func (self *UnicodeObject) FromObject() *Object {
+// llgo:link (*Object).AsUnicode C.PyUnicode_FromObject
+func (self *Object) AsUnicode() *UnicodeObject {
 	return nil
 }
 
@@ -854,8 +854,8 @@ func (self *UnicodeObject) Unicode_DATA() unsafe.Pointer {
 // This function will allocate the object and its buffer in a single memory
 // block.  Objects created using this function are not resizable.
 //
-//go:linkname UnicodeNew C.PyUnicode_New
-func UnicodeNew(size SsizeT, maxchar UCS4) *Object
+//go:linkname NewUnicode C.PyUnicode_New
+func NewUnicode(size SsizeT, maxchar UCS4) *UnicodeObject
 
 // Copy character from one unicode object into another, this function performs
 // character conversion when necessary and falls back to memcpy() if possible.

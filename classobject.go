@@ -19,10 +19,8 @@ type InstanceMethodObject struct {
 //go:linkname MethodType C.PyMethod_Type
 var MethodType TypeObject
 
-// llgo:link (*MethodObject).New C.PyMethod_New
-func (self *MethodObject) New(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname NewMethod C.PyMethod_New
+func NewMethod(_llcppg_param1 *Object, _llcppg_param2 *Object) *MethodObject
 
 // llgo:link (*MethodObject).Function C.PyMethod_Function
 func (self *MethodObject) Function() *Object {
@@ -37,10 +35,8 @@ func (self *MethodObject) Self() *Object {
 //go:linkname InstanceMethodType C.PyInstanceMethod_Type
 var InstanceMethodType TypeObject
 
-// llgo:link (*InstanceMethodObject).New C.PyInstanceMethod_New
-func (self *InstanceMethodObject) New() *Object {
-	return nil
-}
+//go:linkname NewInstanceMethod C.PyInstanceMethod_New
+func NewInstanceMethod(_llcppg_param1 *Object) *InstanceMethodObject
 
 // llgo:link (*InstanceMethodObject).Function C.PyInstanceMethod_Function
 func (self *InstanceMethodObject) Function() *Object {

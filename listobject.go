@@ -22,8 +22,8 @@ var ListIterType TypeObject
 //go:linkname ListRevIterType C.PyListRevIter_Type
 var ListRevIterType TypeObject
 
-//go:linkname ListNew C.PyList_New
-func ListNew(size SsizeT) *Object
+//go:linkname NewList C.PyList_New
+func NewList(size SsizeT) *ListObject
 
 // llgo:link (*ListObject).Size C.PyList_Size
 func (self *ListObject) Size() SsizeT {

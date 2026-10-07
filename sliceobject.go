@@ -25,10 +25,8 @@ var SliceType TypeObject
 //go:linkname EllipsisType C.PyEllipsis_Type
 var EllipsisType TypeObject
 
-// llgo:link (*SliceObject).New C.PySlice_New
-func (self *SliceObject) New(stop *Object, step *Object) *Object {
-	return nil
-}
+//go:linkname NewSlice C.PySlice_New
+func NewSlice(start *Object, stop *Object, step *Object) *SliceObject
 
 //go:linkname X_SliceFromIndices C._PySlice_FromIndices
 func X_SliceFromIndices(start SsizeT, stop SsizeT) *Object
