@@ -24,11 +24,11 @@ func LongFromLong(_llcppg_param1 c.Long) *LongObject
 //go:linkname LongFromUnsignedLong C.PyLong_FromUnsignedLong
 func LongFromUnsignedLong(_llcppg_param1 c.Ulong) *LongObject
 
-//go:linkname LongFromSize_t C.PyLong_FromSize_t
-func LongFromSize_t(_llcppg_param1 c.SizeT) *LongObject
+//go:linkname LongFromSizeT C.PyLong_FromSize_t
+func LongFromSizeT(_llcppg_param1 c.SizeT) *LongObject
 
-//go:linkname LongFromSsize_t C.PyLong_FromSsize_t
-func LongFromSsize_t(_llcppg_param1 SsizeT) *LongObject
+//go:linkname LongFromSsizeT C.PyLong_FromSsize_t
+func LongFromSsizeT(_llcppg_param1 SsizeT) *LongObject
 
 //go:linkname LongFromDouble C.PyLong_FromDouble
 func LongFromDouble(_llcppg_param1 c.Double) *LongObject
