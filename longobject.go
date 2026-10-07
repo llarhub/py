@@ -33,46 +33,38 @@ func LongFromSsizeT(_llcppg_param1 SsizeT) *Object
 //go:linkname LongFromDouble C.PyLong_FromDouble
 func LongFromDouble(_llcppg_param1 c.Double) *Object
 
-type Long struct {
-	X_object
-}
-
-func (self *Object) AsLong() *Long {
-	return (*Long)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Long).As C.PyLong_AsLong
-func (self *Long) As() c.Long {
+// llgo:link (*LongObject).As C.PyLong_AsLong
+func (self *LongObject) As() c.Long {
 	return 0
 }
 
-// llgo:link (*Long).AsLongAndOverflow C.PyLong_AsLongAndOverflow
-func (self *Long) AsLongAndOverflow(_llcppg_param2 *c.Int) c.Long {
+// llgo:link (*LongObject).AsLongAndOverflow C.PyLong_AsLongAndOverflow
+func (self *LongObject) AsLongAndOverflow(_llcppg_param2 *c.Int) c.Long {
 	return 0
 }
 
-// llgo:link (*Long).AsSsizeT C.PyLong_AsSsize_t
-func (self *Long) AsSsizeT() SsizeT {
+// llgo:link (*LongObject).AsSsizeT C.PyLong_AsSsize_t
+func (self *LongObject) AsSsizeT() SsizeT {
 	return 0
 }
 
-// llgo:link (*Long).AsSizeT C.PyLong_AsSize_t
-func (self *Long) AsSizeT() c.SizeT {
+// llgo:link (*LongObject).AsSizeT C.PyLong_AsSize_t
+func (self *LongObject) AsSizeT() c.SizeT {
 	return 0
 }
 
-// llgo:link (*Long).AsUnsigned C.PyLong_AsUnsignedLong
-func (self *Long) AsUnsigned() c.Ulong {
+// llgo:link (*LongObject).AsUnsigned C.PyLong_AsUnsignedLong
+func (self *LongObject) AsUnsigned() c.Ulong {
 	return 0
 }
 
-// llgo:link (*Long).AsUnsignedLongMask C.PyLong_AsUnsignedLongMask
-func (self *Long) AsUnsignedLongMask() c.Ulong {
+// llgo:link (*LongObject).AsUnsignedLongMask C.PyLong_AsUnsignedLongMask
+func (self *LongObject) AsUnsignedLongMask() c.Ulong {
 	return 0
 }
 
-// llgo:link (*Long).AsInt C.PyLong_AsInt
-func (self *Long) AsInt() c.Int {
+// llgo:link (*LongObject).AsInt C.PyLong_AsInt
+func (self *LongObject) AsInt() c.Int {
 	return 0
 }
 
@@ -88,23 +80,23 @@ func LongFromInt64(value c.Int64T) *Object
 //go:linkname LongFromUInt64 C.PyLong_FromUInt64
 func LongFromUInt64(value c.Uint64T) *Object
 
-// llgo:link (*Long).AsInt32 C.PyLong_AsInt32
-func (self *Long) AsInt32(value *c.Int32T) c.Int {
+// llgo:link (*LongObject).AsInt32 C.PyLong_AsInt32
+func (self *LongObject) AsInt32(value *c.Int32T) c.Int {
 	return 0
 }
 
-// llgo:link (*Long).AsUInt32 C.PyLong_AsUInt32
-func (self *Long) AsUInt32(value *c.Uint32T) c.Int {
+// llgo:link (*LongObject).AsUInt32 C.PyLong_AsUInt32
+func (self *LongObject) AsUInt32(value *c.Uint32T) c.Int {
 	return 0
 }
 
-// llgo:link (*Long).AsInt64 C.PyLong_AsInt64
-func (self *Long) AsInt64(value *c.Int64T) c.Int {
+// llgo:link (*LongObject).AsInt64 C.PyLong_AsInt64
+func (self *LongObject) AsInt64(value *c.Int64T) c.Int {
 	return 0
 }
 
-// llgo:link (*Long).AsUInt64 C.PyLong_AsUInt64
-func (self *Long) AsUInt64(value *c.Uint64T) c.Int {
+// llgo:link (*LongObject).AsUInt64 C.PyLong_AsUInt64
+func (self *LongObject) AsUInt64(value *c.Uint64T) c.Int {
 	return 0
 }
 
@@ -135,8 +127,8 @@ func (self *Long) AsUInt64(value *c.Uint64T) c.Int {
 // may be larger than necessary - this function is not an accurate way to
 // calculate the bit length of an integer object.
 //
-// llgo:link (*Long).AsNativeBytes C.PyLong_AsNativeBytes
-func (self *Long) AsNativeBytes(buffer unsafe.Pointer, n_bytes SsizeT, flags c.Int) SsizeT {
+// llgo:link (*LongObject).AsNativeBytes C.PyLong_AsNativeBytes
+func (self *LongObject) AsNativeBytes(buffer unsafe.Pointer, n_bytes SsizeT, flags c.Int) SsizeT {
 	return 0
 }
 
@@ -158,16 +150,16 @@ func LongFromUnsignedNativeBytes(buffer unsafe.Pointer, n_bytes c.SizeT, flags c
 //go:linkname LongGetInfo C.PyLong_GetInfo
 func LongGetInfo() *Object
 
-// llgo:link (*Long).AsDouble C.PyLong_AsDouble
-func (self *Long) AsDouble() c.Double {
+// llgo:link (*LongObject).AsDouble C.PyLong_AsDouble
+func (self *LongObject) AsDouble() c.Double {
 	return 0
 }
 
 //go:linkname LongFromVoidPtr C.PyLong_FromVoidPtr
 func LongFromVoidPtr(_llcppg_param1 unsafe.Pointer) *Object
 
-// llgo:link (*Long).AsVoidPtr C.PyLong_AsVoidPtr
-func (self *Long) AsVoidPtr() unsafe.Pointer {
+// llgo:link (*LongObject).AsVoidPtr C.PyLong_AsVoidPtr
+func (self *LongObject) AsVoidPtr() unsafe.Pointer {
 	return nil
 }
 
@@ -177,23 +169,23 @@ func LongFromLongLong(_llcppg_param1 c.LongLong) *Object
 //go:linkname LongFromUnsignedLongLong C.PyLong_FromUnsignedLongLong
 func LongFromUnsignedLongLong(_llcppg_param1 c.UlongLong) *Object
 
-// llgo:link (*Long).AsLong C.PyLong_AsLongLong
-func (self *Long) AsLong() c.LongLong {
+// llgo:link (*LongObject).AsLong C.PyLong_AsLongLong
+func (self *LongObject) AsLong() c.LongLong {
 	return 0
 }
 
-// llgo:link (*Long).AsUnsignedLong C.PyLong_AsUnsignedLongLong
-func (self *Long) AsUnsignedLong() c.UlongLong {
+// llgo:link (*LongObject).AsUnsignedLong C.PyLong_AsUnsignedLongLong
+func (self *LongObject) AsUnsignedLong() c.UlongLong {
 	return 0
 }
 
-// llgo:link (*Long).AsUnsignedLongLongMask C.PyLong_AsUnsignedLongLongMask
-func (self *Long) AsUnsignedLongLongMask() c.UlongLong {
+// llgo:link (*LongObject).AsUnsignedLongLongMask C.PyLong_AsUnsignedLongLongMask
+func (self *LongObject) AsUnsignedLongLongMask() c.UlongLong {
 	return 0
 }
 
-// llgo:link (*Long).AsLongLongAndOverflow C.PyLong_AsLongLongAndOverflow
-func (self *Long) AsLongLongAndOverflow(_llcppg_param2 *c.Int) c.LongLong {
+// llgo:link (*LongObject).AsLongLongAndOverflow C.PyLong_AsLongLongAndOverflow
+func (self *LongObject) AsLongLongAndOverflow(_llcppg_param2 *c.Int) c.LongLong {
 	return 0
 }
 
@@ -209,28 +201,24 @@ func OSStrtoul(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c
 //go:linkname OSStrtol C.PyOS_strtol
 func OSStrtol(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Long
 
-// llgo:link (*Long).FromUnicodeObject C.PyLong_FromUnicodeObject
-func (self *Long) FromUnicodeObject(base c.Int) *Object {
+// llgo:link (*LongObject).FromUnicodeObject C.PyLong_FromUnicodeObject
+func (self *LongObject) FromUnicodeObject(base c.Int) *Object {
 	return nil
 }
 
-// llgo:link (*Unstable).LongIsCompact C.PyUnstable_Long_IsCompact
-func (self *Unstable) LongIsCompact() c.Int {
-	return 0
-}
+//go:linkname UnstableLongIsCompact C.PyUnstable_Long_IsCompact
+func UnstableLongIsCompact(op *LongObject) c.Int
 
-// llgo:link (*Unstable).LongCompactValue C.PyUnstable_Long_CompactValue
-func (self *Unstable) LongCompactValue() SsizeT {
-	return 0
-}
+//go:linkname UnstableLongCompactValue C.PyUnstable_Long_CompactValue
+func UnstableLongCompactValue(op *LongObject) SsizeT
 
 // PyLong_IsPositive.  Check if the integer object is positive.
 //
 // - On success, return 1 if *obj is positive, and 0 otherwise.
 // - On failure, set an exception, and return -1.
 //
-// llgo:link (*Long).IsPositive C.PyLong_IsPositive
-func (self *Long) IsPositive() c.Int {
+// llgo:link (*LongObject).IsPositive C.PyLong_IsPositive
+func (self *LongObject) IsPositive() c.Int {
 	return 0
 }
 
@@ -239,8 +227,8 @@ func (self *Long) IsPositive() c.Int {
 // - On success, return 1 if *obj is negative, and 0 otherwise.
 // - On failure, set an exception, and return -1.
 //
-// llgo:link (*Long).IsNegative C.PyLong_IsNegative
-func (self *Long) IsNegative() c.Int {
+// llgo:link (*LongObject).IsNegative C.PyLong_IsNegative
+func (self *LongObject) IsNegative() c.Int {
 	return 0
 }
 
@@ -249,8 +237,8 @@ func (self *Long) IsNegative() c.Int {
 // - On success, return 1 if *obj is zero, and 0 if it is non-zero.
 // - On failure, set an exception, and return -1.
 //
-// llgo:link (*Long).IsZero C.PyLong_IsZero
-func (self *Long) IsZero() c.Int {
+// llgo:link (*LongObject).IsZero C.PyLong_IsZero
+func (self *LongObject) IsZero() c.Int {
 	return 0
 }
 
@@ -260,8 +248,8 @@ func (self *Long) IsZero() c.Int {
 // - On success, set '*sign' to the integer sign, and return 0.
 // - On failure, set an exception, and return -1.
 //
-// llgo:link (*Long).Sign C.PyLong_GetSign
-func (self *Long) Sign(sign *c.Int) c.Int {
+// llgo:link (*LongObject).Sign C.PyLong_GetSign
+func (self *LongObject) Sign(sign *c.Int) c.Int {
 	return 0
 }
 

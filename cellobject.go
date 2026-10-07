@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type CellObject struct {
@@ -15,25 +15,17 @@ type CellObject struct {
 //go:linkname CellType C.PyCell_Type
 var CellType TypeObject
 
-type Cell struct {
-	X_object
-}
-
-func (self *Object) AsCell() *Cell {
-	return (*Cell)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Cell).New C.PyCell_New
-func (self *Cell) New() *Object {
+// llgo:link (*CellObject).New C.PyCell_New
+func (self *CellObject) New() *Object {
 	return nil
 }
 
-// llgo:link (*Cell).Get C.PyCell_Get
-func (self *Cell) Get() *Object {
+// llgo:link (*CellObject).Get C.PyCell_Get
+func (self *CellObject) Get() *Object {
 	return nil
 }
 
-// llgo:link (*Cell).Set C.PyCell_Set
-func (self *Cell) Set(_llcppg_param2 *Object) c.Int {
+// llgo:link (*CellObject).Set C.PyCell_Set
+func (self *CellObject) Set(_llcppg_param2 *Object) c.Int {
 	return 0
 }

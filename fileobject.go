@@ -15,23 +15,11 @@ type OpenCodeHookFunction = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.P
 //go:linkname FileFromFd C.PyFile_FromFd
 func FileFromFd(_llcppg_param1 c.Int, _llcppg_param2 *c.Char, _llcppg_param3 *c.Char, _llcppg_param4 c.Int, _llcppg_param5 *c.Char, _llcppg_param6 *c.Char, _llcppg_param7 *c.Char, _llcppg_param8 c.Int) *Object
 
-type File struct {
-	X_object
-}
+//go:linkname FileGetLine C.PyFile_GetLine
+func FileGetLine(_llcppg_param1 *Object, _llcppg_param2 c.Int) *Object
 
-func (self *Object) AsFile() *File {
-	return (*File)(unsafe.Pointer(self))
-}
-
-// llgo:link (*File).Line C.PyFile_GetLine
-func (self *File) Line(_llcppg_param2 c.Int) *Object {
-	return nil
-}
-
-// llgo:link (*File).WriteObject C.PyFile_WriteObject
-func (self *File) WriteObject(_llcppg_param2 *Object, _llcppg_param3 c.Int) c.Int {
-	return 0
-}
+//go:linkname FileWriteObject C.PyFile_WriteObject
+func FileWriteObject(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 c.Int) c.Int
 
 //go:linkname FileWriteString C.PyFile_WriteString
 func FileWriteString(_llcppg_param1 *c.Char, _llcppg_param2 *Object) c.Int
@@ -71,10 +59,8 @@ var StdPrinterType TypeObject
 //go:linkname FileOpenCode C.PyFile_OpenCode
 func FileOpenCode(utf8path *c.Char) *Object
 
-// llgo:link (*File).OpenCodeObject C.PyFile_OpenCodeObject
-func (self *File) OpenCodeObject() *Object {
-	return nil
-}
+//go:linkname FileOpenCodeObject C.PyFile_OpenCodeObject
+func FileOpenCodeObject(path *Object) *Object
 
 //go:linkname FileSetOpenCodeHook C.PyFile_SetOpenCodeHook
 func FileSetOpenCodeHook(hook OpenCodeHookFunction, userData unsafe.Pointer) c.Int

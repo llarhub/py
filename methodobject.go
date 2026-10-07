@@ -70,18 +70,18 @@ type CMethodObject struct {
 //go:linkname CFunctionType C.PyCFunction_Type
 var CFunctionType TypeObject
 
-// llgo:link (*Object).CFunctionGetFunction C.PyCFunction_GetFunction
-func (self *Object) CFunctionGetFunction() CFunction {
+// llgo:link (*CFunctionObject).Function C.PyCFunction_GetFunction
+func (self *CFunctionObject) Function() CFunction {
 	return nil
 }
 
-// llgo:link (*Object).CFunctionGetSelf C.PyCFunction_GetSelf
-func (self *Object) CFunctionGetSelf() *Object {
-	return self
+// llgo:link (*CFunctionObject).Self C.PyCFunction_GetSelf
+func (self *CFunctionObject) Self() *Object {
+	return nil
 }
 
-// llgo:link (*Object).CFunctionGetFlags C.PyCFunction_GetFlags
-func (self *Object) CFunctionGetFlags() c.Int {
+// llgo:link (*CFunctionObject).Flags C.PyCFunction_GetFlags
+func (self *CFunctionObject) Flags() c.Int {
 	return 0
 }
 

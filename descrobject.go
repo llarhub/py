@@ -122,59 +122,31 @@ var DictProxyType TypeObject
 //go:linkname PropertyType C.PyProperty_Type
 var PropertyType TypeObject
 
-type Descr struct {
-	X_typeobject
-}
-
-func (self *TypeObject) AsDescr() *Descr {
-	return (*Descr)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Descr).NewMethod C.PyDescr_NewMethod
-func (self *Descr) NewMethod(_llcppg_param2 *MethodDef) *Object {
+// llgo:link (*TypeObject).DescrNewMethod C.PyDescr_NewMethod
+func (self *TypeObject) DescrNewMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*Descr).NewClassMethod C.PyDescr_NewClassMethod
-func (self *Descr) NewClassMethod(_llcppg_param2 *MethodDef) *Object {
+// llgo:link (*TypeObject).DescrNewClassMethod C.PyDescr_NewClassMethod
+func (self *TypeObject) DescrNewClassMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*Descr).NewMember C.PyDescr_NewMember
-func (self *Descr) NewMember(_llcppg_param2 *MemberDef) *Object {
+// llgo:link (*TypeObject).DescrNewMember C.PyDescr_NewMember
+func (self *TypeObject) DescrNewMember(_llcppg_param2 *MemberDef) *Object {
 	return nil
 }
 
-// llgo:link (*Descr).NewGetSet C.PyDescr_NewGetSet
-func (self *Descr) NewGetSet(_llcppg_param2 *GetSetDef) *Object {
+// llgo:link (*TypeObject).DescrNewGetSet C.PyDescr_NewGetSet
+func (self *TypeObject) DescrNewGetSet(_llcppg_param2 *GetSetDef) *Object {
 	return nil
 }
 
-type DictProxy struct {
-	X_object
-}
+//go:linkname DictProxyNew C.PyDictProxy_New
+func DictProxyNew(_llcppg_param1 *Object) *Object
 
-func (self *Object) AsDictProxy() *DictProxy {
-	return (*DictProxy)(unsafe.Pointer(self))
-}
-
-// llgo:link (*DictProxy).New C.PyDictProxy_New
-func (self *DictProxy) New() *Object {
-	return nil
-}
-
-type Wrapper struct {
-	X_object
-}
-
-func (self *Object) AsWrapper() *Wrapper {
-	return (*Wrapper)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Wrapper).New C.PyWrapper_New
-func (self *Wrapper) New(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname WrapperNew C.PyWrapper_New
+func WrapperNew(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object
 
 //go:linkname MemberGetOne C.PyMember_GetOne
 func MemberGetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef) *Object
@@ -182,12 +154,12 @@ func MemberGetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef) *Object
 //go:linkname MemberSetOne C.PyMember_SetOne
 func MemberSetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef, _llcppg_param3 *Object) c.Int
 
-// llgo:link (*Descr).NewWrapper C.PyDescr_NewWrapper
-func (self *Descr) NewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *Object {
+// llgo:link (*TypeObject).DescrNewWrapper C.PyDescr_NewWrapper
+func (self *TypeObject) DescrNewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *Object {
 	return nil
 }
 
-// llgo:link (*Descr).IsData C.PyDescr_IsData
-func (self *Descr) IsData() c.Int {
+// llgo:link (*DescrObject).IsData C.PyDescr_IsData
+func (self *DescrObject) IsData() c.Int {
 	return 0
 }

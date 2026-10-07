@@ -2,7 +2,7 @@
 
 package py
 
-import "unsafe"
+import _ "unsafe"
 
 type MethodObject struct {
 	ObBase        Object
@@ -19,46 +19,30 @@ type InstanceMethodObject struct {
 //go:linkname MethodType C.PyMethod_Type
 var MethodType TypeObject
 
-type Method struct {
-	X_object
-}
-
-func (self *Object) AsMethod() *Method {
-	return (*Method)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Method).New C.PyMethod_New
-func (self *Method) New(_llcppg_param2 *Object) *Object {
+// llgo:link (*MethodObject).New C.PyMethod_New
+func (self *MethodObject) New(_llcppg_param2 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Method).Function C.PyMethod_Function
-func (self *Method) Function() *Object {
+// llgo:link (*MethodObject).Function C.PyMethod_Function
+func (self *MethodObject) Function() *Object {
 	return nil
 }
 
-// llgo:link (*Method).Self C.PyMethod_Self
-func (self *Method) Self() *Object {
+// llgo:link (*MethodObject).Self C.PyMethod_Self
+func (self *MethodObject) Self() *Object {
 	return nil
 }
 
 //go:linkname InstanceMethodType C.PyInstanceMethod_Type
 var InstanceMethodType TypeObject
 
-type InstanceMethod struct {
-	X_object
-}
-
-func (self *Object) AsInstanceMethod() *InstanceMethod {
-	return (*InstanceMethod)(unsafe.Pointer(self))
-}
-
-// llgo:link (*InstanceMethod).New C.PyInstanceMethod_New
-func (self *InstanceMethod) New() *Object {
+// llgo:link (*InstanceMethodObject).New C.PyInstanceMethod_New
+func (self *InstanceMethodObject) New() *Object {
 	return nil
 }
 
-// llgo:link (*InstanceMethod).Function C.PyInstanceMethod_Function
-func (self *InstanceMethod) Function() *Object {
+// llgo:link (*InstanceMethodObject).Function C.PyInstanceMethod_Function
+func (self *InstanceMethodObject) Function() *Object {
 	return nil
 }

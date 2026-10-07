@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type BytesObject struct {
@@ -38,16 +38,8 @@ func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Obje
 //go:linkname BytesFromString C.PyBytes_FromString
 func BytesFromString(_llcppg_param1 *c.Char) *Object
 
-type Bytes struct {
-	X_object
-}
-
-func (self *Object) AsBytes() *Bytes {
-	return (*Bytes)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Bytes).FromObject C.PyBytes_FromObject
-func (self *Bytes) FromObject() *Object {
+// llgo:link (*BytesObject).FromObject C.PyBytes_FromObject
+func (self *BytesObject) FromObject() *Object {
 	return nil
 }
 
@@ -57,18 +49,18 @@ func Bytes_FromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *Object
 //go:linkname BytesFromFormat C.PyBytes_FromFormat
 func BytesFromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *Object
 
-// llgo:link (*Bytes).Size C.PyBytes_Size
-func (self *Bytes) Size() SsizeT {
+// llgo:link (*BytesObject).Size C.PyBytes_Size
+func (self *BytesObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*Bytes).AsString C.PyBytes_AsString
-func (self *Bytes) AsString() *c.Char {
+// llgo:link (*BytesObject).AsString C.PyBytes_AsString
+func (self *BytesObject) AsString() *c.Char {
 	return nil
 }
 
-// llgo:link (*Bytes).Repr C.PyBytes_Repr
-func (self *Bytes) Repr(_llcppg_param2 c.Int) *Object {
+// llgo:link (*BytesObject).Repr C.PyBytes_Repr
+func (self *BytesObject) Repr(_llcppg_param2 c.Int) *Object {
 	return nil
 }
 
@@ -86,15 +78,15 @@ func BytesDecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT, _llcppg_pa
 // 0-terminated (passing a string with embedded NUL characters will
 // cause an exception).
 //
-// llgo:link (*Bytes).AsStringAndSize C.PyBytes_AsStringAndSize
-func (self *Bytes) AsStringAndSize(s **c.Char, len *SsizeT) c.Int {
+// llgo:link (*BytesObject).AsStringAndSize C.PyBytes_AsStringAndSize
+func (self *BytesObject) AsStringAndSize(s **c.Char, len *SsizeT) c.Int {
 	return 0
 }
 
 //go:linkname X_BytesResize C._PyBytes_Resize
 func X_BytesResize(_llcppg_param1 **Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*Bytes).Join C.PyBytes_Join
-func (self *Bytes) Join(iterable *Object) *Object {
+// llgo:link (*BytesObject).Join C.PyBytes_Join
+func (self *BytesObject) Join(iterable *Object) *Object {
 	return nil
 }

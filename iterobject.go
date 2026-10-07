@@ -2,7 +2,7 @@
 
 package py
 
-import "unsafe"
+import _ "unsafe"
 
 //go:linkname SeqIterType C.PySeqIter_Type
 var SeqIterType TypeObject
@@ -10,28 +10,8 @@ var SeqIterType TypeObject
 //go:linkname CallIterType C.PyCallIter_Type
 var CallIterType TypeObject
 
-type SeqIter struct {
-	X_object
-}
+//go:linkname SeqIterNew C.PySeqIter_New
+func SeqIterNew(_llcppg_param1 *Object) *Object
 
-func (self *Object) AsSeqIter() *SeqIter {
-	return (*SeqIter)(unsafe.Pointer(self))
-}
-
-// llgo:link (*SeqIter).New C.PySeqIter_New
-func (self *SeqIter) New() *Object {
-	return nil
-}
-
-type CallIter struct {
-	X_object
-}
-
-func (self *Object) AsCallIter() *CallIter {
-	return (*CallIter)(unsafe.Pointer(self))
-}
-
-// llgo:link (*CallIter).New C.PyCallIter_New
-func (self *CallIter) New(_llcppg_param2 *Object) *Object {
-	return nil
-}
+//go:linkname CallIterNew C.PyCallIter_New
+func CallIterNew(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object

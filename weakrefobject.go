@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 // PyWeakReference is the base struct for the Python ReferenceType, ProxyType,
@@ -29,40 +29,22 @@ var X_WeakrefProxyType TypeObject
 //go:linkname X_WeakrefCallableProxyType C._PyWeakref_CallableProxyType
 var X_WeakrefCallableProxyType TypeObject
 
-type Weakref struct {
-	X_object
-}
+//go:linkname WeakrefNewRef C.PyWeakref_NewRef
+func WeakrefNewRef(ob *Object, callback *Object) *Object
 
-func (self *Object) AsWeakref() *Weakref {
-	return (*Weakref)(unsafe.Pointer(self))
-}
+//go:linkname WeakrefNewProxy C.PyWeakref_NewProxy
+func WeakrefNewProxy(ob *Object, callback *Object) *Object
 
-// llgo:link (*Weakref).NewRef C.PyWeakref_NewRef
-func (self *Weakref) NewRef(callback *Object) *Object {
-	return nil
-}
+//go:linkname WeakrefGetObject C.PyWeakref_GetObject
+func WeakrefGetObject(ref *Object) *Object
 
-// llgo:link (*Weakref).NewProxy C.PyWeakref_NewProxy
-func (self *Weakref) NewProxy(callback *Object) *Object {
-	return nil
-}
-
-// llgo:link (*Weakref).Object C.PyWeakref_GetObject
-func (self *Weakref) Object() *Object {
-	return nil
-}
-
-// llgo:link (*Weakref).Ref C.PyWeakref_GetRef
-func (self *Weakref) Ref(pobj **Object) c.Int {
-	return 0
-}
+//go:linkname WeakrefGetRef C.PyWeakref_GetRef
+func WeakrefGetRef(ref *Object, pobj **Object) c.Int
 
 //go:linkname X_WeakrefClearRef C._PyWeakref_ClearRef
 func X_WeakrefClearRef(self *WeakReference)
 
 // Test if a weak reference is dead.
 //
-// llgo:link (*Weakref).IsDead C.PyWeakref_IsDead
-func (self *Weakref) IsDead() c.Int {
-	return 0
-}
+//go:linkname WeakrefIsDead C.PyWeakref_IsDead
+func WeakrefIsDead(ref *Object) c.Int

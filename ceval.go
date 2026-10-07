@@ -202,10 +202,8 @@ func UnstablePerfMapStateFini()
 //go:linkname UnstableCopyPerfMapFile C.PyUnstable_CopyPerfMapFile
 func UnstableCopyPerfMapFile(parent_filename *c.Char) c.Int
 
-// llgo:link (*Unstable).PerfTrampolineCompileCode C.PyUnstable_PerfTrampoline_CompileCode
-func (self *Unstable) PerfTrampolineCompileCode() c.Int {
-	return 0
-}
+//go:linkname UnstablePerfTrampolineCompileCode C.PyUnstable_PerfTrampoline_CompileCode
+func UnstablePerfTrampolineCompileCode(_llcppg_param1 *CodeObject) c.Int
 
 //go:linkname UnstablePerfTrampolineSetPersistAfterFork C.PyUnstable_PerfTrampoline_SetPersistAfterFork
 func UnstablePerfTrampolineSetPersistAfterFork(enable c.Int) c.Int

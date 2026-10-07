@@ -106,13 +106,11 @@ type X_FrameEvalFunction = func(_llcppg_param1 *ThreadState, _llcppg_param2 *X_I
 //go:linkname InterpreterStateNew C.PyInterpreterState_New
 func InterpreterStateNew() *InterpreterState
 
-// llgo:link (*InterpreterState).Clear C.PyInterpreterState_Clear
-func (self *InterpreterState) Clear() {
-}
+//go:linkname InterpreterStateClear C.PyInterpreterState_Clear
+func InterpreterStateClear(_llcppg_param1 *InterpreterState)
 
-// llgo:link (*InterpreterState).Delete C.PyInterpreterState_Delete
-func (self *InterpreterState) Delete() {
-}
+//go:linkname InterpreterStateDelete C.PyInterpreterState_Delete
+func InterpreterStateDelete(_llcppg_param1 *InterpreterState)
 
 // New in 3.9
 // Get the current interpreter state.
@@ -127,55 +125,33 @@ func InterpreterStateGet() *InterpreterState
 
 // New in 3.8
 //
-// llgo:link (*InterpreterState).Dict C.PyInterpreterState_GetDict
-func (self *InterpreterState) Dict() *Object {
-	return nil
-}
+//go:linkname InterpreterStateGetDict C.PyInterpreterState_GetDict
+func InterpreterStateGetDict(_llcppg_param1 *InterpreterState) *Object
 
 // New in 3.7
 //
-// llgo:link (*InterpreterState).ID C.PyInterpreterState_GetID
-func (self *InterpreterState) ID() c.Int64T {
-	return 0
-}
-
-type State struct {
-	X_object
-}
-
-func (self *Object) AsState() *State {
-	return (*State)(unsafe.Pointer(self))
-}
+//go:linkname InterpreterState_GetID C.PyInterpreterState_GetID
+func InterpreterState_GetID(_llcppg_param1 *InterpreterState) c.Int64T
 
 // New in 3.3
 //
-// llgo:link (*State).AddModule C.PyState_AddModule
-func (self *State) AddModule(_llcppg_param2 *ModuleDef) c.Int {
-	return 0
-}
+//go:linkname StateAddModule C.PyState_AddModule
+func StateAddModule(_llcppg_param1 *Object, _llcppg_param2 *ModuleDef) c.Int
 
-// llgo:link (*State).RemoveModule C.PyState_RemoveModule
-func (self *State) RemoveModule() c.Int {
-	return 0
-}
+//go:linkname StateRemoveModule C.PyState_RemoveModule
+func StateRemoveModule(_llcppg_param1 *ModuleDef) c.Int
 
-// llgo:link (*State).FindModule C.PyState_FindModule
-func (self *State) FindModule() *Object {
-	return nil
-}
+//go:linkname StateFindModule C.PyState_FindModule
+func StateFindModule(_llcppg_param1 *ModuleDef) *Object
 
-// llgo:link (*InterpreterState).ThreadStateNew C.PyThreadState_New
-func (self *InterpreterState) ThreadStateNew() *ThreadState {
-	return nil
-}
+//go:linkname ThreadStateNew C.PyThreadState_New
+func ThreadStateNew(_llcppg_param1 *InterpreterState) *ThreadState
 
-// llgo:link (*ThreadState).Clear C.PyThreadState_Clear
-func (self *ThreadState) Clear() {
-}
+//go:linkname ThreadStateClear C.PyThreadState_Clear
+func ThreadStateClear(_llcppg_param1 *ThreadState)
 
-// llgo:link (*ThreadState).Delete C.PyThreadState_Delete
-func (self *ThreadState) Delete() {
-}
+//go:linkname ThreadStateDelete C.PyThreadState_Delete
+func ThreadStateDelete(_llcppg_param1 *ThreadState)
 
 // Get the current thread state.
 //
@@ -189,10 +165,8 @@ func (self *ThreadState) Delete() {
 //go:linkname ThreadStateGet C.PyThreadState_Get
 func ThreadStateGet() *ThreadState
 
-// llgo:link (*ThreadState).Swap C.PyThreadState_Swap
-func (self *ThreadState) Swap() *ThreadState {
-	return self
-}
+//go:linkname ThreadStateSwap C.PyThreadState_Swap
+func ThreadStateSwap(_llcppg_param1 *ThreadState) *ThreadState
 
 //go:linkname ThreadStateGetDict C.PyThreadState_GetDict
 func ThreadStateGetDict() *Object
@@ -202,20 +176,14 @@ func ThreadStateSetAsyncExc(_llcppg_param1 c.Ulong, _llcppg_param2 *Object) c.In
 
 // New in 3.9
 //
-// llgo:link (*ThreadState).Interpreter C.PyThreadState_GetInterpreter
-func (self *ThreadState) Interpreter() *InterpreterState {
-	return nil
-}
+//go:linkname ThreadStateGetInterpreter C.PyThreadState_GetInterpreter
+func ThreadStateGetInterpreter(tstate *ThreadState) *InterpreterState
 
-// llgo:link (*ThreadState).Frame C.PyThreadState_GetFrame
-func (self *ThreadState) Frame() *FrameObject {
-	return nil
-}
+//go:linkname ThreadStateGetFrame C.PyThreadState_GetFrame
+func ThreadStateGetFrame(tstate *ThreadState) *FrameObject
 
-// llgo:link (*ThreadState).ID C.PyThreadState_GetID
-func (self *ThreadState) ID() c.Uint64T {
-	return 0
-}
+//go:linkname ThreadState_GetID C.PyThreadState_GetID
+func ThreadState_GetID(tstate *ThreadState) c.Uint64T
 
 // Ensure that the current thread is ready to call the Python
 // C API, regardless of the current state of Python, or of its
@@ -249,9 +217,8 @@ func GILStateEnsure() GILState_STATE
 // Every call to PyGILState_Ensure must be matched by a call to
 // PyGILState_Release on the same thread.
 //
-// llgo:link GILState_STATE.GILStateRelease C.PyGILState_Release
-func (self GILState_STATE) GILStateRelease() {
-}
+//go:linkname GILStateRelease C.PyGILState_Release
+func GILStateRelease(_llcppg_param1 GILState_STATE)
 
 // Helper/diagnostic function - get the current thread state for
 // this thread.  May return NULL if no GILState API has been used
@@ -358,16 +325,14 @@ func ThreadStateGetUnchecked() *ThreadState
 
 // Disable tracing and profiling.
 //
-// llgo:link (*ThreadState).EnterTracing C.PyThreadState_EnterTracing
-func (self *ThreadState) EnterTracing() {
-}
+//go:linkname ThreadStateEnterTracing C.PyThreadState_EnterTracing
+func ThreadStateEnterTracing(tstate *ThreadState)
 
 // Reset tracing and profiling: enable them if a trace function or a profile
 // function is set, otherwise disable them.
 //
-// llgo:link (*ThreadState).LeaveTracing C.PyThreadState_LeaveTracing
-func (self *ThreadState) LeaveTracing() {
-}
+//go:linkname ThreadStateLeaveTracing C.PyThreadState_LeaveTracing
+func ThreadStateLeaveTracing(tstate *ThreadState)
 
 // Helper/diagnostic function - return 1 if the current thread
 // currently holds the GIL, 0 otherwise.
@@ -386,17 +351,14 @@ func X_ThreadCurrentFrames() *Object
 // Set the stack protection start address and stack protection size
 // of a Python thread state
 //
-// llgo:link (*Unstable).ThreadStateSetStackProtection C.PyUnstable_ThreadState_SetStackProtection
-func (self *Unstable) ThreadStateSetStackProtection(stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int {
-	return 0
-}
+//go:linkname UnstableThreadStateSetStackProtection C.PyUnstable_ThreadState_SetStackProtection
+func UnstableThreadStateSetStackProtection(tstate *ThreadState, stack_start_addr unsafe.Pointer, stack_size c.SizeT) c.Int
 
 // Reset the stack protection start address and stack protection size
 // of a Python thread state
 //
-// llgo:link (*Unstable).ThreadStateResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
-func (self *Unstable) ThreadStateResetStackProtection() {
-}
+//go:linkname UnstableThreadStateResetStackProtection C.PyUnstable_ThreadState_ResetStackProtection
+func UnstableThreadStateResetStackProtection(tstate *ThreadState)
 
 // Routines for advanced debuggers, requested by David Beazley.
 // Don't use unless you know what you are doing!
@@ -407,20 +369,14 @@ func InterpreterStateMain() *InterpreterState
 //go:linkname InterpreterStateHead C.PyInterpreterState_Head
 func InterpreterStateHead() *InterpreterState
 
-// llgo:link (*InterpreterState).Next C.PyInterpreterState_Next
-func (self *InterpreterState) Next() *InterpreterState {
-	return self
-}
+//go:linkname InterpreterStateNext C.PyInterpreterState_Next
+func InterpreterStateNext(_llcppg_param1 *InterpreterState) *InterpreterState
 
-// llgo:link (*InterpreterState).ThreadHead C.PyInterpreterState_ThreadHead
-func (self *InterpreterState) ThreadHead() *ThreadState {
-	return nil
-}
+//go:linkname InterpreterStateThreadHead C.PyInterpreterState_ThreadHead
+func InterpreterStateThreadHead(_llcppg_param1 *InterpreterState) *ThreadState
 
-// llgo:link (*ThreadState).ThreadStateNext C.PyThreadState_Next
-func (self *ThreadState) ThreadStateNext() *ThreadState {
-	return self
-}
+//go:linkname ThreadStateNext C.PyThreadState_Next
+func ThreadStateNext(_llcppg_param1 *ThreadState) *ThreadState
 
 //go:linkname ThreadStateDeleteCurrent C.PyThreadState_DeleteCurrent
 func ThreadStateDeleteCurrent()

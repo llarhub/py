@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 // Call a callable Python object without any arguments
@@ -106,21 +106,11 @@ func (self *Object) CallMethodObjArgs(name *Object, __llgo_va_list ...any) *Obje
 //go:linkname Vectorcall_NARGS C.PyVectorcall_NARGS
 func Vectorcall_NARGS(nargsf c.SizeT) SsizeT
 
-type Vectorcall struct {
-	X_object
-}
-
-func (self *Object) AsVectorcall() *Vectorcall {
-	return (*Vectorcall)(unsafe.Pointer(self))
-}
-
 // Call "callable" (which must support vectorcall) with positional arguments
 // "tuple" and keyword arguments "dict". "dict" may also be NULL
 //
-// llgo:link (*Vectorcall).Call C.PyVectorcall_Call
-func (self *Vectorcall) Call(tuple *Object, dict *Object) *Object {
-	return nil
-}
+//go:linkname VectorcallCall C.PyVectorcall_Call
+func VectorcallCall(callable *Object, tuple *Object, dict *Object) *Object
 
 // Perform a PEP 590-style vector call on 'callable'
 //
@@ -232,22 +222,12 @@ func (self *Object) AIter() *Object {
 	return self
 }
 
-type Iter struct {
-	X_object
-}
-
-func (self *Object) AsIter() *Iter {
-	return (*Iter)(unsafe.Pointer(self))
-}
-
 // Returns non-zero if the object 'obj' provides iterator protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*Iter).Check C.PyIter_Check
-func (self *Iter) Check() c.Int {
-	return 0
-}
+//go:linkname IterCheck C.PyIter_Check
+func IterCheck(_llcppg_param1 *Object) c.Int
 
 // Returns non-zero if the object 'obj' provides AsyncIterator protocols, and 0 otherwise.
 //
@@ -260,10 +240,8 @@ func AIterCheck(_llcppg_param1 *Object) c.Int
 // Return 0 and set 'item' to NULL when there are no remaining values.
 // Return -1, set 'item' to NULL and set an exception on error.
 //
-// llgo:link (*Iter).NextItem C.PyIter_NextItem
-func (self *Iter) NextItem(item **Object) c.Int {
-	return 0
-}
+//go:linkname IterNextItem C.PyIter_NextItem
+func IterNextItem(iter *Object, item **Object) c.Int
 
 // Takes an iterator object and calls its tp_iternext slot,
 // returning the next value.
@@ -275,10 +253,8 @@ func (self *Iter) NextItem(item **Object) c.Int {
 //
 // Prefer PyIter_NextItem() instead.
 //
-// llgo:link (*Iter).Next C.PyIter_Next
-func (self *Iter) Next() *Object {
-	return nil
-}
+//go:linkname IterNext C.PyIter_Next
+func IterNext(_llcppg_param1 *Object) *Object
 
 // Takes generator, coroutine or iterator object and sends the value into it.
 // Returns:
@@ -289,90 +265,64 @@ func (self *Iter) Next() *Object {
 // - PYGEN_NEXT (1) if generator has yielded.
 // 'result' parameter is filled with yielded value.
 //
-// llgo:link (*Iter).Send C.PyIter_Send
-func (self *Iter) Send(_llcppg_param2 *Object, _llcppg_param3 **Object) SendResult {
-	return 0
-}
-
-type Number struct {
-	X_object
-}
-
-func (self *Object) AsNumber() *Number {
-	return (*Number)(unsafe.Pointer(self))
-}
+//go:linkname IterSend C.PyIter_Send
+func IterSend(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 **Object) SendResult
 
 // Returns 1 if the object 'o' provides numeric protocols, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*Number).Check C.PyNumber_Check
-func (self *Number) Check() c.Int {
-	return 0
-}
+//go:linkname NumberCheck C.PyNumber_Check
+func NumberCheck(o *Object) c.Int
 
 // Returns the result of adding o1 and o2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 + o2.
 //
-// llgo:link (*Number).Add C.PyNumber_Add
-func (self *Number) Add(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberAdd C.PyNumber_Add
+func NumberAdd(o1 *Object, o2 *Object) *Object
 
 // Returns the result of subtracting o2 from o1, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 - o2.
 //
-// llgo:link (*Number).Subtract C.PyNumber_Subtract
-func (self *Number) Subtract(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberSubtract C.PyNumber_Subtract
+func NumberSubtract(o1 *Object, o2 *Object) *Object
 
 // Returns the result of multiplying o1 and o2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 * o2.
 //
-// llgo:link (*Number).Multiply C.PyNumber_Multiply
-func (self *Number) Multiply(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberMultiply C.PyNumber_Multiply
+func NumberMultiply(o1 *Object, o2 *Object) *Object
 
 // This is the equivalent of the Python expression: o1 @ o2.
 //
-// llgo:link (*Number).MatrixMultiply C.PyNumber_MatrixMultiply
-func (self *Number) MatrixMultiply(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberMatrixMultiply C.PyNumber_MatrixMultiply
+func NumberMatrixMultiply(o1 *Object, o2 *Object) *Object
 
 // Returns the result of dividing o1 by o2 giving an integral result,
 // or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 // o2.
 //
-// llgo:link (*Number).FloorDivide C.PyNumber_FloorDivide
-func (self *Number) FloorDivide(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberFloorDivide C.PyNumber_FloorDivide
+func NumberFloorDivide(o1 *Object, o2 *Object) *Object
 
 // Returns the result of dividing o1 by o2 giving a float result, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 / o2.
 //
-// llgo:link (*Number).TrueDivide C.PyNumber_TrueDivide
-func (self *Number) TrueDivide(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberTrueDivide C.PyNumber_TrueDivide
+func NumberTrueDivide(o1 *Object, o2 *Object) *Object
 
 // Returns the remainder of dividing o1 by o2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 % o2.
 //
-// llgo:link (*Number).Remainder C.PyNumber_Remainder
-func (self *Number) Remainder(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberRemainder C.PyNumber_Remainder
+func NumberRemainder(o1 *Object, o2 *Object) *Object
 
 // See the built-in function divmod.
 //
@@ -380,128 +330,94 @@ func (self *Number) Remainder(o2 *Object) *Object {
 //
 // This is the equivalent of the Python expression: divmod(o1, o2).
 //
-// llgo:link (*Number).Divmod C.PyNumber_Divmod
-func (self *Number) Divmod(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberDivmod C.PyNumber_Divmod
+func NumberDivmod(o1 *Object, o2 *Object) *Object
 
 // See the built-in function pow. Returns NULL on failure.
 //
 // This is the equivalent of the Python expression: pow(o1, o2, o3),
 // where o3 is optional.
 //
-// llgo:link (*Number).Power C.PyNumber_Power
-func (self *Number) Power(o2 *Object, o3 *Object) *Object {
-	return nil
-}
+//go:linkname NumberPower C.PyNumber_Power
+func NumberPower(o1 *Object, o2 *Object, o3 *Object) *Object
 
 // Returns the negation of o on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: -o.
 //
-// llgo:link (*Number).Negative C.PyNumber_Negative
-func (self *Number) Negative() *Object {
-	return nil
-}
+//go:linkname NumberNegative C.PyNumber_Negative
+func NumberNegative(o *Object) *Object
 
 // Returns the positive of o on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: +o.
 //
-// llgo:link (*Number).Positive C.PyNumber_Positive
-func (self *Number) Positive() *Object {
-	return nil
-}
+//go:linkname NumberPositive C.PyNumber_Positive
+func NumberPositive(o *Object) *Object
 
 // Returns the absolute value of 'o', or NULL on failure.
 //
 // This is the equivalent of the Python expression: abs(o).
 //
-// llgo:link (*Number).Absolute C.PyNumber_Absolute
-func (self *Number) Absolute() *Object {
-	return nil
-}
+//go:linkname NumberAbsolute C.PyNumber_Absolute
+func NumberAbsolute(o *Object) *Object
 
 // Returns the bitwise negation of 'o' on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: ~o.
 //
-// llgo:link (*Number).Invert C.PyNumber_Invert
-func (self *Number) Invert() *Object {
-	return nil
-}
+//go:linkname NumberInvert C.PyNumber_Invert
+func NumberInvert(o *Object) *Object
 
 // Returns the result of left shifting o1 by o2 on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 << o2.
 //
-// llgo:link (*Number).Lshift C.PyNumber_Lshift
-func (self *Number) Lshift(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberLshift C.PyNumber_Lshift
+func NumberLshift(o1 *Object, o2 *Object) *Object
 
 // Returns the result of right shifting o1 by o2 on success, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 >> o2.
 //
-// llgo:link (*Number).Rshift C.PyNumber_Rshift
-func (self *Number) Rshift(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberRshift C.PyNumber_Rshift
+func NumberRshift(o1 *Object, o2 *Object) *Object
 
 // Returns the result of bitwise and of o1 and o2 on success, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 & o2.
 //
-// llgo:link (*Number).And C.PyNumber_And
-func (self *Number) And(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberAnd C.PyNumber_And
+func NumberAnd(o1 *Object, o2 *Object) *Object
 
 // Returns the bitwise exclusive or of o1 by o2 on success, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 ^ o2.
 //
-// llgo:link (*Number).Xor C.PyNumber_Xor
-func (self *Number) Xor(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberXor C.PyNumber_Xor
+func NumberXor(o1 *Object, o2 *Object) *Object
 
 // Returns the result of bitwise or on o1 and o2 on success, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 | o2.
 //
-// llgo:link (*Number).Or C.PyNumber_Or
-func (self *Number) Or(o2 *Object) *Object {
-	return nil
-}
-
-type Index struct {
-	X_object
-}
-
-func (self *Object) AsIndex() *Index {
-	return (*Index)(unsafe.Pointer(self))
-}
+//go:linkname NumberOr C.PyNumber_Or
+func NumberOr(o1 *Object, o2 *Object) *Object
 
 // Returns 1 if obj is an index integer (has the nb_index slot of the
 // tp_as_number structure filled in), and 0 otherwise.
 //
-// llgo:link (*Index).Check C.PyIndex_Check
-func (self *Index) Check() c.Int {
-	return 0
-}
+//go:linkname IndexCheck C.PyIndex_Check
+func IndexCheck(_llcppg_param1 *Object) c.Int
 
 // Returns the object 'o' converted to a Python int, or NULL with an exception
 // raised on failure.
 //
-// llgo:link (*Number).Index C.PyNumber_Index
-func (self *Number) Index() *Object {
-	return nil
-}
+//go:linkname NumberIndex C.PyNumber_Index
+func NumberIndex(o *Object) *Object
 
 // Returns the object 'o' converted to Py_ssize_t by going through
 // PyNumber_Index() first.
@@ -510,97 +426,77 @@ func (self *Number) Index() *Object {
 // second argument 'exc' is the error-type to return.  If it is NULL, then the
 // overflow error is cleared and the value is clipped.
 //
-// llgo:link (*Number).AsSsizeT C.PyNumber_AsSsize_t
-func (self *Number) AsSsizeT(exc *Object) SsizeT {
-	return 0
-}
+//go:linkname NumberAsSsizeT C.PyNumber_AsSsize_t
+func NumberAsSsizeT(o *Object, exc *Object) SsizeT
 
 // Returns the object 'o' converted to an integer object on success, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: int(o).
 //
-// llgo:link (*Number).Long C.PyNumber_Long
-func (self *Number) Long() *Object {
-	return nil
-}
+//go:linkname NumberLong C.PyNumber_Long
+func NumberLong(o *Object) *Object
 
 // Returns the object 'o' converted to a float object on success, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: float(o).
 //
-// llgo:link (*Number).Float C.PyNumber_Float
-func (self *Number) Float() *Object {
-	return nil
-}
+//go:linkname NumberFloat C.PyNumber_Float
+func NumberFloat(o *Object) *Object
 
 // Returns the result of adding o2 to o1, possibly in-place, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: o1 += o2.
 //
-// llgo:link (*Number).InPlaceAdd C.PyNumber_InPlaceAdd
-func (self *Number) InPlaceAdd(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceAdd C.PyNumber_InPlaceAdd
+func NumberInPlaceAdd(o1 *Object, o2 *Object) *Object
 
 // Returns the result of subtracting o2 from o1, possibly in-place or
 // NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 -= o2.
 //
-// llgo:link (*Number).InPlaceSubtract C.PyNumber_InPlaceSubtract
-func (self *Number) InPlaceSubtract(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceSubtract C.PyNumber_InPlaceSubtract
+func NumberInPlaceSubtract(o1 *Object, o2 *Object) *Object
 
 // Returns the result of multiplying o1 by o2, possibly in-place, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 *= o2.
 //
-// llgo:link (*Number).InPlaceMultiply C.PyNumber_InPlaceMultiply
-func (self *Number) InPlaceMultiply(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceMultiply C.PyNumber_InPlaceMultiply
+func NumberInPlaceMultiply(o1 *Object, o2 *Object) *Object
 
 // This is the equivalent of the Python expression: o1 @= o2.
 //
-// llgo:link (*Number).InPlaceMatrixMultiply C.PyNumber_InPlaceMatrixMultiply
-func (self *Number) InPlaceMatrixMultiply(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceMatrixMultiply C.PyNumber_InPlaceMatrixMultiply
+func NumberInPlaceMatrixMultiply(o1 *Object, o2 *Object) *Object
 
 // Returns the result of dividing o1 by o2 giving an integral result, possibly
 // in-place, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 /= o2.
 //
-// llgo:link (*Number).InPlaceFloorDivide C.PyNumber_InPlaceFloorDivide
-func (self *Number) InPlaceFloorDivide(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceFloorDivide C.PyNumber_InPlaceFloorDivide
+func NumberInPlaceFloorDivide(o1 *Object, o2 *Object) *Object
 
 // Returns the result of dividing o1 by o2 giving a float result, possibly
 // in-place, or null on failure.
 //
 // This is the equivalent of the Python expression: o1 /= o2.
 //
-// llgo:link (*Number).InPlaceTrueDivide C.PyNumber_InPlaceTrueDivide
-func (self *Number) InPlaceTrueDivide(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceTrueDivide C.PyNumber_InPlaceTrueDivide
+func NumberInPlaceTrueDivide(o1 *Object, o2 *Object) *Object
 
 // Returns the remainder of dividing o1 by o2, possibly in-place, or NULL on
 // failure.
 //
 // This is the equivalent of the Python expression: o1 %= o2.
 //
-// llgo:link (*Number).InPlaceRemainder C.PyNumber_InPlaceRemainder
-func (self *Number) InPlaceRemainder(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceRemainder C.PyNumber_InPlaceRemainder
+func NumberInPlaceRemainder(o1 *Object, o2 *Object) *Object
 
 // Returns the result of raising o1 to the power of o2, possibly in-place,
 // or NULL on failure.
@@ -608,193 +504,145 @@ func (self *Number) InPlaceRemainder(o2 *Object) *Object {
 // This is the equivalent of the Python expression: o1 **= o2,
 // or o1 = pow(o1, o2, o3) if o3 is present.
 //
-// llgo:link (*Number).InPlacePower C.PyNumber_InPlacePower
-func (self *Number) InPlacePower(o2 *Object, o3 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlacePower C.PyNumber_InPlacePower
+func NumberInPlacePower(o1 *Object, o2 *Object, o3 *Object) *Object
 
 // Returns the result of left shifting o1 by o2, possibly in-place, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: o1 <<= o2.
 //
-// llgo:link (*Number).InPlaceLshift C.PyNumber_InPlaceLshift
-func (self *Number) InPlaceLshift(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceLshift C.PyNumber_InPlaceLshift
+func NumberInPlaceLshift(o1 *Object, o2 *Object) *Object
 
 // Returns the result of right shifting o1 by o2, possibly in-place or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: o1 >>= o2.
 //
-// llgo:link (*Number).InPlaceRshift C.PyNumber_InPlaceRshift
-func (self *Number) InPlaceRshift(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceRshift C.PyNumber_InPlaceRshift
+func NumberInPlaceRshift(o1 *Object, o2 *Object) *Object
 
 // Returns the result of bitwise and of o1 and o2, possibly in-place, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: o1 &= o2.
 //
-// llgo:link (*Number).InPlaceAnd C.PyNumber_InPlaceAnd
-func (self *Number) InPlaceAnd(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceAnd C.PyNumber_InPlaceAnd
+func NumberInPlaceAnd(o1 *Object, o2 *Object) *Object
 
 // Returns the bitwise exclusive or of o1 by o2, possibly in-place, or NULL
 // on failure.
 //
 // This is the equivalent of the Python expression: o1 ^= o2.
 //
-// llgo:link (*Number).InPlaceXor C.PyNumber_InPlaceXor
-func (self *Number) InPlaceXor(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceXor C.PyNumber_InPlaceXor
+func NumberInPlaceXor(o1 *Object, o2 *Object) *Object
 
 // Returns the result of bitwise or of o1 and o2, possibly in-place,
 // or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 |= o2.
 //
-// llgo:link (*Number).InPlaceOr C.PyNumber_InPlaceOr
-func (self *Number) InPlaceOr(o2 *Object) *Object {
-	return nil
-}
+//go:linkname NumberInPlaceOr C.PyNumber_InPlaceOr
+func NumberInPlaceOr(o1 *Object, o2 *Object) *Object
 
 // Returns the integer n converted to a string with a base, with a base
 // marker of 0b, 0o or 0x prefixed if applicable.
 //
 // If n is not an int object, it is converted with PyNumber_Index first.
 //
-// llgo:link (*Number).ToBase C.PyNumber_ToBase
-func (self *Number) ToBase(base c.Int) *Object {
-	return nil
-}
-
-type Sequence struct {
-	X_object
-}
-
-func (self *Object) AsSequence() *Sequence {
-	return (*Sequence)(unsafe.Pointer(self))
-}
+//go:linkname NumberToBase C.PyNumber_ToBase
+func NumberToBase(n *Object, base c.Int) *Object
 
 // Return 1 if the object provides sequence protocol, and zero
 // otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*Sequence).Check C.PySequence_Check
-func (self *Sequence) Check() c.Int {
-	return 0
-}
+//go:linkname SequenceCheck C.PySequence_Check
+func SequenceCheck(o *Object) c.Int
 
 // Return the size of sequence object o, or -1 on failure.
 //
-// llgo:link (*Sequence).Size C.PySequence_Size
-func (self *Sequence) Size() SsizeT {
-	return 0
-}
+//go:linkname SequenceSize C.PySequence_Size
+func SequenceSize(o *Object) SsizeT
 
-// llgo:link (*Sequence).Length C.PySequence_Length
-func (self *Sequence) Length() SsizeT {
-	return 0
-}
+//go:linkname SequenceLength C.PySequence_Length
+func SequenceLength(o *Object) SsizeT
 
 // Return the concatenation of o1 and o2 on success, and NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 + o2.
 //
-// llgo:link (*Sequence).Concat C.PySequence_Concat
-func (self *Sequence) Concat(o2 *Object) *Object {
-	return nil
-}
+//go:linkname SequenceConcat C.PySequence_Concat
+func SequenceConcat(o1 *Object, o2 *Object) *Object
 
 // Return the result of repeating sequence object 'o' 'count' times,
 // or NULL on failure.
 //
 // This is the equivalent of the Python expression: o * count.
 //
-// llgo:link (*Sequence).Repeat C.PySequence_Repeat
-func (self *Sequence) Repeat(count SsizeT) *Object {
-	return nil
-}
+//go:linkname SequenceRepeat C.PySequence_Repeat
+func SequenceRepeat(o *Object, count SsizeT) *Object
 
 // Return the ith element of o, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[i].
 //
-// llgo:link (*Sequence).Item C.PySequence_GetItem
-func (self *Sequence) Item(i SsizeT) *Object {
-	return nil
-}
+//go:linkname SequenceGetItem C.PySequence_GetItem
+func SequenceGetItem(o *Object, i SsizeT) *Object
 
 // Return the slice of sequence object o between i1 and i2, or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[i1:i2].
 //
-// llgo:link (*Sequence).Slice C.PySequence_GetSlice
-func (self *Sequence) Slice(i1 SsizeT, i2 SsizeT) *Object {
-	return nil
-}
+//go:linkname SequenceGetSlice C.PySequence_GetSlice
+func SequenceGetSlice(o *Object, i1 SsizeT, i2 SsizeT) *Object
 
 // Assign object 'v' to the ith element of the sequence 'o'. Raise an exception
 // and return -1 on failure; return 0 on success.
 //
 // This is the equivalent of the Python statement o[i] = v.
 //
-// llgo:link (*Sequence).SetItem C.PySequence_SetItem
-func (self *Sequence) SetItem(i SsizeT, v *Object) c.Int {
-	return 0
-}
+//go:linkname SequenceSetItem C.PySequence_SetItem
+func SequenceSetItem(o *Object, i SsizeT, v *Object) c.Int
 
 // Delete the 'i'-th element of the sequence 'v'. Returns -1 on failure.
 //
 // This is the equivalent of the Python statement: del o[i].
 //
-// llgo:link (*Sequence).DelItem C.PySequence_DelItem
-func (self *Sequence) DelItem(i SsizeT) c.Int {
-	return 0
-}
+//go:linkname SequenceDelItem C.PySequence_DelItem
+func SequenceDelItem(o *Object, i SsizeT) c.Int
 
 // Assign the sequence object 'v' to the slice in sequence object 'o',
 // from 'i1' to 'i2'. Returns -1 on failure.
 //
 // This is the equivalent of the Python statement: o[i1:i2] = v.
 //
-// llgo:link (*Sequence).SetSlice C.PySequence_SetSlice
-func (self *Sequence) SetSlice(i1 SsizeT, i2 SsizeT, v *Object) c.Int {
-	return 0
-}
+//go:linkname SequenceSetSlice C.PySequence_SetSlice
+func SequenceSetSlice(o *Object, i1 SsizeT, i2 SsizeT, v *Object) c.Int
 
 // Delete the slice in sequence object 'o' from 'i1' to 'i2'.
 // Returns -1 on failure.
 //
 // This is the equivalent of the Python statement: del o[i1:i2].
 //
-// llgo:link (*Sequence).DelSlice C.PySequence_DelSlice
-func (self *Sequence) DelSlice(i1 SsizeT, i2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname SequenceDelSlice C.PySequence_DelSlice
+func SequenceDelSlice(o *Object, i1 SsizeT, i2 SsizeT) c.Int
 
 // Returns the sequence 'o' as a tuple on success, and NULL on failure.
 //
 // This is equivalent to the Python expression: tuple(o).
 //
-// llgo:link (*Sequence).Tuple C.PySequence_Tuple
-func (self *Sequence) Tuple() *Object {
-	return nil
-}
+//go:linkname SequenceTuple C.PySequence_Tuple
+func SequenceTuple(o *Object) *Object
 
 // Returns the sequence 'o' as a list on success, and NULL on failure.
 // This is equivalent to the Python expression: list(o)
 //
-// llgo:link (*Sequence).List C.PySequence_List
-func (self *Sequence) List() *Object {
-	return nil
-}
+//go:linkname SequenceList C.PySequence_List
+func SequenceList(o *Object) *Object
 
 // Return the sequence 'o' as a list, unless it's already a tuple or list.
 //
@@ -804,10 +652,8 @@ func (self *Sequence) List() *Object {
 // Returns NULL on failure.  If the object does not support iteration, raises a
 // TypeError exception with 'm' as the message text.
 //
-// llgo:link (*Sequence).Fast C.PySequence_Fast
-func (self *Sequence) Fast(m *c.Char) *Object {
-	return nil
-}
+//go:linkname SequenceFast C.PySequence_Fast
+func SequenceFast(o *Object, m *c.Char) *Object
 
 // Return the number of occurrences on value on 'o', that is, return
 // the number of keys for which o[key] == value.
@@ -815,90 +661,64 @@ func (self *Sequence) Fast(m *c.Char) *Object {
 // On failure, return -1.  This is equivalent to the Python expression:
 // o.count(value).
 //
-// llgo:link (*Sequence).Count C.PySequence_Count
-func (self *Sequence) Count(value *Object) SsizeT {
-	return 0
-}
+//go:linkname SequenceCount C.PySequence_Count
+func SequenceCount(o *Object, value *Object) SsizeT
 
 // Return 1 if 'ob' is in the sequence 'seq'; 0 if 'ob' is not in the sequence
 // 'seq'; -1 on error.
 //
 // Use __contains__ if possible, else _PySequence_IterSearch().
 //
-// llgo:link (*Sequence).Contains C.PySequence_Contains
-func (self *Sequence) Contains(ob *Object) c.Int {
-	return 0
-}
+//go:linkname SequenceContains C.PySequence_Contains
+func SequenceContains(seq *Object, ob *Object) c.Int
 
 // Determine if the sequence 'o' contains 'value'. If an item in 'o' is equal
 // to 'value', return 1, otherwise return 0. On error, return -1.
 //
 // This is equivalent to the Python expression: value in o.
 //
-// llgo:link (*Sequence).In C.PySequence_In
-func (self *Sequence) In(value *Object) c.Int {
-	return 0
-}
+//go:linkname SequenceIn C.PySequence_In
+func SequenceIn(o *Object, value *Object) c.Int
 
 // Return the first index for which o[i] == value.
 // On error, return -1.
 //
 // This is equivalent to the Python expression: o.index(value).
 //
-// llgo:link (*Sequence).Index C.PySequence_Index
-func (self *Sequence) Index(value *Object) SsizeT {
-	return 0
-}
+//go:linkname SequenceIndex C.PySequence_Index
+func SequenceIndex(o *Object, value *Object) SsizeT
 
 // Append sequence 'o2' to sequence 'o1', in-place when possible. Return the
 // resulting object, which could be 'o1', or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 += o2.
 //
-// llgo:link (*Sequence).InPlaceConcat C.PySequence_InPlaceConcat
-func (self *Sequence) InPlaceConcat(o2 *Object) *Object {
-	return nil
-}
+//go:linkname SequenceInPlaceConcat C.PySequence_InPlaceConcat
+func SequenceInPlaceConcat(o1 *Object, o2 *Object) *Object
 
 // Repeat sequence 'o' by 'count', in-place when possible. Return the resulting
 // object, which could be 'o', or NULL on failure.
 //
 // This is the equivalent of the Python expression: o1 *= count.
 //
-// llgo:link (*Sequence).InPlaceRepeat C.PySequence_InPlaceRepeat
-func (self *Sequence) InPlaceRepeat(count SsizeT) *Object {
-	return nil
-}
-
-type Mapping struct {
-	X_object
-}
-
-func (self *Object) AsMapping() *Mapping {
-	return (*Mapping)(unsafe.Pointer(self))
-}
+//go:linkname SequenceInPlaceRepeat C.PySequence_InPlaceRepeat
+func SequenceInPlaceRepeat(o *Object, count SsizeT) *Object
 
 // Return 1 if the object provides mapping protocol, and 0 otherwise.
 //
 // This function always succeeds.
 //
-// llgo:link (*Mapping).Check C.PyMapping_Check
-func (self *Mapping) Check() c.Int {
-	return 0
-}
+//go:linkname MappingCheck C.PyMapping_Check
+func MappingCheck(o *Object) c.Int
 
 // Returns the number of keys in mapping object 'o' on success, and -1 on
 // failure. This is equivalent to the Python expression: len(o).
 //
-// llgo:link (*Mapping).Size C.PyMapping_Size
-func (self *Mapping) Size() SsizeT {
-	return 0
-}
+//go:linkname MappingSize C.PyMapping_Size
+func MappingSize(o *Object) SsizeT
 
-// llgo:link (*Mapping).Length C.PyMapping_Length
-func (self *Mapping) Length() SsizeT {
-	return 0
-}
+//go:linkname MappingLength C.PyMapping_Length
+func MappingLength(o *Object) SsizeT
 
 // On success, return 1 if the mapping object 'o' has the key 'key',
 // and 0 otherwise.
@@ -907,10 +727,8 @@ func (self *Mapping) Length() SsizeT {
 //
 // This function always succeeds.
 //
-// llgo:link (*Mapping).HasKeyString C.PyMapping_HasKeyString
-func (self *Mapping) HasKeyString(key *c.Char) c.Int {
-	return 0
-}
+//go:linkname MappingHasKeyString C.PyMapping_HasKeyString
+func MappingHasKeyString(o *Object, key *c.Char) c.Int
 
 // Return 1 if the mapping object has the key 'key', and 0 otherwise.
 //
@@ -918,82 +736,62 @@ func (self *Mapping) HasKeyString(key *c.Char) c.Int {
 //
 // This function always succeeds.
 //
-// llgo:link (*Mapping).HasKey C.PyMapping_HasKey
-func (self *Mapping) HasKey(key *Object) c.Int {
-	return 0
-}
+//go:linkname MappingHasKey C.PyMapping_HasKey
+func MappingHasKey(o *Object, key *Object) c.Int
 
 // Return 1 if the mapping object has the key 'key', and 0 otherwise.
 // This is equivalent to the Python expression: key in o.
 // On failure, return -1.
 //
-// llgo:link (*Mapping).HasKeyWithError C.PyMapping_HasKeyWithError
-func (self *Mapping) HasKeyWithError(key *Object) c.Int {
-	return 0
-}
+//go:linkname MappingHasKeyWithError C.PyMapping_HasKeyWithError
+func MappingHasKeyWithError(o *Object, key *Object) c.Int
 
 // Return 1 if the mapping object has the key 'key', and 0 otherwise.
 // This is equivalent to the Python expression: key in o.
 // On failure, return -1.
 //
-// llgo:link (*Mapping).HasKeyStringWithError C.PyMapping_HasKeyStringWithError
-func (self *Mapping) HasKeyStringWithError(key *c.Char) c.Int {
-	return 0
-}
+//go:linkname MappingHasKeyStringWithError C.PyMapping_HasKeyStringWithError
+func MappingHasKeyStringWithError(o *Object, key *c.Char) c.Int
 
 // On success, return a list of the keys in mapping object 'o'.
 // On failure, return NULL.
 //
-// llgo:link (*Mapping).Keys C.PyMapping_Keys
-func (self *Mapping) Keys() *Object {
-	return nil
-}
+//go:linkname MappingKeys C.PyMapping_Keys
+func MappingKeys(o *Object) *Object
 
 // On success, return a list of the values in mapping object 'o'.
 // On failure, return NULL.
 //
-// llgo:link (*Mapping).Values C.PyMapping_Values
-func (self *Mapping) Values() *Object {
-	return nil
-}
+//go:linkname MappingValues C.PyMapping_Values
+func MappingValues(o *Object) *Object
 
 // On success, return a list of the items in mapping object 'o',
 // where each item is a tuple containing a key-value pair. On failure, return
 // NULL.
 //
-// llgo:link (*Mapping).Items C.PyMapping_Items
-func (self *Mapping) Items() *Object {
-	return nil
-}
+//go:linkname MappingItems C.PyMapping_Items
+func MappingItems(o *Object) *Object
 
 // Return element of 'o' corresponding to the string 'key' or NULL on failure.
 //
 // This is the equivalent of the Python expression: o[key].
 //
-// llgo:link (*Mapping).ItemString C.PyMapping_GetItemString
-func (self *Mapping) ItemString(key *c.Char) *Object {
-	return nil
-}
+//go:linkname MappingGetItemString C.PyMapping_GetItemString
+func MappingGetItemString(o *Object, key *c.Char) *Object
 
-// llgo:link (*Mapping).OptionalItem C.PyMapping_GetOptionalItem
-func (self *Mapping) OptionalItem(_llcppg_param2 *Object, _llcppg_param3 **Object) c.Int {
-	return 0
-}
+//go:linkname MappingGetOptionalItem C.PyMapping_GetOptionalItem
+func MappingGetOptionalItem(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 **Object) c.Int
 
-// llgo:link (*Mapping).OptionalItemString C.PyMapping_GetOptionalItemString
-func (self *Mapping) OptionalItemString(_llcppg_param2 *c.Char, _llcppg_param3 **Object) c.Int {
-	return 0
-}
+//go:linkname MappingGetOptionalItemString C.PyMapping_GetOptionalItemString
+func MappingGetOptionalItemString(_llcppg_param1 *Object, _llcppg_param2 *c.Char, _llcppg_param3 **Object) c.Int
 
 // Map the string 'key' to the value 'v' in the mapping 'o'.
 // Returns -1 on failure.
 //
 // This is the equivalent of the Python statement: o[key]=v.
 //
-// llgo:link (*Mapping).SetItemString C.PyMapping_SetItemString
-func (self *Mapping) SetItemString(key *c.Char, value *Object) c.Int {
-	return 0
-}
+//go:linkname MappingSetItemString C.PyMapping_SetItemString
+func MappingSetItemString(o *Object, key *c.Char, value *Object) c.Int
 
 // isinstance(object, typeorclass)
 //
@@ -1029,10 +827,8 @@ func X_ObjectCallMethodId(obj *Object, name *X_Identifier, format *c.Char, __llg
 //go:linkname X_StackAsDict C._PyStack_AsDict
 func X_StackAsDict(values **Object, kwnames *Object) *Object
 
-// llgo:link (*Vectorcall).Function C.PyVectorcall_Function
-func (self *Vectorcall) Function() Vectorcallfunc {
-	return nil
-}
+//go:linkname VectorcallFunction C.PyVectorcall_Function
+func VectorcallFunction(callable *Object) Vectorcallfunc
 
 // Same as PyObject_Vectorcall except that keyword arguments are passed as
 // dict, which may be NULL if there are no keyword arguments.

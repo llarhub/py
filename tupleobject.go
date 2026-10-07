@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type TupleObject struct {
@@ -34,31 +34,23 @@ var TupleIterType TypeObject
 //go:linkname TupleNew C.PyTuple_New
 func TupleNew(size SsizeT) *Object
 
-type Tuple struct {
-	X_object
-}
-
-func (self *Object) AsTuple() *Tuple {
-	return (*Tuple)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Tuple).Size C.PyTuple_Size
-func (self *Tuple) Size() SsizeT {
+// llgo:link (*TupleObject).Size C.PyTuple_Size
+func (self *TupleObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*Tuple).Item C.PyTuple_GetItem
-func (self *Tuple) Item(_llcppg_param2 SsizeT) *Object {
+// llgo:link (*TupleObject).Item C.PyTuple_GetItem
+func (self *TupleObject) Item(_llcppg_param2 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*Tuple).SetItem C.PyTuple_SetItem
-func (self *Tuple) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
+// llgo:link (*TupleObject).SetItem C.PyTuple_SetItem
+func (self *TupleObject) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Tuple).Slice C.PyTuple_GetSlice
-func (self *Tuple) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
+// llgo:link (*TupleObject).Slice C.PyTuple_GetSlice
+func (self *TupleObject) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
 	return nil
 }
 

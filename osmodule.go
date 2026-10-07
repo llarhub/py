@@ -2,17 +2,7 @@
 
 package py
 
-import "unsafe"
+import _ "unsafe"
 
-type OS struct {
-	X_object
-}
-
-func (self *Object) AsOS() *OS {
-	return (*OS)(unsafe.Pointer(self))
-}
-
-// llgo:link (*OS).FSPath C.PyOS_FSPath
-func (self *OS) FSPath() *Object {
-	return nil
-}
+//go:linkname OS_FSPath C.PyOS_FSPath
+func OS_FSPath(path *Object) *Object

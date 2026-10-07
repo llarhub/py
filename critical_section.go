@@ -2,31 +2,27 @@
 
 package py
 
+import _ "unsafe"
+
 type CriticalSection struct {
 }
 type CriticalSection2 struct {
 }
 
-// llgo:link (*CriticalSection).Begin C.PyCriticalSection_Begin
-func (self *CriticalSection) Begin(op *Object) {
-}
+//go:linkname CriticalSectionBegin C.PyCriticalSection_Begin
+func CriticalSectionBegin(c *CriticalSection, op *Object)
 
-// llgo:link (*CriticalSection).BeginMutex C.PyCriticalSection_BeginMutex
-func (self *CriticalSection) BeginMutex(m *Mutex) {
-}
+//go:linkname CriticalSectionBeginMutex C.PyCriticalSection_BeginMutex
+func CriticalSectionBeginMutex(c *CriticalSection, m *Mutex)
 
-// llgo:link (*CriticalSection).End C.PyCriticalSection_End
-func (self *CriticalSection) End() {
-}
+//go:linkname CriticalSectionEnd C.PyCriticalSection_End
+func CriticalSectionEnd(c *CriticalSection)
 
-// llgo:link (*CriticalSection2).Begin C.PyCriticalSection2_Begin
-func (self *CriticalSection2) Begin(a *Object, b *Object) {
-}
+//go:linkname CriticalSection2Begin C.PyCriticalSection2_Begin
+func CriticalSection2Begin(c *CriticalSection2, a *Object, b *Object)
 
-// llgo:link (*CriticalSection2).BeginMutex C.PyCriticalSection2_BeginMutex
-func (self *CriticalSection2) BeginMutex(m1 *Mutex, m2 *Mutex) {
-}
+//go:linkname CriticalSection2BeginMutex C.PyCriticalSection2_BeginMutex
+func CriticalSection2BeginMutex(c *CriticalSection2, m1 *Mutex, m2 *Mutex)
 
-// llgo:link (*CriticalSection2).End C.PyCriticalSection2_End
-func (self *CriticalSection2) End() {
-}
+//go:linkname CriticalSection2End C.PyCriticalSection2_End
+func CriticalSection2End(c *CriticalSection2)

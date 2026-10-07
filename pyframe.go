@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 const Unstable_EXECUTABLE_KIND_SKIP = 0
@@ -15,23 +15,16 @@ const Unstable_EXECUTABLE_KINDS = 5
 
 type X_InterpreterFrame struct {
 }
-type Frame struct {
-	X_frame
-}
-
-func (self *FrameObject) AsFrame() *Frame {
-	return (*Frame)(unsafe.Pointer(self))
-}
 
 // Return the line of code the frame is currently executing.
 //
-// llgo:link (*Frame).LineNumber C.PyFrame_GetLineNumber
-func (self *Frame) LineNumber() c.Int {
+// llgo:link (*FrameObject).LineNumber C.PyFrame_GetLineNumber
+func (self *FrameObject) LineNumber() c.Int {
 	return 0
 }
 
-// llgo:link (*Frame).Code C.PyFrame_GetCode
-func (self *Frame) Code() *CodeObject {
+// llgo:link (*FrameObject).Code C.PyFrame_GetCode
+func (self *FrameObject) Code() *CodeObject {
 	return nil
 }
 
@@ -41,66 +34,60 @@ var FrameType TypeObject
 //go:linkname FrameLocalsProxyType C.PyFrameLocalsProxy_Type
 var FrameLocalsProxyType TypeObject
 
-// llgo:link (*Frame).Back C.PyFrame_GetBack
-func (self *Frame) Back() *FrameObject {
+// llgo:link (*FrameObject).Back C.PyFrame_GetBack
+func (self *FrameObject) Back() *FrameObject {
+	return self
+}
+
+// llgo:link (*FrameObject).Locals C.PyFrame_GetLocals
+func (self *FrameObject) Locals() *Object {
 	return nil
 }
 
-// llgo:link (*Frame).Locals C.PyFrame_GetLocals
-func (self *Frame) Locals() *Object {
+// llgo:link (*FrameObject).Globals C.PyFrame_GetGlobals
+func (self *FrameObject) Globals() *Object {
 	return nil
 }
 
-// llgo:link (*Frame).Globals C.PyFrame_GetGlobals
-func (self *Frame) Globals() *Object {
+// llgo:link (*FrameObject).Builtins C.PyFrame_GetBuiltins
+func (self *FrameObject) Builtins() *Object {
 	return nil
 }
 
-// llgo:link (*Frame).Builtins C.PyFrame_GetBuiltins
-func (self *Frame) Builtins() *Object {
+// llgo:link (*FrameObject).Generator C.PyFrame_GetGenerator
+func (self *FrameObject) Generator() *Object {
 	return nil
 }
 
-// llgo:link (*Frame).Generator C.PyFrame_GetGenerator
-func (self *Frame) Generator() *Object {
-	return nil
-}
-
-// llgo:link (*Frame).Lasti C.PyFrame_GetLasti
-func (self *Frame) Lasti() c.Int {
+// llgo:link (*FrameObject).Lasti C.PyFrame_GetLasti
+func (self *FrameObject) Lasti() c.Int {
 	return 0
 }
 
-// llgo:link (*Frame).Var C.PyFrame_GetVar
-func (self *Frame) Var(name *Object) *Object {
+// llgo:link (*FrameObject).Var C.PyFrame_GetVar
+func (self *FrameObject) Var(name *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Frame).VarString C.PyFrame_GetVarString
-func (self *Frame) VarString(name *c.Char) *Object {
+// llgo:link (*FrameObject).VarString C.PyFrame_GetVarString
+func (self *FrameObject) VarString(name *c.Char) *Object {
 	return nil
 }
 
 // Returns the code object of the frame (strong reference).
 // Does not raise an exception.
 //
-// llgo:link (*Unstable).InterpreterFrameGetCode C.PyUnstable_InterpreterFrame_GetCode
-func (self *Unstable) InterpreterFrameGetCode() *Object {
-	return nil
-}
+//go:linkname UnstableInterpreterFrameGetCode C.PyUnstable_InterpreterFrame_GetCode
+func UnstableInterpreterFrameGetCode(frame *X_InterpreterFrame) *Object
 
 // Returns a byte offset into the last executed instruction.
 // Does not raise an exception.
 //
-// llgo:link (*Unstable).InterpreterFrameGetLasti C.PyUnstable_InterpreterFrame_GetLasti
-func (self *Unstable) InterpreterFrameGetLasti() c.Int {
-	return 0
-}
+//go:linkname UnstableInterpreterFrameGetLasti C.PyUnstable_InterpreterFrame_GetLasti
+func UnstableInterpreterFrameGetLasti(frame *X_InterpreterFrame) c.Int
 
 // Returns the currently executing line number, or -1 if there is no line number.
 // Does not raise an exception.
 //
-// llgo:link (*Unstable).InterpreterFrameGetLine C.PyUnstable_InterpreterFrame_GetLine
-func (self *Unstable) InterpreterFrameGetLine() c.Int {
-	return 0
-}
+//go:linkname UnstableInterpreterFrameGetLine C.PyUnstable_InterpreterFrame_GetLine
+func UnstableInterpreterFrameGetLine(frame *X_InterpreterFrame) c.Int

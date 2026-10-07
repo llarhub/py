@@ -393,66 +393,58 @@ var LongType TypeObject
 //go:linkname BoolType C.PyBool_Type
 var BoolType TypeObject
 
-type Type struct {
-	TypeSpec
-}
-
-func (self *TypeSpec) AsType() *Type {
-	return (*Type)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Type).FromSpec C.PyType_FromSpec
-func (self *Type) FromSpec() *Object {
+// llgo:link (*TypeSpec).TypeFromSpec C.PyType_FromSpec
+func (self *TypeSpec) TypeFromSpec() *Object {
 	return nil
 }
 
-// llgo:link (*Type).FromSpecWithBases C.PyType_FromSpecWithBases
-func (self *Type) FromSpecWithBases(_llcppg_param2 *Object) *Object {
+// llgo:link (*TypeSpec).TypeFromSpecWithBases C.PyType_FromSpecWithBases
+func (self *TypeSpec) TypeFromSpecWithBases(_llcppg_param2 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Type).Slot C.PyType_GetSlot
-func (self *Type) Slot(_llcppg_param2 c.Int) unsafe.Pointer {
+// llgo:link (*TypeObject).Slot C.PyType_GetSlot
+func (self *TypeObject) Slot(_llcppg_param2 c.Int) unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*Type).FromModuleAndSpec C.PyType_FromModuleAndSpec
-func (self *Type) FromModuleAndSpec(_llcppg_param2 *TypeSpec, _llcppg_param3 *Object) *Object {
+// llgo:link (*TypeObject).FromModuleAndSpec C.PyType_FromModuleAndSpec
+func (self *TypeObject) FromModuleAndSpec(_llcppg_param2 *TypeSpec, _llcppg_param3 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Type).Module C.PyType_GetModule
-func (self *Type) Module() *Object {
+// llgo:link (*TypeObject).Module C.PyType_GetModule
+func (self *TypeObject) Module() *Object {
 	return nil
 }
 
-// llgo:link (*Type).ModuleState C.PyType_GetModuleState
-func (self *Type) ModuleState() unsafe.Pointer {
+// llgo:link (*TypeObject).ModuleState C.PyType_GetModuleState
+func (self *TypeObject) ModuleState() unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*Type).Name C.PyType_GetName
-func (self *Type) Name() *Object {
+// llgo:link (*TypeObject).Name C.PyType_GetName
+func (self *TypeObject) Name() *Object {
 	return nil
 }
 
-// llgo:link (*Type).QualName C.PyType_GetQualName
-func (self *Type) QualName() *Object {
+// llgo:link (*TypeObject).QualName C.PyType_GetQualName
+func (self *TypeObject) QualName() *Object {
 	return nil
 }
 
-// llgo:link (*Type).FullyQualifiedName C.PyType_GetFullyQualifiedName
-func (self *Type) FullyQualifiedName() *Object {
+// llgo:link (*TypeObject).FullyQualifiedName C.PyType_GetFullyQualifiedName
+func (self *TypeObject) FullyQualifiedName() *Object {
 	return nil
 }
 
-// llgo:link (*Type).ModuleName C.PyType_GetModuleName
-func (self *Type) ModuleName() *Object {
+// llgo:link (*TypeObject).ModuleName C.PyType_GetModuleName
+func (self *TypeObject) ModuleName() *Object {
 	return nil
 }
 
-// llgo:link (*Type).FromMetaclass C.PyType_FromMetaclass
-func (self *Type) FromMetaclass(_llcppg_param2 *Object, _llcppg_param3 *TypeSpec, _llcppg_param4 *Object) *Object {
+// llgo:link (*TypeObject).FromMetaclass C.PyType_FromMetaclass
+func (self *TypeObject) FromMetaclass(_llcppg_param2 *Object, _llcppg_param3 *TypeSpec, _llcppg_param4 *Object) *Object {
 	return nil
 }
 
@@ -461,20 +453,20 @@ func (self *Object) TypeData(cls *TypeObject) unsafe.Pointer {
 	return nil
 }
 
-// llgo:link (*Type).DataSize C.PyType_GetTypeDataSize
-func (self *Type) DataSize() SsizeT {
+// llgo:link (*TypeObject).DataSize C.PyType_GetTypeDataSize
+func (self *TypeObject) DataSize() SsizeT {
 	return 0
 }
 
-// llgo:link (*Type).BaseByToken C.PyType_GetBaseByToken
-func (self *Type) BaseByToken(_llcppg_param2 unsafe.Pointer, _llcppg_param3 **TypeObject) c.Int {
+// llgo:link (*TypeObject).BaseByToken C.PyType_GetBaseByToken
+func (self *TypeObject) BaseByToken(_llcppg_param2 unsafe.Pointer, _llcppg_param3 **TypeObject) c.Int {
 	return 0
 }
 
 // Generic type check
 //
-// llgo:link (*Type).IsSubtype C.PyType_IsSubtype
-func (self *Type) IsSubtype(_llcppg_param2 *TypeObject) c.Int {
+// llgo:link (*TypeObject).IsSubtype C.PyType_IsSubtype
+func (self *TypeObject) IsSubtype(_llcppg_param2 *TypeObject) c.Int {
 	return 0
 }
 
@@ -493,31 +485,31 @@ var BaseObjectType TypeObject
 //go:linkname SuperType C.PySuper_Type
 var SuperType TypeObject
 
-// llgo:link (*Type).Flags C.PyType_GetFlags
-func (self *Type) Flags() c.Ulong {
+// llgo:link (*TypeObject).Flags C.PyType_GetFlags
+func (self *TypeObject) Flags() c.Ulong {
 	return 0
 }
 
-// llgo:link (*Type).Ready C.PyType_Ready
-func (self *Type) Ready() c.Int {
+// llgo:link (*TypeObject).Ready C.PyType_Ready
+func (self *TypeObject) Ready() c.Int {
 	return 0
 }
 
-// llgo:link (*Type).GenericAlloc C.PyType_GenericAlloc
-func (self *Type) GenericAlloc(_llcppg_param2 SsizeT) *Object {
+// llgo:link (*TypeObject).GenericAlloc C.PyType_GenericAlloc
+func (self *TypeObject) GenericAlloc(_llcppg_param2 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*Type).GenericNew C.PyType_GenericNew
-func (self *Type) GenericNew(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+// llgo:link (*TypeObject).GenericNew C.PyType_GenericNew
+func (self *TypeObject) GenericNew(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
 	return nil
 }
 
 //go:linkname TypeClearCache C.PyType_ClearCache
 func TypeClearCache() c.Uint
 
-// llgo:link (*Type).Modified C.PyType_Modified
-func (self *Type) Modified() {
+// llgo:link (*TypeObject).Modified C.PyType_Modified
+func (self *TypeObject) Modified() {
 }
 
 // Generic operations on objects
@@ -652,18 +644,8 @@ func (self *Object) Not() c.Int {
 	return 0
 }
 
-type Callable struct {
-	X_object
-}
-
-func (self *Object) AsCallable() *Callable {
-	return (*Callable)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Callable).Check C.PyCallable_Check
-func (self *Callable) Check() c.Int {
-	return 0
-}
+//go:linkname CallableCheck C.PyCallable_Check
+func CallableCheck(_llcppg_param1 *Object) c.Int
 
 // llgo:link (*Object).ClearWeakRefs C.PyObject_ClearWeakRefs
 func (self *Object) ClearWeakRefs() {
@@ -729,8 +711,8 @@ func X_TypeLookup(_llcppg_param1 *TypeObject, _llcppg_param2 *Object) *Object
 //go:linkname X_TypeLookupRef C._PyType_LookupRef
 func X_TypeLookupRef(_llcppg_param1 *TypeObject, _llcppg_param2 *Object) *Object
 
-// llgo:link (*Type).Dict C.PyType_GetDict
-func (self *Type) Dict() *Object {
+// llgo:link (*TypeObject).Dict C.PyType_GetDict
+func (self *TypeObject) Dict() *Object {
 	return nil
 }
 
@@ -760,17 +742,8 @@ func (self *Object) CallFinalizerFromDealloc() c.Int {
 	return 0
 }
 
-type Unstable struct {
-	X_object
-}
-
-func (self *Object) AsUnstable() *Unstable {
-	return (*Unstable)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Unstable).ObjectClearWeakRefsNoCallbacks C.PyUnstable_Object_ClearWeakRefsNoCallbacks
-func (self *Unstable) ObjectClearWeakRefsNoCallbacks() {
-}
+//go:linkname UnstableObjectClearWeakRefsNoCallbacks C.PyUnstable_Object_ClearWeakRefsNoCallbacks
+func UnstableObjectClearWeakRefsNoCallbacks(_llcppg_param1 *Object)
 
 // Same as PyObject_Generic{Get,Set}Attr, but passing the attributes
 // dict as the last parameter.
@@ -836,10 +809,8 @@ func TypeUnwatch(watcher_id c.Int, type_ *Object) c.Int
 // Returns 1 if the type already had a valid version tag or a new one was
 // assigned, or 0 if a new tag could not be assigned.
 //
-// llgo:link (*Unstable).TypeAssignVersionTag C.PyUnstable_Type_AssignVersionTag
-func (self *Unstable) TypeAssignVersionTag() c.Int {
-	return 0
-}
+//go:linkname UnstableTypeAssignVersionTag C.PyUnstable_Type_AssignVersionTag
+func UnstableTypeAssignVersionTag(type_ *TypeObject) c.Int
 
 //go:linkname RefTracerSetTracer C.PyRefTracer_SetTracer
 func RefTracerSetTracer(tracer RefTracer, data unsafe.Pointer) c.Int
@@ -852,50 +823,39 @@ func RefTracerGetTracer(_llcppg_param1 *unsafe.Pointer) RefTracer
 // Returns 1 if deferred reference counting was successfully enabled, and
 // 0 if the runtime ignored it. This function cannot fail.
 //
-// llgo:link (*Unstable).ObjectEnableDeferredRefcount C.PyUnstable_Object_EnableDeferredRefcount
-func (self *Unstable) ObjectEnableDeferredRefcount() c.Int {
-	return 0
-}
+//go:linkname UnstableObjectEnableDeferredRefcount C.PyUnstable_Object_EnableDeferredRefcount
+func UnstableObjectEnableDeferredRefcount(_llcppg_param1 *Object) c.Int
 
 // Determine if the object exists as a unique temporary variable on the
 // topmost frame of the interpreter.
 //
-// llgo:link (*Unstable).ObjectIsUniqueReferencedTemporary C.PyUnstable_Object_IsUniqueReferencedTemporary
-func (self *Unstable) ObjectIsUniqueReferencedTemporary() c.Int {
-	return 0
-}
+//go:linkname UnstableObjectIsUniqueReferencedTemporary C.PyUnstable_Object_IsUniqueReferencedTemporary
+func UnstableObjectIsUniqueReferencedTemporary(_llcppg_param1 *Object) c.Int
 
 // Check whether the object is immortal. This cannot fail.
 //
-// llgo:link (*Unstable).IsImmortal C.PyUnstable_IsImmortal
-func (self *Unstable) IsImmortal() c.Int {
-	return 0
-}
+//go:linkname UnstableIsImmortal C.PyUnstable_IsImmortal
+func UnstableIsImmortal(_llcppg_param1 *Object) c.Int
 
 // Increments the reference count of the object, if it's not zero.
 // PyUnstable_EnableTryIncRef() should be called on the object
 // before calling this function in order to avoid spurious failures.
 //
-// llgo:link (*Unstable).TryIncRef C.PyUnstable_TryIncRef
-func (self *Unstable) TryIncRef() c.Int {
-	return 0
-}
+//go:linkname UnstableTryIncRef C.PyUnstable_TryIncRef
+func UnstableTryIncRef(_llcppg_param1 *Object) c.Int
 
-// llgo:link (*Unstable).EnableTryIncRef C.PyUnstable_EnableTryIncRef
-func (self *Unstable) EnableTryIncRef() {
-}
+//go:linkname UnstableEnableTryIncRef C.PyUnstable_EnableTryIncRef
+func UnstableEnableTryIncRef(_llcppg_param1 *Object)
 
-// llgo:link (*Unstable).ObjectIsUniquelyReferenced C.PyUnstable_Object_IsUniquelyReferenced
-func (self *Unstable) ObjectIsUniquelyReferenced() c.Int {
-	return 0
-}
+//go:linkname UnstableObjectIsUniquelyReferenced C.PyUnstable_Object_IsUniquelyReferenced
+func UnstableObjectIsUniquelyReferenced(_llcppg_param1 *Object) c.Int
 
-// llgo:link (*Type).ModuleByDef C.PyType_GetModuleByDef
-func (self *Type) ModuleByDef(_llcppg_param2 *ModuleDef) *Object {
+// llgo:link (*TypeObject).ModuleByDef C.PyType_GetModuleByDef
+func (self *TypeObject) ModuleByDef(_llcppg_param2 *ModuleDef) *Object {
 	return nil
 }
 
-// llgo:link (*Type).Freeze C.PyType_Freeze
-func (self *Type) Freeze() c.Int {
+// llgo:link (*TypeObject).Freeze C.PyType_Freeze
+func (self *TypeObject) Freeze() c.Int {
 	return 0
 }

@@ -160,7 +160,5 @@ func FdIsInteractive(_llcppg_param1 *c.FILE, _llcppg_param2 *c.Char) c.Int
 //go:linkname NewInterpreterFromConfig C.Py_NewInterpreterFromConfig
 func NewInterpreterFromConfig(tstate_p **ThreadState, config *InterpreterConfig) Status
 
-// llgo:link (*Unstable).AtExit C.PyUnstable_AtExit
-func (self *Unstable) AtExit(_llcppg_param2 AtexitDatacallbackfunc, _llcppg_param3 unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname UnstableAtExit C.PyUnstable_AtExit
+func UnstableAtExit(_llcppg_param1 *InterpreterState, _llcppg_param2 AtexitDatacallbackfunc, _llcppg_param3 unsafe.Pointer) c.Int

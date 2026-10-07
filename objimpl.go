@@ -100,8 +100,8 @@ func (self *Object) Init(_llcppg_param2 *TypeObject) *Object {
 	return self
 }
 
-// llgo:link (*VarObject).ObjectInitVar C.PyObject_InitVar
-func (self *VarObject) ObjectInitVar(_llcppg_param2 *TypeObject, _llcppg_param3 SsizeT) *VarObject {
+// llgo:link (*VarObject).ObjectInit C.PyObject_InitVar
+func (self *VarObject) ObjectInit(_llcppg_param2 *TypeObject, _llcppg_param3 SsizeT) *VarObject {
 	return self
 }
 
@@ -184,8 +184,8 @@ func (self *Object) IS_GC() c.Int {
 
 // Test if a type supports weak references
 //
-// llgo:link (*Type).SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
-func (self *Type) SUPPORTS_WEAKREFS() c.Int {
+// llgo:link (*TypeObject).Type_SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
+func (self *TypeObject) Type_SUPPORTS_WEAKREFS() c.Int {
 	return 0
 }
 
@@ -194,10 +194,8 @@ func (self *Object) GET_WEAKREFS_LISTPTR() **Object {
 	return nil
 }
 
-// llgo:link (*Unstable).Object_GC_NewWithExtraData C.PyUnstable_Object_GC_NewWithExtraData
-func (self *Unstable) Object_GC_NewWithExtraData(_llcppg_param2 c.SizeT) *Object {
-	return nil
-}
+//go:linkname Unstable_Object_GC_NewWithExtraData C.PyUnstable_Object_GC_NewWithExtraData
+func Unstable_Object_GC_NewWithExtraData(_llcppg_param1 *TypeObject, _llcppg_param2 c.SizeT) *Object
 
 //go:linkname Unstable_GC_VisitObjects C.PyUnstable_GC_VisitObjects
 func Unstable_GC_VisitObjects(callback GcvisitobjectsT, arg unsafe.Pointer)

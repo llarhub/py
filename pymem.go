@@ -81,9 +81,8 @@ func MemRawFree(ptr unsafe.Pointer)
 
 // Get the memory block allocator of the specified domain.
 //
-// llgo:link MemAllocatorDomain.MemGetAllocator C.PyMem_GetAllocator
-func (self MemAllocatorDomain) MemGetAllocator(allocator *MemAllocatorEx) {
-}
+//go:linkname MemGetAllocator C.PyMem_GetAllocator
+func MemGetAllocator(domain MemAllocatorDomain, allocator *MemAllocatorEx)
 
 // Set the memory block allocator of the specified domain.
 //
@@ -97,9 +96,8 @@ func (self MemAllocatorDomain) MemGetAllocator(allocator *MemAllocatorEx) {
 // PyMem_SetupDebugHooks() function must be called to reinstall the debug hooks
 // on top on the new allocator.
 //
-// llgo:link MemAllocatorDomain.MemSetAllocator C.PyMem_SetAllocator
-func (self MemAllocatorDomain) MemSetAllocator(allocator *MemAllocatorEx) {
-}
+//go:linkname MemSetAllocator C.PyMem_SetAllocator
+func MemSetAllocator(domain MemAllocatorDomain, allocator *MemAllocatorEx)
 
 // Setup hooks to detect bugs in the following Python memory allocator
 // functions:

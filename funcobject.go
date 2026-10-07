@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type FunctionWatchEvent c.Uint
@@ -78,80 +78,72 @@ type FunctionWatchCallback = func(_llcppg_param1 FunctionWatchEvent, _llcppg_par
 //go:linkname FunctionType C.PyFunction_Type
 var FunctionType TypeObject
 
-type Function struct {
-	X_object
-}
-
-func (self *Object) AsFunction() *Function {
-	return (*Function)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Function).New C.PyFunction_New
-func (self *Function) New(_llcppg_param2 *Object) *Object {
+// llgo:link (*FunctionObject).New C.PyFunction_New
+func (self *FunctionObject) New(_llcppg_param2 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Function).NewWithQualName C.PyFunction_NewWithQualName
-func (self *Function) NewWithQualName(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
+// llgo:link (*FunctionObject).NewWithQualName C.PyFunction_NewWithQualName
+func (self *FunctionObject) NewWithQualName(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Function).Code C.PyFunction_GetCode
-func (self *Function) Code() *Object {
+// llgo:link (*FunctionObject).Code C.PyFunction_GetCode
+func (self *FunctionObject) Code() *Object {
 	return nil
 }
 
-// llgo:link (*Function).Globals C.PyFunction_GetGlobals
-func (self *Function) Globals() *Object {
+// llgo:link (*FunctionObject).Globals C.PyFunction_GetGlobals
+func (self *FunctionObject) Globals() *Object {
 	return nil
 }
 
-// llgo:link (*Function).Module C.PyFunction_GetModule
-func (self *Function) Module() *Object {
+// llgo:link (*FunctionObject).Module C.PyFunction_GetModule
+func (self *FunctionObject) Module() *Object {
 	return nil
 }
 
-// llgo:link (*Function).Defaults C.PyFunction_GetDefaults
-func (self *Function) Defaults() *Object {
+// llgo:link (*FunctionObject).Defaults C.PyFunction_GetDefaults
+func (self *FunctionObject) Defaults() *Object {
 	return nil
 }
 
-// llgo:link (*Function).SetDefaults C.PyFunction_SetDefaults
-func (self *Function) SetDefaults(_llcppg_param2 *Object) c.Int {
+// llgo:link (*FunctionObject).SetDefaults C.PyFunction_SetDefaults
+func (self *FunctionObject) SetDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Function).SetVectorcall C.PyFunction_SetVectorcall
-func (self *Function) SetVectorcall(_llcppg_param2 Vectorcallfunc) {
+// llgo:link (*FunctionObject).SetVectorcall C.PyFunction_SetVectorcall
+func (self *FunctionObject) SetVectorcall(_llcppg_param2 Vectorcallfunc) {
 }
 
-// llgo:link (*Function).KwDefaults C.PyFunction_GetKwDefaults
-func (self *Function) KwDefaults() *Object {
+// llgo:link (*FunctionObject).KwDefaults C.PyFunction_GetKwDefaults
+func (self *FunctionObject) KwDefaults() *Object {
 	return nil
 }
 
-// llgo:link (*Function).SetKwDefaults C.PyFunction_SetKwDefaults
-func (self *Function) SetKwDefaults(_llcppg_param2 *Object) c.Int {
+// llgo:link (*FunctionObject).SetKwDefaults C.PyFunction_SetKwDefaults
+func (self *FunctionObject) SetKwDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Function).Closure C.PyFunction_GetClosure
-func (self *Function) Closure() *Object {
+// llgo:link (*FunctionObject).Closure C.PyFunction_GetClosure
+func (self *FunctionObject) Closure() *Object {
 	return nil
 }
 
-// llgo:link (*Function).SetClosure C.PyFunction_SetClosure
-func (self *Function) SetClosure(_llcppg_param2 *Object) c.Int {
+// llgo:link (*FunctionObject).SetClosure C.PyFunction_SetClosure
+func (self *FunctionObject) SetClosure(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Function).Annotations C.PyFunction_GetAnnotations
-func (self *Function) Annotations() *Object {
+// llgo:link (*FunctionObject).Annotations C.PyFunction_GetAnnotations
+func (self *FunctionObject) Annotations() *Object {
 	return nil
 }
 
-// llgo:link (*Function).SetAnnotations C.PyFunction_SetAnnotations
-func (self *Function) SetAnnotations(_llcppg_param2 *Object) c.Int {
+// llgo:link (*FunctionObject).SetAnnotations C.PyFunction_SetAnnotations
+func (self *FunctionObject) SetAnnotations(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
@@ -163,31 +155,11 @@ var ClassMethodType TypeObject
 //go:linkname StaticMethodType C.PyStaticMethod_Type
 var StaticMethodType TypeObject
 
-type ClassMethod struct {
-	X_object
-}
+//go:linkname ClassMethodNew C.PyClassMethod_New
+func ClassMethodNew(_llcppg_param1 *Object) *Object
 
-func (self *Object) AsClassMethod() *ClassMethod {
-	return (*ClassMethod)(unsafe.Pointer(self))
-}
-
-// llgo:link (*ClassMethod).New C.PyClassMethod_New
-func (self *ClassMethod) New() *Object {
-	return nil
-}
-
-type StaticMethod struct {
-	X_object
-}
-
-func (self *Object) AsStaticMethod() *StaticMethod {
-	return (*StaticMethod)(unsafe.Pointer(self))
-}
-
-// llgo:link (*StaticMethod).New C.PyStaticMethod_New
-func (self *StaticMethod) New() *Object {
-	return nil
-}
+//go:linkname StaticMethodNew C.PyStaticMethod_New
+func StaticMethodNew(_llcppg_param1 *Object) *Object
 
 // Register a per-interpreter callback that will be invoked for function lifecycle
 // events.

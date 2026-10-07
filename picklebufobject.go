@@ -4,38 +4,24 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 //go:linkname PickleBufferType C.PyPickleBuffer_Type
 var PickleBufferType TypeObject
 
-type PickleBuffer struct {
-	X_object
-}
-
-func (self *Object) AsPickleBuffer() *PickleBuffer {
-	return (*PickleBuffer)(unsafe.Pointer(self))
-}
-
 // Create a PickleBuffer redirecting to the given buffer-enabled object
 //
-// llgo:link (*PickleBuffer).FromObject C.PyPickleBuffer_FromObject
-func (self *PickleBuffer) FromObject() *Object {
-	return nil
-}
+//go:linkname PickleBufferFromObject C.PyPickleBuffer_FromObject
+func PickleBufferFromObject(_llcppg_param1 *Object) *Object
 
 // Get the PickleBuffer's underlying view to the original object
 // (NULL if released)
 //
-// llgo:link (*PickleBuffer).Buffer C.PyPickleBuffer_GetBuffer
-func (self *PickleBuffer) Buffer() *Buffer {
-	return nil
-}
+//go:linkname PickleBufferGetBuffer C.PyPickleBuffer_GetBuffer
+func PickleBufferGetBuffer(_llcppg_param1 *Object) *Buffer
 
 // Release the PickleBuffer.  Returns 0 on success, -1 on error.
 //
-// llgo:link (*PickleBuffer).Release C.PyPickleBuffer_Release
-func (self *PickleBuffer) Release() c.Int {
-	return 0
-}
+//go:linkname PickleBufferRelease C.PyPickleBuffer_Release
+func PickleBufferRelease(_llcppg_param1 *Object) c.Int

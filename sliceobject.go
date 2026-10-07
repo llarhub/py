@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type SliceObject struct {
@@ -25,16 +25,8 @@ var SliceType TypeObject
 //go:linkname EllipsisType C.PyEllipsis_Type
 var EllipsisType TypeObject
 
-type Slice struct {
-	X_object
-}
-
-func (self *Object) AsSlice() *Slice {
-	return (*Slice)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Slice).New C.PySlice_New
-func (self *Slice) New(stop *Object, step *Object) *Object {
+// llgo:link (*SliceObject).New C.PySlice_New
+func (self *SliceObject) New(stop *Object, step *Object) *Object {
 	return nil
 }
 
@@ -44,18 +36,18 @@ func X_SliceFromIndices(start SsizeT, stop SsizeT) *Object
 //go:linkname X_SliceGetLongIndices C._PySlice_GetLongIndices
 func X_SliceGetLongIndices(self *SliceObject, length *Object, start_ptr **Object, stop_ptr **Object, step_ptr **Object) c.Int
 
-// llgo:link (*Slice).Indices C.PySlice_GetIndices
-func (self *Slice) Indices(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
+// llgo:link (*SliceObject).Indices C.PySlice_GetIndices
+func (self *SliceObject) Indices(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*Slice).IndicesEx C.PySlice_GetIndicesEx
-func (self *Slice) IndicesEx(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT, slicelength *SsizeT) c.Int {
+// llgo:link (*SliceObject).IndicesEx C.PySlice_GetIndicesEx
+func (self *SliceObject) IndicesEx(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT, slicelength *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*Slice).Unpack C.PySlice_Unpack
-func (self *Slice) Unpack(start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
+// llgo:link (*SliceObject).Unpack C.PySlice_Unpack
+func (self *SliceObject) Unpack(start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }
 

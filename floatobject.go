@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type FloatObject struct {
@@ -24,18 +24,10 @@ func FloatGetMin() c.Double
 //go:linkname FloatGetInfo C.PyFloat_GetInfo
 func FloatGetInfo() *Object
 
-type Float struct {
-	X_object
-}
-
-func (self *Object) AsFloat() *Float {
-	return (*Float)(unsafe.Pointer(self))
-}
-
 // Return Python float from string PyObject.
 //
-// llgo:link (*Float).FromString C.PyFloat_FromString
-func (self *Float) FromString() *Object {
+// llgo:link (*FloatObject).FromString C.PyFloat_FromString
+func (self *FloatObject) FromString() *Object {
 	return nil
 }
 
@@ -47,8 +39,8 @@ func FloatFromDouble(_llcppg_param1 c.Double) *Object
 // Extract C double from Python float.  The macro version trades safety for
 // speed.
 //
-// llgo:link (*Float).AsDouble C.PyFloat_AsDouble
-func (self *Float) AsDouble() c.Double {
+// llgo:link (*FloatObject).AsDouble C.PyFloat_AsDouble
+func (self *FloatObject) AsDouble() c.Double {
 	return 0
 }
 

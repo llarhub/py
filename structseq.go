@@ -22,30 +22,20 @@ type StructSequence = TupleObject
 //go:linkname StructSequenceUnnamedField C.PyStructSequence_UnnamedField
 var StructSequenceUnnamedField *c.Char
 
-// llgo:link (*TypeObject).StructSequenceInitType C.PyStructSequence_InitType
-func (self *TypeObject) StructSequenceInitType(desc *StructSequenceDesc) {
-}
+//go:linkname StructSequenceInitType C.PyStructSequence_InitType
+func StructSequenceInitType(type_ *TypeObject, desc *StructSequenceDesc)
 
-// llgo:link (*TypeObject).StructSequenceInitType2 C.PyStructSequence_InitType2
-func (self *TypeObject) StructSequenceInitType2(desc *StructSequenceDesc) c.Int {
-	return 0
-}
+//go:linkname StructSequenceInitType2 C.PyStructSequence_InitType2
+func StructSequenceInitType2(type_ *TypeObject, desc *StructSequenceDesc) c.Int
 
-// llgo:link (*StructSequenceDesc).StructSequenceNewType C.PyStructSequence_NewType
-func (self *StructSequenceDesc) StructSequenceNewType() *TypeObject {
-	return nil
-}
+//go:linkname StructSequenceNewType C.PyStructSequence_NewType
+func StructSequenceNewType(desc *StructSequenceDesc) *TypeObject
 
-// llgo:link (*TypeObject).StructSequenceNew C.PyStructSequence_New
-func (self *TypeObject) StructSequenceNew() *Object {
-	return nil
-}
+//go:linkname StructSequenceNew C.PyStructSequence_New
+func StructSequenceNew(type_ *TypeObject) *Object
 
-// llgo:link (*Object).StructSequenceSetItem C.PyStructSequence_SetItem
-func (self *Object) StructSequenceSetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) {
-}
+//go:linkname StructSequenceSetItem C.PyStructSequence_SetItem
+func StructSequenceSetItem(_llcppg_param1 *Object, _llcppg_param2 SsizeT, _llcppg_param3 *Object)
 
-// llgo:link (*Object).StructSequenceGetItem C.PyStructSequence_GetItem
-func (self *Object) StructSequenceGetItem(_llcppg_param2 SsizeT) *Object {
-	return self
-}
+//go:linkname StructSequenceGetItem C.PyStructSequence_GetItem
+func StructSequenceGetItem(_llcppg_param1 *Object, _llcppg_param2 SsizeT) *Object

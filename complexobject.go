@@ -27,13 +27,13 @@ var ComplexType TypeObject
 //go:linkname ComplexFromDoubles C.PyComplex_FromDoubles
 func ComplexFromDoubles(real c.Double, imag c.Double) *Object
 
-// llgo:link (*Object).ComplexRealAsDouble C.PyComplex_RealAsDouble
-func (self *Object) ComplexRealAsDouble() c.Double {
+// llgo:link (*ComplexObject).RealAsDouble C.PyComplex_RealAsDouble
+func (self *ComplexObject) RealAsDouble() c.Double {
 	return 0
 }
 
-// llgo:link (*Object).ComplexImagAsDouble C.PyComplex_ImagAsDouble
-func (self *Object) ComplexImagAsDouble() c.Double {
+// llgo:link (*ComplexObject).ImagAsDouble C.PyComplex_ImagAsDouble
+func (self *ComplexObject) ImagAsDouble() c.Double {
 	return 0
 }
 
@@ -65,7 +65,7 @@ func (self Complex) FromC() *Object {
 	return nil
 }
 
-// llgo:link (*Object).ComplexAsCComplex C.PyComplex_AsCComplex
-func (self *Object) ComplexAsCComplex() Complex {
+// llgo:link (*ComplexObject).AsC C.PyComplex_AsCComplex
+func (self *ComplexObject) AsC() Complex {
 	return Complex{}
 }

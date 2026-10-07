@@ -16,58 +16,32 @@ var CapsuleType TypeObject
 //go:linkname CapsuleNew C.PyCapsule_New
 func CapsuleNew(pointer unsafe.Pointer, name *c.Char, destructor CapsuleDestructor) *Object
 
-type Capsule struct {
-	X_object
-}
+//go:linkname CapsuleGetPointer C.PyCapsule_GetPointer
+func CapsuleGetPointer(capsule *Object, name *c.Char) unsafe.Pointer
 
-func (self *Object) AsCapsule() *Capsule {
-	return (*Capsule)(unsafe.Pointer(self))
-}
+//go:linkname CapsuleGetDestructor C.PyCapsule_GetDestructor
+func CapsuleGetDestructor(capsule *Object) CapsuleDestructor
 
-// llgo:link (*Capsule).Pointer C.PyCapsule_GetPointer
-func (self *Capsule) Pointer(name *c.Char) unsafe.Pointer {
-	return nil
-}
+//go:linkname CapsuleGetName C.PyCapsule_GetName
+func CapsuleGetName(capsule *Object) *c.Char
 
-// llgo:link (*Capsule).Destructor C.PyCapsule_GetDestructor
-func (self *Capsule) Destructor() CapsuleDestructor {
-	return nil
-}
+//go:linkname CapsuleGetContext C.PyCapsule_GetContext
+func CapsuleGetContext(capsule *Object) unsafe.Pointer
 
-// llgo:link (*Capsule).Name C.PyCapsule_GetName
-func (self *Capsule) Name() *c.Char {
-	return nil
-}
+//go:linkname CapsuleIsValid C.PyCapsule_IsValid
+func CapsuleIsValid(capsule *Object, name *c.Char) c.Int
 
-// llgo:link (*Capsule).Context C.PyCapsule_GetContext
-func (self *Capsule) Context() unsafe.Pointer {
-	return nil
-}
+//go:linkname CapsuleSetPointer C.PyCapsule_SetPointer
+func CapsuleSetPointer(capsule *Object, pointer unsafe.Pointer) c.Int
 
-// llgo:link (*Capsule).IsValid C.PyCapsule_IsValid
-func (self *Capsule) IsValid(name *c.Char) c.Int {
-	return 0
-}
+//go:linkname CapsuleSetDestructor C.PyCapsule_SetDestructor
+func CapsuleSetDestructor(capsule *Object, destructor CapsuleDestructor) c.Int
 
-// llgo:link (*Capsule).SetPointer C.PyCapsule_SetPointer
-func (self *Capsule) SetPointer(pointer unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname CapsuleSetName C.PyCapsule_SetName
+func CapsuleSetName(capsule *Object, name *c.Char) c.Int
 
-// llgo:link (*Capsule).SetDestructor C.PyCapsule_SetDestructor
-func (self *Capsule) SetDestructor(destructor CapsuleDestructor) c.Int {
-	return 0
-}
-
-// llgo:link (*Capsule).SetName C.PyCapsule_SetName
-func (self *Capsule) SetName(name *c.Char) c.Int {
-	return 0
-}
-
-// llgo:link (*Capsule).SetContext C.PyCapsule_SetContext
-func (self *Capsule) SetContext(context unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname CapsuleSetContext C.PyCapsule_SetContext
+func CapsuleSetContext(capsule *Object, context unsafe.Pointer) c.Int
 
 //go:linkname CapsuleImport C.PyCapsule_Import
 func CapsuleImport(name *c.Char, no_block c.Int) unsafe.Pointer

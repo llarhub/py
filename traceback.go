@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type X_traceback struct {
@@ -15,25 +15,14 @@ type X_traceback struct {
 	TbLineno c.Int
 }
 type TracebackObject = X_traceback
-type TraceBack struct {
-	X_frame
-}
-
-func (self *FrameObject) AsTraceBack() *TraceBack {
-	return (*TraceBack)(unsafe.Pointer(self))
-}
 
 // Traceback interface
 //
-// llgo:link (*TraceBack).Here C.PyTraceBack_Here
-func (self *TraceBack) Here() c.Int {
-	return 0
-}
+//go:linkname TraceBackHere C.PyTraceBack_Here
+func TraceBackHere(_llcppg_param1 *FrameObject) c.Int
 
-// llgo:link (*TraceBack).Print C.PyTraceBack_Print
-func (self *TraceBack) Print(_llcppg_param2 *Object) c.Int {
-	return 0
-}
+//go:linkname TraceBackPrint C.PyTraceBack_Print
+func TraceBackPrint(_llcppg_param1 *Object, _llcppg_param2 *Object) c.Int
 
 // Reveal traceback type so we can typecheck traceback objects
 //

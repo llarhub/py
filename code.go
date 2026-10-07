@@ -146,25 +146,17 @@ func UnstableCodeNewWithPosOnlyArgs(_llcppg_param1 c.Int, _llcppg_param2 c.Int, 
 //go:linkname CodeNewEmpty C.PyCode_NewEmpty
 func CodeNewEmpty(filename *c.Char, funcname *c.Char, firstlineno c.Int) *CodeObject
 
-type Code struct {
-	CodeObject
-}
-
-func (self *CodeObject) AsCode() *Code {
-	return (*Code)(unsafe.Pointer(self))
-}
-
 // Return the line number associated with the specified bytecode index
 // in this code object.  If you just need the line number of a frame,
 // use PyFrame_GetLineNumber() instead.
 //
-// llgo:link (*Code).Addr2Line C.PyCode_Addr2Line
-func (self *Code) Addr2Line(_llcppg_param2 c.Int) c.Int {
+// llgo:link (*CodeObject).Addr2Line C.PyCode_Addr2Line
+func (self *CodeObject) Addr2Line(_llcppg_param2 c.Int) c.Int {
 	return 0
 }
 
-// llgo:link (*Code).Addr2Location C.PyCode_Addr2Location
-func (self *Code) Addr2Location(_llcppg_param2 c.Int, _llcppg_param3 *c.Int, _llcppg_param4 *c.Int, _llcppg_param5 *c.Int, _llcppg_param6 *c.Int) c.Int {
+// llgo:link (*CodeObject).Addr2Location C.PyCode_Addr2Location
+func (self *CodeObject) Addr2Location(_llcppg_param2 c.Int, _llcppg_param3 *c.Int, _llcppg_param4 *c.Int, _llcppg_param5 *c.Int, _llcppg_param6 *c.Int) c.Int {
 	return 0
 }
 
@@ -201,46 +193,42 @@ func X_CodeCheckLineNumber(lasti c.Int, bounds *CodeAddressRange) c.Int
 //go:linkname X_CodeConstantKey C._PyCode_ConstantKey
 func X_CodeConstantKey(obj *Object) *Object
 
-// llgo:link (*Code).Optimize C.PyCode_Optimize
-func (self *Code) Optimize(consts *Object, names *Object, lnotab *Object) *Object {
+// llgo:link (*CodeObject).Optimize C.PyCode_Optimize
+func (self *CodeObject) Optimize(consts *Object, names *Object, lnotab *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Unstable).CodeGetExtra C.PyUnstable_Code_GetExtra
-func (self *Unstable) CodeGetExtra(index SsizeT, extra *unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname UnstableCodeGetExtra C.PyUnstable_Code_GetExtra
+func UnstableCodeGetExtra(code *Object, index SsizeT, extra *unsafe.Pointer) c.Int
 
-// llgo:link (*Unstable).CodeSetExtra C.PyUnstable_Code_SetExtra
-func (self *Unstable) CodeSetExtra(index SsizeT, extra unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname UnstableCodeSetExtra C.PyUnstable_Code_SetExtra
+func UnstableCodeSetExtra(code *Object, index SsizeT, extra unsafe.Pointer) c.Int
 
 // Equivalent to getattr(code, 'co_code') in Python.
 // Returns a strong reference to a bytes object.
 //
-// llgo:link (*Code).Get C.PyCode_GetCode
-func (self *Code) Get() *Object {
+// llgo:link (*CodeObject).Get C.PyCode_GetCode
+func (self *CodeObject) Get() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_varnames') in Python.
 //
-// llgo:link (*Code).Varnames C.PyCode_GetVarnames
-func (self *Code) Varnames() *Object {
+// llgo:link (*CodeObject).Varnames C.PyCode_GetVarnames
+func (self *CodeObject) Varnames() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_cellvars') in Python.
 //
-// llgo:link (*Code).Cellvars C.PyCode_GetCellvars
-func (self *Code) Cellvars() *Object {
+// llgo:link (*CodeObject).Cellvars C.PyCode_GetCellvars
+func (self *CodeObject) Cellvars() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_freevars') in Python.
 //
-// llgo:link (*Code).Freevars C.PyCode_GetFreevars
-func (self *Code) Freevars() *Object {
+// llgo:link (*CodeObject).Freevars C.PyCode_GetFreevars
+func (self *CodeObject) Freevars() *Object {
 	return nil
 }

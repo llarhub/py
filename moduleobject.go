@@ -42,63 +42,37 @@ type ModuleDefBase struct {
 //go:linkname ModuleType C.PyModule_Type
 var ModuleType TypeObject
 
-type Module struct {
-	X_object
-}
-
-func (self *Object) AsModule() *Module {
-	return (*Module)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Module).NewObject C.PyModule_NewObject
-func (self *Module) NewObject() *Object {
-	return nil
-}
+//go:linkname ModuleNewObject C.PyModule_NewObject
+func ModuleNewObject(name *Object) *Object
 
 //go:linkname ModuleNew C.PyModule_New
 func ModuleNew(name *c.Char) *Object
 
-// llgo:link (*Module).Dict C.PyModule_GetDict
-func (self *Module) Dict() *Object {
-	return nil
-}
+//go:linkname ModuleGetDict C.PyModule_GetDict
+func ModuleGetDict(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Module).NameObject C.PyModule_GetNameObject
-func (self *Module) NameObject() *Object {
-	return nil
-}
+//go:linkname ModuleGetNameObject C.PyModule_GetNameObject
+func ModuleGetNameObject(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Module).Name C.PyModule_GetName
-func (self *Module) Name() *c.Char {
-	return nil
-}
+//go:linkname ModuleGetName C.PyModule_GetName
+func ModuleGetName(_llcppg_param1 *Object) *c.Char
 
-// llgo:link (*Module).Filename C.PyModule_GetFilename
-func (self *Module) Filename() *c.Char {
-	return nil
-}
+//go:linkname ModuleGetFilename C.PyModule_GetFilename
+func ModuleGetFilename(_llcppg_param1 *Object) *c.Char
 
-// llgo:link (*Module).FilenameObject C.PyModule_GetFilenameObject
-func (self *Module) FilenameObject() *Object {
-	return nil
-}
+//go:linkname ModuleGetFilenameObject C.PyModule_GetFilenameObject
+func ModuleGetFilenameObject(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Module).Def C.PyModule_GetDef
-func (self *Module) Def() *ModuleDef {
-	return nil
-}
+//go:linkname ModuleGetDef C.PyModule_GetDef
+func ModuleGetDef(_llcppg_param1 *Object) *ModuleDef
 
-// llgo:link (*Module).State C.PyModule_GetState
-func (self *Module) State() unsafe.Pointer {
-	return nil
-}
+//go:linkname ModuleGetState C.PyModule_GetState
+func ModuleGetState(_llcppg_param1 *Object) unsafe.Pointer
 
 // New in 3.5
 //
-// llgo:link (*ModuleDef).Init C.PyModuleDef_Init
-func (self *ModuleDef) Init() *Object {
-	return nil
-}
+//go:linkname ModuleDefInit C.PyModuleDef_Init
+func ModuleDefInit(_llcppg_param1 *ModuleDef) *Object
 
 //go:linkname ModuleDefType C.PyModuleDef_Type
 var ModuleDefType TypeObject

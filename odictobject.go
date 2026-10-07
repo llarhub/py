@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type X_odictobject struct {
@@ -29,20 +29,12 @@ var ODictValuesType TypeObject
 //go:linkname ODictNew C.PyODict_New
 func ODictNew() *Object
 
-type ODict struct {
-	X_object
-}
-
-func (self *Object) AsODict() *ODict {
-	return (*ODict)(unsafe.Pointer(self))
-}
-
-// llgo:link (*ODict).SetItem C.PyODict_SetItem
-func (self *ODict) SetItem(key *Object, item *Object) c.Int {
+// llgo:link (*Object).ODictSetItem C.PyODict_SetItem
+func (self *Object) ODictSetItem(key *Object, item *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ODict).DelItem C.PyODict_DelItem
-func (self *ODict) DelItem(key *Object) c.Int {
+// llgo:link (*Object).ODictDelItem C.PyODict_DelItem
+func (self *Object) ODictDelItem(key *Object) c.Int {
 	return 0
 }

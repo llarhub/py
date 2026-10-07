@@ -71,14 +71,11 @@ func ThreadGetThreadNativeId() c.Ulong
 //go:linkname ThreadAllocateLock C.PyThread_allocate_lock
 func ThreadAllocateLock() ThreadTypeLock
 
-// llgo:link ThreadTypeLock.ThreadFreeLock C.PyThread_free_lock
-func (self ThreadTypeLock) ThreadFreeLock() {
-}
+//go:linkname ThreadFreeLock C.PyThread_free_lock
+func ThreadFreeLock(_llcppg_param1 ThreadTypeLock)
 
-// llgo:link ThreadTypeLock.ThreadAcquireLock C.PyThread_acquire_lock
-func (self ThreadTypeLock) ThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
-	return 0
-}
+//go:linkname ThreadAcquireLock C.PyThread_acquire_lock
+func ThreadAcquireLock(_llcppg_param1 ThreadTypeLock, _llcppg_param2 c.Int) c.Int
 
 // If microseconds == 0, the call is non-blocking: it returns immediately
 // even when the lock can't be acquired.
@@ -92,14 +89,11 @@ func (self ThreadTypeLock) ThreadAcquireLock(_llcppg_param2 c.Int) c.Int {
 // call will return PY_LOCK_INTR.  The caller may reattempt to acquire the
 // lock.
 //
-// llgo:link ThreadTypeLock.ThreadAcquireLockTimed C.PyThread_acquire_lock_timed
-func (self ThreadTypeLock) ThreadAcquireLockTimed(microseconds c.LongLong, intr_flag c.Int) LockStatus {
-	return 0
-}
+//go:linkname ThreadAcquireLockTimed C.PyThread_acquire_lock_timed
+func ThreadAcquireLockTimed(_llcppg_param1 ThreadTypeLock, microseconds c.LongLong, intr_flag c.Int) LockStatus
 
-// llgo:link ThreadTypeLock.ThreadReleaseLock C.PyThread_release_lock
-func (self ThreadTypeLock) ThreadReleaseLock() {
-}
+//go:linkname ThreadReleaseLock C.PyThread_release_lock
+func ThreadReleaseLock(_llcppg_param1 ThreadTypeLock)
 
 //go:linkname ThreadGetStacksize C.PyThread_get_stacksize
 func ThreadGetStacksize() c.SizeT
@@ -140,43 +134,25 @@ func Thread_ReInitTLS()
 //go:linkname ThreadTssAlloc C.PyThread_tss_alloc
 func ThreadTssAlloc() *TssT
 
-type Thread struct {
-	X_tssT
-}
-
-func (self *TssT) AsThread() *Thread {
-	return (*Thread)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Thread).TssFree C.PyThread_tss_free
-func (self *Thread) TssFree() {
-}
+//go:linkname ThreadTssFree C.PyThread_tss_free
+func ThreadTssFree(key *TssT)
 
 // The parameter key must not be NULL.
 //
-// llgo:link (*Thread).TssIsCreated C.PyThread_tss_is_created
-func (self *Thread) TssIsCreated() c.Int {
-	return 0
-}
+//go:linkname ThreadTssIsCreated C.PyThread_tss_is_created
+func ThreadTssIsCreated(key *TssT) c.Int
 
-// llgo:link (*Thread).TssCreate C.PyThread_tss_create
-func (self *Thread) TssCreate() c.Int {
-	return 0
-}
+//go:linkname ThreadTssCreate C.PyThread_tss_create
+func ThreadTssCreate(key *TssT) c.Int
 
-// llgo:link (*Thread).TssDelete C.PyThread_tss_delete
-func (self *Thread) TssDelete() {
-}
+//go:linkname ThreadTssDelete C.PyThread_tss_delete
+func ThreadTssDelete(key *TssT)
 
-// llgo:link (*Thread).TssSet C.PyThread_tss_set
-func (self *Thread) TssSet(value unsafe.Pointer) c.Int {
-	return 0
-}
+//go:linkname ThreadTssSet C.PyThread_tss_set
+func ThreadTssSet(key *TssT, value unsafe.Pointer) c.Int
 
-// llgo:link (*Thread).TssGet C.PyThread_tss_get
-func (self *Thread) TssGet() unsafe.Pointer {
-	return nil
-}
+//go:linkname ThreadTssGet C.PyThread_tss_get
+func ThreadTssGet(key *TssT) unsafe.Pointer
 
 // PY_TIMEOUT_MAX is the highest usable value (in microseconds) of PY_TIMEOUT_T
 // type, and depends on the system threading API.

@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 const X_MANAGED_BUFFER_RELEASED = 1
@@ -36,28 +36,20 @@ type MemoryViewObject struct {
 //go:linkname MemoryViewType C.PyMemoryView_Type
 var MemoryViewType TypeObject
 
-type MemoryView struct {
-	X_object
-}
-
-func (self *Object) AsMemoryView() *MemoryView {
-	return (*MemoryView)(unsafe.Pointer(self))
-}
-
-// llgo:link (*MemoryView).FromObject C.PyMemoryView_FromObject
-func (self *MemoryView) FromObject() *Object {
+// llgo:link (*MemoryViewObject).FromObject C.PyMemoryView_FromObject
+func (self *MemoryViewObject) FromObject() *Object {
 	return nil
 }
 
 //go:linkname MemoryViewFromMemory C.PyMemoryView_FromMemory
 func MemoryViewFromMemory(mem *c.Char, size SsizeT, flags c.Int) *Object
 
-// llgo:link (*MemoryView).FromBuffer C.PyMemoryView_FromBuffer
-func (self *MemoryView) FromBuffer() *Object {
+// llgo:link (*Buffer).MemoryViewFrom C.PyMemoryView_FromBuffer
+func (self *Buffer) MemoryViewFrom() *Object {
 	return nil
 }
 
-// llgo:link (*MemoryView).Contiguous C.PyMemoryView_GetContiguous
-func (self *MemoryView) Contiguous(buffertype c.Int, order c.Char) *Object {
+// llgo:link (*MemoryViewObject).Contiguous C.PyMemoryView_GetContiguous
+func (self *MemoryViewObject) Contiguous(buffertype c.Int, order c.Char) *Object {
 	return nil
 }

@@ -51,77 +51,69 @@ var DictType TypeObject
 //go:linkname DictNew C.PyDict_New
 func DictNew() *Object
 
-type Dict struct {
-	X_object
-}
-
-func (self *Object) AsDict() *Dict {
-	return (*Dict)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Dict).Item C.PyDict_GetItem
-func (self *Dict) Item(key *Object) *Object {
+// llgo:link (*DictObject).Item C.PyDict_GetItem
+func (self *DictObject) Item(key *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Dict).ItemWithError C.PyDict_GetItemWithError
-func (self *Dict) ItemWithError(key *Object) *Object {
+// llgo:link (*DictObject).ItemWithError C.PyDict_GetItemWithError
+func (self *DictObject) ItemWithError(key *Object) *Object {
 	return nil
 }
 
-// llgo:link (*Dict).SetItem C.PyDict_SetItem
-func (self *Dict) SetItem(key *Object, item *Object) c.Int {
+// llgo:link (*DictObject).SetItem C.PyDict_SetItem
+func (self *DictObject) SetItem(key *Object, item *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).DelItem C.PyDict_DelItem
-func (self *Dict) DelItem(key *Object) c.Int {
+// llgo:link (*DictObject).DelItem C.PyDict_DelItem
+func (self *DictObject) DelItem(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).Clear C.PyDict_Clear
-func (self *Dict) Clear() {
+// llgo:link (*DictObject).Clear C.PyDict_Clear
+func (self *DictObject) Clear() {
 }
 
-// llgo:link (*Dict).Next C.PyDict_Next
-func (self *Dict) Next(pos *SsizeT, key **Object, value **Object) c.Int {
+// llgo:link (*DictObject).Next C.PyDict_Next
+func (self *DictObject) Next(pos *SsizeT, key **Object, value **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).Keys C.PyDict_Keys
-func (self *Dict) Keys() *Object {
+// llgo:link (*DictObject).Keys C.PyDict_Keys
+func (self *DictObject) Keys() *Object {
 	return nil
 }
 
-// llgo:link (*Dict).Values C.PyDict_Values
-func (self *Dict) Values() *Object {
+// llgo:link (*DictObject).Values C.PyDict_Values
+func (self *DictObject) Values() *Object {
 	return nil
 }
 
-// llgo:link (*Dict).Items C.PyDict_Items
-func (self *Dict) Items() *Object {
+// llgo:link (*DictObject).Items C.PyDict_Items
+func (self *DictObject) Items() *Object {
 	return nil
 }
 
-// llgo:link (*Dict).Size C.PyDict_Size
-func (self *Dict) Size() SsizeT {
+// llgo:link (*DictObject).Size C.PyDict_Size
+func (self *DictObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*Dict).Copy C.PyDict_Copy
-func (self *Dict) Copy() *Object {
+// llgo:link (*DictObject).Copy C.PyDict_Copy
+func (self *DictObject) Copy() *Object {
 	return nil
 }
 
-// llgo:link (*Dict).Contains C.PyDict_Contains
-func (self *Dict) Contains(key *Object) c.Int {
+// llgo:link (*DictObject).Contains C.PyDict_Contains
+func (self *DictObject) Contains(key *Object) c.Int {
 	return 0
 }
 
 // PyDict_Update(mp, other) is equivalent to PyDict_Merge(mp, other, 1).
 //
-// llgo:link (*Dict).Update C.PyDict_Update
-func (self *Dict) Update(other *Object) c.Int {
+// llgo:link (*DictObject).Update C.PyDict_Update
+func (self *DictObject) Update(other *Object) c.Int {
 	return 0
 }
 
@@ -130,8 +122,8 @@ func (self *Dict) Update(other *Object) c.Int {
 // the last occurrence of a key wins, else the first.  The Python
 // dict.update(other) is equivalent to PyDict_Merge(dict, other, 1).
 //
-// llgo:link (*Dict).Merge C.PyDict_Merge
-func (self *Dict) Merge(other *Object, override c.Int) c.Int {
+// llgo:link (*DictObject).Merge C.PyDict_Merge
+func (self *DictObject) Merge(other *Object, override c.Int) c.Int {
 	return 0
 }
 
@@ -140,23 +132,23 @@ func (self *Dict) Merge(other *Object, override c.Int) c.Int {
 // of a key wins, else the first.  The Python dict constructor dict(seq2)
 // is equivalent to dict={}; PyDict_MergeFromSeq(dict, seq2, 1).
 //
-// llgo:link (*Dict).MergeFromSeq2 C.PyDict_MergeFromSeq2
-func (self *Dict) MergeFromSeq2(seq2 *Object, override c.Int) c.Int {
+// llgo:link (*DictObject).MergeFromSeq2 C.PyDict_MergeFromSeq2
+func (self *DictObject) MergeFromSeq2(seq2 *Object, override c.Int) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).ItemString C.PyDict_GetItemString
-func (self *Dict) ItemString(key *c.Char) *Object {
+// llgo:link (*DictObject).ItemString C.PyDict_GetItemString
+func (self *DictObject) ItemString(key *c.Char) *Object {
 	return nil
 }
 
-// llgo:link (*Dict).SetItemString C.PyDict_SetItemString
-func (self *Dict) SetItemString(key *c.Char, item *Object) c.Int {
+// llgo:link (*DictObject).SetItemString C.PyDict_SetItemString
+func (self *DictObject) SetItemString(key *c.Char, item *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).DelItemString C.PyDict_DelItemString
-func (self *Dict) DelItemString(key *c.Char) c.Int {
+// llgo:link (*DictObject).DelItemString C.PyDict_DelItemString
+func (self *DictObject) DelItemString(key *c.Char) c.Int {
 	return 0
 }
 
@@ -166,13 +158,13 @@ func (self *Dict) DelItemString(key *c.Char) c.Int {
 // - If the key is missing, set *result to NULL and return 0 .
 // - On error, raise an exception and return -1.
 //
-// llgo:link (*Dict).ItemRef C.PyDict_GetItemRef
-func (self *Dict) ItemRef(key *Object, result **Object) c.Int {
+// llgo:link (*DictObject).ItemRef C.PyDict_GetItemRef
+func (self *DictObject) ItemRef(key *Object, result **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).ItemStringRef C.PyDict_GetItemStringRef
-func (self *Dict) ItemStringRef(key *c.Char, result **Object) c.Int {
+// llgo:link (*DictObject).ItemStringRef C.PyDict_GetItemStringRef
+func (self *DictObject) ItemStringRef(key *c.Char, result **Object) c.Int {
 	return 0
 }
 
@@ -220,8 +212,8 @@ func X_DictGetItemKnownHash(mp *Object, key *Object, hash HashT) *Object
 //go:linkname X_DictGetItemStringWithError C._PyDict_GetItemStringWithError
 func X_DictGetItemStringWithError(_llcppg_param1 *Object, _llcppg_param2 *c.Char) *Object
 
-// llgo:link (*Dict).SetDefault C.PyDict_SetDefault
-func (self *Dict) SetDefault(key *Object, defaultobj *Object) *Object {
+// llgo:link (*DictObject).SetDefault C.PyDict_SetDefault
+func (self *DictObject) SetDefault(key *Object, defaultobj *Object) *Object {
 	return nil
 }
 
@@ -234,26 +226,26 @@ func (self *Dict) SetDefault(key *Object, defaultobj *Object) *Object {
 //    0 if `key` was not present and `default_value` was inserted
 //    1 if `key` was present and `default_value` was not inserted
 //
-// llgo:link (*Dict).SetDefaultRef C.PyDict_SetDefaultRef
-func (self *Dict) SetDefaultRef(key *Object, default_value *Object, result **Object) c.Int {
+// llgo:link (*DictObject).SetDefaultRef C.PyDict_SetDefaultRef
+func (self *DictObject) SetDefaultRef(key *Object, default_value *Object, result **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).ContainsString C.PyDict_ContainsString
-func (self *Dict) ContainsString(key *c.Char) c.Int {
+// llgo:link (*DictObject).ContainsString C.PyDict_ContainsString
+func (self *DictObject) ContainsString(key *c.Char) c.Int {
 	return 0
 }
 
 //go:linkname X_DictNewPresized C._PyDict_NewPresized
 func X_DictNewPresized(minused SsizeT) *Object
 
-// llgo:link (*Dict).Pop C.PyDict_Pop
-func (self *Dict) Pop(key *Object, result **Object) c.Int {
+// llgo:link (*DictObject).Pop C.PyDict_Pop
+func (self *DictObject) Pop(key *Object, result **Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Dict).PopString C.PyDict_PopString
-func (self *Dict) PopString(key *c.Char, result **Object) c.Int {
+// llgo:link (*DictObject).PopString C.PyDict_PopString
+func (self *DictObject) PopString(key *c.Char, result **Object) c.Int {
 	return 0
 }
 

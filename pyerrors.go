@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 type BaseExceptionObject struct {
@@ -201,69 +201,38 @@ func ErrExceptionMatches(_llcppg_param1 *Object) c.Int
 //go:linkname ErrNormalizeException C.PyErr_NormalizeException
 func ErrNormalizeException(_llcppg_param1 **Object, _llcppg_param2 **Object, _llcppg_param3 **Object)
 
-type Exception struct {
-	X_object
-}
-
-func (self *Object) AsException() *Exception {
-	return (*Exception)(unsafe.Pointer(self))
-}
-
 // Traceback manipulation (PEP 3134)
 //
-// llgo:link (*Exception).SetTraceback C.PyException_SetTraceback
-func (self *Exception) SetTraceback(_llcppg_param2 *Object) c.Int {
-	return 0
-}
+//go:linkname ExceptionSetTraceback C.PyException_SetTraceback
+func ExceptionSetTraceback(_llcppg_param1 *Object, _llcppg_param2 *Object) c.Int
 
-// llgo:link (*Exception).Traceback C.PyException_GetTraceback
-func (self *Exception) Traceback() *Object {
-	return nil
-}
+//go:linkname ExceptionGetTraceback C.PyException_GetTraceback
+func ExceptionGetTraceback(_llcppg_param1 *Object) *Object
 
 // Cause manipulation (PEP 3134)
 //
-// llgo:link (*Exception).Cause C.PyException_GetCause
-func (self *Exception) Cause() *Object {
-	return nil
-}
+//go:linkname ExceptionGetCause C.PyException_GetCause
+func ExceptionGetCause(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Exception).SetCause C.PyException_SetCause
-func (self *Exception) SetCause(_llcppg_param2 *Object) {
-}
+//go:linkname ExceptionSetCause C.PyException_SetCause
+func ExceptionSetCause(_llcppg_param1 *Object, _llcppg_param2 *Object)
 
 // Context manipulation (PEP 3134)
 //
-// llgo:link (*Exception).Context C.PyException_GetContext
-func (self *Exception) Context() *Object {
-	return nil
-}
+//go:linkname ExceptionGetContext C.PyException_GetContext
+func ExceptionGetContext(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Exception).SetContext C.PyException_SetContext
-func (self *Exception) SetContext(_llcppg_param2 *Object) {
-}
+//go:linkname ExceptionSetContext C.PyException_SetContext
+func ExceptionSetContext(_llcppg_param1 *Object, _llcppg_param2 *Object)
 
-// llgo:link (*Exception).Args C.PyException_GetArgs
-func (self *Exception) Args() *Object {
-	return nil
-}
+//go:linkname ExceptionGetArgs C.PyException_GetArgs
+func ExceptionGetArgs(_llcppg_param1 *Object) *Object
 
-// llgo:link (*Exception).SetArgs C.PyException_SetArgs
-func (self *Exception) SetArgs(_llcppg_param2 *Object) {
-}
+//go:linkname ExceptionSetArgs C.PyException_SetArgs
+func ExceptionSetArgs(_llcppg_param1 *Object, _llcppg_param2 *Object)
 
-type ExceptionClass struct {
-	X_object
-}
-
-func (self *Object) AsExceptionClass() *ExceptionClass {
-	return (*ExceptionClass)(unsafe.Pointer(self))
-}
-
-// llgo:link (*ExceptionClass).Name C.PyExceptionClass_Name
-func (self *ExceptionClass) Name() *c.Char {
-	return nil
-}
+//go:linkname ExceptionClassName C.PyExceptionClass_Name
+func ExceptionClassName(_llcppg_param1 *Object) *c.Char
 
 // Predefined exceptions
 //
@@ -553,165 +522,95 @@ func ErrProgramText(filename *c.Char, lineno c.Int) *Object
 //go:linkname UnicodeDecodeErrorCreate C.PyUnicodeDecodeError_Create
 func UnicodeDecodeErrorCreate(encoding *c.Char, object *c.Char, length SsizeT, start SsizeT, end SsizeT, reason *c.Char) *Object
 
-type UnicodeEncodeError struct {
-	X_object
-}
-
-func (self *Object) AsUnicodeEncodeError() *UnicodeEncodeError {
-	return (*UnicodeEncodeError)(unsafe.Pointer(self))
-}
-
 // get the encoding attribute
 //
-// llgo:link (*UnicodeEncodeError).Encoding C.PyUnicodeEncodeError_GetEncoding
-func (self *UnicodeEncodeError) Encoding() *Object {
-	return nil
-}
+//go:linkname UnicodeEncodeErrorGetEncoding C.PyUnicodeEncodeError_GetEncoding
+func UnicodeEncodeErrorGetEncoding(_llcppg_param1 *Object) *Object
 
-type UnicodeDecodeError struct {
-	X_object
-}
-
-func (self *Object) AsUnicodeDecodeError() *UnicodeDecodeError {
-	return (*UnicodeDecodeError)(unsafe.Pointer(self))
-}
-
-// llgo:link (*UnicodeDecodeError).Encoding C.PyUnicodeDecodeError_GetEncoding
-func (self *UnicodeDecodeError) Encoding() *Object {
-	return nil
-}
+//go:linkname UnicodeDecodeErrorGetEncoding C.PyUnicodeDecodeError_GetEncoding
+func UnicodeDecodeErrorGetEncoding(_llcppg_param1 *Object) *Object
 
 // get the object attribute
 //
-// llgo:link (*UnicodeEncodeError).Object C.PyUnicodeEncodeError_GetObject
-func (self *UnicodeEncodeError) Object() *Object {
-	return nil
-}
+//go:linkname UnicodeEncodeErrorGetObject C.PyUnicodeEncodeError_GetObject
+func UnicodeEncodeErrorGetObject(_llcppg_param1 *Object) *Object
 
-// llgo:link (*UnicodeDecodeError).Object C.PyUnicodeDecodeError_GetObject
-func (self *UnicodeDecodeError) Object() *Object {
-	return nil
-}
+//go:linkname UnicodeDecodeErrorGetObject C.PyUnicodeDecodeError_GetObject
+func UnicodeDecodeErrorGetObject(_llcppg_param1 *Object) *Object
 
-type UnicodeTranslateError struct {
-	X_object
-}
-
-func (self *Object) AsUnicodeTranslateError() *UnicodeTranslateError {
-	return (*UnicodeTranslateError)(unsafe.Pointer(self))
-}
-
-// llgo:link (*UnicodeTranslateError).Object C.PyUnicodeTranslateError_GetObject
-func (self *UnicodeTranslateError) Object() *Object {
-	return nil
-}
+//go:linkname UnicodeTranslateErrorGetObject C.PyUnicodeTranslateError_GetObject
+func UnicodeTranslateErrorGetObject(_llcppg_param1 *Object) *Object
 
 // get the value of the start attribute (the int * may not be NULL)
 // return 0 on success, -1 on failure
 //
-// llgo:link (*UnicodeEncodeError).Start C.PyUnicodeEncodeError_GetStart
-func (self *UnicodeEncodeError) Start(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeEncodeErrorGetStart C.PyUnicodeEncodeError_GetStart
+func UnicodeEncodeErrorGetStart(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
-// llgo:link (*UnicodeDecodeError).Start C.PyUnicodeDecodeError_GetStart
-func (self *UnicodeDecodeError) Start(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeDecodeErrorGetStart C.PyUnicodeDecodeError_GetStart
+func UnicodeDecodeErrorGetStart(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
-// llgo:link (*UnicodeTranslateError).Start C.PyUnicodeTranslateError_GetStart
-func (self *UnicodeTranslateError) Start(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeTranslateErrorGetStart C.PyUnicodeTranslateError_GetStart
+func UnicodeTranslateErrorGetStart(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
 // assign a new value to the start attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*UnicodeEncodeError).SetStart C.PyUnicodeEncodeError_SetStart
-func (self *UnicodeEncodeError) SetStart(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeEncodeErrorSetStart C.PyUnicodeEncodeError_SetStart
+func UnicodeEncodeErrorSetStart(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*UnicodeDecodeError).SetStart C.PyUnicodeDecodeError_SetStart
-func (self *UnicodeDecodeError) SetStart(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeDecodeErrorSetStart C.PyUnicodeDecodeError_SetStart
+func UnicodeDecodeErrorSetStart(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*UnicodeTranslateError).SetStart C.PyUnicodeTranslateError_SetStart
-func (self *UnicodeTranslateError) SetStart(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeTranslateErrorSetStart C.PyUnicodeTranslateError_SetStart
+func UnicodeTranslateErrorSetStart(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
 // get the value of the end attribute (the int *may not be NULL)
 // return 0 on success, -1 on failure
 //
-// llgo:link (*UnicodeEncodeError).End C.PyUnicodeEncodeError_GetEnd
-func (self *UnicodeEncodeError) End(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeEncodeErrorGetEnd C.PyUnicodeEncodeError_GetEnd
+func UnicodeEncodeErrorGetEnd(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
-// llgo:link (*UnicodeDecodeError).End C.PyUnicodeDecodeError_GetEnd
-func (self *UnicodeDecodeError) End(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeDecodeErrorGetEnd C.PyUnicodeDecodeError_GetEnd
+func UnicodeDecodeErrorGetEnd(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
-// llgo:link (*UnicodeTranslateError).End C.PyUnicodeTranslateError_GetEnd
-func (self *UnicodeTranslateError) End(_llcppg_param2 *SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeTranslateErrorGetEnd C.PyUnicodeTranslateError_GetEnd
+func UnicodeTranslateErrorGetEnd(_llcppg_param1 *Object, _llcppg_param2 *SsizeT) c.Int
 
 // assign a new value to the end attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*UnicodeEncodeError).SetEnd C.PyUnicodeEncodeError_SetEnd
-func (self *UnicodeEncodeError) SetEnd(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeEncodeErrorSetEnd C.PyUnicodeEncodeError_SetEnd
+func UnicodeEncodeErrorSetEnd(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*UnicodeDecodeError).SetEnd C.PyUnicodeDecodeError_SetEnd
-func (self *UnicodeDecodeError) SetEnd(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeDecodeErrorSetEnd C.PyUnicodeDecodeError_SetEnd
+func UnicodeDecodeErrorSetEnd(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*UnicodeTranslateError).SetEnd C.PyUnicodeTranslateError_SetEnd
-func (self *UnicodeTranslateError) SetEnd(_llcppg_param2 SsizeT) c.Int {
-	return 0
-}
+//go:linkname UnicodeTranslateErrorSetEnd C.PyUnicodeTranslateError_SetEnd
+func UnicodeTranslateErrorSetEnd(_llcppg_param1 *Object, _llcppg_param2 SsizeT) c.Int
 
 // get the value of the reason attribute
 //
-// llgo:link (*UnicodeEncodeError).Reason C.PyUnicodeEncodeError_GetReason
-func (self *UnicodeEncodeError) Reason() *Object {
-	return nil
-}
+//go:linkname UnicodeEncodeErrorGetReason C.PyUnicodeEncodeError_GetReason
+func UnicodeEncodeErrorGetReason(_llcppg_param1 *Object) *Object
 
-// llgo:link (*UnicodeDecodeError).Reason C.PyUnicodeDecodeError_GetReason
-func (self *UnicodeDecodeError) Reason() *Object {
-	return nil
-}
+//go:linkname UnicodeDecodeErrorGetReason C.PyUnicodeDecodeError_GetReason
+func UnicodeDecodeErrorGetReason(_llcppg_param1 *Object) *Object
 
-// llgo:link (*UnicodeTranslateError).Reason C.PyUnicodeTranslateError_GetReason
-func (self *UnicodeTranslateError) Reason() *Object {
-	return nil
-}
+//go:linkname UnicodeTranslateErrorGetReason C.PyUnicodeTranslateError_GetReason
+func UnicodeTranslateErrorGetReason(_llcppg_param1 *Object) *Object
 
 // assign a new value to the reason attribute
 // return 0 on success, -1 on failure
 //
-// llgo:link (*UnicodeEncodeError).SetReason C.PyUnicodeEncodeError_SetReason
-func (self *UnicodeEncodeError) SetReason(reason *c.Char) c.Int {
-	return 0
-}
+//go:linkname UnicodeEncodeErrorSetReason C.PyUnicodeEncodeError_SetReason
+func UnicodeEncodeErrorSetReason(exc *Object, reason *c.Char) c.Int
 
-// llgo:link (*UnicodeDecodeError).SetReason C.PyUnicodeDecodeError_SetReason
-func (self *UnicodeDecodeError) SetReason(reason *c.Char) c.Int {
-	return 0
-}
+//go:linkname UnicodeDecodeErrorSetReason C.PyUnicodeDecodeError_SetReason
+func UnicodeDecodeErrorSetReason(exc *Object, reason *c.Char) c.Int
 
-// llgo:link (*UnicodeTranslateError).SetReason C.PyUnicodeTranslateError_SetReason
-func (self *UnicodeTranslateError) SetReason(reason *c.Char) c.Int {
-	return 0
-}
+//go:linkname UnicodeTranslateErrorSetReason C.PyUnicodeTranslateError_SetReason
+func UnicodeTranslateErrorSetReason(exc *Object, reason *c.Char) c.Int
 
 //go:linkname OSSnprintf C.PyOS_snprintf
 func OSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any) c.Int
@@ -726,10 +625,8 @@ func X_ErrChainExceptions1(_llcppg_param1 *Object)
 
 // In exceptions.c
 //
-// llgo:link (*Unstable).ExcPrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
-func (self *Unstable) ExcPrepReraiseStar(excs *Object) *Object {
-	return nil
-}
+//go:linkname UnstableExcPrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
+func UnstableExcPrepReraiseStar(orig *Object, excs *Object) *Object
 
 // In signalmodule.c
 //

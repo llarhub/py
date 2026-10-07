@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 const Set_MINSIZE = 8
@@ -43,58 +43,40 @@ var FrozenSetType TypeObject
 //go:linkname SetIterType C.PySetIter_Type
 var SetIterType TypeObject
 
-type Set struct {
-	X_object
-}
-
-func (self *Object) AsSet() *Set {
-	return (*Set)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Set).New C.PySet_New
-func (self *Set) New() *Object {
+// llgo:link (*SetObject).New C.PySet_New
+func (self *SetObject) New() *Object {
 	return nil
 }
 
-type FrozenSet struct {
-	X_object
+//go:linkname FrozenSetNew C.PyFrozenSet_New
+func FrozenSetNew(_llcppg_param1 *Object) *Object
+
+// llgo:link (*SetObject).Add C.PySet_Add
+func (self *SetObject) Add(key *Object) c.Int {
+	return 0
 }
 
-func (self *Object) AsFrozenSet() *FrozenSet {
-	return (*FrozenSet)(unsafe.Pointer(self))
+// llgo:link (*SetObject).Clear C.PySet_Clear
+func (self *SetObject) Clear() c.Int {
+	return 0
 }
 
-// llgo:link (*FrozenSet).New C.PyFrozenSet_New
-func (self *FrozenSet) New() *Object {
+// llgo:link (*SetObject).Contains C.PySet_Contains
+func (self *SetObject) Contains(key *Object) c.Int {
+	return 0
+}
+
+// llgo:link (*SetObject).Discard C.PySet_Discard
+func (self *SetObject) Discard(key *Object) c.Int {
+	return 0
+}
+
+// llgo:link (*SetObject).Pop C.PySet_Pop
+func (self *SetObject) Pop() *Object {
 	return nil
 }
 
-// llgo:link (*Set).Add C.PySet_Add
-func (self *Set) Add(key *Object) c.Int {
-	return 0
-}
-
-// llgo:link (*Set).Clear C.PySet_Clear
-func (self *Set) Clear() c.Int {
-	return 0
-}
-
-// llgo:link (*Set).Contains C.PySet_Contains
-func (self *Set) Contains(key *Object) c.Int {
-	return 0
-}
-
-// llgo:link (*Set).Discard C.PySet_Discard
-func (self *Set) Discard(key *Object) c.Int {
-	return 0
-}
-
-// llgo:link (*Set).Pop C.PySet_Pop
-func (self *Set) Pop() *Object {
-	return nil
-}
-
-// llgo:link (*Set).Size C.PySet_Size
-func (self *Set) Size() SsizeT {
+// llgo:link (*SetObject).Size C.PySet_Size
+func (self *SetObject) Size() SsizeT {
 	return 0
 }

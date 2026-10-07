@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 // Object layout
@@ -24,41 +24,33 @@ var ByteArrayType TypeObject
 //go:linkname ByteArrayIterType C.PyByteArrayIter_Type
 var ByteArrayIterType TypeObject
 
-type ByteArray struct {
-	X_object
-}
-
-func (self *Object) AsByteArray() *ByteArray {
-	return (*ByteArray)(unsafe.Pointer(self))
-}
-
 // Direct API functions
 //
-// llgo:link (*ByteArray).FromObject C.PyByteArray_FromObject
-func (self *ByteArray) FromObject() *Object {
+// llgo:link (*ByteArrayObject).FromObject C.PyByteArray_FromObject
+func (self *ByteArrayObject) FromObject() *Object {
 	return nil
 }
 
-// llgo:link (*ByteArray).Concat C.PyByteArray_Concat
-func (self *ByteArray) Concat(_llcppg_param2 *Object) *Object {
+// llgo:link (*ByteArrayObject).Concat C.PyByteArray_Concat
+func (self *ByteArrayObject) Concat(_llcppg_param2 *Object) *Object {
 	return nil
 }
 
 //go:linkname ByteArrayFromStringAndSize C.PyByteArray_FromStringAndSize
 func ByteArrayFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Object
 
-// llgo:link (*ByteArray).Size C.PyByteArray_Size
-func (self *ByteArray) Size() SsizeT {
+// llgo:link (*ByteArrayObject).Size C.PyByteArray_Size
+func (self *ByteArrayObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*ByteArray).AsString C.PyByteArray_AsString
-func (self *ByteArray) AsString() *c.Char {
+// llgo:link (*ByteArrayObject).AsString C.PyByteArray_AsString
+func (self *ByteArrayObject) AsString() *c.Char {
 	return nil
 }
 
-// llgo:link (*ByteArray).Resize C.PyByteArray_Resize
-func (self *ByteArray) Resize(_llcppg_param2 SsizeT) c.Int {
+// llgo:link (*ByteArrayObject).Resize C.PyByteArray_Resize
+func (self *ByteArrayObject) Resize(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }
 

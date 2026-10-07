@@ -4,16 +4,8 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
-
-type Codec struct {
-	X_object
-}
-
-func (self *Object) AsCodec() *Codec {
-	return (*Codec)(unsafe.Pointer(self))
-}
 
 // Register a new codec search function.
 //
@@ -23,19 +15,15 @@ func (self *Object) AsCodec() *Codec {
 //
 // The search_function's refcount is incremented by this function.
 //
-// llgo:link (*Codec).Register C.PyCodec_Register
-func (self *Codec) Register() c.Int {
-	return 0
-}
+//go:linkname CodecRegister C.PyCodec_Register
+func CodecRegister(search_function *Object) c.Int
 
 // Unregister a codec search function and clear the registry's cache.
 // If the search function is not registered, do nothing.
 // Return 0 on success. Raise an exception and return -1 on error.
 //
-// llgo:link (*Codec).Unregister C.PyCodec_Unregister
-func (self *Codec) Unregister() c.Int {
-	return 0
-}
+//go:linkname CodecUnregister C.PyCodec_Unregister
+func CodecUnregister(search_function *Object) c.Int
 
 // Codec registry encoding check API.
 //
@@ -53,10 +41,8 @@ func CodecKnownEncoding(encoding *c.Char) c.Int
 //
 // Raises a LookupError in case no encoder can be found.
 //
-// llgo:link (*Codec).Encode C.PyCodec_Encode
-func (self *Codec) Encode(encoding *c.Char, errors *c.Char) *Object {
-	return nil
-}
+//go:linkname CodecEncode C.PyCodec_Encode
+func CodecEncode(object *Object, encoding *c.Char, errors *c.Char) *Object
 
 // Generic codec based decoding API.
 //
@@ -66,10 +52,8 @@ func (self *Codec) Encode(encoding *c.Char, errors *c.Char) *Object {
 //
 // Raises a LookupError in case no encoder can be found.
 //
-// llgo:link (*Codec).Decode C.PyCodec_Decode
-func (self *Codec) Decode(encoding *c.Char, errors *c.Char) *Object {
-	return nil
-}
+//go:linkname CodecDecode C.PyCodec_Decode
+func CodecDecode(object *Object, encoding *c.Char, errors *c.Char) *Object
 
 // Get an encoder function for the given encoding.
 //
@@ -120,45 +104,33 @@ func CodecLookupError(name *c.Char) *Object
 
 // raise exc as an exception
 //
-// llgo:link (*Codec).StrictErrors C.PyCodec_StrictErrors
-func (self *Codec) StrictErrors() *Object {
-	return nil
-}
+//go:linkname CodecStrictErrors C.PyCodec_StrictErrors
+func CodecStrictErrors(exc *Object) *Object
 
 // ignore the unicode error, skipping the faulty input
 //
-// llgo:link (*Codec).IgnoreErrors C.PyCodec_IgnoreErrors
-func (self *Codec) IgnoreErrors() *Object {
-	return nil
-}
+//go:linkname CodecIgnoreErrors C.PyCodec_IgnoreErrors
+func CodecIgnoreErrors(exc *Object) *Object
 
 // replace the unicode encode error with ? or U+FFFD
 //
-// llgo:link (*Codec).ReplaceErrors C.PyCodec_ReplaceErrors
-func (self *Codec) ReplaceErrors() *Object {
-	return nil
-}
+//go:linkname CodecReplaceErrors C.PyCodec_ReplaceErrors
+func CodecReplaceErrors(exc *Object) *Object
 
 // replace the unicode encode error with XML character references
 //
-// llgo:link (*Codec).XMLCharRefReplaceErrors C.PyCodec_XMLCharRefReplaceErrors
-func (self *Codec) XMLCharRefReplaceErrors() *Object {
-	return nil
-}
+//go:linkname CodecXMLCharRefReplaceErrors C.PyCodec_XMLCharRefReplaceErrors
+func CodecXMLCharRefReplaceErrors(exc *Object) *Object
 
 // replace the unicode encode error with backslash escapes (\x, \u and \U)
 //
-// llgo:link (*Codec).BackslashReplaceErrors C.PyCodec_BackslashReplaceErrors
-func (self *Codec) BackslashReplaceErrors() *Object {
-	return nil
-}
+//go:linkname CodecBackslashReplaceErrors C.PyCodec_BackslashReplaceErrors
+func CodecBackslashReplaceErrors(exc *Object) *Object
 
 // replace the unicode encode error with backslash escapes (\N, \x, \u and \U)
 //
-// llgo:link (*Codec).NameReplaceErrors C.PyCodec_NameReplaceErrors
-func (self *Codec) NameReplaceErrors() *Object {
-	return nil
-}
+//go:linkname CodecNameReplaceErrors C.PyCodec_NameReplaceErrors
+func CodecNameReplaceErrors(exc *Object) *Object
 
 //go:linkname Hexdigits C.Py_hexdigits
 var Hexdigits *c.Char

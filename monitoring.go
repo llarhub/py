@@ -4,7 +4,7 @@ package py
 
 import (
 	"github.com/goplus/lib/c"
-	"unsafe"
+	_ "unsafe"
 )
 
 const MONITORING_EVENT_PY_START = 0
@@ -32,18 +32,9 @@ type X_MonitoringState struct {
 	Opaque c.Uint8T
 }
 type MonitoringState = X_MonitoringState
-type Monitoring struct {
-	X_MonitoringState
-}
 
-func (self *MonitoringState) AsMonitoring() *Monitoring {
-	return (*Monitoring)(unsafe.Pointer(self))
-}
-
-// llgo:link (*Monitoring).EnterScope C.PyMonitoring_EnterScope
-func (self *Monitoring) EnterScope(version *c.Uint64T, event_types *c.Uint8T, length SsizeT) c.Int {
-	return 0
-}
+//go:linkname MonitoringEnterScope C.PyMonitoring_EnterScope
+func MonitoringEnterScope(state_array *MonitoringState, version *c.Uint64T, event_types *c.Uint8T, length SsizeT) c.Int
 
 //go:linkname MonitoringExitScope C.PyMonitoring_ExitScope
 func MonitoringExitScope() c.Int
