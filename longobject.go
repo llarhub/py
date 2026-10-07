@@ -33,8 +33,8 @@ func LongFromSsizeT(_llcppg_param1 SsizeT) *LongObject
 //go:linkname LongFromDouble C.PyLong_FromDouble
 func LongFromDouble(_llcppg_param1 c.Double) *LongObject
 
-// llgo:link (*LongObject).As C.PyLong_AsLong
-func (self *LongObject) As() c.Long {
+// llgo:link (*LongObject).AsLong C.PyLong_AsLong
+func (self *LongObject) AsLong() c.Long {
 	return 0
 }
 
@@ -169,8 +169,8 @@ func LongFromLongLong(_llcppg_param1 c.LongLong) *LongObject
 //go:linkname LongFromUnsignedLongLong C.PyLong_FromUnsignedLongLong
 func LongFromUnsignedLongLong(_llcppg_param1 c.UlongLong) *LongObject
 
-// llgo:link (*LongObject).AsLong C.PyLong_AsLongLong
-func (self *LongObject) AsLong() c.LongLong {
+// llgo:link (*LongObject).AsLongLong C.PyLong_AsLongLong
+func (self *LongObject) AsLongLong() c.LongLong {
 	return 0
 }
 

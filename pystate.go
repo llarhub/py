@@ -397,8 +397,8 @@ func (self *InterpreterState) ThreadHead() *ThreadState {
 	return nil
 }
 
-// llgo:link (*ThreadState).ThreadStateNext C.PyThreadState_Next
-func (self *ThreadState) ThreadStateNext() *ThreadState {
+// llgo:link (*ThreadState).GetNext C.PyThreadState_Next
+func (self *ThreadState) GetNext() *ThreadState {
 	return self
 }
 
