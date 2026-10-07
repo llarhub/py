@@ -70,11 +70,15 @@ func ImportGetImporter(path *Object) *Object
 //go:linkname Import C.PyImport_Import
 func Import(name *Object) *Object
 
-//go:linkname ImportReloadModule C.PyImport_ReloadModule
-func ImportReloadModule(m *Object) *Object
+// llgo:link (*Object).ImportReloadModule C.PyImport_ReloadModule
+func (self *Object) ImportReloadModule() *Object {
+	return self
+}
 
-//go:linkname ImportImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
-func ImportImportFrozenModuleObject(name *Object) c.Int
+// llgo:link (*Object).ImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
+func (self *Object) ImportFrozenModuleObject() c.Int {
+	return 0
+}
 
 //go:linkname ImportImportFrozenModule C.PyImport_ImportFrozenModule
 func ImportImportFrozenModule(name *c.Char) c.Int
@@ -87,8 +91,10 @@ func ImportAppendInittab(name *c.Char, initfunc func() *Object) c.Int
 //go:linkname ImportInittab C.PyImport_Inittab
 var ImportInittab *X_inittab
 
-//go:linkname ImportExtendInittab C.PyImport_ExtendInittab
-func ImportExtendInittab(newtab *X_inittab) c.Int
+// llgo:link (*X_inittab).ImportExtendInittab C.PyImport_ExtendInittab
+func (self *X_inittab) ImportExtendInittab() c.Int {
+	return 0
+}
 
 // Embedding apps may change this pointer to point to their favorite
 // collection of frozen modules:
@@ -96,8 +102,10 @@ func ImportExtendInittab(newtab *X_inittab) c.Int
 //go:linkname ImportFrozenModules C.PyImport_FrozenModules
 var ImportFrozenModules *X_frozen
 
-//go:linkname ImportImportModuleAttr C.PyImport_ImportModuleAttr
-func ImportImportModuleAttr(mod_name *Object, attr_name *Object) *Object
+// llgo:link (*Object).ImportImportModuleAttr C.PyImport_ImportModuleAttr
+func (self *Object) ImportImportModuleAttr(attr_name *Object) *Object {
+	return self
+}
 
 //go:linkname ImportImportModuleAttrString C.PyImport_ImportModuleAttrString
 func ImportImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *Object

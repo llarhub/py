@@ -130,53 +130,80 @@ func StatusNoMemory() Status
 //go:linkname StatusExit C.PyStatus_Exit
 func StatusExit(exitcode c.Int) Status
 
-//go:linkname StatusIsError C.PyStatus_IsError
-func StatusIsError(err Status) c.Int
+// llgo:link Status.IsError C.PyStatus_IsError
+func (self Status) IsError() c.Int {
+	return 0
+}
 
-//go:linkname StatusIsExit C.PyStatus_IsExit
-func StatusIsExit(err Status) c.Int
+// llgo:link Status.IsExit C.PyStatus_IsExit
+func (self Status) IsExit() c.Int {
+	return 0
+}
 
-//go:linkname StatusException C.PyStatus_Exception
-func StatusException(err Status) c.Int
+// llgo:link Status.Exception C.PyStatus_Exception
+func (self Status) Exception() c.Int {
+	return 0
+}
 
-//go:linkname WideStringListAppend C.PyWideStringList_Append
-func WideStringListAppend(list *WideStringList, item *c.WcharT) Status
+// llgo:link (*WideStringList).Append C.PyWideStringList_Append
+func (self *WideStringList) Append(item *c.WcharT) Status {
+	return Status{}
+}
 
-//go:linkname WideStringListInsert C.PyWideStringList_Insert
-func WideStringListInsert(list *WideStringList, index SsizeT, item *c.WcharT) Status
+// llgo:link (*WideStringList).Insert C.PyWideStringList_Insert
+func (self *WideStringList) Insert(index SsizeT, item *c.WcharT) Status {
+	return Status{}
+}
 
-//go:linkname PreConfigInitPythonConfig C.PyPreConfig_InitPythonConfig
-func PreConfigInitPythonConfig(config *PreConfig)
+// llgo:link (*PreConfig).InitPythonConfig C.PyPreConfig_InitPythonConfig
+func (self *PreConfig) InitPythonConfig() {
+}
 
-//go:linkname PreConfigInitIsolatedConfig C.PyPreConfig_InitIsolatedConfig
-func PreConfigInitIsolatedConfig(config *PreConfig)
+// llgo:link (*PreConfig).InitIsolatedConfig C.PyPreConfig_InitIsolatedConfig
+func (self *PreConfig) InitIsolatedConfig() {
+}
 
-//go:linkname ConfigInitPythonConfig C.PyConfig_InitPythonConfig
-func ConfigInitPythonConfig(config *Config)
+// llgo:link (*Config).InitPython C.PyConfig_InitPythonConfig
+func (self *Config) InitPython() {
+}
 
-//go:linkname ConfigInitIsolatedConfig C.PyConfig_InitIsolatedConfig
-func ConfigInitIsolatedConfig(config *Config)
+// llgo:link (*Config).InitIsolated C.PyConfig_InitIsolatedConfig
+func (self *Config) InitIsolated() {
+}
 
-//go:linkname ConfigClear C.PyConfig_Clear
-func ConfigClear(_llcppg_param1 *Config)
+// llgo:link (*Config).Clear C.PyConfig_Clear
+func (self *Config) Clear() {
+}
 
-//go:linkname ConfigSetString C.PyConfig_SetString
-func ConfigSetString(config *Config, config_str **c.WcharT, str *c.WcharT) Status
+// llgo:link (*Config).SetString C.PyConfig_SetString
+func (self *Config) SetString(config_str **c.WcharT, str *c.WcharT) Status {
+	return Status{}
+}
 
-//go:linkname ConfigSetBytesString C.PyConfig_SetBytesString
-func ConfigSetBytesString(config *Config, config_str **c.WcharT, str *c.Char) Status
+// llgo:link (*Config).SetBytesString C.PyConfig_SetBytesString
+func (self *Config) SetBytesString(config_str **c.WcharT, str *c.Char) Status {
+	return Status{}
+}
 
-//go:linkname ConfigRead C.PyConfig_Read
-func ConfigRead(config *Config) Status
+// llgo:link (*Config).Read C.PyConfig_Read
+func (self *Config) Read() Status {
+	return Status{}
+}
 
-//go:linkname ConfigSetBytesArgv C.PyConfig_SetBytesArgv
-func ConfigSetBytesArgv(config *Config, argc SsizeT, argv **c.Char) Status
+// llgo:link (*Config).SetBytesArgv C.PyConfig_SetBytesArgv
+func (self *Config) SetBytesArgv(argc SsizeT, argv **c.Char) Status {
+	return Status{}
+}
 
-//go:linkname ConfigSetArgv C.PyConfig_SetArgv
-func ConfigSetArgv(config *Config, argc SsizeT, argv **c.WcharT) Status
+// llgo:link (*Config).SetArgv C.PyConfig_SetArgv
+func (self *Config) SetArgv(argc SsizeT, argv **c.WcharT) Status {
+	return Status{}
+}
 
-//go:linkname ConfigSetWideStringList C.PyConfig_SetWideStringList
-func ConfigSetWideStringList(config *Config, list *WideStringList, length SsizeT, items **c.WcharT) Status
+// llgo:link (*Config).SetWideStringList C.PyConfig_SetWideStringList
+func (self *Config) SetWideStringList(list *WideStringList, length SsizeT, items **c.WcharT) Status {
+	return Status{}
+}
 
 // --- PyConfig_Get() -----------------------------------------
 //

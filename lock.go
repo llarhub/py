@@ -2,10 +2,7 @@
 
 package py
 
-import (
-	"github.com/goplus/lib/c"
-	_ "unsafe"
-)
+import "github.com/goplus/lib/c"
 
 const X_UNLOCKED = 0
 const X_LOCKED = 1
@@ -37,15 +34,19 @@ type Mutex struct {
 
 // exported function for locking the mutex
 //
-//go:linkname MutexLock C.PyMutex_Lock
-func MutexLock(m *Mutex)
+// llgo:link (*Mutex).Lock C.PyMutex_Lock
+func (self *Mutex) Lock() {
+}
 
 // exported function for unlocking the mutex
 //
-//go:linkname MutexUnlock C.PyMutex_Unlock
-func MutexUnlock(m *Mutex)
+// llgo:link (*Mutex).Unlock C.PyMutex_Unlock
+func (self *Mutex) Unlock() {
+}
 
 // exported function for checking if the mutex is locked
 //
-//go:linkname MutexIsLocked C.PyMutex_IsLocked
-func MutexIsLocked(m *Mutex) c.Int
+// llgo:link (*Mutex).IsLocked C.PyMutex_IsLocked
+func (self *Mutex) IsLocked() c.Int {
+	return 0
+}

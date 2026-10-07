@@ -46,17 +46,23 @@ var ContextTokenType TypeObject
 //go:linkname ContextNew C.PyContext_New
 func ContextNew() *Object
 
-//go:linkname ContextCopy C.PyContext_Copy
-func ContextCopy(_llcppg_param1 *Object) *Object
+// llgo:link (*Object).ContextCopy C.PyContext_Copy
+func (self *Object) ContextCopy() *Object {
+	return self
+}
 
 //go:linkname ContextCopyCurrent C.PyContext_CopyCurrent
 func ContextCopyCurrent() *Object
 
-//go:linkname ContextEnter C.PyContext_Enter
-func ContextEnter(_llcppg_param1 *Object) c.Int
+// llgo:link (*Object).ContextEnter C.PyContext_Enter
+func (self *Object) ContextEnter() c.Int {
+	return 0
+}
 
-//go:linkname ContextExit C.PyContext_Exit
-func ContextExit(_llcppg_param1 *Object) c.Int
+// llgo:link (*Object).ContextExit C.PyContext_Exit
+func (self *Object) ContextExit() c.Int {
+	return 0
+}
 
 // Register a per-interpreter callback that will be invoked for context object
 // enter/exit events.
@@ -96,17 +102,23 @@ func ContextVarNew(name *c.Char, default_value *Object) *Object
 //
 // '*value' will be a new ref, if not NULL.
 //
-//go:linkname ContextVarGet C.PyContextVar_Get
-func ContextVarGet(var_ *Object, default_value *Object, value **Object) c.Int
+// llgo:link (*Object).ContextVarGet C.PyContextVar_Get
+func (self *Object) ContextVarGet(default_value *Object, value **Object) c.Int {
+	return 0
+}
 
 // Set a new value for the variable.
 // Returns NULL if an error occurs.
 //
-//go:linkname ContextVarSet C.PyContextVar_Set
-func ContextVarSet(var_ *Object, value *Object) *Object
+// llgo:link (*Object).ContextVarSet C.PyContextVar_Set
+func (self *Object) ContextVarSet(value *Object) *Object {
+	return self
+}
 
 // Reset a variable to its previous value.
 // Returns 0 on success, -1 on error.
 //
-//go:linkname ContextVarReset C.PyContextVar_Reset
-func ContextVarReset(var_ *Object, token *Object) c.Int
+// llgo:link (*Object).ContextVarReset C.PyContextVar_Reset
+func (self *Object) ContextVarReset(token *Object) c.Int {
+	return 0
+}

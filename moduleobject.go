@@ -71,8 +71,10 @@ func ModuleGetState(_llcppg_param1 *Object) unsafe.Pointer
 
 // New in 3.5
 //
-//go:linkname ModuleDefInit C.PyModuleDef_Init
-func ModuleDefInit(_llcppg_param1 *ModuleDef) *Object
+// llgo:link (*ModuleDef).Init C.PyModuleDef_Init
+func (self *ModuleDef) Init() *Object {
+	return nil
+}
 
 //go:linkname ModuleDefType C.PyModuleDef_Type
 var ModuleDefType TypeObject

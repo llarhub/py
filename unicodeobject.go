@@ -901,41 +901,64 @@ func UnicodeFromKindAndData(kind c.Int, buffer unsafe.Pointer, size SsizeT) *Uni
 //go:linkname UnicodeWriterCreate C.PyUnicodeWriter_Create
 func UnicodeWriterCreate(length SsizeT) *UnicodeWriter
 
-//go:linkname UnicodeWriterDiscard C.PyUnicodeWriter_Discard
-func UnicodeWriterDiscard(writer *UnicodeWriter)
+// llgo:link (*UnicodeWriter).Discard C.PyUnicodeWriter_Discard
+func (self *UnicodeWriter) Discard() {
+}
 
-//go:linkname UnicodeWriterFinish C.PyUnicodeWriter_Finish
-func UnicodeWriterFinish(writer *UnicodeWriter) *Object
+// llgo:link (*UnicodeWriter).Finish C.PyUnicodeWriter_Finish
+func (self *UnicodeWriter) Finish() *Object {
+	return nil
+}
 
-//go:linkname UnicodeWriterWriteChar C.PyUnicodeWriter_WriteChar
-func UnicodeWriterWriteChar(writer *UnicodeWriter, ch UCS4) c.Int
+// llgo:link (*UnicodeWriter).WriteChar C.PyUnicodeWriter_WriteChar
+func (self *UnicodeWriter) WriteChar(ch UCS4) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteUTF8 C.PyUnicodeWriter_WriteUTF8
-func UnicodeWriterWriteUTF8(writer *UnicodeWriter, str *c.Char, size SsizeT) c.Int
+// llgo:link (*UnicodeWriter).WriteUTF8 C.PyUnicodeWriter_WriteUTF8
+func (self *UnicodeWriter) WriteUTF8(str *c.Char, size SsizeT) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriter_WriteASCII C.PyUnicodeWriter_WriteASCII
-func UnicodeWriter_WriteASCII(writer *UnicodeWriter, str *c.Char, size SsizeT) c.Int
+// llgo:link (*UnicodeWriter).WriteASCII C.PyUnicodeWriter_WriteASCII
+func (self *UnicodeWriter) WriteASCII(str *c.Char, size SsizeT) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteWideChar C.PyUnicodeWriter_WriteWideChar
-func UnicodeWriterWriteWideChar(writer *UnicodeWriter, str *c.WcharT, size SsizeT) c.Int
+// llgo:link (*UnicodeWriter).WriteWideChar C.PyUnicodeWriter_WriteWideChar
+func (self *UnicodeWriter) WriteWideChar(str *c.WcharT, size SsizeT) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteUCS4 C.PyUnicodeWriter_WriteUCS4
-func UnicodeWriterWriteUCS4(writer *UnicodeWriter, str *UCS4, size SsizeT) c.Int
+// llgo:link (*UnicodeWriter).WriteUCS4 C.PyUnicodeWriter_WriteUCS4
+func (self *UnicodeWriter) WriteUCS4(str *UCS4, size SsizeT) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteStr C.PyUnicodeWriter_WriteStr
-func UnicodeWriterWriteStr(writer *UnicodeWriter, obj *Object) c.Int
+// llgo:link (*UnicodeWriter).WriteStr C.PyUnicodeWriter_WriteStr
+func (self *UnicodeWriter) WriteStr(obj *Object) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteRepr C.PyUnicodeWriter_WriteRepr
-func UnicodeWriterWriteRepr(writer *UnicodeWriter, obj *Object) c.Int
+// llgo:link (*UnicodeWriter).WriteRepr C.PyUnicodeWriter_WriteRepr
+func (self *UnicodeWriter) WriteRepr(obj *Object) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterWriteSubstring C.PyUnicodeWriter_WriteSubstring
-func UnicodeWriterWriteSubstring(writer *UnicodeWriter, str *Object, start SsizeT, end SsizeT) c.Int
+// llgo:link (*UnicodeWriter).WriteSubstring C.PyUnicodeWriter_WriteSubstring
+func (self *UnicodeWriter) WriteSubstring(str *Object, start SsizeT, end SsizeT) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterFormat C.PyUnicodeWriter_Format
-func UnicodeWriterFormat(writer *UnicodeWriter, format *c.Char, __llgo_va_list ...any) c.Int
+// llgo:link (*UnicodeWriter).Format C.PyUnicodeWriter_Format
+func (self *UnicodeWriter) Format(format *c.Char, __llgo_va_list ...any) c.Int {
+	return 0
+}
 
-//go:linkname UnicodeWriterDecodeUTF8Stateful C.PyUnicodeWriter_DecodeUTF8Stateful
-func UnicodeWriterDecodeUTF8Stateful(writer *UnicodeWriter, string *c.Char, length SsizeT, errors *c.Char, consumed *SsizeT) c.Int
+// llgo:link (*UnicodeWriter).DecodeUTF8Stateful C.PyUnicodeWriter_DecodeUTF8Stateful
+func (self *UnicodeWriter) DecodeUTF8Stateful(string *c.Char, length SsizeT, errors *c.Char, consumed *SsizeT) c.Int {
+	return 0
+}
 
 // Initialize a Unicode writer.
 //
