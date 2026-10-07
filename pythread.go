@@ -134,25 +134,35 @@ func Thread_ReInitTLS()
 //go:linkname ThreadTssAlloc C.PyThread_tss_alloc
 func ThreadTssAlloc() *TssT
 
-//go:linkname ThreadTssFree C.PyThread_tss_free
-func ThreadTssFree(key *TssT)
+// llgo:link (*TssT).Free C.PyThread_tss_free
+func (self *TssT) Free() {
+}
 
 // The parameter key must not be NULL.
 //
-//go:linkname ThreadTssIsCreated C.PyThread_tss_is_created
-func ThreadTssIsCreated(key *TssT) c.Int
+// llgo:link (*TssT).IsCreated C.PyThread_tss_is_created
+func (self *TssT) IsCreated() c.Int {
+	return 0
+}
 
-//go:linkname ThreadTssCreate C.PyThread_tss_create
-func ThreadTssCreate(key *TssT) c.Int
+// llgo:link (*TssT).Create C.PyThread_tss_create
+func (self *TssT) Create() c.Int {
+	return 0
+}
 
-//go:linkname ThreadTssDelete C.PyThread_tss_delete
-func ThreadTssDelete(key *TssT)
+// llgo:link (*TssT).Delete C.PyThread_tss_delete
+func (self *TssT) Delete() {
+}
 
-//go:linkname ThreadTssSet C.PyThread_tss_set
-func ThreadTssSet(key *TssT, value unsafe.Pointer) c.Int
+// llgo:link (*TssT).Set C.PyThread_tss_set
+func (self *TssT) Set(value unsafe.Pointer) c.Int {
+	return 0
+}
 
-//go:linkname ThreadTssGet C.PyThread_tss_get
-func ThreadTssGet(key *TssT) unsafe.Pointer
+// llgo:link (*TssT).Get C.PyThread_tss_get
+func (self *TssT) Get() unsafe.Pointer {
+	return nil
+}
 
 // PY_TIMEOUT_MAX is the highest usable value (in microseconds) of PY_TIMEOUT_T
 // type, and depends on the system threading API.
