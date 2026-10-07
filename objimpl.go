@@ -165,15 +165,13 @@ func (self *Object) GC_IsFinalized() c.Int {
 
 // Get the arena allocator.
 //
-// llgo:link (*ObjectArenaAllocator).ObjectGetArenaAllocator C.PyObject_GetArenaAllocator
-func (self *ObjectArenaAllocator) ObjectGetArenaAllocator() {
-}
+//go:linkname ObjectGetArenaAllocator C.PyObject_GetArenaAllocator
+func ObjectGetArenaAllocator(allocator *ObjectArenaAllocator)
 
 // Set the arena allocator.
 //
-// llgo:link (*ObjectArenaAllocator).ObjectSetArenaAllocator C.PyObject_SetArenaAllocator
-func (self *ObjectArenaAllocator) ObjectSetArenaAllocator() {
-}
+//go:linkname ObjectSetArenaAllocator C.PyObject_SetArenaAllocator
+func ObjectSetArenaAllocator(allocator *ObjectArenaAllocator)
 
 // Test if an object implements the garbage collector protocol
 //
