@@ -89,15 +89,18 @@ func (self *LongObject) Export(export_long *LongExport) c.Int {
 	return 0
 }
 
-// llgo:link (*LongExport).LongFreeExport C.PyLong_FreeExport
-func (self *LongExport) LongFreeExport() {
+// llgo:link (*LongExport).Free C.PyLong_FreeExport
+func (self *LongExport) Free() {
 }
 
 //go:linkname LongWriterCreate C.PyLongWriter_Create
 func LongWriterCreate(negative c.Int, ndigits SsizeT, digits *unsafe.Pointer) *LongWriter
 
-//go:linkname LongWriterFinish C.PyLongWriter_Finish
-func LongWriterFinish(writer *LongWriter) *Object
+// llgo:link (*LongWriter).Finish C.PyLongWriter_Finish
+func (self *LongWriter) Finish() *Object {
+	return nil
+}
 
-//go:linkname LongWriterDiscard C.PyLongWriter_Discard
-func LongWriterDiscard(writer *LongWriter)
+// llgo:link (*LongWriter).Discard C.PyLongWriter_Discard
+func (self *LongWriter) Discard() {
+}
