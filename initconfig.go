@@ -202,41 +202,62 @@ func GetArgcArgv(argc *c.Int, argv ***c.WcharT)
 //go:linkname InitConfigCreate C.PyInitConfig_Create
 func InitConfigCreate() *InitConfig
 
-//go:linkname InitConfigFree C.PyInitConfig_Free
-func InitConfigFree(config *InitConfig)
+// llgo:link (*InitConfig).Free C.PyInitConfig_Free
+func (self *InitConfig) Free() {
+}
 
-//go:linkname InitConfigGetError C.PyInitConfig_GetError
-func InitConfigGetError(config *InitConfig, err_msg **c.Char) c.Int
+// llgo:link (*InitConfig).Error C.PyInitConfig_GetError
+func (self *InitConfig) Error(err_msg **c.Char) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigGetExitCode C.PyInitConfig_GetExitCode
-func InitConfigGetExitCode(config *InitConfig, exitcode *c.Int) c.Int
+// llgo:link (*InitConfig).ExitCode C.PyInitConfig_GetExitCode
+func (self *InitConfig) ExitCode(exitcode *c.Int) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigHasOption C.PyInitConfig_HasOption
-func InitConfigHasOption(config *InitConfig, name *c.Char) c.Int
+// llgo:link (*InitConfig).HasOption C.PyInitConfig_HasOption
+func (self *InitConfig) HasOption(name *c.Char) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigGetInt C.PyInitConfig_GetInt
-func InitConfigGetInt(config *InitConfig, name *c.Char, value *c.Int64T) c.Int
+// llgo:link (*InitConfig).Int C.PyInitConfig_GetInt
+func (self *InitConfig) Int(name *c.Char, value *c.Int64T) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigGetStr C.PyInitConfig_GetStr
-func InitConfigGetStr(config *InitConfig, name *c.Char, value **c.Char) c.Int
+// llgo:link (*InitConfig).Str C.PyInitConfig_GetStr
+func (self *InitConfig) Str(name *c.Char, value **c.Char) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigGetStrList C.PyInitConfig_GetStrList
-func InitConfigGetStrList(config *InitConfig, name *c.Char, length *c.SizeT, items ***c.Char) c.Int
+// llgo:link (*InitConfig).StrList C.PyInitConfig_GetStrList
+func (self *InitConfig) StrList(name *c.Char, length *c.SizeT, items ***c.Char) c.Int {
+	return 0
+}
 
 //go:linkname InitConfigFreeStrList C.PyInitConfig_FreeStrList
 func InitConfigFreeStrList(length c.SizeT, items **c.Char)
 
-//go:linkname InitConfigSetInt C.PyInitConfig_SetInt
-func InitConfigSetInt(config *InitConfig, name *c.Char, value c.Int64T) c.Int
+// llgo:link (*InitConfig).SetInt C.PyInitConfig_SetInt
+func (self *InitConfig) SetInt(name *c.Char, value c.Int64T) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigSetStr C.PyInitConfig_SetStr
-func InitConfigSetStr(config *InitConfig, name *c.Char, value *c.Char) c.Int
+// llgo:link (*InitConfig).SetStr C.PyInitConfig_SetStr
+func (self *InitConfig) SetStr(name *c.Char, value *c.Char) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigSetStrList C.PyInitConfig_SetStrList
-func InitConfigSetStrList(config *InitConfig, name *c.Char, length c.SizeT, items **c.Char) c.Int
+// llgo:link (*InitConfig).SetStrList C.PyInitConfig_SetStrList
+func (self *InitConfig) SetStrList(name *c.Char, length c.SizeT, items **c.Char) c.Int {
+	return 0
+}
 
-//go:linkname InitConfigAddModule C.PyInitConfig_AddModule
-func InitConfigAddModule(config *InitConfig, name *c.Char, initfunc func() *Object) c.Int
+// llgo:link (*InitConfig).AddModule C.PyInitConfig_AddModule
+func (self *InitConfig) AddModule(name *c.Char, initfunc func() *Object) c.Int {
+	return 0
+}
 
 //go:linkname InitializeFromInitConfig C.Py_InitializeFromInitConfig
 func InitializeFromInitConfig(config *InitConfig) c.Int
