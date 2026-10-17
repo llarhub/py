@@ -7,31 +7,46 @@ import (
 	_ "unsafe"
 )
 
-const SingleInput = 256
-const FileInput = 257
-const EvalInput = 258
-const FuncTypeInput = 345
-const CF_MASK = 33423360
-const CF_MASK_OBSOLETE = 16
-const CF_SOURCE_IS_UTF8 = 256
-const CF_DONT_IMPLY_DEDENT = 512
-const CF_ONLY_AST = 1024
-const CF_IGNORE_COOKIE = 2048
-const CF_TYPE_COMMENTS = 4096
-const CF_ALLOW_TOP_LEVEL_AWAIT = 8192
-const CF_ALLOW_INCOMPLETE_INPUT = 16384
-const CF_OPTIMIZED_AST = 33792
-const CF_COMPILE_MASK = 62976
-const FUTURE_NESTED_SCOPES = "nested_scopes"
-const FUTURE_GENERATORS = "generators"
-const FUTURE_DIVISION = "division"
-const FUTURE_ABSOLUTE_IMPORT = "absolute_import"
-const FUTURE_WITH_STATEMENT = "with_statement"
-const FUTURE_PRINT_FUNCTION = "print_function"
-const FUTURE_UNICODE_LITERALS = "unicode_literals"
-const FUTURE_BARRY_AS_BDFL = "barry_as_FLUFL"
-const FUTURE_GENERATOR_STOP = "generator_stop"
-const FUTURE_ANNOTATIONS = "annotations"
+// These definitions must match corresponding definitions in graminit.h.
+const (
+	SingleInput   = 256
+	FileInput     = 257
+	EvalInput     = 258
+	FuncTypeInput = 345
+)
+
+// Public interface
+const (
+	CF_MASK          = 33423360
+	CF_MASK_OBSOLETE = 16
+)
+
+// bpo-39562: CO_FUTURE_ and PyCF_ constants must be kept unique.
+// PyCF_ constants can use bits from 0x0100 to 0x10000.
+// CO_FUTURE_ constants use bits starting at 0x20000.
+const (
+	CF_SOURCE_IS_UTF8         = 256
+	CF_DONT_IMPLY_DEDENT      = 512
+	CF_ONLY_AST               = 1024
+	CF_IGNORE_COOKIE          = 2048
+	CF_TYPE_COMMENTS          = 4096
+	CF_ALLOW_TOP_LEVEL_AWAIT  = 8192
+	CF_ALLOW_INCOMPLETE_INPUT = 16384
+	CF_OPTIMIZED_AST          = 33792
+	CF_COMPILE_MASK           = 62976
+)
+const (
+	FUTURE_NESTED_SCOPES    = "nested_scopes"
+	FUTURE_GENERATORS       = "generators"
+	FUTURE_DIVISION         = "division"
+	FUTURE_ABSOLUTE_IMPORT  = "absolute_import"
+	FUTURE_WITH_STATEMENT   = "with_statement"
+	FUTURE_PRINT_FUNCTION   = "print_function"
+	FUTURE_UNICODE_LITERALS = "unicode_literals"
+	FUTURE_BARRY_AS_BDFL    = "barry_as_FLUFL"
+	FUTURE_GENERATOR_STOP   = "generator_stop"
+	FUTURE_ANNOTATIONS      = "annotations"
+)
 
 type CompilerFlags struct {
 	CfFlags          c.Int

@@ -7,12 +7,26 @@ import (
 	_ "unsafe"
 )
 
-const METH_VARARGS = 1
-const METH_KEYWORDS = 2
-const METH_NOARGS = 4
-const METH_O = 8
-const METH_CLASS = 16
-const METH_STATIC = 32
+// #define METH_OLDARGS  0x0000   -- unsupported now
+const (
+	METH_VARARGS = 1
+	// METH_NOARGS and METH_O must not be combined with the flags above.
+	METH_KEYWORDS = 2
+)
+
+// METH_NOARGS and METH_O must not be combined with the flags above.
+const (
+	METH_NOARGS = 4
+	METH_O      = 8
+)
+
+// METH_CLASS and METH_STATIC are a little different; these control
+// the construction of methods for a class.  These cannot be used for
+// functions in modules.
+const (
+	METH_CLASS  = 16
+	METH_STATIC = 32
+)
 const METH_COEXIST = 64
 const METH_FASTCALL = 128
 const METH_STACKLESS = 0
@@ -23,6 +37,18 @@ type MethodDef struct {
 	MlMeth  CFunction
 	MlFlags c.Int
 	MlDoc   *c.Char
+}
+type CFunctionObject struct {
+	ObBase       Object
+	MMl          *MethodDef
+	MSelf        *Object
+	MModule      *Object
+	MWeakreflist *Object
+	Vectorcall   Vectorcallfunc
+}
+type CMethodObject struct {
+	Func    CFunctionObject
+	MmClass *TypeObject
 }
 
 // llgo:type C
@@ -47,26 +73,6 @@ type CMethod = func(_llcppg_param1 *Object, _llcppg_param2 *TypeObject, _llcppg_
 type X_CFunctionFast = CFunctionFast
 type X_CFunctionFastWithKeywords = CFunctionFastWithKeywords
 
-// PyCFunctionObject structure
-type CFunctionObject struct {
-	ObBase       Object
-	MMl          *MethodDef
-	MSelf        *Object
-	MModule      *Object
-	MWeakreflist *Object
-	Vectorcall   Vectorcallfunc
-}
-
-// PyCMethodObject structure
-type CMethodObject struct {
-	Func    CFunctionObject
-	MmClass *TypeObject
-}
-
-// This is about the type 'builtin_function_or_method',
-// not Python methods in user-defined classes.  See classobject.h
-// for the latter.
-//
 //go:linkname CFunctionType C.PyCFunction_Type
 var CFunctionType TypeObject
 

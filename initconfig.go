@@ -7,28 +7,16 @@ import (
 	_ "unsafe"
 )
 
-// --- PyStatus -----------------------------------------------
 type Status struct {
-	X_type   _llcppg_anon_4
+	X_type   _llcppg_anon_5
 	Func     *c.Char
 	ErrMsg   *c.Char
 	Exitcode c.Int
 }
-type _llcppg_anon_4 c.Uint
-
-const (
-	X_Status_TYPE_OK    _llcppg_anon_4 = 0
-	X_Status_TYPE_ERROR _llcppg_anon_4 = 1
-	X_Status_TYPE_EXIT  _llcppg_anon_4 = 2
-)
-
-// --- PyWideStringList ------------------------------------------------
 type WideStringList struct {
 	Length SsizeT
 	Items  **c.WcharT
 }
-
-// --- PyPreConfig -----------------------------------------------
 type PreConfig struct {
 	X_configInit      c.Int
 	ParseArgv         c.Int
@@ -117,6 +105,13 @@ type Config struct {
 }
 type InitConfig struct {
 }
+type _llcppg_anon_5 c.Uint
+
+const (
+	X_Status_TYPE_OK    _llcppg_anon_5 = 0
+	X_Status_TYPE_ERROR _llcppg_anon_5 = 1
+	X_Status_TYPE_EXIT  _llcppg_anon_5 = 2
+)
 
 //go:linkname StatusOk C.PyStatus_Ok
 func StatusOk() Status
@@ -205,8 +200,6 @@ func (self *Config) SetWideStringList(list *WideStringList, length SsizeT, items
 	return Status{}
 }
 
-// --- PyConfig_Get() -----------------------------------------
-//
 //go:linkname ConfigGet C.PyConfig_Get
 func ConfigGet(name *c.Char) *Object
 

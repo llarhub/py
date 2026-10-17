@@ -7,14 +7,29 @@ import (
 	_ "unsafe"
 )
 
-const X_MANAGED_BUFFER_RELEASED = 1
-const X_MANAGED_BUFFER_FREE_FORMAT = 2
-const X_MEMORYVIEW_RELEASED = 1
-const X_MEMORYVIEW_C = 2
-const X_MEMORYVIEW_FORTRAN = 4
-const X_MEMORYVIEW_SCALAR = 8
-const X_MEMORYVIEW_PIL = 16
-const X_MEMORYVIEW_RESTRICTED = 32
+// The structs are declared here so that macros can work, but they shouldn't
+// be considered public. Don't access their fields directly, use the macros
+// and functions instead!
+const (
+	X_MANAGED_BUFFER_RELEASED = 1
+	// free format
+	X_MANAGED_BUFFER_FREE_FORMAT = 2
+)
+
+// memoryview state flags
+const (
+	X_MEMORYVIEW_RELEASED = 1
+	// C-contiguous layout
+	X_MEMORYVIEW_C = 2
+	// Fortran contiguous layout
+	X_MEMORYVIEW_FORTRAN = 4
+	// scalar: ndim = 0
+	X_MEMORYVIEW_SCALAR = 8
+	// PIL-style layout
+	X_MEMORYVIEW_PIL = 16
+	// Disallow new references to the memoryview's buffer
+	X_MEMORYVIEW_RESTRICTED = 32
+)
 
 type X_ManagedBufferObject struct {
 	ObBase  Object

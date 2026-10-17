@@ -7,81 +7,36 @@ import (
 	_ "unsafe"
 )
 
-// Register a new codec search function.
-//
-// As side effect, this tries to load the encodings package, if not
-// yet done, to make sure that it is always first in the list of
-// search functions.
-//
-// The search_function's refcount is incremented by this function.
-//
 //go:linkname CodecRegister C.PyCodec_Register
 func CodecRegister(search_function *Object) c.Int
 
-// Unregister a codec search function and clear the registry's cache.
-// If the search function is not registered, do nothing.
-// Return 0 on success. Raise an exception and return -1 on error.
-//
 //go:linkname CodecUnregister C.PyCodec_Unregister
 func CodecUnregister(search_function *Object) c.Int
 
-// Codec registry encoding check API.
-//
-// Returns 1/0 depending on whether there is a registered codec for
-// the given encoding.
-//
 //go:linkname CodecKnownEncoding C.PyCodec_KnownEncoding
 func CodecKnownEncoding(encoding *c.Char) c.Int
 
-// Generic codec based encoding API.
-//
-// object is passed through the encoder function found for the given
-// encoding using the error handling method defined by errors. errors
-// may be NULL to use the default method defined for the codec.
-//
-// Raises a LookupError in case no encoder can be found.
-//
 //go:linkname CodecEncode C.PyCodec_Encode
 func CodecEncode(object *Object, encoding *c.Char, errors *c.Char) *Object
 
-// Generic codec based decoding API.
-//
-// object is passed through the decoder function found for the given
-// encoding using the error handling method defined by errors. errors
-// may be NULL to use the default method defined for the codec.
-//
-// Raises a LookupError in case no encoder can be found.
-//
 //go:linkname CodecDecode C.PyCodec_Decode
 func CodecDecode(object *Object, encoding *c.Char, errors *c.Char) *Object
 
-// Get an encoder function for the given encoding.
-//
 //go:linkname CodecEncoder C.PyCodec_Encoder
 func CodecEncoder(encoding *c.Char) *Object
 
-// Get a decoder function for the given encoding.
-//
 //go:linkname CodecDecoder C.PyCodec_Decoder
 func CodecDecoder(encoding *c.Char) *Object
 
-// Get an IncrementalEncoder object for the given encoding.
-//
 //go:linkname CodecIncrementalEncoder C.PyCodec_IncrementalEncoder
 func CodecIncrementalEncoder(encoding *c.Char, errors *c.Char) *Object
 
-// Get an IncrementalDecoder object function for the given encoding.
-//
 //go:linkname CodecIncrementalDecoder C.PyCodec_IncrementalDecoder
 func CodecIncrementalDecoder(encoding *c.Char, errors *c.Char) *Object
 
-// Get a StreamReader factory function for the given encoding.
-//
 //go:linkname CodecStreamReader C.PyCodec_StreamReader
 func CodecStreamReader(encoding *c.Char, stream *Object, errors *c.Char) *Object
 
-// Get a StreamWriter factory function for the given encoding.
-//
 //go:linkname CodecStreamWriter C.PyCodec_StreamWriter
 func CodecStreamWriter(encoding *c.Char, stream *Object, errors *c.Char) *Object
 

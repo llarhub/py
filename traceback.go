@@ -16,8 +16,6 @@ type X_traceback struct {
 }
 type TracebackObject = X_traceback
 
-// Traceback interface
-//
 //go:linkname TraceBackHere C.PyTraceBack_Here
 func TraceBackHere(_llcppg_param1 *FrameObject) c.Int
 

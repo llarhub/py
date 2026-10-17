@@ -13,15 +13,6 @@ type Setentry struct {
 	Key  *Object
 	Hash HashT
 }
-
-// The SetObject data structure is shared by set and frozenset objects.
-//
-// Invariant for sets:
-// - hash is -1
-//
-// Invariants for frozensets:
-// - data is immutable.
-// - hash is the hash of the frozenset or -1 if not computed yet.
 type SetObject struct {
 	ObBase      Object
 	Fill        SsizeT

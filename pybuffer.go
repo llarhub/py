@@ -7,34 +7,47 @@ import (
 	"unsafe"
 )
 
+// Maximum number of dimensions
 const BUF_MAX_NDIM = 64
-const BUF_SIMPLE = 0
-const BUF_WRITABLE = 1
-const BUF_WRITEABLE = 1
-const BUF_FORMAT = 4
-const BUF_ND = 8
-const BUF_STRIDES = 24
-const BUF_C_CONTIGUOUS = 56
-const BUF_F_CONTIGUOUS = 88
-const BUF_ANY_CONTIGUOUS = 152
-const BUF_INDIRECT = 280
-const BUF_CONTIG = 9
-const BUF_CONTIG_RO = 8
-const BUF_STRIDED = 25
-const BUF_STRIDED_RO = 24
-const BUF_RECORDS = 29
-const BUF_RECORDS_RO = 28
-const BUF_FULL = 285
-const BUF_FULL_RO = 284
-const BUF_READ = 256
-const BUF_WRITE = 512
 
-// === New Buffer API ============================================
-// Limited API and stable ABI since Python 3.11
-//
-// Py_buffer struct layout and size is now part of the stable abi3. The
-// struct layout and size must not be changed in any way, as it would
-// break the ABI.
+// Flags for getting buffers. Keep these in sync with inspect.BufferFlags.
+const (
+	BUF_SIMPLE   = 0
+	BUF_WRITABLE = 1
+)
+
+// we used to include an E, backwards compatible alias
+const BUF_WRITEABLE = 1
+const (
+	BUF_FORMAT         = 4
+	BUF_ND             = 8
+	BUF_STRIDES        = 24
+	BUF_C_CONTIGUOUS   = 56
+	BUF_F_CONTIGUOUS   = 88
+	BUF_ANY_CONTIGUOUS = 152
+	BUF_INDIRECT       = 280
+)
+const (
+	BUF_CONTIG    = 9
+	BUF_CONTIG_RO = 8
+)
+const (
+	BUF_STRIDED    = 25
+	BUF_STRIDED_RO = 24
+)
+const (
+	BUF_RECORDS    = 29
+	BUF_RECORDS_RO = 28
+)
+const (
+	BUF_FULL    = 285
+	BUF_FULL_RO = 284
+)
+const (
+	BUF_READ  = 256
+	BUF_WRITE = 512
+)
+
 type Buffer struct {
 	Buf        unsafe.Pointer
 	Obj        *Object

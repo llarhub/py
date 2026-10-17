@@ -7,13 +7,25 @@ import (
 	_ "unsafe"
 )
 
-const DTSF_SIGN = 1
-const DTSF_ADD_DOT_0 = 2
-const DTSF_ALT = 4
+// PyOS_double_to_string's "flags" parameter can be set to 0 or more of:
+const (
+	DTSF_SIGN = 1
+	// if the result is an integer add ".0"
+	DTSF_ADD_DOT_0 = 2
+	// "alternate" formatting. it's format_code
+	// specific
+	DTSF_ALT = 4
+)
+
+// negative zero result is coerced to 0
 const DTSF_NO_NEG_0 = 8
-const DTST_FINITE = 0
-const DTST_INFINITE = 1
-const DTST_NAN = 2
+
+// PyOS_double_to_string's "type", if non-NULL, will be set to one of:
+const (
+	DTST_FINITE   = 0
+	DTST_INFINITE = 1
+	DTST_NAN      = 2
+)
 
 //go:linkname OSStringToDouble C.PyOS_string_to_double
 func OSStringToDouble(str *c.Char, endptr **c.Char, overflow_exception *Object) c.Double

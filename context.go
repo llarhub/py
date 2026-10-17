@@ -17,12 +17,12 @@ CONTEXT_SWITCHED ContextEvent = 1
 
 type X_pycontextobject struct {
 }
-type Context = X_pycontextobject
-type X_pycontextvarobject struct {
-}
-type ContextVar = X_pycontextvarobject
 type X_pycontexttokenobject struct {
 }
+type X_pycontextvarobject struct {
+}
+type Context = X_pycontextobject
+type ContextVar = X_pycontextvarobject
 type ContextToken = X_pycontexttokenobject
 
 // Context object watcher callback function.  The object passed to the callback

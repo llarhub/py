@@ -13,18 +13,6 @@ type TupleObject struct {
 	ObItem [1]*Object
 }
 
-// Another generally useful object type is a tuple of object pointers.
-// For Python, this is an immutable type.  C code can change the tuple items
-// (but not their number), and even use tuples as general-purpose arrays of
-// object references, but in general only brand new tuples should be mutated,
-// not ones that might already have been exposed to Python code.
-//
-// ** WARNING *** PyTuple_SetItem does not increment the new item's reference
-// count, but does decrement the reference count of the item it replaces,
-// if not nil.  It does *decrement* the reference count if it is *not*
-// inserted in the tuple.  Similarly, PyTuple_GetItem does not increment the
-// returned item's reference count.
-//
 //go:linkname TupleType C.PyTuple_Type
 var TupleType TypeObject
 

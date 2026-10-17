@@ -8,15 +8,33 @@ import (
 )
 
 const HASH_CUTOFF = 0
-const HASH_EXTERNAL = 0
-const HASH_SIPHASH24 = 1
-const HASH_FNV = 2
-const HASH_SIPHASH13 = 3
+
+// Hash algorithm selection
+//
+// The values for Py_HASH_* are hard-coded in the
+// configure script.
+//
+// - FNV and SIPHASH* are available on all platforms and architectures.
+// - With EXTERNAL embedders can provide an alternative implementation with::
+//
+//     PyHash_FuncDef PyHash_Func = {...};
+//
+// XXX: Figure out __declspec() for extern PyHash_FuncDef.
+const (
+	HASH_EXTERNAL  = 0
+	HASH_SIPHASH24 = 1
+	HASH_FNV       = 2
+	HASH_SIPHASH13 = 3
+)
 const HASH_ALGORITHM = 3
 const HASH_BITS = 61
 const HASH_INF = 314159
-const X_HASH_BITS = 61
-const X_HASH_INF = 314159
+
+// Aliases kept for backward compatibility with Python 3.12
+const (
+	X_HASH_BITS = 61
+	X_HASH_INF  = 314159
+)
 
 // hash function definition
 //

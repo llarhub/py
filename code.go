@@ -7,53 +7,64 @@ import (
 	"unsafe"
 )
 
-const CO_OPTIMIZED = 1
-const CO_NEWLOCALS = 2
-const CO_VARARGS = 4
-const CO_VARKEYWORDS = 8
-const CO_NESTED = 16
-const CO_GENERATOR = 32
-const CO_COROUTINE = 128
-const CO_ITERABLE_COROUTINE = 256
-const CO_ASYNC_GENERATOR = 512
-const CO_FUTURE_DIVISION = 131072
-const CO_FUTURE_ABSOLUTE_IMPORT = 262144
-const CO_FUTURE_WITH_STATEMENT = 524288
-const CO_FUTURE_PRINT_FUNCTION = 1048576
-const CO_FUTURE_UNICODE_LITERALS = 2097152
-const CO_FUTURE_BARRY_AS_BDFL = 4194304
-const CO_FUTURE_GENERATOR_STOP = 8388608
-const CO_FUTURE_ANNOTATIONS = 16777216
+// Masks for co_flags above
+const (
+	CO_OPTIMIZED   = 1
+	CO_NEWLOCALS   = 2
+	CO_VARARGS     = 4
+	CO_VARKEYWORDS = 8
+	CO_NESTED      = 16
+	CO_GENERATOR   = 32
+)
+
+// The CO_COROUTINE flag is set for coroutine functions (defined with
+// ``async def`` keywords)
+const (
+	CO_COROUTINE          = 128
+	CO_ITERABLE_COROUTINE = 256
+	CO_ASYNC_GENERATOR    = 512
+)
+
+// bpo-39562: These constant values are changed in Python 3.9
+// to prevent collision with compiler flags. CO_FUTURE_ and PyCF_
+// constants must be kept unique. PyCF_ constants can use bits from
+// 0x0100 to 0x10000. CO_FUTURE_ constants use bits starting at 0x20000.
+const (
+	CO_FUTURE_DIVISION = 131072
+	// do absolute imports by default
+	CO_FUTURE_ABSOLUTE_IMPORT  = 262144
+	CO_FUTURE_WITH_STATEMENT   = 524288
+	CO_FUTURE_PRINT_FUNCTION   = 1048576
+	CO_FUTURE_UNICODE_LITERALS = 2097152
+)
+const (
+	CO_FUTURE_BARRY_AS_BDFL  = 4194304
+	CO_FUTURE_GENERATOR_STOP = 8388608
+	CO_FUTURE_ANNOTATIONS    = 16777216
+)
 const CO_NO_MONITORING_EVENTS = 33554432
+
+// Whether the code object has a docstring,
+// If so, it will be the first item in co_consts
 const CO_HAS_DOCSTRING = 67108864
+
+// A function defined in class scope
 const CO_METHOD = 134217728
+
+// Max static block nesting within a function
 const CO_MAXBLOCKS = 21
 
-type CodeEvent c.Uint
-
-const (
-	CODE_EVENT_CREATE  CodeEvent = 0
-	CODE_EVENT_DESTROY CodeEvent = 1
-)
-
-type X_CodeLocationInfoKind c.Uint
-
-const (
-	// short forms are 0 to 9
-	CODE_LOCATION_INFO_SHORT0 X_CodeLocationInfoKind = 0
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_ONE_LINE0 X_CodeLocationInfoKind = 10
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_ONE_LINE1 X_CodeLocationInfoKind = 11
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_ONE_LINE2 X_CodeLocationInfoKind = 12
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_NO_COLUMNS X_CodeLocationInfoKind = 13
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_LONG X_CodeLocationInfoKind = 14
-	// one lineforms are 10 to 12
-	CODE_LOCATION_INFO_NONE X_CodeLocationInfoKind = 15
-)
+type X_CoCached struct {
+	X_coCode     *Object
+	X_coVarnames *Object
+	X_coCellvars *Object
+	X_coFreevars *Object
+}
+type X_ExecutorArray struct {
+	Size      c.Int
+	Capacity  c.Int
+	Executors [1]*X_ExecutorObject
+}
 
 // Bytecode object
 type CodeObject struct {
@@ -89,17 +100,39 @@ type CodeObject struct {
 	CoExtra                    unsafe.Pointer
 	CoCodeAdaptive             [1]c.Char
 }
-type X_CoCached struct {
-	X_coCode     *Object
-	X_coVarnames *Object
-	X_coCellvars *Object
-	X_coFreevars *Object
+type CodeEvent c.Uint
+
+const (
+	CODE_EVENT_CREATE  CodeEvent = 0
+	CODE_EVENT_DESTROY CodeEvent = 1
+)
+
+// for internal use only
+type X_opaque struct {
+	ComputedLine c.Int
+	LoNext       *c.Uint8T
+	Limit        *c.Uint8T
 }
-type X_ExecutorArray struct {
-	Size      c.Int
-	Capacity  c.Int
-	Executors [1]*X_ExecutorObject
+type X_lineOffsets struct {
+	ArStart c.Int
+	ArEnd   c.Int
+	ArLine  c.Int
+	Opaque  X_opaque
 }
+type X_CodeLocationInfoKind c.Uint
+
+const (
+	// short forms are 0 to 9
+	CODE_LOCATION_INFO_SHORT0 X_CodeLocationInfoKind = 0
+	// one lineforms are 10 to 12
+	CODE_LOCATION_INFO_ONE_LINE0  X_CodeLocationInfoKind = 10
+	CODE_LOCATION_INFO_ONE_LINE1  X_CodeLocationInfoKind = 11
+	CODE_LOCATION_INFO_ONE_LINE2  X_CodeLocationInfoKind = 12
+	CODE_LOCATION_INFO_NO_COLUMNS X_CodeLocationInfoKind = 13
+	CODE_LOCATION_INFO_LONG       X_CodeLocationInfoKind = 14
+	CODE_LOCATION_INFO_NONE       X_CodeLocationInfoKind = 15
+)
+
 type X_ExecutorObject struct {
 }
 type X_CoMonitoringData struct {
@@ -115,19 +148,6 @@ type X_CoMonitoringData struct {
 //
 // llgo:type C
 type CodeWatchCallback = func(_llcppg_param1 CodeEvent, _llcppg_param2 *CodeObject) c.Int
-
-// for internal use only
-type X_opaque struct {
-	ComputedLine c.Int
-	LoNext       *c.Uint8T
-	Limit        *c.Uint8T
-}
-type X_lineOffsets struct {
-	ArStart c.Int
-	ArEnd   c.Int
-	ArLine  c.Int
-	Opaque  X_opaque
-}
 type CodeAddressRange = X_lineOffsets
 
 //go:linkname CodeType C.PyCode_Type
@@ -138,6 +158,8 @@ var CodeType TypeObject
 //go:linkname UnstableCodeNew C.PyUnstable_Code_New
 func UnstableCodeNew(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 *Object, _llcppg_param7 *Object, _llcppg_param8 *Object, _llcppg_param9 *Object, _llcppg_param10 *Object, _llcppg_param11 *Object, _llcppg_param12 *Object, _llcppg_param13 *Object, _llcppg_param14 *Object, _llcppg_param15 c.Int, _llcppg_param16 *Object, _llcppg_param17 *Object) *CodeObject
 
+// same as struct above
+//
 //go:linkname UnstableCodeNewWithPosOnlyArgs C.PyUnstable_Code_NewWithPosOnlyArgs
 func UnstableCodeNewWithPosOnlyArgs(_llcppg_param1 c.Int, _llcppg_param2 c.Int, _llcppg_param3 c.Int, _llcppg_param4 c.Int, _llcppg_param5 c.Int, _llcppg_param6 c.Int, _llcppg_param7 *Object, _llcppg_param8 *Object, _llcppg_param9 *Object, _llcppg_param10 *Object, _llcppg_param11 *Object, _llcppg_param12 *Object, _llcppg_param13 *Object, _llcppg_param14 *Object, _llcppg_param15 *Object, _llcppg_param16 c.Int, _llcppg_param17 *Object, _llcppg_param18 *Object) *CodeObject
 
@@ -201,6 +223,8 @@ func (self *CodeObject) Optimize(consts *Object, names *Object, lnotab *Object) 
 //go:linkname UnstableCodeGetExtra C.PyUnstable_Code_GetExtra
 func UnstableCodeGetExtra(code *Object, index SsizeT, extra *unsafe.Pointer) c.Int
 
+// Old names -- remove when this API changes:
+//
 //go:linkname UnstableCodeSetExtra C.PyUnstable_Code_SetExtra
 func UnstableCodeSetExtra(code *Object, index SsizeT, extra unsafe.Pointer) c.Int
 

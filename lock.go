@@ -4,8 +4,10 @@ package py
 
 import "github.com/goplus/lib/c"
 
-const X_UNLOCKED = 0
-const X_LOCKED = 1
+const (
+	X_UNLOCKED = 0
+	X_LOCKED   = 1
+)
 
 // A mutex that occupies one byte. The lock can be zero initialized to
 // represent the unlocked state.

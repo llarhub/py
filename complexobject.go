@@ -19,8 +19,6 @@ type ComplexObject struct {
 	Cval   Complex
 }
 
-// Complex object interface
-//
 //go:linkname ComplexType C.PyComplex_Type
 var ComplexType TypeObject
 

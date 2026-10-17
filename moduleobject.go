@@ -7,12 +7,27 @@ import (
 	"unsafe"
 )
 
-const ModCreate = 1
-const ModExec = 2
+const (
+	ModCreate = 1
+	ModExec   = 2
+)
 const ModMultipleInterpreters = 3
 const ModGil = 4
 const X_modLAST_SLOT = 4
 
+// llgo:type C
+type ModuleDefBase struct {
+	ObBase Object
+	MInit  func() *Object
+	MIndex SsizeT
+	MCopy  *Object
+}
+
+// New in 3.5
+type ModuleDefSlot struct {
+	Slot  c.Int
+	Value unsafe.Pointer
+}
 type ModuleDef struct {
 	MBase     ModuleDefBase
 	MName     *c.Char
@@ -23,20 +38,6 @@ type ModuleDef struct {
 	MTraverse Traverseproc
 	MClear    Inquiry
 	MFree     Freefunc
-}
-
-// New in 3.5
-type ModuleDefSlot struct {
-	Slot  c.Int
-	Value unsafe.Pointer
-}
-
-// llgo:type C
-type ModuleDefBase struct {
-	ObBase Object
-	MInit  func() *Object
-	MIndex SsizeT
-	MCopy  *Object
 }
 
 //go:linkname ModuleType C.PyModule_Type

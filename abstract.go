@@ -86,14 +86,6 @@ func (self *Object) CallFunctionObjArgs(__llgo_va_list ...any) *Object {
 	return self
 }
 
-// Call the method named 'name' of object 'obj' with a variable number of
-// C arguments.  The C arguments are provided as PyObject* values, terminated
-// by NULL.
-//
-// Returns the result of the call on success, or NULL on failure.
-//
-// This is the equivalent of the Python expression: obj.name(*args).
-//
 // llgo:link (*Object).CallMethodObjArgs C.PyObject_CallMethodObjArgs
 func (self *Object) CallMethodObjArgs(name *Object, __llgo_va_list ...any) *Object {
 	return self
@@ -739,17 +731,9 @@ func MappingHasKeyString(o *Object, key *c.Char) c.Int
 //go:linkname MappingHasKey C.PyMapping_HasKey
 func MappingHasKey(o *Object, key *Object) c.Int
 
-// Return 1 if the mapping object has the key 'key', and 0 otherwise.
-// This is equivalent to the Python expression: key in o.
-// On failure, return -1.
-//
 //go:linkname MappingHasKeyWithError C.PyMapping_HasKeyWithError
 func MappingHasKeyWithError(o *Object, key *Object) c.Int
 
-// Return 1 if the mapping object has the key 'key', and 0 otherwise.
-// This is equivalent to the Python expression: key in o.
-// On failure, return -1.
-//
 //go:linkname MappingHasKeyStringWithError C.PyMapping_HasKeyStringWithError
 func MappingHasKeyStringWithError(o *Object, key *c.Char) c.Int
 

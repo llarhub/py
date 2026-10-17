@@ -8,8 +8,10 @@ import (
 	"unsafe"
 )
 
-const WAIT_LOCK = 1
-const NOWAIT_LOCK = 0
+const (
+	WAIT_LOCK   = 1
+	NOWAIT_LOCK = 0
+)
 
 // Return status codes for Python lock acquisition.  Chosen for maximum
 // backwards compatibility, ie failure -> 0, success -> 1.
@@ -21,8 +23,6 @@ const (
 	LOCK_INTR     LockStatus = 2
 )
 
-type ThreadTypeLock uintptr
-
 // When Py_LIMITED_API is not defined, the type layout of Py_tss_t is
 // exposed to allow static allocation in the API clients.  Even in this case,
 // you must handle TSS keys through API functions due to compatibility.
@@ -30,14 +30,32 @@ type X_tssT struct {
 	X_isInitialized c.Int
 	X_key           pthread.Key
 }
+type ThreadTypeLock uintptr
 
-// New in 3.7
-// Thread Specific Storage (TSS) API
+// opaque
 type TssT = X_tssT
 
 //go:linkname ThreadInitThread C.PyThread_init_thread
 func ThreadInitThread()
 
+// Terminates the current thread. Considered unsafe.
+//
+// WARNING: This function is only safe to call if all functions in the full call
+// stack are written to safely allow it.  Additionally, the behavior is
+// platform-dependent.  This function should be avoided, and is no longer called
+// by Python itself.  It is retained only for compatibility with existing C
+// extension code.
+//
+// With pthreads, calls `pthread_exit` causes some libcs (glibc?) to attempt to
+// unwind the stack and call C++ destructors; if a `noexcept` function is
+// reached, they may terminate the process. Others (macOS) do unwinding.
+//
+// On Windows, calls `_endthreadex` which kills the thread without calling C++
+// destructors.
+//
+// In either case there is a risk of invalid references remaining to data on the
+// thread stack.
+//
 //go:linkname ThreadStartNewThread C.PyThread_start_new_thread
 func ThreadStartNewThread(_llcppg_param1 func(_llcppg_param1 unsafe.Pointer), _llcppg_param2 unsafe.Pointer) c.Ulong
 

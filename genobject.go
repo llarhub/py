@@ -4,20 +4,14 @@ package py
 
 import _ "unsafe"
 
-type X_GenObject struct {
-}
-
-// --- Generators ---------------------------------------------------------
-type GenObject = X_GenObject
-type X_CoroObject struct {
-}
-
-// --- PyCoroObject -------------------------------------------------------
-type CoroObject = X_CoroObject
 type X_AsyncGenObject struct {
 }
-
-// --- Asynchronous Generators --------------------------------------------
+type X_CoroObject struct {
+}
+type X_GenObject struct {
+}
+type GenObject = X_GenObject
+type CoroObject = X_CoroObject
 type AsyncGenObject = X_AsyncGenObject
 
 //go:linkname GenType C.PyGen_Type

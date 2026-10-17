@@ -7,15 +7,13 @@ import (
 	"unsafe"
 )
 
-const InterpreterConfig_DEFAULT_GIL = 0
-const InterpreterConfig_SHARED_GIL = 1
-const InterpreterConfig_OWN_GIL = 2
+const (
+	InterpreterConfig_DEFAULT_GIL = 0
+	InterpreterConfig_SHARED_GIL  = 1
+	InterpreterConfig_OWN_GIL     = 2
+)
 const X_InterpreterConfig_LEGACY_CHECK_MULTI_INTERP_EXTENSIONS = 0
 
-// Signals
-//
-// llgo:type C
-type OSSighandlerT = func(_llcppg_param1 c.Int)
 type InterpreterConfig struct {
 	UseMainObmalloc            c.Int
 	AllowFork                  c.Int
@@ -25,6 +23,11 @@ type InterpreterConfig struct {
 	CheckMultiInterpExtensions c.Int
 	Gil                        c.Int
 }
+
+// Signals
+//
+// llgo:type C
+type OSSighandlerT = func(_llcppg_param1 c.Int)
 
 // llgo:type C
 type AtexitDatacallbackfunc = func(_llcppg_param1 unsafe.Pointer)
@@ -132,8 +135,6 @@ func IsFinalizing() c.Int
 //go:linkname FrozenMain C.Py_FrozenMain
 func FrozenMain(argc c.Int, argv **c.Char) c.Int
 
-// PEP 432 Multi-phase initialization API (Private while provisional!)
-//
 //go:linkname PreInitialize C.Py_PreInitialize
 func PreInitialize(src_config *PreConfig) Status
 
@@ -143,8 +144,6 @@ func PreInitializeFromBytesArgs(src_config *PreConfig, argc SsizeT, argv **c.Cha
 //go:linkname PreInitializeFromArgs C.Py_PreInitializeFromArgs
 func PreInitializeFromArgs(src_config *PreConfig, argc SsizeT, argv **c.WcharT) Status
 
-// Initialization and finalization
-//
 //go:linkname InitializeFromConfig C.Py_InitializeFromConfig
 func InitializeFromConfig(config *Config) Status
 

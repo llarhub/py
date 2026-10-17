@@ -7,33 +7,77 @@ import (
 	"unsafe"
 )
 
+// Flag bits for printing:
 const PRINT_RAW = 1
+
+// Track types initialized using _PyStaticType_InitBuiltin().
 const X_TPFLAGS_STATIC_BUILTIN = 2
+
+// The values array is placed inline directly after the rest of
+// the object. Implies Py_TPFLAGS_HAVE_GC.
 const TPFLAGS_INLINE_VALUES = 4
+
+// Placement of weakref pointers are managed by the VM, not by the type.
+// The VM will automatically set tp_weaklistoffset.
 const TPFLAGS_MANAGED_WEAKREF = 8
+
+// Placement of dict (and values) pointers are managed by the VM, not by the type.
+// The VM will automatically set tp_dictoffset. Implies Py_TPFLAGS_HAVE_GC.
 const TPFLAGS_MANAGED_DICT = 16
 const TPFLAGS_PREHEADER = 24
+
+// Set if instances of the type object are treated as sequences for pattern matching
 const TPFLAGS_SEQUENCE = 32
+
+// Set if instances of the type object are treated as mappings for pattern matching
 const TPFLAGS_MAPPING = 64
 const TPFLAGS_HAVE_STACKLESS_EXTENSION = 0
 const TPFLAGS_DEFAULT = 0
-const CONSTANT_NONE = 0
-const CONSTANT_FALSE = 1
-const CONSTANT_TRUE = 2
-const CONSTANT_ELLIPSIS = 3
-const CONSTANT_NOT_IMPLEMENTED = 4
-const CONSTANT_ZERO = 5
-const CONSTANT_ONE = 6
-const CONSTANT_EMPTY_STR = 7
-const CONSTANT_EMPTY_BYTES = 8
-const CONSTANT_EMPTY_TUPLE = 9
-const LT = 0
-const LE = 1
-const EQ = 2
-const NE = 3
-const GT = 4
-const GE = 5
+const (
+	CONSTANT_NONE            = 0
+	CONSTANT_FALSE           = 1
+	CONSTANT_TRUE            = 2
+	CONSTANT_ELLIPSIS        = 3
+	CONSTANT_NOT_IMPLEMENTED = 4
+	CONSTANT_ZERO            = 5
+	CONSTANT_ONE             = 6
+	CONSTANT_EMPTY_STR       = 7
+	CONSTANT_EMPTY_BYTES     = 8
+	CONSTANT_EMPTY_TUPLE     = 9
+)
+
+// Rich comparison opcodes
+const (
+	LT = 0
+	LE = 1
+	EQ = 2
+	NE = 3
+	GT = 4
+	GE = 5
+)
+
+// (see tp_versions_used)
 const X_ATTR_CACHE_UNUSED = 30000
+
+type X_object struct {
+	_llcppg_anon_0
+	ObType *TypeObject
+}
+type VarObject struct {
+	ObBase Object
+	ObSize SsizeT
+}
+type TypeSlot struct {
+	Slot  c.Int
+	Pfunc unsafe.Pointer
+}
+type TypeSpec struct {
+	Name      *c.Char
+	Basicsize c.Int
+	Itemsize  c.Int
+	Flags     c.Uint
+	Slots     *TypeSlot
+}
 
 // Result of calling PyIter_Send
 type SendResult c.Int
@@ -44,16 +88,93 @@ const (
 	PYGEN_NEXT   SendResult = 1
 )
 
-type RefTracerEvent c.Uint
-
-const (
-	RefTracer_CREATE  RefTracerEvent = 0
-	RefTracer_DESTROY RefTracerEvent = 1
-)
-
-type X_object struct {
-	_llcppg_anon_0
-	ObType *TypeObject
+// This structure helps managing static strings. The basic usage goes like this:
+// Instead of doing
+//
+// r = PyObject_CallMethod(o, "foo", "args", ...);
+//
+// do
+//
+// _Py_IDENTIFIER(foo);
+// ...
+// r = _PyObject_CallMethodId(o, &PyId_foo, "args", ...);
+//
+// PyId_foo is a static variable, either on block level or file level. On first
+// usage, the string "foo" is interned, and the structures are linked. On interpreter
+// shutdown, all strings are released.
+//
+// Alternatively, _Py_static_string allows choosing the variable name.
+// _PyUnicode_FromId returns a borrowed reference to the interned string.
+// _PyObject_{Get,Set,Has}AttrId are __getattr__ versions using _Py_Identifier*.
+type X_Identifier struct {
+	String *c.Char
+	Index  SsizeT
+	Mutex  _llcppg_anon_2
+}
+type NumberMethods struct {
+	NbAdd                   Binaryfunc
+	NbSubtract              Binaryfunc
+	NbMultiply              Binaryfunc
+	NbRemainder             Binaryfunc
+	NbDivmod                Binaryfunc
+	NbPower                 Ternaryfunc
+	NbNegative              Unaryfunc
+	NbPositive              Unaryfunc
+	NbAbsolute              Unaryfunc
+	NbBool                  Inquiry
+	NbInvert                Unaryfunc
+	NbLshift                Binaryfunc
+	NbRshift                Binaryfunc
+	NbAnd                   Binaryfunc
+	NbXor                   Binaryfunc
+	NbOr                    Binaryfunc
+	NbInt                   Unaryfunc
+	NbReserved              unsafe.Pointer
+	NbFloat                 Unaryfunc
+	NbInplaceAdd            Binaryfunc
+	NbInplaceSubtract       Binaryfunc
+	NbInplaceMultiply       Binaryfunc
+	NbInplaceRemainder      Binaryfunc
+	NbInplacePower          Ternaryfunc
+	NbInplaceLshift         Binaryfunc
+	NbInplaceRshift         Binaryfunc
+	NbInplaceAnd            Binaryfunc
+	NbInplaceXor            Binaryfunc
+	NbInplaceOr             Binaryfunc
+	NbFloorDivide           Binaryfunc
+	NbTrueDivide            Binaryfunc
+	NbInplaceFloorDivide    Binaryfunc
+	NbInplaceTrueDivide     Binaryfunc
+	NbIndex                 Unaryfunc
+	NbMatrixMultiply        Binaryfunc
+	NbInplaceMatrixMultiply Binaryfunc
+}
+type SequenceMethods struct {
+	SqLength        Lenfunc
+	SqConcat        Binaryfunc
+	SqRepeat        Ssizeargfunc
+	SqItem          Ssizeargfunc
+	WasSqSlice      unsafe.Pointer
+	SqAssItem       Ssizeobjargproc
+	WasSqAssSlice   unsafe.Pointer
+	SqContains      Objobjproc
+	SqInplaceConcat Binaryfunc
+	SqInplaceRepeat Ssizeargfunc
+}
+type MappingMethods struct {
+	MpLength       Lenfunc
+	MpSubscript    Binaryfunc
+	MpAssSubscript Objobjargproc
+}
+type AsyncMethods struct {
+	AmAwait Unaryfunc
+	AmAiter Unaryfunc
+	AmAnext Unaryfunc
+	AmSend  Sendfunc
+}
+type BufferProcs struct {
+	BfGetbuffer     Getbufferproc
+	BfReleasebuffer Releasebufferproc
 }
 
 // If this structure is modified, Doc/includes/typestruct.h should be updated
@@ -111,27 +232,49 @@ type X_typeobject struct {
 	TpWatched          uint8
 	TpVersionsUsed     c.Uint16T
 }
+
+// This struct is used by the specializer
+// It should be treated as an opaque blob
+// by code other than the specializer and interpreter.
+type X_specializationCache struct {
+	Getitem        *Object
+	GetitemVersion c.Uint32T
+	Init           *Object
+}
+
+// The *real* layout of a type object when allocated on the heap
+type X_heaptypeobject struct {
+	HtType       TypeObject
+	AsAsync      AsyncMethods
+	AsNumber     NumberMethods
+	AsMapping    MappingMethods
+	AsSequence   SequenceMethods
+	AsBuffer     BufferProcs
+	HtName       *Object
+	HtSlots      *Object
+	HtQualname   *Object
+	HtCachedKeys *X_dictkeysobject
+	HtModule     *Object
+	X_htTpname   *c.Char
+	HtToken      unsafe.Pointer
+	X_specCache  X_specializationCache
+}
+type RefTracerEvent c.Uint
+
+const (
+	RefTracer_CREATE  RefTracerEvent = 0
+	RefTracer_DESTROY RefTracerEvent = 1
+)
+
 type _llcppg_anon_0 struct {
 	_xgo_union [1]uint64
 }
-type VarObject struct {
-	ObBase Object
-	ObSize SsizeT
+type _llcppg_anon_1 struct {
+	ObRefcnt   c.Uint32T
+	ObOverflow c.Uint16T
+	ObFlags    c.Uint16T
 }
 
-// Type objects contain a string containing the type name (to help somewhat
-// in debugging), the allocation parameters (see PyObject_New() and
-// PyObject_NewVar()),
-// and methods for accessing objects of the type.  Methods are optional, a
-// nil pointer meaning that particular kind of access is not available for
-// this type.  The Py_DECREF() macro uses the tp_dealloc method without
-// checking for a nil pointer; it should always be implemented except if
-// the implementation can guarantee that the reference count will never
-// reach zero (e.g., for statically allocated type objects).
-//
-// NB: the methods for certain type groups are now contained in separate
-// method blocks.
-//
 // llgo:type C
 type Unaryfunc = func(_llcppg_param1 *Object) *Object
 
@@ -221,146 +364,18 @@ type Allocfunc = func(_llcppg_param1 *TypeObject, _llcppg_param2 SsizeT) *Object
 
 // llgo:type C
 type Vectorcallfunc = func(_llcppg_param1 *Object, _llcppg_param2 **Object, _llcppg_param3 c.SizeT, _llcppg_param4 *Object) *Object
-type TypeSlot struct {
-	Slot  c.Int
-	Pfunc unsafe.Pointer
-}
-type TypeSpec struct {
-	Name      *c.Char
-	Basicsize c.Int
-	Itemsize  c.Int
-	Flags     c.Uint
-	Slots     *TypeSlot
-}
-
-// String Literals
-// This structure helps managing static strings. The basic usage goes like this:
-// Instead of doing
-//
-// r = PyObject_CallMethod(o, "foo", "args", ...);
-//
-// do
-//
-// _Py_IDENTIFIER(foo);
-// ...
-// r = _PyObject_CallMethodId(o, &PyId_foo, "args", ...);
-//
-// PyId_foo is a static variable, either on block level or file level. On first
-// usage, the string "foo" is interned, and the structures are linked. On interpreter
-// shutdown, all strings are released.
-//
-// Alternatively, _Py_static_string allows choosing the variable name.
-// _PyUnicode_FromId returns a borrowed reference to the interned string.
-// _PyObject_{Get,Set,Has}AttrId are __getattr__ versions using _Py_Identifier*.
-type X_Identifier struct {
-	String *c.Char
-	Index  SsizeT
-	Mutex  _llcppg_anon_1
-}
 
 // Hidden PyMutex struct for non free-threaded build.
-type _llcppg_anon_1 struct {
+type _llcppg_anon_2 struct {
 	V c.Uint8T
-}
-type NumberMethods struct {
-	NbAdd                   Binaryfunc
-	NbSubtract              Binaryfunc
-	NbMultiply              Binaryfunc
-	NbRemainder             Binaryfunc
-	NbDivmod                Binaryfunc
-	NbPower                 Ternaryfunc
-	NbNegative              Unaryfunc
-	NbPositive              Unaryfunc
-	NbAbsolute              Unaryfunc
-	NbBool                  Inquiry
-	NbInvert                Unaryfunc
-	NbLshift                Binaryfunc
-	NbRshift                Binaryfunc
-	NbAnd                   Binaryfunc
-	NbXor                   Binaryfunc
-	NbOr                    Binaryfunc
-	NbInt                   Unaryfunc
-	NbReserved              unsafe.Pointer
-	NbFloat                 Unaryfunc
-	NbInplaceAdd            Binaryfunc
-	NbInplaceSubtract       Binaryfunc
-	NbInplaceMultiply       Binaryfunc
-	NbInplaceRemainder      Binaryfunc
-	NbInplacePower          Ternaryfunc
-	NbInplaceLshift         Binaryfunc
-	NbInplaceRshift         Binaryfunc
-	NbInplaceAnd            Binaryfunc
-	NbInplaceXor            Binaryfunc
-	NbInplaceOr             Binaryfunc
-	NbFloorDivide           Binaryfunc
-	NbTrueDivide            Binaryfunc
-	NbInplaceFloorDivide    Binaryfunc
-	NbInplaceTrueDivide     Binaryfunc
-	NbIndex                 Unaryfunc
-	NbMatrixMultiply        Binaryfunc
-	NbInplaceMatrixMultiply Binaryfunc
-}
-type SequenceMethods struct {
-	SqLength        Lenfunc
-	SqConcat        Binaryfunc
-	SqRepeat        Ssizeargfunc
-	SqItem          Ssizeargfunc
-	WasSqSlice      unsafe.Pointer
-	SqAssItem       Ssizeobjargproc
-	WasSqAssSlice   unsafe.Pointer
-	SqContains      Objobjproc
-	SqInplaceConcat Binaryfunc
-	SqInplaceRepeat Ssizeargfunc
-}
-type MappingMethods struct {
-	MpLength       Lenfunc
-	MpSubscript    Binaryfunc
-	MpAssSubscript Objobjargproc
 }
 
 // llgo:type C
 type Sendfunc = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 **Object) SendResult
-type AsyncMethods struct {
-	AmAwait Unaryfunc
-	AmAiter Unaryfunc
-	AmAnext Unaryfunc
-	AmSend  Sendfunc
-}
-type BufferProcs struct {
-	BfGetbuffer     Getbufferproc
-	BfReleasebuffer Releasebufferproc
-}
 
 // Allow printfunc in the tp_vectorcall_offset slot for
 // backwards-compatibility
 type Printfunc = SsizeT
-
-// This struct is used by the specializer
-// It should be treated as an opaque blob
-// by code other than the specializer and interpreter.
-type X_specializationCache struct {
-	Getitem        *Object
-	GetitemVersion c.Uint32T
-	Init           *Object
-}
-
-// The *real* layout of a type object when allocated on the heap
-type X_heaptypeobject struct {
-	HtType       TypeObject
-	AsAsync      AsyncMethods
-	AsNumber     NumberMethods
-	AsMapping    MappingMethods
-	AsSequence   SequenceMethods
-	AsBuffer     BufferProcs
-	HtName       *Object
-	HtSlots      *Object
-	HtQualname   *Object
-	HtCachedKeys *X_dictkeysobject
-	HtModule     *Object
-	X_htTpname   *c.Char
-	HtToken      unsafe.Pointer
-	X_specCache  X_specializationCache
-}
 type X_dictkeysobject struct {
 }
 
@@ -375,6 +390,15 @@ type RefTracer = func(_llcppg_param1 *Object, _llcppg_param2 RefTracerEvent, _ll
 
 func (p *_llcppg_anon_0) XGof_ref_ob_refcnt_full() *c.Int64T {
 	return (*c.Int64T)(unsafe.Pointer(p))
+}
+func (p *_llcppg_anon_0) XGof_ref_ob_refcnt() *c.Uint32T {
+	return &(*_llcppg_anon_1)(unsafe.Pointer(p)).ObRefcnt
+}
+func (p *_llcppg_anon_0) XGof_ref_ob_overflow() *c.Uint16T {
+	return &(*_llcppg_anon_1)(unsafe.Pointer(p)).ObOverflow
+}
+func (p *_llcppg_anon_0) XGof_ref_ob_flags() *c.Uint16T {
+	return &(*_llcppg_anon_1)(unsafe.Pointer(p)).ObFlags
 }
 
 // Test if the 'x' object is the 'y' object, the same as "x is y" in Python.
@@ -667,7 +691,8 @@ func GetConstant(constant_id c.Uint) *Object
 //go:linkname GetConstantBorrowed C.Py_GetConstantBorrowed
 func GetConstantBorrowed(constant_id c.Uint) *Object
 
-// Don't use this directly
+// _Py_NoneStruct is an object of undefined type which can be used in contexts
+// where NULL (nil) is not suitable (since NULL often means 'error').
 //
 //go:linkname X_NoneStruct C._Py_NoneStruct
 var X_NoneStruct Object
@@ -677,7 +702,8 @@ var X_NoneStruct Object
 //go:linkname IsNone C.Py_IsNone
 func IsNone(x *Object) c.Int
 
-// Don't use this directly
+// Py_NotImplemented is a singleton used to signal that an operation is
+// not implemented for a given type combination.
 //
 //go:linkname X_NotImplementedStruct C._Py_NotImplementedStruct
 var X_NotImplementedStruct Object

@@ -7,15 +7,17 @@ import (
 	"unsafe"
 )
 
-const FVC_MASK = 3
-const FVC_NONE = 0
-const FVC_STR = 1
-const FVC_REPR = 2
-const FVC_ASCII = 3
-const FVS_MASK = 4
-const FVS_HAVE_SPEC = 4
+// Masks and values used by FORMAT_VALUE opcode.
+const (
+	FVC_MASK      = 3
+	FVC_NONE      = 0
+	FVC_STR       = 1
+	FVC_REPR      = 2
+	FVC_ASCII     = 3
+	FVS_MASK      = 4
+	FVS_HAVE_SPEC = 4
+)
 
-// Trampoline API
 type PerfMapState struct {
 	PerfMap *c.FILE
 	MapLock ThreadTypeLock
@@ -103,47 +105,6 @@ func EvalFrame(_llcppg_param1 *FrameObject) *Object
 //go:linkname EvalFrameEx C.PyEval_EvalFrameEx
 func EvalFrameEx(f *FrameObject, exc c.Int) *Object
 
-// Interface for threads.
-//
-// A module that plans to do a blocking system call (or something else
-// that lasts a long time and doesn't touch Python data) can allow other
-// threads to run as follows:
-//
-// ...preparations here...
-// Py_BEGIN_ALLOW_THREADS
-// ...blocking system call here...
-// Py_END_ALLOW_THREADS
-// ...interpret result here...
-//
-// The Py_BEGIN_ALLOW_THREADS/Py_END_ALLOW_THREADS pair expands to a
-// {}-surrounded block.
-// To leave the block in the middle (e.g., with return), you must insert
-// a line containing Py_BLOCK_THREADS before the return, e.g.
-//
-// if (...premature_exit...) {
-// Py_BLOCK_THREADS
-// PyErr_SetFromErrno(PyExc_OSError);
-// return NULL;
-// }
-//
-// An alternative is:
-//
-// Py_BLOCK_THREADS
-// if (...premature_exit...) {
-// PyErr_SetFromErrno(PyExc_OSError);
-// return NULL;
-// }
-// Py_UNBLOCK_THREADS
-//
-// For convenience, that the value of 'errno' is restored across
-// Py_END_ALLOW_THREADS and Py_BLOCK_THREADS.
-//
-// WARNING: NEVER NEST CALLS TO Py_BEGIN_ALLOW_THREADS AND
-// Py_END_ALLOW_THREADS!!!
-//
-// Note that not yet all candidates have been converted to use this
-// mechanism!
-//
 //go:linkname EvalSaveThread C.PyEval_SaveThread
 func EvalSaveThread() *ThreadState
 
@@ -181,6 +142,8 @@ func EvalMergeCompilerFlags(cf *CompilerFlags) c.Int
 //go:linkname X_EvalFrameDefault C._PyEval_EvalFrameDefault
 func X_EvalFrameDefault(tstate *ThreadState, f *X_InterpreterFrame, exc c.Int) *Object
 
+// Old name -- remove when this API changes:
+//
 //go:linkname UnstableEvalRequestCodeExtraIndex C.PyUnstable_Eval_RequestCodeExtraIndex
 func UnstableEvalRequestCodeExtraIndex(_llcppg_param1 Freefunc) SsizeT
 

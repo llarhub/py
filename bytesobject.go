@@ -13,19 +13,6 @@ type BytesObject struct {
 	ObSval  [1]c.Char
 }
 
-// Type PyBytesObject represents a byte string.  An extra zero byte is
-// reserved at the end to ensure it is zero-terminated, but a size is
-// present so strings with null bytes in them can be represented.  This
-// is an immutable object type.
-//
-// There are functions to create new bytes objects, to test
-// an object for bytes-ness, and to get the
-// byte string value.  The latter function returns a null pointer
-// if the object is not of the proper type.
-// There is a variant that takes an explicit size as well as a
-// variant that assumes a zero-terminated string.  Note that none of the
-// functions should be applied to NULL pointer.
-//
 //go:linkname BytesType C.PyBytes_Type
 var BytesType TypeObject
 

@@ -8,16 +8,29 @@ import (
 	"unsafe"
 )
 
+// This limitation is for performance and simplicity. If needed it can be
+// removed (with effort).
 const MAX_CO_EXTRA_USERS = 255
-const Trace_CALL = 0
-const Trace_EXCEPTION = 1
-const Trace_LINE = 2
-const Trace_RETURN = 3
-const Trace_C_CALL = 4
-const Trace_C_EXCEPTION = 5
-const Trace_C_RETURN = 6
-const Trace_OPCODE = 7
+
+// The following values are used for 'what' for tracefunc functions
+//
+// To add a new kind of trace event, also update "trace_init" in
+// Python/sysmodule.c to define the Python level event name
+const (
+	Trace_CALL        = 0
+	Trace_EXCEPTION   = 1
+	Trace_LINE        = 2
+	Trace_RETURN      = 3
+	Trace_C_CALL      = 4
+	Trace_C_EXCEPTION = 5
+	Trace_C_RETURN    = 6
+	Trace_OPCODE      = 7
+)
+
+// Remote debugger support
 const X_MAX_SCRIPT_PATH_SIZE = 512
+
+// Minimum size of data stack chunk
 const X_DATA_STACK_CHUNK_SIZE = 16384
 
 type GILState_STATE c.Uint
@@ -27,12 +40,26 @@ const (
 	GILState_UNLOCKED GILState_STATE = 1
 )
 
+type X_RemoteDebuggerSupport struct {
+	DebuggerPendingCall c.Int32T
+	DebuggerScriptPath  [512]c.Char
+}
+type X_errStackitem struct {
+	ExcValue     *Object
+	PreviousItem *X_errStackitem
+}
+type X_stackChunk struct {
+	Previous *X_stackChunk
+	Size     c.SizeT
+	Top      c.SizeT
+	Data     [1]*Object
+}
 type X_ts struct {
 	Prev                         *ThreadState
 	Next                         *ThreadState
 	Interp                       *InterpreterState
 	EvalBreaker                  c.UintptrT
-	X_status                     _llcppg_anon_5
+	X_status                     _llcppg_anon_6
 	HoldsGil                     c.Int
 	X_whence                     c.Int
 	State                        c.Int
@@ -77,29 +104,13 @@ type X_ts struct {
 //
 // llgo:type C
 type Tracefunc = func(_llcppg_param1 *Object, _llcppg_param2 *FrameObject, _llcppg_param3 c.Int, _llcppg_param4 *Object) c.Int
-type X_RemoteDebuggerSupport struct {
-	DebuggerPendingCall c.Int32T
-	DebuggerScriptPath  [512]c.Char
-}
-type X_errStackitem struct {
-	ExcValue     *Object
-	PreviousItem *X_errStackitem
-}
 type X_ErrStackItem = X_errStackitem
-type X_stackChunk struct {
-	Previous *X_stackChunk
-	Size     c.SizeT
-	Top      c.SizeT
-	Data     [1]*Object
-}
 type X_StackChunk = X_stackChunk
-type _llcppg_anon_5 struct {
+type _llcppg_anon_6 struct {
 	_xgo_align  [0]uint32
 	_xgo_bits_0 [4]uint8
 }
 
-// Frame evaluation API
-//
 // llgo:type C
 type X_FrameEvalFunction = func(_llcppg_param1 *ThreadState, _llcppg_param2 *X_InterpreterFrame, _llcppg_param3 c.Int) *Object
 
@@ -114,7 +125,6 @@ func (self *InterpreterState) Clear() {
 func (self *InterpreterState) Delete() {
 }
 
-// New in 3.9
 // Get the current interpreter state.
 //
 // Issue a fatal error if there no current Python thread state or no current
@@ -245,8 +255,6 @@ func GILStateRelease(_llcppg_param1 GILState_STATE)
 //go:linkname GILStateGetThisThreadState C.PyGILState_GetThisThreadState
 func GILStateGetThisThreadState() *ThreadState
 
-// private interpreter helpers
-//
 //go:linkname X_InterpreterStateRequiresIDRef C._PyInterpreterState_RequiresIDRef
 func X_InterpreterStateRequiresIDRef(_llcppg_param1 *InterpreterState) c.Int
 
@@ -254,82 +262,82 @@ func X_InterpreterStateRequiresIDRef(_llcppg_param1 *InterpreterState) c.Int
 func X_InterpreterStateRequireIDRef(_llcppg_param1 *InterpreterState, _llcppg_param2 c.Int)
 
 // unsigned int initialized : 1
-func (p *_llcppg_anon_5) XGof_get_initialized() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_initialized() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 0, 1))
 }
 
 // unsigned int initialized : 1
-func (p *_llcppg_anon_5) XGof_set_initialized(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_initialized(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 0, 1, uint64(v))
 }
 
 // unsigned int bound : 1
-func (p *_llcppg_anon_5) XGof_get_bound() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_bound() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 1, 1))
 }
 
 // unsigned int bound : 1
-func (p *_llcppg_anon_5) XGof_set_bound(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_bound(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 1, 1, uint64(v))
 }
 
 // unsigned int unbound : 1
-func (p *_llcppg_anon_5) XGof_get_unbound() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_unbound() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 2, 1))
 }
 
 // unsigned int unbound : 1
-func (p *_llcppg_anon_5) XGof_set_unbound(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_unbound(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 2, 1, uint64(v))
 }
 
 // unsigned int bound_gilstate : 1
-func (p *_llcppg_anon_5) XGof_get_bound_gilstate() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_bound_gilstate() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 3, 1))
 }
 
 // unsigned int bound_gilstate : 1
-func (p *_llcppg_anon_5) XGof_set_bound_gilstate(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_bound_gilstate(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 3, 1, uint64(v))
 }
 
 // unsigned int active : 1
-func (p *_llcppg_anon_5) XGof_get_active() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_active() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 4, 1))
 }
 
 // unsigned int active : 1
-func (p *_llcppg_anon_5) XGof_set_active(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_active(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 4, 1, uint64(v))
 }
 
 // unsigned int finalizing : 1
-func (p *_llcppg_anon_5) XGof_get_finalizing() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_finalizing() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 5, 1))
 }
 
 // unsigned int finalizing : 1
-func (p *_llcppg_anon_5) XGof_set_finalizing(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_finalizing(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 5, 1, uint64(v))
 }
 
 // unsigned int cleared : 1
-func (p *_llcppg_anon_5) XGof_get_cleared() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_cleared() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 6, 1))
 }
 
 // unsigned int cleared : 1
-func (p *_llcppg_anon_5) XGof_set_cleared(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_cleared(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 6, 1, uint64(v))
 }
 
 // unsigned int finalized : 1
-func (p *_llcppg_anon_5) XGof_get_finalized() c.Uint {
+func (p *_llcppg_anon_6) XGof_get_finalized() c.Uint {
 	return c.Uint(bitfield.Unsigned(unsafe.Pointer(p), 7, 1))
 }
 
 // unsigned int finalized : 1
-func (p *_llcppg_anon_5) XGof_set_finalized(v c.Uint) {
+func (p *_llcppg_anon_6) XGof_set_finalized(v c.Uint) {
 	bitfield.Set(unsafe.Pointer(p), 7, 1, uint64(v))
 }
 

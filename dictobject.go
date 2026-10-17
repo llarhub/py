@@ -7,6 +7,15 @@ import (
 	"unsafe"
 )
 
+// The ma_values pointer is NULL for a combined table
+// or points to an array of PyObject* for a split table
+type DictObject struct {
+	ObBase         Object
+	MaUsed         SsizeT
+	X_maWatcherTag c.Uint64T
+	MaKeys         *DictKeysObject
+	MaValues       *DictValues
+}
 type DictWatchEvent c.Uint
 
 const (
@@ -18,20 +27,10 @@ const (
 	Dict_EVENT_DEALLOCATED DictWatchEvent = 5
 )
 
-type DictKeysObject = X_dictkeysobject
 type X_dictvalues struct {
 }
+type DictKeysObject = X_dictkeysobject
 type DictValues = X_dictvalues
-
-// The ma_values pointer is NULL for a combined table
-// or points to an array of PyObject* for a split table
-type DictObject struct {
-	ObBase         Object
-	MaUsed         SsizeT
-	X_maWatcherTag c.Uint64T
-	MaKeys         *DictKeysObject
-	MaValues       *DictValues
-}
 
 // Callback to be invoked when a watched dict is cleared, dealloced, or modified.
 // In clear/dealloc case, key and new_value will be NULL. Otherwise, new_value will be the
@@ -40,11 +39,6 @@ type DictObject struct {
 // llgo:type C
 type DictWatchCallback = func(_llcppg_param1 DictWatchEvent, _llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *Object) c.Int
 
-// The distribution includes a separate file, Objects/dictnotes.txt,
-// describing explorations into dictionary design and optimization.
-// It covers typical dictionary use patterns, the parameters for
-// tuning dictionaries, and several ideas for possible optimizations.
-//
 //go:linkname DictType C.PyDict_Type
 var DictType TypeObject
 
@@ -173,8 +167,6 @@ func (self *Object) GenericGetDict(_llcppg_param2 unsafe.Pointer) *Object {
 	return self
 }
 
-// Dictionary (keys, values, items) views
-//
 //go:linkname DictKeysType C.PyDictKeys_Type
 var DictKeysType TypeObject
 
@@ -184,8 +176,6 @@ var DictValuesType TypeObject
 //go:linkname DictItemsType C.PyDictItems_Type
 var DictItemsType TypeObject
 
-// Dictionary (key, value, items) iterators
-//
 //go:linkname DictIterKeyType C.PyDictIterKey_Type
 var DictIterKeyType TypeObject
 
@@ -204,6 +194,8 @@ var DictRevIterItemType TypeObject
 //go:linkname DictRevIterValueType C.PyDictRevIterValue_Type
 var DictRevIterValueType TypeObject
 
+// PyDict_GetItemStringRef() can be used instead
+//
 //go:linkname X_DictGetItemKnownHash C._PyDict_GetItem_KnownHash
 func X_DictGetItemKnownHash(mp *Object, key *Object, hash HashT) *Object
 

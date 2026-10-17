@@ -234,8 +234,6 @@ func ExceptionSetArgs(_llcppg_param1 *Object, _llcppg_param2 *Object)
 //go:linkname ExceptionClassName C.PyExceptionClass_Name
 func ExceptionClassName(_llcppg_param1 *Object) *c.Char
 
-// Predefined exceptions
-//
 //go:linkname ExcBaseException C.PyExc_BaseException
 var ExcBaseException *Object
 
@@ -444,8 +442,6 @@ var ExcEncodingWarning *Object
 //go:linkname ExcResourceWarning C.PyExc_ResourceWarning
 var ExcResourceWarning *Object
 
-// Convenience functions
-//
 //go:linkname ErrBadArgument C.PyErr_BadArgument
 func ErrBadArgument() c.Int
 
@@ -481,6 +477,9 @@ func ErrSetImportError(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_p
 //go:linkname ErrBadInternalCall C.PyErr_BadInternalCall
 func ErrBadInternalCall()
 
+// Mask the old API with a call to the new API for code compiled under
+// Python 2.0:
+//
 //go:linkname X_ErrBadInternalCall C._PyErr_BadInternalCall
 func X_ErrBadInternalCall(filename *c.Char, lineno c.Int)
 
@@ -618,23 +617,15 @@ func OSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any
 //go:linkname OSVsnprintf C.PyOS_vsnprintf
 func OSVsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
 
-// Context manipulation (PEP 3134)
-//
 //go:linkname X_ErrChainExceptions1 C._PyErr_ChainExceptions1
 func X_ErrChainExceptions1(_llcppg_param1 *Object)
 
-// In exceptions.c
-//
 //go:linkname UnstableExcPrepReraiseStar C.PyUnstable_Exc_PrepReraiseStar
 func UnstableExcPrepReraiseStar(orig *Object, excs *Object) *Object
 
-// In signalmodule.c
-//
 //go:linkname SignalSetWakeupFd C.PySignal_SetWakeupFd
 func SignalSetWakeupFd(fd c.Int) c.Int
 
-// Support for adding program text to SyntaxErrors
-//
 //go:linkname ErrSyntaxLocationObject C.PyErr_SyntaxLocationObject
 func ErrSyntaxLocationObject(filename *Object, lineno c.Int, col_offset c.Int)
 

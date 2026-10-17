@@ -7,13 +7,15 @@ import (
 	_ "unsafe"
 )
 
-const CTF_LOWER = 1
-const CTF_UPPER = 2
-const CTF_ALPHA = 3
-const CTF_DIGIT = 4
-const CTF_ALNUM = 7
-const CTF_SPACE = 8
-const CTF_XDIGIT = 16
+const (
+	CTF_LOWER  = 1
+	CTF_UPPER  = 2
+	CTF_ALPHA  = 3
+	CTF_DIGIT  = 4
+	CTF_ALNUM  = 7
+	CTF_SPACE  = 8
+	CTF_XDIGIT = 16
+)
 
 //go:linkname X_ctypeTable C._Py_ctype_table
 var X_ctypeTable [256]c.Uint

@@ -7,6 +7,8 @@ import (
 	_ "unsafe"
 )
 
+// This is not used after Py_Initialize() is called.
+//
 // llgo:type C
 type X_inittab struct {
 	Name     *c.Char
@@ -96,9 +98,6 @@ func (self *X_inittab) ImportExtendInittab() c.Int {
 	return 0
 }
 
-// Embedding apps may change this pointer to point to their favorite
-// collection of frozen modules:
-//
 //go:linkname ImportFrozenModules C.PyImport_FrozenModules
 var ImportFrozenModules *X_frozen
 

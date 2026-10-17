@@ -7,11 +7,13 @@ import (
 	_ "unsafe"
 )
 
-const Unstable_EXECUTABLE_KIND_SKIP = 0
-const Unstable_EXECUTABLE_KIND_PY_FUNCTION = 1
-const Unstable_EXECUTABLE_KIND_BUILTIN_FUNCTION = 3
-const Unstable_EXECUTABLE_KIND_METHOD_DESCRIPTOR = 4
-const Unstable_EXECUTABLE_KINDS = 5
+const (
+	Unstable_EXECUTABLE_KIND_SKIP              = 0
+	Unstable_EXECUTABLE_KIND_PY_FUNCTION       = 1
+	Unstable_EXECUTABLE_KIND_BUILTIN_FUNCTION  = 3
+	Unstable_EXECUTABLE_KIND_METHOD_DESCRIPTOR = 4
+	Unstable_EXECUTABLE_KINDS                  = 5
+)
 
 type X_InterpreterFrame struct {
 }

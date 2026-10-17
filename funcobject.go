@@ -7,16 +7,6 @@ import (
 	_ "unsafe"
 )
 
-type FunctionWatchEvent c.Uint
-
-const (
-	Function_EVENT_CREATE            FunctionWatchEvent = 0
-	Function_EVENT_DESTROY           FunctionWatchEvent = 1
-	Function_EVENT_MODIFY_CODE       FunctionWatchEvent = 2
-	Function_EVENT_MODIFY_DEFAULTS   FunctionWatchEvent = 3
-	Function_EVENT_MODIFY_KWDEFAULTS FunctionWatchEvent = 4
-)
-
 type FrameConstructor struct {
 	FcGlobals    *Object
 	FcBuiltins   *Object
@@ -27,16 +17,6 @@ type FrameConstructor struct {
 	FcKwdefaults *Object
 	FcClosure    *Object
 }
-
-// Function objects and code objects should not be confused with each other:
-//
-// Function objects are created by the execution of the 'def' statement.
-// They reference a code object in their __code__ attribute, which is a
-// purely syntactic object, i.e. nothing more than a compiled version of some
-// source code lines.  There is one code object per source code "fragment",
-// but each code object can be referenced by zero or many function objects
-// depending only on how many times the 'def' statement in the source was
-// executed so far.
 type FunctionObject struct {
 	ObBase          Object
 	FuncGlobals     *Object
@@ -57,6 +37,15 @@ type FunctionObject struct {
 	Vectorcall      Vectorcallfunc
 	FuncVersion     c.Uint32T
 }
+type FunctionWatchEvent c.Uint
+
+const (
+	Function_EVENT_CREATE            FunctionWatchEvent = 0
+	Function_EVENT_DESTROY           FunctionWatchEvent = 1
+	Function_EVENT_MODIFY_CODE       FunctionWatchEvent = 2
+	Function_EVENT_MODIFY_DEFAULTS   FunctionWatchEvent = 3
+	Function_EVENT_MODIFY_KWDEFAULTS FunctionWatchEvent = 4
+)
 
 // A callback that is invoked for different events in a function's lifecycle.
 //

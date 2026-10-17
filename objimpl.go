@@ -7,34 +7,6 @@ import (
 	"unsafe"
 )
 
-// This example code implements an object constructor with a custom
-// allocator, where PyObject_New is inlined, and shows the important
-// distinction between two steps (at least):
-// 1) the actual allocation of the object storage;
-// 2) the initialization of the Python specific fields
-// in this storage with PyObject_{Init, InitVar}.
-//
-// PyObject *
-// YourObject_New(...)
-// {
-// PyObject *op;
-//
-// op = (PyObject *) Your_Allocator(_PyObject_SIZE(YourTypeStruct));
-// if (op == NULL) {
-// return PyErr_NoMemory();
-// }
-//
-// PyObject_Init(op, &YourTypeStruct);
-//
-// op->ob_field = value;
-// ...
-// return op;
-// }
-//
-// Note that in C++, the use of the new operator usually implies that
-// the 1st step is performed automatically for you, so in a C++ class
-// constructor you would start directly with PyObject_Init/InitVar.
-//
 // llgo:type C
 type ObjectArenaAllocator struct {
 	Ctx   unsafe.Pointer

@@ -4,8 +4,10 @@ package py
 
 import _ "unsafe"
 
-const X_STATICALLY_ALLOCATED_FLAG = 4
-const X_IMMORTAL_FLAGS = 1
+const (
+	X_STATICALLY_ALLOCATED_FLAG = 4
+	X_IMMORTAL_FLAGS            = 1
+)
 
 // Py_REFCNT() implementation for the stable ABI
 //

@@ -7,30 +7,61 @@ import (
 	"unsafe"
 )
 
-const T_SHORT = 0
-const T_INT = 1
-const T_LONG = 2
-const T_FLOAT = 3
-const T_DOUBLE = 4
-const T_STRING = 5
-const X_T_OBJECT = 6
-const T_CHAR = 7
-const T_BYTE = 8
-const T_UBYTE = 9
-const T_USHORT = 10
-const T_UINT = 11
-const T_ULONG = 12
+// Types
+const (
+	T_SHORT  = 0
+	T_INT    = 1
+	T_LONG   = 2
+	T_FLOAT  = 3
+	T_DOUBLE = 4
+	T_STRING = 5
+	// Deprecated, use Py_T_OBJECT_EX instead
+	X_T_OBJECT = 6
+)
+
+// the ordering here is weird for binary compatibility
+const (
+	T_CHAR = 7
+	// 8-bit signed int
+	T_BYTE = 8
+)
+
+// unsigned variants:
+const (
+	T_UBYTE  = 9
+	T_USHORT = 10
+	T_UINT   = 11
+	T_ULONG  = 12
+)
+
+// Added by Jack: strings contained in the structure
 const T_STRING_INPLACE = 13
+
+// Added by Lillo: bools contained in the structure (assumed char)
 const T_BOOL = 14
-const T_OBJECT_EX = 16
-const T_LONGLONG = 17
-const T_ULONGLONG = 18
-const T_PYSSIZET = 19
-const X_T_NONE = 20
-const READONLY = 1
-const AUDIT_READ = 2
-const X_WRITE_RESTRICTED = 4
-const RELATIVE_OFFSET = 8
+const (
+	T_OBJECT_EX = 16
+	T_LONGLONG  = 17
+	T_ULONGLONG = 18
+)
+const (
+	// Py_ssize_t
+	T_PYSSIZET = 19
+	// Deprecated. Value is always None.
+	X_T_NONE = 20
+)
+
+// Flags
+const (
+	READONLY = 1
+	// Added in 3.10, harmless no-op before that
+	AUDIT_READ = 2
+	// Deprecated, no-op. Do not reuse the value.
+	X_WRITE_RESTRICTED = 4
+	RELATIVE_OFFSET    = 8
+)
+
+// Flags for above struct
 const WrapperFlag_KEYWORDS = 1
 
 type GetSetDef struct {
@@ -53,18 +84,6 @@ type MemberDef struct {
 	Flags  c.Int
 	Doc    *c.Char
 }
-
-// llgo:type C
-type Getter = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
-
-// llgo:type C
-type Setter = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) c.Int
-
-// llgo:type C
-type Wrapperfunc = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) *Object
-
-// llgo:type C
-type WrapperfuncKwds = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *Object) *Object
 type Wrapperbase struct {
 	Name       *c.Char
 	Offset     c.Int
@@ -74,8 +93,6 @@ type Wrapperbase struct {
 	Flags      c.Int
 	NameStrobj *Object
 }
-
-// Various kinds of descriptor objects
 type DescrObject struct {
 	ObBase    Object
 	DType     *TypeObject
@@ -100,6 +117,18 @@ type WrapperDescrObject struct {
 	DBase    *Wrapperbase
 	DWrapped unsafe.Pointer
 }
+
+// llgo:type C
+type Getter = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
+
+// llgo:type C
+type Setter = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) c.Int
+
+// llgo:type C
+type Wrapperfunc = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) *Object
+
+// llgo:type C
+type WrapperfuncKwds = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *Object) *Object
 
 //go:linkname ClassMethodDescrType C.PyClassMethodDescr_Type
 var ClassMethodDescrType TypeObject
