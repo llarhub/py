@@ -83,7 +83,7 @@ T PyNameErrorObject NameErrorObject
 T PyNumberMethods NumberMethods
 T PyODictObject ODictObject
 T PyOSErrorObject OSErrorObject
-T PyOS_sighandler_t OSSighandlerT
+T PyOS_sighandler_t OS_sighandler_t
 T PyObject Object
 T PyObjectArenaAllocator ObjectArenaAllocator
 T PyPreConfig PreConfig

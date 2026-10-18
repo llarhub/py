@@ -146,8 +146,8 @@ func ThreadDeleteKeyValue(key c.Int)
 
 // Cleanup after a fork
 //
-//go:linkname Thread_ReInitTLS C.PyThread_ReInitTLS
-func Thread_ReInitTLS()
+//go:linkname ThreadReInitTLS C.PyThread_ReInitTLS
+func ThreadReInitTLS()
 
 //go:linkname ThreadTssAlloc C.PyThread_tss_alloc
 func ThreadTssAlloc() *TssT

@@ -9,7 +9,7 @@ import (
 
 type X_odictobject struct {
 }
-type ODictObject = X_odictobject
+type ODictObject X_odictobject
 
 //go:linkname ODictType C.PyODict_Type
 var ODictType TypeObject

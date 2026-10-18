@@ -21,9 +21,9 @@ type X_pycontexttokenobject struct {
 }
 type X_pycontextvarobject struct {
 }
-type Context = X_pycontextobject
-type ContextVar = X_pycontextvarobject
-type ContextToken = X_pycontexttokenobject
+type Context X_pycontextobject
+type ContextVar X_pycontextvarobject
+type ContextToken X_pycontexttokenobject
 
 // Context object watcher callback function.  The object passed to the callback
 // is event-specific; see PyContextEvent for details.

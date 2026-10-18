@@ -199,11 +199,11 @@ func LongFromString(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_par
 // These aren't really part of the int object, but they're handy. The
 // functions are in Python/mystrtoul.c.
 //
-//go:linkname OSStrtoul C.PyOS_strtoul
-func OSStrtoul(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Ulong
+//go:linkname OS_strtoul C.PyOS_strtoul
+func OS_strtoul(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Ulong
 
-//go:linkname OSStrtol C.PyOS_strtol
-func OSStrtol(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Long
+//go:linkname OS_strtol C.PyOS_strtol
+func OS_strtol(_llcppg_param1 *c.Char, _llcppg_param2 **c.Char, _llcppg_param3 c.Int) c.Long
 
 //go:linkname LongFromUnicodeObject C.PyLong_FromUnicodeObject
 func LongFromUnicodeObject(u *Object, base c.Int) *LongObject

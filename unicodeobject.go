@@ -289,8 +289,8 @@ func (self *UnicodeObject) AsLatin1String() *Object {
 	return nil
 }
 
-//go:linkname Unicode_DecodeASCII C.PyUnicode_DecodeASCII
-func Unicode_DecodeASCII(string *c.Char, length SsizeT, errors *c.Char) *Object
+//go:linkname UnicodeDecodeASCII C.PyUnicode_DecodeASCII
+func UnicodeDecodeASCII(string *c.Char, length SsizeT, errors *c.Char) *Object
 
 // llgo:link (*UnicodeObject).AsASCIIString C.PyUnicode_AsASCIIString
 func (self *UnicodeObject) AsASCIIString() *Object {
@@ -527,13 +527,13 @@ func (p *_llcppg_anon_4) XGof_ref_ucs4() **UCS4 {
 	return (**UCS4)(unsafe.Pointer(p))
 }
 
-// llgo:link (*UnicodeObject).Unicode_KIND C.PyUnicode_KIND
-func (self *UnicodeObject) Unicode_KIND() c.Int {
+// llgo:link (*UnicodeObject).KIND C.PyUnicode_KIND
+func (self *UnicodeObject) KIND() c.Int {
 	return 0
 }
 
-// llgo:link (*UnicodeObject).Unicode_DATA C.PyUnicode_DATA
-func (self *UnicodeObject) Unicode_DATA() unsafe.Pointer {
+// llgo:link (*UnicodeObject).DATA C.PyUnicode_DATA
+func (self *UnicodeObject) DATA() unsafe.Pointer {
 	return nil
 }
 

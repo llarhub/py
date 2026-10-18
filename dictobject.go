@@ -30,7 +30,7 @@ const (
 type X_dictvalues struct {
 }
 type DictKeysObject = X_dictkeysobject
-type DictValues = X_dictvalues
+type DictValues X_dictvalues
 
 // Callback to be invoked when a watched dict is cleared, dealloced, or modified.
 // In clear/dealloc case, key and new_value will be NULL. Otherwise, new_value will be the

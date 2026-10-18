@@ -27,7 +27,7 @@ type InterpreterConfig struct {
 // Signals
 //
 // llgo:type C
-type OSSighandlerT = func(_llcppg_param1 c.Int)
+type OS_sighandler_t = func(_llcppg_param1 c.Int)
 
 // llgo:type C
 type AtexitDatacallbackfunc = func(_llcppg_param1 unsafe.Pointer)
@@ -117,11 +117,11 @@ func GetCompiler() *c.Char
 //go:linkname GetBuildInfo C.Py_GetBuildInfo
 func GetBuildInfo() *c.Char
 
-//go:linkname OSGetsig C.PyOS_getsig
-func OSGetsig(_llcppg_param1 c.Int) OSSighandlerT
+//go:linkname OS_getsig C.PyOS_getsig
+func OS_getsig(_llcppg_param1 c.Int) OS_sighandler_t
 
-//go:linkname OSSetsig C.PyOS_setsig
-func OSSetsig(_llcppg_param1 c.Int, _llcppg_param2 OSSighandlerT) OSSighandlerT
+//go:linkname OS_setsig C.PyOS_setsig
+func OS_setsig(_llcppg_param1 c.Int, _llcppg_param2 OS_sighandler_t) OS_sighandler_t
 
 //go:linkname Version C.Py_Version
 var Version c.Ulong

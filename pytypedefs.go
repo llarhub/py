@@ -9,6 +9,6 @@ type X_is struct {
 type Object = X_object
 type LongObject = X_longobject
 type TypeObject = X_typeobject
-type FrameObject = X_frame
+type FrameObject X_frame
 type ThreadState = X_ts
-type InterpreterState = X_is
+type InterpreterState X_is

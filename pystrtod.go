@@ -27,11 +27,11 @@ const (
 	DTST_NAN      = 2
 )
 
-//go:linkname OSStringToDouble C.PyOS_string_to_double
-func OSStringToDouble(str *c.Char, endptr **c.Char, overflow_exception *Object) c.Double
+//go:linkname OS_string_to_double C.PyOS_string_to_double
+func OS_string_to_double(str *c.Char, endptr **c.Char, overflow_exception *Object) c.Double
 
 // The caller is responsible for calling PyMem_Free to free the buffer
 // that's is returned.
 //
-//go:linkname OSDoubleToString C.PyOS_double_to_string
-func OSDoubleToString(val c.Double, format_code c.Char, precision c.Int, flags c.Int, type_ *c.Int) *c.Char
+//go:linkname OS_double_to_string C.PyOS_double_to_string
+func OS_double_to_string(val c.Double, format_code c.Char, precision c.Int, flags c.Int, type_ *c.Int) *c.Char

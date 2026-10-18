@@ -10,9 +10,9 @@ type X_CoroObject struct {
 }
 type X_GenObject struct {
 }
-type GenObject = X_GenObject
-type CoroObject = X_CoroObject
-type AsyncGenObject = X_AsyncGenObject
+type GenObject X_GenObject
+type CoroObject X_CoroObject
+type AsyncGenObject X_AsyncGenObject
 
 //go:linkname GenType C.PyGen_Type
 var GenType TypeObject

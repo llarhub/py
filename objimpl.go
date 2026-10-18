@@ -154,8 +154,8 @@ func (self *Object) IS_GC() c.Int {
 
 // Test if a type supports weak references
 //
-// llgo:link (*TypeObject).Type_SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
-func (self *TypeObject) Type_SUPPORTS_WEAKREFS() c.Int {
+// llgo:link (*TypeObject).SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
+func (self *TypeObject) SUPPORTS_WEAKREFS() c.Int {
 	return 0
 }
 

@@ -13,7 +13,7 @@ const (
 )
 const ModMultipleInterpreters = 3
 const ModGil = 4
-const X_modLAST_SLOT = 4
+const X_mod_LAST_SLOT = 4
 
 // llgo:type C
 type ModuleDefBase struct {

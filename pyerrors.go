@@ -463,8 +463,8 @@ func ErrSetFromErrnoWithFilename(exc *Object, filename *c.Char) *Object
 //go:linkname ErrFormat C.PyErr_Format
 func ErrFormat(exception *Object, format *c.Char, __llgo_va_list ...any) *Object
 
-//go:linkname Err_FormatV C.PyErr_FormatV
-func Err_FormatV(exception *Object, format *c.Char, vargs c.VaList) *Object
+//go:linkname ErrFormatV C.PyErr_FormatV
+func ErrFormatV(exception *Object, format *c.Char, vargs c.VaList) *Object
 
 //go:linkname ErrSetImportErrorSubclass C.PyErr_SetImportErrorSubclass
 func ErrSetImportErrorSubclass(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object, _llcppg_param4 *Object) *Object
@@ -611,11 +611,11 @@ func UnicodeDecodeErrorSetReason(exc *Object, reason *c.Char) c.Int
 //go:linkname UnicodeTranslateErrorSetReason C.PyUnicodeTranslateError_SetReason
 func UnicodeTranslateErrorSetReason(exc *Object, reason *c.Char) c.Int
 
-//go:linkname OSSnprintf C.PyOS_snprintf
-func OSSnprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any) c.Int
+//go:linkname OS_snprintf C.PyOS_snprintf
+func OS_snprintf(str *c.Char, size c.SizeT, format *c.Char, __llgo_va_list ...any) c.Int
 
-//go:linkname OSVsnprintf C.PyOS_vsnprintf
-func OSVsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
+//go:linkname OS_vsnprintf C.PyOS_vsnprintf
+func OS_vsnprintf(str *c.Char, size c.SizeT, format *c.Char, va c.VaList) c.Int
 
 //go:linkname X_ErrChainExceptions1 C._PyErr_ChainExceptions1
 func X_ErrChainExceptions1(_llcppg_param1 *Object)
