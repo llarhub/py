@@ -19,8 +19,8 @@ var TupleType TypeObject
 //go:linkname TupleIterType C.PyTupleIter_Type
 var TupleIterType TypeObject
 
-//go:linkname NewTuple C.PyTuple_New
-func NewTuple(size SsizeT) *TupleObject
+//go:linkname TupleNew C.PyTuple_New
+func TupleNew(size SsizeT) *TupleObject
 
 // llgo:link (*TupleObject).Size C.PyTuple_Size
 func (self *TupleObject) Size() SsizeT {

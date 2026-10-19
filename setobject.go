@@ -34,8 +34,8 @@ var FrozenSetType TypeObject
 //go:linkname SetIterType C.PySetIter_Type
 var SetIterType TypeObject
 
-//go:linkname NewSet C.PySet_New
-func NewSet(_llcppg_param1 *Object) *SetObject
+//go:linkname SetNew C.PySet_New
+func SetNew(_llcppg_param1 *Object) *SetObject
 
 //go:linkname FrozenSetNew C.PyFrozenSet_New
 func FrozenSetNew(_llcppg_param1 *Object) *Object

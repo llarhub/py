@@ -39,36 +39,53 @@ type ModuleDef struct {
 	MClear    Inquiry
 	MFree     Freefunc
 }
+type ModuleObject struct {
+	Object
+}
 
 //go:linkname ModuleType C.PyModule_Type
 var ModuleType TypeObject
 
 //go:linkname ModuleNewObject C.PyModule_NewObject
-func ModuleNewObject(name *Object) *Object
+func ModuleNewObject(name *Object) *ModuleObject
 
 //go:linkname ModuleNew C.PyModule_New
-func ModuleNew(name *c.Char) *Object
+func ModuleNew(name *c.Char) *ModuleObject
 
-//go:linkname ModuleGetDict C.PyModule_GetDict
-func ModuleGetDict(_llcppg_param1 *Object) *Object
+// llgo:link (*ModuleObject).Dict C.PyModule_GetDict
+func (self *ModuleObject) Dict() *Object {
+	return nil
+}
 
-//go:linkname ModuleGetNameObject C.PyModule_GetNameObject
-func ModuleGetNameObject(_llcppg_param1 *Object) *Object
+// llgo:link (*ModuleObject).NameObject C.PyModule_GetNameObject
+func (self *ModuleObject) NameObject() *Object {
+	return nil
+}
 
-//go:linkname ModuleGetName C.PyModule_GetName
-func ModuleGetName(_llcppg_param1 *Object) *c.Char
+// llgo:link (*ModuleObject).Name C.PyModule_GetName
+func (self *ModuleObject) Name() *c.Char {
+	return nil
+}
 
-//go:linkname ModuleGetFilename C.PyModule_GetFilename
-func ModuleGetFilename(_llcppg_param1 *Object) *c.Char
+// llgo:link (*ModuleObject).Filename C.PyModule_GetFilename
+func (self *ModuleObject) Filename() *c.Char {
+	return nil
+}
 
-//go:linkname ModuleGetFilenameObject C.PyModule_GetFilenameObject
-func ModuleGetFilenameObject(_llcppg_param1 *Object) *Object
+// llgo:link (*ModuleObject).FilenameObject C.PyModule_GetFilenameObject
+func (self *ModuleObject) FilenameObject() *Object {
+	return nil
+}
 
-//go:linkname ModuleGetDef C.PyModule_GetDef
-func ModuleGetDef(_llcppg_param1 *Object) *ModuleDef
+// llgo:link (*Object).GetDef C.PyModule_GetDef
+func (self *Object) GetDef() *ModuleDef {
+	return nil
+}
 
-//go:linkname ModuleGetState C.PyModule_GetState
-func ModuleGetState(_llcppg_param1 *Object) unsafe.Pointer
+// llgo:link (*ModuleObject).State C.PyModule_GetState
+func (self *ModuleObject) State() unsafe.Pointer {
+	return nil
+}
 
 // New in 3.5
 //

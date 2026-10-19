@@ -541,8 +541,8 @@ func (self *UnicodeObject) DATA() unsafe.Pointer {
 // This function will allocate the object and its buffer in a single memory
 // block.  Objects created using this function are not resizable.
 //
-//go:linkname NewUnicode C.PyUnicode_New
-func NewUnicode(size SsizeT, maxchar UCS4) *UnicodeObject
+//go:linkname UnicodeNew C.PyUnicode_New
+func UnicodeNew(size SsizeT, maxchar UCS4) *UnicodeObject
 
 // Copy character from one unicode object into another, this function performs
 // character conversion when necessary and falls back to memcpy() if possible.

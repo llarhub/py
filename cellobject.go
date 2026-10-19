@@ -15,8 +15,8 @@ type CellObject struct {
 //go:linkname CellType C.PyCell_Type
 var CellType TypeObject
 
-//go:linkname NewCell C.PyCell_New
-func NewCell(_llcppg_param1 *Object) *CellObject
+//go:linkname CellNew C.PyCell_New
+func CellNew(_llcppg_param1 *Object) *CellObject
 
 // llgo:link (*CellObject).Get C.PyCell_Get
 func (self *CellObject) Get() *Object {

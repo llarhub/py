@@ -42,8 +42,8 @@ type DictWatchCallback = func(_llcppg_param1 DictWatchEvent, _llcppg_param2 *Obj
 //go:linkname DictType C.PyDict_Type
 var DictType TypeObject
 
-//go:linkname NewDict C.PyDict_New
-func NewDict() *DictObject
+//go:linkname DictNew C.PyDict_New
+func DictNew() *DictObject
 
 // llgo:link (*DictObject).Item C.PyDict_GetItem
 func (self *DictObject) Item(key *Object) *Object {

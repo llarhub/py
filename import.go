@@ -43,44 +43,42 @@ func ExecCodeModuleObject(name *Object, co *Object, pathname *Object, cpathname 
 func GetModuleDict() *Object
 
 //go:linkname GetModule C.PyImport_GetModule
-func GetModule(name *Object) *Object
+func GetModule(name *Object) *ModuleObject
 
 //go:linkname AddModuleObject C.PyImport_AddModuleObject
-func AddModuleObject(name *Object) *Object
+func AddModuleObject(name *Object) *ModuleObject
 
 //go:linkname AddModule C.PyImport_AddModule
-func AddModule(name *c.Char) *Object
+func AddModule(name *c.Char) *ModuleObject
 
 //go:linkname AddModuleRef C.PyImport_AddModuleRef
-func AddModuleRef(name *c.Char) *Object
+func AddModuleRef(name *c.Char) *ModuleObject
 
 //go:linkname ImportModule C.PyImport_ImportModule
-func ImportModule(name *c.Char) *Object
+func ImportModule(name *c.Char) *ModuleObject
 
 //go:linkname ImportModuleNoBlock C.PyImport_ImportModuleNoBlock
-func ImportModuleNoBlock(name *c.Char) *Object
+func ImportModuleNoBlock(name *c.Char) *ModuleObject
 
 //go:linkname ImportModuleLevel C.PyImport_ImportModuleLevel
-func ImportModuleLevel(name *c.Char, globals *Object, locals *Object, fromlist *Object, level c.Int) *Object
+func ImportModuleLevel(name *c.Char, globals *Object, locals *Object, fromlist *Object, level c.Int) *ModuleObject
 
 //go:linkname ImportModuleLevelObject C.PyImport_ImportModuleLevelObject
-func ImportModuleLevelObject(name *Object, globals *Object, locals *Object, fromlist *Object, level c.Int) *Object
+func ImportModuleLevelObject(name *Object, globals *Object, locals *Object, fromlist *Object, level c.Int) *ModuleObject
 
 //go:linkname GetImporter C.PyImport_GetImporter
 func GetImporter(path *Object) *Object
 
 //go:linkname Import C.PyImport_Import
-func Import(name *Object) *Object
+func Import(name *Object) *ModuleObject
 
 // llgo:link (*Object).ReloadModule C.PyImport_ReloadModule
 func (self *Object) ReloadModule() *Object {
 	return self
 }
 
-// llgo:link (*Object).ImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
-func (self *Object) ImportFrozenModuleObject() c.Int {
-	return 0
-}
+//go:linkname ImportFrozenModuleObject C.PyImport_ImportFrozenModuleObject
+func ImportFrozenModuleObject(name *Object) c.Int
 
 //go:linkname ImportFrozenModule C.PyImport_ImportFrozenModule
 func ImportFrozenModule(name *c.Char) c.Int
@@ -101,10 +99,8 @@ func (self *X_inittab) ExtendInittab() c.Int {
 //go:linkname ImportFrozenModules C.PyImport_FrozenModules
 var ImportFrozenModules *X_frozen
 
-// llgo:link (*Object).ImportModuleAttr C.PyImport_ImportModuleAttr
-func (self *Object) ImportModuleAttr(attr_name *Object) *Object {
-	return self
-}
+//go:linkname ImportModuleAttr C.PyImport_ImportModuleAttr
+func ImportModuleAttr(mod_name *Object, attr_name *Object) *Object
 
 //go:linkname ImportModuleAttrString C.PyImport_ImportModuleAttrString
 func ImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *Object

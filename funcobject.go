@@ -67,8 +67,8 @@ type FunctionWatchCallback = func(_llcppg_param1 FunctionWatchEvent, _llcppg_par
 //go:linkname FunctionType C.PyFunction_Type
 var FunctionType TypeObject
 
-//go:linkname NewFunction C.PyFunction_New
-func NewFunction(_llcppg_param1 *Object, _llcppg_param2 *Object) *FunctionObject
+//go:linkname FunctionNew C.PyFunction_New
+func FunctionNew(_llcppg_param1 *Object, _llcppg_param2 *Object) *FunctionObject
 
 // llgo:link (*FunctionObject).NewWithQualName C.PyFunction_NewWithQualName
 func (self *FunctionObject) NewWithQualName(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
