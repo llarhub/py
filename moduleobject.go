@@ -53,7 +53,7 @@ func ModuleNewObject(name *Object) *ModuleObject
 func ModuleNew(name *c.Char) *ModuleObject
 
 // llgo:link (*ModuleObject).Dict C.PyModule_GetDict
-func (self *ModuleObject) Dict() *Object {
+func (self *ModuleObject) Dict() *DictObject {
 	return nil
 }
 
