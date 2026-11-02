@@ -20,12 +20,12 @@ var GenType TypeObject
 //go:linkname GenNew C.PyGen_New
 func GenNew(_llcppg_param1 *FrameObject) *Object
 
-// llgo:link (*FrameObject).GenNewWithQualName C.PyGen_NewWithQualName
+//llgo:link (*FrameObject).GenNewWithQualName C.PyGen_NewWithQualName
 func (self *FrameObject) GenNewWithQualName(name *Object, qualname *Object) *Object {
 	return nil
 }
 
-// llgo:link (*GenObject).Code C.PyGen_GetCode
+//llgo:link (*GenObject).Code C.PyGen_GetCode
 func (self *GenObject) Code() *CodeObject {
 	return nil
 }

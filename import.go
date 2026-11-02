@@ -9,7 +9,7 @@ import (
 
 // This is not used after Py_Initialize() is called.
 //
-// llgo:type C
+//llgo:cdecl
 type X_inittab struct {
 	Name     *c.Char
 	Initfunc func() *Object
@@ -72,7 +72,7 @@ func GetImporter(path *Object) *Object
 //go:linkname Import C.PyImport_Import
 func Import(name *Object) *ModuleObject
 
-// llgo:link (*Object).ReloadModule C.PyImport_ReloadModule
+//llgo:link (*Object).ReloadModule C.PyImport_ReloadModule
 func (self *Object) ReloadModule() *Object {
 	return self
 }
@@ -91,7 +91,7 @@ func AppendInittab(name *c.Char, initfunc func() *Object) c.Int
 //go:linkname ImportInittab C.PyImport_Inittab
 var ImportInittab *X_inittab
 
-// llgo:link (*X_inittab).ExtendInittab C.PyImport_ExtendInittab
+//llgo:link (*X_inittab).ExtendInittab C.PyImport_ExtendInittab
 func (self *X_inittab) ExtendInittab() c.Int {
 	return 0
 }
@@ -104,3 +104,6 @@ func ImportModuleAttr(mod_name *Object, attr_name *Object) *Object
 
 //go:linkname ImportModuleAttrString C.PyImport_ImportModuleAttrString
 func ImportModuleAttrString(mod_name *c.Char, attr_name *c.Char) *Object
+func ImportModuleEx(n *c.Char, g *Object, l *Object, f *Object) *ModuleObject {
+	return ImportModuleLevel(n, g, l, f, 0)
+}

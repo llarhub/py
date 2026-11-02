@@ -7,26 +7,26 @@ type CriticalSection struct {
 type CriticalSection2 struct {
 }
 
-// llgo:link (*CriticalSection).Begin C.PyCriticalSection_Begin
+//llgo:link (*CriticalSection).Begin C.PyCriticalSection_Begin
 func (self *CriticalSection) Begin(op *Object) {
 }
 
-// llgo:link (*CriticalSection).BeginMutex C.PyCriticalSection_BeginMutex
+//llgo:link (*CriticalSection).BeginMutex C.PyCriticalSection_BeginMutex
 func (self *CriticalSection) BeginMutex(m *Mutex) {
 }
 
-// llgo:link (*CriticalSection).End C.PyCriticalSection_End
+//llgo:link (*CriticalSection).End C.PyCriticalSection_End
 func (self *CriticalSection) End() {
 }
 
-// llgo:link (*CriticalSection2).Begin C.PyCriticalSection2_Begin
+//llgo:link (*CriticalSection2).Begin C.PyCriticalSection2_Begin
 func (self *CriticalSection2) Begin(a *Object, b *Object) {
 }
 
-// llgo:link (*CriticalSection2).BeginMutex C.PyCriticalSection2_BeginMutex
+//llgo:link (*CriticalSection2).BeginMutex C.PyCriticalSection2_BeginMutex
 func (self *CriticalSection2) BeginMutex(m1 *Mutex, m2 *Mutex) {
 }
 
-// llgo:link (*CriticalSection2).End C.PyCriticalSection2_End
+//llgo:link (*CriticalSection2).End C.PyCriticalSection2_End
 func (self *CriticalSection2) End() {
 }

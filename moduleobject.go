@@ -15,7 +15,7 @@ const ModMultipleInterpreters = 3
 const ModGil = 4
 const X_mod_LAST_SLOT = 4
 
-// llgo:type C
+//llgo:cdecl
 type ModuleDefBase struct {
 	ObBase Object
 	MInit  func() *Object
@@ -52,44 +52,44 @@ func ModuleNewObject(name *Object) *ModuleObject
 //go:linkname ModuleNew C.PyModule_New
 func ModuleNew(name *c.Char) *ModuleObject
 
-// llgo:link (*ModuleObject).Dict C.PyModule_GetDict
+//llgo:link (*ModuleObject).Dict C.PyModule_GetDict
 func (self *ModuleObject) Dict() *DictObject {
 	return nil
 }
 
-// llgo:link (*ModuleObject).NameObject C.PyModule_GetNameObject
+//llgo:link (*ModuleObject).NameObject C.PyModule_GetNameObject
 func (self *ModuleObject) NameObject() *Object {
 	return nil
 }
 
-// llgo:link (*ModuleObject).Name C.PyModule_GetName
+//llgo:link (*ModuleObject).Name C.PyModule_GetName
 func (self *ModuleObject) Name() *c.Char {
 	return nil
 }
 
-// llgo:link (*ModuleObject).Filename C.PyModule_GetFilename
+//llgo:link (*ModuleObject).Filename C.PyModule_GetFilename
 func (self *ModuleObject) Filename() *c.Char {
 	return nil
 }
 
-// llgo:link (*ModuleObject).FilenameObject C.PyModule_GetFilenameObject
+//llgo:link (*ModuleObject).FilenameObject C.PyModule_GetFilenameObject
 func (self *ModuleObject) FilenameObject() *Object {
 	return nil
 }
 
-// llgo:link (*Object).GetDef C.PyModule_GetDef
+//llgo:link (*Object).GetDef C.PyModule_GetDef
 func (self *Object) GetDef() *ModuleDef {
 	return nil
 }
 
-// llgo:link (*ModuleObject).State C.PyModule_GetState
+//llgo:link (*ModuleObject).State C.PyModule_GetState
 func (self *ModuleObject) State() unsafe.Pointer {
 	return nil
 }
 
 // New in 3.5
 //
-// llgo:link (*ModuleDef).Init C.PyModuleDef_Init
+//llgo:link (*ModuleDef).Init C.PyModuleDef_Init
 func (self *ModuleDef) Init() *Object {
 	return nil
 }

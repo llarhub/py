@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-// llgo:type C
+//llgo:cdecl
 type ObjectArenaAllocator struct {
 	Ctx   unsafe.Pointer
 	Alloc func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
@@ -27,7 +27,7 @@ type ObjectArenaAllocator struct {
 // collection in the callback may lead to undefined behaviour e.g. visiting the
 // same objects multiple times or not at all.
 //
-// llgo:type C
+//llgo:cdecl
 type GcvisitobjectsT = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) c.Int
 
 // Functions to call the same malloc/realloc/free as used by Python's
@@ -67,12 +67,12 @@ func ObjectFree(ptr unsafe.Pointer)
 
 // Functions
 //
-// llgo:link (*Object).Init C.PyObject_Init
+//llgo:link (*Object).Init C.PyObject_Init
 func (self *Object) Init(_llcppg_param2 *TypeObject) *Object {
 	return self
 }
 
-// llgo:link (*VarObject).ObjectInit C.PyObject_InitVar
+//llgo:link (*VarObject).ObjectInit C.PyObject_InitVar
 func (self *VarObject) ObjectInit(_llcppg_param2 *TypeObject, _llcppg_param3 SsizeT) *VarObject {
 	return self
 }
@@ -125,12 +125,12 @@ func Object_GC_UnTrack(_llcppg_param1 unsafe.Pointer)
 //go:linkname Object_GC_Del C.PyObject_GC_Del
 func Object_GC_Del(_llcppg_param1 unsafe.Pointer)
 
-// llgo:link (*Object).GC_IsTracked C.PyObject_GC_IsTracked
+//llgo:link (*Object).GC_IsTracked C.PyObject_GC_IsTracked
 func (self *Object) GC_IsTracked() c.Int {
 	return 0
 }
 
-// llgo:link (*Object).GC_IsFinalized C.PyObject_GC_IsFinalized
+//llgo:link (*Object).GC_IsFinalized C.PyObject_GC_IsFinalized
 func (self *Object) GC_IsFinalized() c.Int {
 	return 0
 }
@@ -147,19 +147,19 @@ func ObjectSetArenaAllocator(allocator *ObjectArenaAllocator)
 
 // Test if an object implements the garbage collector protocol
 //
-// llgo:link (*Object).IS_GC C.PyObject_IS_GC
+//llgo:link (*Object).IS_GC C.PyObject_IS_GC
 func (self *Object) IS_GC() c.Int {
 	return 0
 }
 
 // Test if a type supports weak references
 //
-// llgo:link (*TypeObject).SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
+//llgo:link (*TypeObject).SUPPORTS_WEAKREFS C.PyType_SUPPORTS_WEAKREFS
 func (self *TypeObject) SUPPORTS_WEAKREFS() c.Int {
 	return 0
 }
 
-// llgo:link (*Object).GET_WEAKREFS_LISTPTR C.PyObject_GET_WEAKREFS_LISTPTR
+//llgo:link (*Object).GET_WEAKREFS_LISTPTR C.PyObject_GET_WEAKREFS_LISTPTR
 func (self *Object) GET_WEAKREFS_LISTPTR() **Object {
 	return nil
 }

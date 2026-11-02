@@ -25,7 +25,7 @@ func BytesFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *Byte
 //go:linkname BytesFromString C.PyBytes_FromString
 func BytesFromString(_llcppg_param1 *c.Char) *BytesObject
 
-// llgo:link (*Object).AsBytes C.PyBytes_FromObject
+//llgo:link (*Object).AsBytes C.PyBytes_FromObject
 func (self *Object) AsBytes() *BytesObject {
 	return nil
 }
@@ -36,17 +36,17 @@ func BytesFromFormatV(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *BytesObj
 //go:linkname BytesFromFormat C.PyBytes_FromFormat
 func BytesFromFormat(_llcppg_param1 *c.Char, __llgo_va_list ...any) *BytesObject
 
-// llgo:link (*BytesObject).Size C.PyBytes_Size
+//llgo:link (*BytesObject).Size C.PyBytes_Size
 func (self *BytesObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*BytesObject).AsString C.PyBytes_AsString
+//llgo:link (*BytesObject).AsString C.PyBytes_AsString
 func (self *BytesObject) AsString() *c.Char {
 	return nil
 }
 
-// llgo:link (*BytesObject).Repr C.PyBytes_Repr
+//llgo:link (*BytesObject).Repr C.PyBytes_Repr
 func (self *BytesObject) Repr(_llcppg_param2 c.Int) *Object {
 	return nil
 }
@@ -65,7 +65,7 @@ func BytesDecodeEscape(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT, _llcppg_pa
 // 0-terminated (passing a string with embedded NUL characters will
 // cause an exception).
 //
-// llgo:link (*BytesObject).AsStringAndSize C.PyBytes_AsStringAndSize
+//llgo:link (*BytesObject).AsStringAndSize C.PyBytes_AsStringAndSize
 func (self *BytesObject) AsStringAndSize(s **c.Char, len *SsizeT) c.Int {
 	return 0
 }
@@ -73,7 +73,7 @@ func (self *BytesObject) AsStringAndSize(s **c.Char, len *SsizeT) c.Int {
 //go:linkname X_BytesResize C._PyBytes_Resize
 func X_BytesResize(_llcppg_param1 **Object, _llcppg_param2 SsizeT) c.Int
 
-// llgo:link (*BytesObject).Join C.PyBytes_Join
+//llgo:link (*BytesObject).Join C.PyBytes_Join
 func (self *BytesObject) Join(iterable *Object) *Object {
 	return nil
 }

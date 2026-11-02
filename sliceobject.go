@@ -34,17 +34,17 @@ func X_SliceFromIndices(start SsizeT, stop SsizeT) *Object
 //go:linkname X_SliceGetLongIndices C._PySlice_GetLongIndices
 func X_SliceGetLongIndices(self *SliceObject, length *Object, start_ptr **Object, stop_ptr **Object, step_ptr **Object) c.Int
 
-// llgo:link (*SliceObject).Indices C.PySlice_GetIndices
+//llgo:link (*SliceObject).Indices C.PySlice_GetIndices
 func (self *SliceObject) Indices(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*SliceObject).IndicesEx C.PySlice_GetIndicesEx
+//llgo:link (*SliceObject).IndicesEx C.PySlice_GetIndicesEx
 func (self *SliceObject) IndicesEx(length SsizeT, start *SsizeT, stop *SsizeT, step *SsizeT, slicelength *SsizeT) c.Int {
 	return 0
 }
 
-// llgo:link (*SliceObject).Unpack C.PySlice_Unpack
+//llgo:link (*SliceObject).Unpack C.PySlice_Unpack
 func (self *SliceObject) Unpack(start *SsizeT, stop *SsizeT, step *SsizeT) c.Int {
 	return 0
 }

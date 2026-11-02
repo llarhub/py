@@ -38,7 +38,7 @@ const (
 
 // hash function definition
 //
-// llgo:type C
+//llgo:cdecl
 type HashFuncDef struct {
 	Hash     func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 SsizeT) HashT
 	Name     *c.Char
@@ -57,7 +57,7 @@ func HashGetFuncDef() *HashFuncDef
 //go:linkname HashPointer C.Py_HashPointer
 func HashPointer(ptr unsafe.Pointer) HashT
 
-// llgo:link (*Object).GenericHash C.PyObject_GenericHash
+//llgo:link (*Object).GenericHash C.PyObject_GenericHash
 func (self *Object) GenericHash() HashT {
 	return 0
 }

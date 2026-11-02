@@ -26,12 +26,12 @@ var ByteArrayIterType TypeObject
 
 // Direct API functions
 //
-// llgo:link (*Object).AsByteArray C.PyByteArray_FromObject
+//llgo:link (*Object).AsByteArray C.PyByteArray_FromObject
 func (self *Object) AsByteArray() *ByteArrayObject {
 	return nil
 }
 
-// llgo:link (*ByteArrayObject).Concat C.PyByteArray_Concat
+//llgo:link (*ByteArrayObject).Concat C.PyByteArray_Concat
 func (self *ByteArrayObject) Concat(_llcppg_param2 *Object) *Object {
 	return nil
 }
@@ -39,17 +39,17 @@ func (self *ByteArrayObject) Concat(_llcppg_param2 *Object) *Object {
 //go:linkname ByteArrayFromStringAndSize C.PyByteArray_FromStringAndSize
 func ByteArrayFromStringAndSize(_llcppg_param1 *c.Char, _llcppg_param2 SsizeT) *ByteArrayObject
 
-// llgo:link (*ByteArrayObject).Size C.PyByteArray_Size
+//llgo:link (*ByteArrayObject).Size C.PyByteArray_Size
 func (self *ByteArrayObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*ByteArrayObject).AsString C.PyByteArray_AsString
+//llgo:link (*ByteArrayObject).AsString C.PyByteArray_AsString
 func (self *ByteArrayObject) AsString() *c.Char {
 	return nil
 }
 
-// llgo:link (*ByteArrayObject).Resize C.PyByteArray_Resize
+//llgo:link (*ByteArrayObject).Resize C.PyByteArray_Resize
 func (self *ByteArrayObject) Resize(_llcppg_param2 SsizeT) c.Int {
 	return 0
 }

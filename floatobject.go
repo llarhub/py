@@ -37,7 +37,7 @@ func FloatFromDouble(_llcppg_param1 c.Double) *FloatObject
 // Extract C double from Python float.  The macro version trades safety for
 // speed.
 //
-// llgo:link (*FloatObject).AsDouble C.PyFloat_AsDouble
+//llgo:link (*FloatObject).AsDouble C.PyFloat_AsDouble
 func (self *FloatObject) AsDouble() c.Double {
 	return 0
 }

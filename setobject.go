@@ -40,32 +40,32 @@ func SetNew(_llcppg_param1 *Object) *SetObject
 //go:linkname FrozenSetNew C.PyFrozenSet_New
 func FrozenSetNew(_llcppg_param1 *Object) *Object
 
-// llgo:link (*SetObject).Add C.PySet_Add
+//llgo:link (*SetObject).Add C.PySet_Add
 func (self *SetObject) Add(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*SetObject).Clear C.PySet_Clear
+//llgo:link (*SetObject).Clear C.PySet_Clear
 func (self *SetObject) Clear() c.Int {
 	return 0
 }
 
-// llgo:link (*SetObject).Contains C.PySet_Contains
+//llgo:link (*SetObject).Contains C.PySet_Contains
 func (self *SetObject) Contains(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*SetObject).Discard C.PySet_Discard
+//llgo:link (*SetObject).Discard C.PySet_Discard
 func (self *SetObject) Discard(key *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*SetObject).Pop C.PySet_Pop
+//llgo:link (*SetObject).Pop C.PySet_Pop
 func (self *SetObject) Pop() *Object {
 	return nil
 }
 
-// llgo:link (*SetObject).Size C.PySet_Size
+//llgo:link (*SetObject).Size C.PySet_Size
 func (self *SetObject) Size() SsizeT {
 	return 0
 }

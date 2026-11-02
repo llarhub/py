@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-// llgo:type C
+//llgo:cdecl
 type AuditHookFunction = func(_llcppg_param1 *c.Char, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) c.Int
 
 //go:linkname SysAudit C.PySys_Audit

@@ -32,7 +32,7 @@ const (
 	PYMEM_ALLOCATOR_MIMALLOC_DEBUG MemAllocatorName = 8
 )
 
-// llgo:type C
+//llgo:cdecl
 type MemAllocatorEx struct {
 	Ctx     unsafe.Pointer
 	Malloc  func(_llcppg_param1 unsafe.Pointer, _llcppg_param2 c.SizeT) unsafe.Pointer
@@ -109,3 +109,22 @@ func MemSetAllocator(domain MemAllocatorDomain, allocator *MemAllocatorEx)
 //
 //go:linkname MemSetupDebugHooks C.PyMem_SetupDebugHooks
 func MemSetupDebugHooks()
+
+// Deprecated aliases only kept for backward compatibility.
+// PyMem_Del and PyMem_DEL are defined with no parameter to be able to use
+// them as function pointers (ex: dealloc = PyMem_Del).
+func Mem_MALLOC(n c.SizeT) unsafe.Pointer {
+	return MemMalloc(n)
+}
+func Mem_REALLOC(p unsafe.Pointer, n c.SizeT) unsafe.Pointer {
+	return MemRealloc(p, n)
+}
+func Mem_FREE(p unsafe.Pointer) {
+	MemFree(p)
+}
+func MemDel(p unsafe.Pointer) {
+	MemFree(p)
+}
+func Mem_DEL(p unsafe.Pointer) {
+	MemFree(p)
+}

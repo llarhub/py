@@ -63,23 +63,23 @@ func X_LongFromDigits(negative c.Int, digit_count SsizeT, digits *Digit) *LongOb
 //go:linkname LongGetNativeLayout C.PyLong_GetNativeLayout
 func LongGetNativeLayout() *LongLayout
 
-// llgo:link (*LongObject).Export C.PyLong_Export
+//llgo:link (*LongObject).Export C.PyLong_Export
 func (self *LongObject) Export(export_long *LongExport) c.Int {
 	return 0
 }
 
-// llgo:link (*LongExport).Free C.PyLong_FreeExport
+//llgo:link (*LongExport).Free C.PyLong_FreeExport
 func (self *LongExport) Free() {
 }
 
 //go:linkname LongWriterCreate C.PyLongWriter_Create
 func LongWriterCreate(negative c.Int, ndigits SsizeT, digits *unsafe.Pointer) *LongWriter
 
-// llgo:link (*LongWriter).Finish C.PyLongWriter_Finish
+//llgo:link (*LongWriter).Finish C.PyLongWriter_Finish
 func (self *LongWriter) Finish() *Object {
 	return nil
 }
 
-// llgo:link (*LongWriter).Discard C.PyLongWriter_Discard
+//llgo:link (*LongWriter).Discard C.PyLongWriter_Discard
 func (self *LongWriter) Discard() {
 }

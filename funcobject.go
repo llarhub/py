@@ -61,7 +61,7 @@ const (
 // If the callback returns with an exception set, it must return -1. Otherwise
 // it should return 0.
 //
-// llgo:type C
+//llgo:cdecl
 type FunctionWatchCallback = func(_llcppg_param1 FunctionWatchEvent, _llcppg_param2 *FunctionObject, _llcppg_param3 *Object) c.Int
 
 //go:linkname FunctionType C.PyFunction_Type
@@ -70,66 +70,66 @@ var FunctionType TypeObject
 //go:linkname FunctionNew C.PyFunction_New
 func FunctionNew(_llcppg_param1 *Object, _llcppg_param2 *Object) *FunctionObject
 
-// llgo:link (*FunctionObject).NewWithQualName C.PyFunction_NewWithQualName
+//llgo:link (*FunctionObject).NewWithQualName C.PyFunction_NewWithQualName
 func (self *FunctionObject) NewWithQualName(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).Code C.PyFunction_GetCode
+//llgo:link (*FunctionObject).Code C.PyFunction_GetCode
 func (self *FunctionObject) Code() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).Globals C.PyFunction_GetGlobals
+//llgo:link (*FunctionObject).Globals C.PyFunction_GetGlobals
 func (self *FunctionObject) Globals() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).Module C.PyFunction_GetModule
+//llgo:link (*FunctionObject).Module C.PyFunction_GetModule
 func (self *FunctionObject) Module() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).Defaults C.PyFunction_GetDefaults
+//llgo:link (*FunctionObject).Defaults C.PyFunction_GetDefaults
 func (self *FunctionObject) Defaults() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).SetDefaults C.PyFunction_SetDefaults
+//llgo:link (*FunctionObject).SetDefaults C.PyFunction_SetDefaults
 func (self *FunctionObject) SetDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*FunctionObject).SetVectorcall C.PyFunction_SetVectorcall
+//llgo:link (*FunctionObject).SetVectorcall C.PyFunction_SetVectorcall
 func (self *FunctionObject) SetVectorcall(_llcppg_param2 Vectorcallfunc) {
 }
 
-// llgo:link (*FunctionObject).KwDefaults C.PyFunction_GetKwDefaults
+//llgo:link (*FunctionObject).KwDefaults C.PyFunction_GetKwDefaults
 func (self *FunctionObject) KwDefaults() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).SetKwDefaults C.PyFunction_SetKwDefaults
+//llgo:link (*FunctionObject).SetKwDefaults C.PyFunction_SetKwDefaults
 func (self *FunctionObject) SetKwDefaults(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*FunctionObject).Closure C.PyFunction_GetClosure
+//llgo:link (*FunctionObject).Closure C.PyFunction_GetClosure
 func (self *FunctionObject) Closure() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).SetClosure C.PyFunction_SetClosure
+//llgo:link (*FunctionObject).SetClosure C.PyFunction_SetClosure
 func (self *FunctionObject) SetClosure(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*FunctionObject).Annotations C.PyFunction_GetAnnotations
+//llgo:link (*FunctionObject).Annotations C.PyFunction_GetAnnotations
 func (self *FunctionObject) Annotations() *Object {
 	return nil
 }
 
-// llgo:link (*FunctionObject).SetAnnotations C.PyFunction_SetAnnotations
+//llgo:link (*FunctionObject).SetAnnotations C.PyFunction_SetAnnotations
 func (self *FunctionObject) SetAnnotations(_llcppg_param2 *Object) c.Int {
 	return 0
 }

@@ -152,32 +152,32 @@ func ThreadReInitTLS()
 //go:linkname ThreadTssAlloc C.PyThread_tss_alloc
 func ThreadTssAlloc() *TssT
 
-// llgo:link (*TssT).Free C.PyThread_tss_free
+//llgo:link (*TssT).Free C.PyThread_tss_free
 func (self *TssT) Free() {
 }
 
 // The parameter key must not be NULL.
 //
-// llgo:link (*TssT).IsCreated C.PyThread_tss_is_created
+//llgo:link (*TssT).IsCreated C.PyThread_tss_is_created
 func (self *TssT) IsCreated() c.Int {
 	return 0
 }
 
-// llgo:link (*TssT).Create C.PyThread_tss_create
+//llgo:link (*TssT).Create C.PyThread_tss_create
 func (self *TssT) Create() c.Int {
 	return 0
 }
 
-// llgo:link (*TssT).Delete C.PyThread_tss_delete
+//llgo:link (*TssT).Delete C.PyThread_tss_delete
 func (self *TssT) Delete() {
 }
 
-// llgo:link (*TssT).Set C.PyThread_tss_set
+//llgo:link (*TssT).Set C.PyThread_tss_set
 func (self *TssT) Set(value unsafe.Pointer) c.Int {
 	return 0
 }
 
-// llgo:link (*TssT).Get C.PyThread_tss_get
+//llgo:link (*TssT).Get C.PyThread_tss_get
 func (self *TssT) Get() unsafe.Pointer {
 	return nil
 }

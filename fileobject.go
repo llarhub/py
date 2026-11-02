@@ -9,7 +9,7 @@ import (
 
 const STDIOTEXTMODE = "b"
 
-// llgo:type C
+//llgo:cdecl
 type OpenCodeHookFunction = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
 
 //go:linkname FileFromFd C.PyFile_FromFd
@@ -24,7 +24,7 @@ func FileWriteObject(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_par
 //go:linkname FileWriteString C.PyFile_WriteString
 func FileWriteString(_llcppg_param1 *c.Char, _llcppg_param2 *Object) c.Int
 
-// llgo:link (*Object).AsFileDescriptor C.PyObject_AsFileDescriptor
+//llgo:link (*Object).AsFileDescriptor C.PyObject_AsFileDescriptor
 func (self *Object) AsFileDescriptor() c.Int {
 	return 0
 }

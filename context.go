@@ -31,7 +31,7 @@ type ContextToken X_pycontexttokenobject
 // if the callback returns with an exception set, it must return -1. Otherwise
 // it should return 0
 //
-// llgo:type C
+//llgo:cdecl
 type ContextWatchCallback = func(_llcppg_param1 ContextEvent, _llcppg_param2 *Object) c.Int
 
 //go:linkname ContextType C.PyContext_Type
@@ -46,7 +46,7 @@ var ContextTokenType TypeObject
 //go:linkname ContextNew C.PyContext_New
 func ContextNew() *Object
 
-// llgo:link (*Object).ContextCopy C.PyContext_Copy
+//llgo:link (*Object).ContextCopy C.PyContext_Copy
 func (self *Object) ContextCopy() *Object {
 	return self
 }
@@ -54,12 +54,12 @@ func (self *Object) ContextCopy() *Object {
 //go:linkname ContextCopyCurrent C.PyContext_CopyCurrent
 func ContextCopyCurrent() *Object
 
-// llgo:link (*Object).ContextEnter C.PyContext_Enter
+//llgo:link (*Object).ContextEnter C.PyContext_Enter
 func (self *Object) ContextEnter() c.Int {
 	return 0
 }
 
-// llgo:link (*Object).ContextExit C.PyContext_Exit
+//llgo:link (*Object).ContextExit C.PyContext_Exit
 func (self *Object) ContextExit() c.Int {
 	return 0
 }
@@ -102,7 +102,7 @@ func ContextVarNew(name *c.Char, default_value *Object) *Object
 //
 // '*value' will be a new ref, if not NULL.
 //
-// llgo:link (*Object).ContextVarGet C.PyContextVar_Get
+//llgo:link (*Object).ContextVarGet C.PyContextVar_Get
 func (self *Object) ContextVarGet(default_value *Object, value **Object) c.Int {
 	return 0
 }
@@ -110,7 +110,7 @@ func (self *Object) ContextVarGet(default_value *Object, value **Object) c.Int {
 // Set a new value for the variable.
 // Returns NULL if an error occurs.
 //
-// llgo:link (*Object).ContextVarSet C.PyContextVar_Set
+//llgo:link (*Object).ContextVarSet C.PyContextVar_Set
 func (self *Object) ContextVarSet(value *Object) *Object {
 	return self
 }
@@ -118,7 +118,7 @@ func (self *Object) ContextVarSet(value *Object) *Object {
 // Reset a variable to its previous value.
 // Returns 0 on success, -1 on error.
 //
-// llgo:link (*Object).ContextVarReset C.PyContextVar_Reset
+//llgo:link (*Object).ContextVarReset C.PyContextVar_Reset
 func (self *Object) ContextVarReset(token *Object) c.Int {
 	return 0
 }

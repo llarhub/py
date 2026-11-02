@@ -20,12 +20,12 @@ type X_InterpreterFrame struct {
 
 // Return the line of code the frame is currently executing.
 //
-// llgo:link (*FrameObject).LineNumber C.PyFrame_GetLineNumber
+//llgo:link (*FrameObject).LineNumber C.PyFrame_GetLineNumber
 func (self *FrameObject) LineNumber() c.Int {
 	return 0
 }
 
-// llgo:link (*FrameObject).Code C.PyFrame_GetCode
+//llgo:link (*FrameObject).Code C.PyFrame_GetCode
 func (self *FrameObject) Code() *CodeObject {
 	return nil
 }
@@ -36,42 +36,42 @@ var FrameType TypeObject
 //go:linkname FrameLocalsProxyType C.PyFrameLocalsProxy_Type
 var FrameLocalsProxyType TypeObject
 
-// llgo:link (*FrameObject).Back C.PyFrame_GetBack
+//llgo:link (*FrameObject).Back C.PyFrame_GetBack
 func (self *FrameObject) Back() *FrameObject {
 	return self
 }
 
-// llgo:link (*FrameObject).Locals C.PyFrame_GetLocals
+//llgo:link (*FrameObject).Locals C.PyFrame_GetLocals
 func (self *FrameObject) Locals() *Object {
 	return nil
 }
 
-// llgo:link (*FrameObject).Globals C.PyFrame_GetGlobals
+//llgo:link (*FrameObject).Globals C.PyFrame_GetGlobals
 func (self *FrameObject) Globals() *Object {
 	return nil
 }
 
-// llgo:link (*FrameObject).Builtins C.PyFrame_GetBuiltins
+//llgo:link (*FrameObject).Builtins C.PyFrame_GetBuiltins
 func (self *FrameObject) Builtins() *Object {
 	return nil
 }
 
-// llgo:link (*FrameObject).Generator C.PyFrame_GetGenerator
+//llgo:link (*FrameObject).Generator C.PyFrame_GetGenerator
 func (self *FrameObject) Generator() *Object {
 	return nil
 }
 
-// llgo:link (*FrameObject).Lasti C.PyFrame_GetLasti
+//llgo:link (*FrameObject).Lasti C.PyFrame_GetLasti
 func (self *FrameObject) Lasti() c.Int {
 	return 0
 }
 
-// llgo:link (*FrameObject).Var C.PyFrame_GetVar
+//llgo:link (*FrameObject).Var C.PyFrame_GetVar
 func (self *FrameObject) Var(name *Object) *Object {
 	return nil
 }
 
-// llgo:link (*FrameObject).VarString C.PyFrame_GetVarString
+//llgo:link (*FrameObject).VarString C.PyFrame_GetVarString
 func (self *FrameObject) VarString(name *c.Char) *Object {
 	return nil
 }

@@ -26,10 +26,10 @@ type InterpreterConfig struct {
 
 // Signals
 //
-// llgo:type C
+//llgo:cdecl
 type OS_sighandler_t = func(_llcppg_param1 c.Int)
 
-// llgo:type C
+//llgo:cdecl
 type AtexitDatacallbackfunc = func(_llcppg_param1 unsafe.Pointer)
 
 // Initialization and finalization

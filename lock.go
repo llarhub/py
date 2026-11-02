@@ -36,19 +36,19 @@ type Mutex struct {
 
 // exported function for locking the mutex
 //
-// llgo:link (*Mutex).Lock C.PyMutex_Lock
+//llgo:link (*Mutex).Lock C.PyMutex_Lock
 func (self *Mutex) Lock() {
 }
 
 // exported function for unlocking the mutex
 //
-// llgo:link (*Mutex).Unlock C.PyMutex_Unlock
+//llgo:link (*Mutex).Unlock C.PyMutex_Unlock
 func (self *Mutex) Unlock() {
 }
 
 // exported function for checking if the mutex is locked
 //
-// llgo:link (*Mutex).IsLocked C.PyMutex_IsLocked
+//llgo:link (*Mutex).IsLocked C.PyMutex_IsLocked
 func (self *Mutex) IsLocked() c.Int {
 	return 0
 }

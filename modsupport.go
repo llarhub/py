@@ -114,14 +114,14 @@ func VaBuildValue(_llcppg_param1 *c.Char, _llcppg_param2 c.VaList) *Object
 // On success, return 0.
 // On error, raise an exception and return -1.
 //
-// llgo:link (*ModuleObject).AddObjectRef C.PyModule_AddObjectRef
+//llgo:link (*ModuleObject).AddObjectRef C.PyModule_AddObjectRef
 func (self *ModuleObject) AddObjectRef(name *c.Char, value *Object) c.Int {
 	return 0
 }
 
 // Similar to PyModule_AddObjectRef() but steal a reference to 'value'.
 //
-// llgo:link (*ModuleObject).Add C.PyModule_Add
+//llgo:link (*ModuleObject).Add C.PyModule_Add
 func (self *ModuleObject) Add(name *c.Char, value *Object) c.Int {
 	return 0
 }
@@ -130,46 +130,46 @@ func (self *ModuleObject) Add(name *c.Char, value *Object) c.Int {
 // a reference to 'value' on success and only on success.
 // Errorprone. Should not be used in new code.
 //
-// llgo:link (*ModuleObject).AddObject C.PyModule_AddObject
+//llgo:link (*ModuleObject).AddObject C.PyModule_AddObject
 func (self *ModuleObject) AddObject(_llcppg_param2 *c.Char, value *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ModuleObject).AddIntConstant C.PyModule_AddIntConstant
+//llgo:link (*ModuleObject).AddIntConstant C.PyModule_AddIntConstant
 func (self *ModuleObject) AddIntConstant(_llcppg_param2 *c.Char, _llcppg_param3 c.Long) c.Int {
 	return 0
 }
 
-// llgo:link (*ModuleObject).AddStringConstant C.PyModule_AddStringConstant
+//llgo:link (*ModuleObject).AddStringConstant C.PyModule_AddStringConstant
 func (self *ModuleObject) AddStringConstant(_llcppg_param2 *c.Char, _llcppg_param3 *c.Char) c.Int {
 	return 0
 }
 
 // New in 3.9
 //
-// llgo:link (*ModuleObject).AddType C.PyModule_AddType
+//llgo:link (*ModuleObject).AddType C.PyModule_AddType
 func (self *ModuleObject) AddType(type_ *TypeObject) c.Int {
 	return 0
 }
 
 // New in 3.5
 //
-// llgo:link (*ModuleObject).SetDocString C.PyModule_SetDocString
+//llgo:link (*ModuleObject).SetDocString C.PyModule_SetDocString
 func (self *ModuleObject) SetDocString(_llcppg_param2 *c.Char) c.Int {
 	return 0
 }
 
-// llgo:link (*ModuleObject).AddFunctions C.PyModule_AddFunctions
+//llgo:link (*ModuleObject).AddFunctions C.PyModule_AddFunctions
 func (self *ModuleObject) AddFunctions(_llcppg_param2 *MethodDef) c.Int {
 	return 0
 }
 
-// llgo:link (*ModuleObject).ExecDef C.PyModule_ExecDef
+//llgo:link (*ModuleObject).ExecDef C.PyModule_ExecDef
 func (self *ModuleObject) ExecDef(def *ModuleDef) c.Int {
 	return 0
 }
 
-// llgo:link (*ModuleDef).ModuleCreate2 C.PyModule_Create2
+//llgo:link (*ModuleDef).ModuleCreate2 C.PyModule_Create2
 func (self *ModuleDef) ModuleCreate2(apiver c.Int) *Object {
 	return nil
 }
@@ -181,3 +181,9 @@ func ModuleFromDefAndSpec2(def *ModuleDef, spec *Object, module_api_version c.In
 
 //go:linkname X_ArgParseTupleAndKeywordsFast C._PyArg_ParseTupleAndKeywordsFast
 func X_ArgParseTupleAndKeywordsFast(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *X_ArgParser, __llgo_va_list ...any) c.Int
+func (self *ModuleDef) ModuleCreate() *Object {
+	return self.ModuleCreate2(1013)
+}
+func ModuleFromDefAndSpec(module *ModuleDef, spec *Object) *ModuleObject {
+	return ModuleFromDefAndSpec2(module, spec, 1013)
+}

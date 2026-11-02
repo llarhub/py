@@ -22,22 +22,22 @@ var TupleIterType TypeObject
 //go:linkname TupleNew C.PyTuple_New
 func TupleNew(size SsizeT) *TupleObject
 
-// llgo:link (*TupleObject).Size C.PyTuple_Size
+//llgo:link (*TupleObject).Size C.PyTuple_Size
 func (self *TupleObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*TupleObject).Item C.PyTuple_GetItem
+//llgo:link (*TupleObject).Item C.PyTuple_GetItem
 func (self *TupleObject) Item(_llcppg_param2 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*TupleObject).SetItem C.PyTuple_SetItem
+//llgo:link (*TupleObject).SetItem C.PyTuple_SetItem
 func (self *TupleObject) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*TupleObject).Slice C.PyTuple_GetSlice
+//llgo:link (*TupleObject).Slice C.PyTuple_GetSlice
 func (self *TupleObject) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
 	return nil
 }

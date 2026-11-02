@@ -25,67 +25,67 @@ var ListRevIterType TypeObject
 //go:linkname ListNew C.PyList_New
 func ListNew(size SsizeT) *ListObject
 
-// llgo:link (*ListObject).Size C.PyList_Size
+//llgo:link (*ListObject).Size C.PyList_Size
 func (self *ListObject) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*ListObject).Item C.PyList_GetItem
+//llgo:link (*ListObject).Item C.PyList_GetItem
 func (self *ListObject) Item(_llcppg_param2 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*ListObject).ItemRef C.PyList_GetItemRef
+//llgo:link (*ListObject).ItemRef C.PyList_GetItemRef
 func (self *ListObject) ItemRef(_llcppg_param2 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*ListObject).SetItem C.PyList_SetItem
+//llgo:link (*ListObject).SetItem C.PyList_SetItem
 func (self *ListObject) SetItem(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Insert C.PyList_Insert
+//llgo:link (*ListObject).Insert C.PyList_Insert
 func (self *ListObject) Insert(_llcppg_param2 SsizeT, _llcppg_param3 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Append C.PyList_Append
+//llgo:link (*ListObject).Append C.PyList_Append
 func (self *ListObject) Append(_llcppg_param2 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Slice C.PyList_GetSlice
+//llgo:link (*ListObject).Slice C.PyList_GetSlice
 func (self *ListObject) Slice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT) *Object {
 	return nil
 }
 
-// llgo:link (*ListObject).SetSlice C.PyList_SetSlice
+//llgo:link (*ListObject).SetSlice C.PyList_SetSlice
 func (self *ListObject) SetSlice(_llcppg_param2 SsizeT, _llcppg_param3 SsizeT, _llcppg_param4 *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Sort C.PyList_Sort
+//llgo:link (*ListObject).Sort C.PyList_Sort
 func (self *ListObject) Sort() c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Reverse C.PyList_Reverse
+//llgo:link (*ListObject).Reverse C.PyList_Reverse
 func (self *ListObject) Reverse() c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).AsTuple C.PyList_AsTuple
+//llgo:link (*ListObject).AsTuple C.PyList_AsTuple
 func (self *ListObject) AsTuple() *Object {
 	return nil
 }
 
-// llgo:link (*ListObject).Extend C.PyList_Extend
+//llgo:link (*ListObject).Extend C.PyList_Extend
 func (self *ListObject) Extend(iterable *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*ListObject).Clear C.PyList_Clear
+//llgo:link (*ListObject).Clear C.PyList_Clear
 func (self *ListObject) Clear() c.Int {
 	return 0
 }

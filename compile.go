@@ -47,6 +47,7 @@ const (
 	FUTURE_GENERATOR_STOP   = "generator_stop"
 	FUTURE_ANNOTATIONS      = "annotations"
 )
+const INVALID_STACK_EFFECT = 2147483647
 
 type CompilerFlags struct {
 	CfFlags          c.Int

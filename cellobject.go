@@ -18,12 +18,12 @@ var CellType TypeObject
 //go:linkname CellNew C.PyCell_New
 func CellNew(_llcppg_param1 *Object) *CellObject
 
-// llgo:link (*CellObject).Get C.PyCell_Get
+//llgo:link (*CellObject).Get C.PyCell_Get
 func (self *CellObject) Get() *Object {
 	return nil
 }
 
-// llgo:link (*CellObject).Set C.PyCell_Set
+//llgo:link (*CellObject).Set C.PyCell_Set
 func (self *CellObject) Set(_llcppg_param2 *Object) c.Int {
 	return 0
 }

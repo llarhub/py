@@ -22,12 +22,12 @@ var MethodType TypeObject
 //go:linkname MethodNew C.PyMethod_New
 func MethodNew(_llcppg_param1 *Object, _llcppg_param2 *Object) *MethodObject
 
-// llgo:link (*MethodObject).Function C.PyMethod_Function
+//llgo:link (*MethodObject).Function C.PyMethod_Function
 func (self *MethodObject) Function() *Object {
 	return nil
 }
 
-// llgo:link (*MethodObject).Self C.PyMethod_Self
+//llgo:link (*MethodObject).Self C.PyMethod_Self
 func (self *MethodObject) Self() *Object {
 	return nil
 }
@@ -38,7 +38,7 @@ var InstanceMethodType TypeObject
 //go:linkname InstanceMethodNew C.PyInstanceMethod_New
 func InstanceMethodNew(_llcppg_param1 *Object) *InstanceMethodObject
 
-// llgo:link (*InstanceMethodObject).Function C.PyInstanceMethod_Function
+//llgo:link (*InstanceMethodObject).Function C.PyInstanceMethod_Function
 func (self *InstanceMethodObject) Function() *Object {
 	return nil
 }

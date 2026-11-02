@@ -51,19 +51,19 @@ type CMethodObject struct {
 	MmClass *TypeObject
 }
 
-// llgo:type C
+//llgo:cdecl
 type CFunction = func(_llcppg_param1 *Object, _llcppg_param2 *Object) *Object
 
-// llgo:type C
+//llgo:cdecl
 type CFunctionFast = func(_llcppg_param1 *Object, _llcppg_param2 **Object, _llcppg_param3 SsizeT) *Object
 
-// llgo:type C
+//llgo:cdecl
 type CFunctionWithKeywords = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 *Object) *Object
 
-// llgo:type C
+//llgo:cdecl
 type CFunctionFastWithKeywords = func(_llcppg_param1 *Object, _llcppg_param2 **Object, _llcppg_param3 SsizeT, _llcppg_param4 *Object) *Object
 
-// llgo:type C
+//llgo:cdecl
 type CMethod = func(_llcppg_param1 *Object, _llcppg_param2 *TypeObject, _llcppg_param3 **Object, _llcppg_param4 SsizeT, _llcppg_param5 *Object) *Object
 
 // For backwards compatibility. `METH_FASTCALL` was added to the stable API in
@@ -76,17 +76,17 @@ type X_CFunctionFastWithKeywords = CFunctionFastWithKeywords
 //go:linkname CFunctionType C.PyCFunction_Type
 var CFunctionType TypeObject
 
-// llgo:link (*CFunctionObject).Function C.PyCFunction_GetFunction
+//llgo:link (*CFunctionObject).Function C.PyCFunction_GetFunction
 func (self *CFunctionObject) Function() CFunction {
 	return nil
 }
 
-// llgo:link (*CFunctionObject).Self C.PyCFunction_GetSelf
+//llgo:link (*CFunctionObject).Self C.PyCFunction_GetSelf
 func (self *CFunctionObject) Self() *Object {
 	return nil
 }
 
-// llgo:link (*CFunctionObject).Flags C.PyCFunction_GetFlags
+//llgo:link (*CFunctionObject).Flags C.PyCFunction_GetFlags
 func (self *CFunctionObject) Flags() c.Int {
 	return 0
 }
@@ -100,7 +100,7 @@ func CFunctionNew(_llcppg_param1 *MethodDef, _llcppg_param2 *Object) *CFunctionO
 
 // PyCFunction_NewEx is similar: on 3.9+, this calls PyCMethod_New.
 //
-// llgo:link (*MethodDef).CFunctionNewEx C.PyCFunction_NewEx
+//llgo:link (*MethodDef).CFunctionNewEx C.PyCFunction_NewEx
 func (self *MethodDef) CFunctionNewEx(_llcppg_param2 *Object, _llcppg_param3 *Object) *Object {
 	return nil
 }
@@ -110,3 +110,10 @@ func CMethodNew(_llcppg_param1 *MethodDef, _llcppg_param2 *Object, _llcppg_param
 
 //go:linkname CMethodType C.PyCMethod_Type
 var CMethodType TypeObject
+
+func (self *MethodDef) CFunctionNew(SELF *Object) *Object {
+	return self.CFunctionNewEx(SELF, nil)
+}
+func CFunctionNewEx(ML *MethodDef, SELF *Object, MOD *Object) *CMethodObject {
+	return CMethodNew(ML, SELF, MOD, nil)
+}

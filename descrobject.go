@@ -118,16 +118,16 @@ type WrapperDescrObject struct {
 	DWrapped unsafe.Pointer
 }
 
-// llgo:type C
+//llgo:cdecl
 type Getter = func(_llcppg_param1 *Object, _llcppg_param2 unsafe.Pointer) *Object
 
-// llgo:type C
+//llgo:cdecl
 type Setter = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) c.Int
 
-// llgo:type C
+//llgo:cdecl
 type Wrapperfunc = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer) *Object
 
-// llgo:type C
+//llgo:cdecl
 type WrapperfuncKwds = func(_llcppg_param1 *Object, _llcppg_param2 *Object, _llcppg_param3 unsafe.Pointer, _llcppg_param4 *Object) *Object
 
 //go:linkname ClassMethodDescrType C.PyClassMethodDescr_Type
@@ -151,22 +151,22 @@ var DictProxyType TypeObject
 //go:linkname PropertyType C.PyProperty_Type
 var PropertyType TypeObject
 
-// llgo:link (*TypeObject).DescrNewMethod C.PyDescr_NewMethod
+//llgo:link (*TypeObject).DescrNewMethod C.PyDescr_NewMethod
 func (self *TypeObject) DescrNewMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*TypeObject).DescrNewClassMethod C.PyDescr_NewClassMethod
+//llgo:link (*TypeObject).DescrNewClassMethod C.PyDescr_NewClassMethod
 func (self *TypeObject) DescrNewClassMethod(_llcppg_param2 *MethodDef) *Object {
 	return nil
 }
 
-// llgo:link (*TypeObject).DescrNewMember C.PyDescr_NewMember
+//llgo:link (*TypeObject).DescrNewMember C.PyDescr_NewMember
 func (self *TypeObject) DescrNewMember(_llcppg_param2 *MemberDef) *Object {
 	return nil
 }
 
-// llgo:link (*TypeObject).DescrNewGetSet C.PyDescr_NewGetSet
+//llgo:link (*TypeObject).DescrNewGetSet C.PyDescr_NewGetSet
 func (self *TypeObject) DescrNewGetSet(_llcppg_param2 *GetSetDef) *Object {
 	return nil
 }
@@ -183,12 +183,12 @@ func MemberGetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef) *Object
 //go:linkname MemberSetOne C.PyMember_SetOne
 func MemberSetOne(_llcppg_param1 *c.Char, _llcppg_param2 *MemberDef, _llcppg_param3 *Object) c.Int
 
-// llgo:link (*TypeObject).DescrNewWrapper C.PyDescr_NewWrapper
+//llgo:link (*TypeObject).DescrNewWrapper C.PyDescr_NewWrapper
 func (self *TypeObject) DescrNewWrapper(_llcppg_param2 *Wrapperbase, _llcppg_param3 unsafe.Pointer) *Object {
 	return nil
 }
 
-// llgo:link (*DescrObject).IsData C.PyDescr_IsData
+//llgo:link (*DescrObject).IsData C.PyDescr_IsData
 func (self *DescrObject) IsData() c.Int {
 	return 0
 }

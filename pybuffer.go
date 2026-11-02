@@ -62,15 +62,15 @@ type Buffer struct {
 	Internal   unsafe.Pointer
 }
 
-// llgo:type C
+//llgo:cdecl
 type Getbufferproc = func(_llcppg_param1 *Object, _llcppg_param2 *Buffer, _llcppg_param3 c.Int) c.Int
 
-// llgo:type C
+//llgo:cdecl
 type Releasebufferproc = func(_llcppg_param1 *Object, _llcppg_param2 *Buffer)
 
 // Return 1 if the getbuffer function is available, otherwise return 0.
 //
-// llgo:link (*Object).CheckBuffer C.PyObject_CheckBuffer
+//llgo:link (*Object).CheckBuffer C.PyObject_CheckBuffer
 func (self *Object) CheckBuffer() c.Int {
 	return 0
 }
@@ -81,7 +81,7 @@ func (self *Object) CheckBuffer() c.Int {
 //
 // Returns -1 and raises an error on failure and returns 0 on success.
 //
-// llgo:link (*Object).Buffer C.PyObject_GetBuffer
+//llgo:link (*Object).Buffer C.PyObject_GetBuffer
 func (self *Object) Buffer(view *Buffer, flags c.Int) c.Int {
 	return 0
 }
@@ -89,7 +89,7 @@ func (self *Object) Buffer(view *Buffer, flags c.Int) c.Int {
 // Get the memory area pointed to by the indices for the buffer given.
 // Note that view->ndim is the assumed size of indices.
 //
-// llgo:link (*Buffer).Pointer C.PyBuffer_GetPointer
+//llgo:link (*Buffer).Pointer C.PyBuffer_GetPointer
 func (self *Buffer) Pointer(indices *SsizeT) unsafe.Pointer {
 	return nil
 }
@@ -122,14 +122,14 @@ func BufferFromContiguous(view *Buffer, buf unsafe.Pointer, len SsizeT, order c.
 // is 'A', then it does not matter and the copy will be made
 // in whatever way is more efficient.
 //
-// llgo:link (*Object).CopyData C.PyObject_CopyData
+//llgo:link (*Object).CopyData C.PyObject_CopyData
 func (self *Object) CopyData(src *Object) c.Int {
 	return 0
 }
 
 // Copy the data from the src buffer to the buffer of destination.
 //
-// llgo:link (*Buffer).IsContiguous C.PyBuffer_IsContiguous
+//llgo:link (*Buffer).IsContiguous C.PyBuffer_IsContiguous
 func (self *Buffer) IsContiguous(fort c.Char) c.Int {
 	return 0
 }
@@ -148,13 +148,13 @@ func BufferFillContiguousStrides(ndims c.Int, shape *SsizeT, strides *SsizeT, it
 //
 // Returns 0 on success and -1 (with raising an error) on error.
 //
-// llgo:link (*Buffer).FillInfo C.PyBuffer_FillInfo
+//llgo:link (*Buffer).FillInfo C.PyBuffer_FillInfo
 func (self *Buffer) FillInfo(o *Object, buf unsafe.Pointer, len SsizeT, readonly c.Int, flags c.Int) c.Int {
 	return 0
 }
 
 // Releases a Py_buffer obtained from getbuffer ParseTuple's "s*".
 //
-// llgo:link (*Buffer).Release C.PyBuffer_Release
+//llgo:link (*Buffer).Release C.PyBuffer_Release
 func (self *Buffer) Release() {
 }

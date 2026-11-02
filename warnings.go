@@ -26,3 +26,8 @@ func ErrWarnExplicitObject(category *Object, message *Object, filename *Object, 
 
 //go:linkname ErrWarnExplicitFormat C.PyErr_WarnExplicitFormat
 func ErrWarnExplicitFormat(category *Object, filename *c.Char, lineno c.Int, module *c.Char, registry *Object, format *c.Char, __llgo_va_list ...any) c.Int
+
+// DEPRECATED: Use PyErr_WarnEx() instead.
+func ErrWarn(category *Object, msg *c.Char) c.Int {
+	return ErrWarnEx(category, msg, 1)
+}

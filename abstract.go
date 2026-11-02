@@ -9,7 +9,7 @@ import (
 
 // Call a callable Python object without any arguments
 //
-// llgo:link (*Object).CallNoArgs C.PyObject_CallNoArgs
+//llgo:link (*Object).CallNoArgs C.PyObject_CallNoArgs
 func (self *Object) CallNoArgs() *Object {
 	return self
 }
@@ -23,7 +23,7 @@ func (self *Object) CallNoArgs() *Object {
 // This is the equivalent of the Python expression:
 // callable(*args, **kwargs).
 //
-// llgo:link (*Object).Call C.PyObject_Call
+//llgo:link (*Object).Call C.PyObject_Call
 func (self *Object) Call(args *Object, kwargs *Object) *Object {
 	return self
 }
@@ -36,7 +36,7 @@ func (self *Object) Call(args *Object, kwargs *Object) *Object {
 // This is the equivalent of the Python expression:
 // callable(*args).
 //
-// llgo:link (*Object).CallObject C.PyObject_CallObject
+//llgo:link (*Object).CallObject C.PyObject_CallObject
 func (self *Object) CallObject(args *Object) *Object {
 	return self
 }
@@ -52,7 +52,7 @@ func (self *Object) CallObject(args *Object) *Object {
 // This is the equivalent of the Python expression:
 // callable(arg1, arg2, ...).
 //
-// llgo:link (*Object).CallFunction C.PyObject_CallFunction
+//llgo:link (*Object).CallFunction C.PyObject_CallFunction
 func (self *Object) CallFunction(format *c.Char, __llgo_va_list ...any) *Object {
 	return self
 }
@@ -67,7 +67,7 @@ func (self *Object) CallFunction(format *c.Char, __llgo_va_list ...any) *Object 
 // This is the equivalent of the Python expression:
 // obj.name(arg1, arg2, ...).
 //
-// llgo:link (*Object).CallMethod C.PyObject_CallMethod
+//llgo:link (*Object).CallMethod C.PyObject_CallMethod
 func (self *Object) CallMethod(name *c.Char, format *c.Char, __llgo_va_list ...any) *Object {
 	return self
 }
@@ -81,12 +81,12 @@ func (self *Object) CallMethod(name *c.Char, format *c.Char, __llgo_va_list ...a
 // This is the equivalent of the Python expression:
 // callable(arg1, arg2, ...).
 //
-// llgo:link (*Object).CallFunctionObjArgs C.PyObject_CallFunctionObjArgs
+//llgo:link (*Object).CallFunctionObjArgs C.PyObject_CallFunctionObjArgs
 func (self *Object) CallFunctionObjArgs(__llgo_va_list ...any) *Object {
 	return self
 }
 
-// llgo:link (*Object).CallMethodObjArgs C.PyObject_CallMethodObjArgs
+//llgo:link (*Object).CallMethodObjArgs C.PyObject_CallMethodObjArgs
 func (self *Object) CallMethodObjArgs(name *Object, __llgo_va_list ...any) *Object {
 	return self
 }
@@ -106,14 +106,14 @@ func VectorcallCall(callable *Object, tuple *Object, dict *Object) *Object
 
 // Perform a PEP 590-style vector call on 'callable'
 //
-// llgo:link (*Object).Vectorcall C.PyObject_Vectorcall
+//llgo:link (*Object).Vectorcall C.PyObject_Vectorcall
 func (self *Object) Vectorcall(args **Object, nargsf c.SizeT, kwnames *Object) *Object {
 	return self
 }
 
 // Call the method 'name' on args[0] with arguments in args[1..nargsf-1].
 //
-// llgo:link (*Object).VectorcallMethod C.PyObject_VectorcallMethod
+//llgo:link (*Object).VectorcallMethod C.PyObject_VectorcallMethod
 func (self *Object) VectorcallMethod(args **Object, nargsf c.SizeT, kwnames *Object) *Object {
 	return self
 }
@@ -125,9 +125,9 @@ func (self *Object) VectorcallMethod(args **Object, nargsf c.SizeT, kwnames *Obj
 //
 // This is equivalent to the Python expression: type(o)
 //
-// llgo:link (*Object).Type C.PyObject_Type
-func (self *Object) Type() *Object {
-	return self
+//llgo:link (*Object).Type C.PyObject_Type
+func (self *Object) Type() *TypeObject {
+	return nil
 }
 
 // Return the size of object 'o'.  If the object 'o' provides both sequence and
@@ -137,12 +137,12 @@ func (self *Object) Type() *Object {
 //
 // This is the equivalent to the Python expression: len(o)
 //
-// llgo:link (*Object).Size C.PyObject_Size
+//llgo:link (*Object).Size C.PyObject_Size
 func (self *Object) Size() SsizeT {
 	return 0
 }
 
-// llgo:link (*Object).Length C.PyObject_Length
+//llgo:link (*Object).Length C.PyObject_Length
 func (self *Object) Length() SsizeT {
 	return 0
 }
@@ -152,7 +152,7 @@ func (self *Object) Length() SsizeT {
 //
 // This is the equivalent of the Python expression: o[key]
 //
-// llgo:link (*Object).Item C.PyObject_GetItem
+//llgo:link (*Object).Item C.PyObject_GetItem
 func (self *Object) Item(key *Object) *Object {
 	return self
 }
@@ -163,7 +163,7 @@ func (self *Object) Item(key *Object) *Object {
 //
 // This is the equivalent of the Python statement: o[key]=v.
 //
-// llgo:link (*Object).SetItem C.PyObject_SetItem
+//llgo:link (*Object).SetItem C.PyObject_SetItem
 func (self *Object) SetItem(key *Object, v *Object) c.Int {
 	return 0
 }
@@ -173,7 +173,7 @@ func (self *Object) SetItem(key *Object, v *Object) c.Int {
 //
 // This is equivalent to the Python statement: del o[key].
 //
-// llgo:link (*Object).DelItemString C.PyObject_DelItemString
+//llgo:link (*Object).DelItemString C.PyObject_DelItemString
 func (self *Object) DelItemString(key *c.Char) c.Int {
 	return 0
 }
@@ -183,7 +183,7 @@ func (self *Object) DelItemString(key *c.Char) c.Int {
 //
 // This is the equivalent of the Python statement: del o[key].
 //
-// llgo:link (*Object).DelItem C.PyObject_DelItem
+//llgo:link (*Object).DelItem C.PyObject_DelItem
 func (self *Object) DelItem(key *Object) c.Int {
 	return 0
 }
@@ -191,7 +191,7 @@ func (self *Object) DelItem(key *Object) c.Int {
 // Takes an arbitrary object and returns the result of calling
 // obj.__format__(format_spec).
 //
-// llgo:link (*Object).Format C.PyObject_Format
+//llgo:link (*Object).Format C.PyObject_Format
 func (self *Object) Format(format_spec *Object) *Object {
 	return self
 }
@@ -200,7 +200,7 @@ func (self *Object) Format(format_spec *Object) *Object {
 // This is typically a new iterator but if the argument is an iterator, this
 // returns itself.
 //
-// llgo:link (*Object).Iter C.PyObject_GetIter
+//llgo:link (*Object).Iter C.PyObject_GetIter
 func (self *Object) Iter() *Object {
 	return self
 }
@@ -209,7 +209,7 @@ func (self *Object) Iter() *Object {
 // This is typically a new iterator but if the argument is an AsyncIterator,
 // this returns itself.
 //
-// llgo:link (*Object).AIter C.PyObject_GetAIter
+//llgo:link (*Object).AIter C.PyObject_GetAIter
 func (self *Object) AIter() *Object {
 	return self
 }
@@ -779,14 +779,14 @@ func MappingSetItemString(o *Object, key *c.Char, value *Object) c.Int
 
 // isinstance(object, typeorclass)
 //
-// llgo:link (*Object).IsInstance C.PyObject_IsInstance
+//llgo:link (*Object).IsInstance C.PyObject_IsInstance
 func (self *Object) IsInstance(typeorclass *Object) c.Int {
 	return 0
 }
 
 // issubclass(object, typeorclass)
 //
-// llgo:link (*Object).IsSubclass C.PyObject_IsSubclass
+//llgo:link (*Object).IsSubclass C.PyObject_IsSubclass
 func (self *Object) IsSubclass(typeorclass *Object) c.Int {
 	return 0
 }
@@ -817,12 +817,12 @@ func VectorcallFunction(callable *Object) Vectorcallfunc
 // Same as PyObject_Vectorcall except that keyword arguments are passed as
 // dict, which may be NULL if there are no keyword arguments.
 //
-// llgo:link (*Object).VectorcallDict C.PyObject_VectorcallDict
+//llgo:link (*Object).VectorcallDict C.PyObject_VectorcallDict
 func (self *Object) VectorcallDict(args **Object, nargsf c.SizeT, kwargs *Object) *Object {
 	return self
 }
 
-// llgo:link (*Object).CallOneArg C.PyObject_CallOneArg
+//llgo:link (*Object).CallOneArg C.PyObject_CallOneArg
 func (self *Object) CallOneArg(arg *Object) *Object {
 	return self
 }
@@ -831,7 +831,31 @@ func (self *Object) CallOneArg(arg *Object) *Object {
 // If neither of those return a non-negative value, then return the default
 // value.  If one of the calls fails, this function returns -1.
 //
-// llgo:link (*Object).LengthHint C.PyObject_LengthHint
+//llgo:link (*Object).LengthHint C.PyObject_LengthHint
 func (self *Object) LengthHint(_llcppg_param2 SsizeT) SsizeT {
 	return 0
+}
+
+// Implemented as a macro:
+//
+// int PyMapping_DelItemString(PyObject *o, const char *key);
+//
+// Remove the mapping for the string 'key' from the mapping 'o'. Returns -1 on
+// failure.
+//
+// This is equivalent to the Python statement: del o[key].
+func (self *Object) MappingDelItemString(K *c.Char) c.Int {
+	return self.DelItemString(K)
+}
+
+// Implemented as a macro:
+//
+// int PyMapping_DelItem(PyObject *o, PyObject *key);
+//
+// Remove the mapping for the object 'key' from the mapping object 'o'.
+// Returns -1 on failure.
+//
+// This is equivalent to the Python statement: del o[key].
+func (self *Object) MappingDelItem(K *Object) c.Int {
+	return self.DelItem(K)
 }

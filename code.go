@@ -146,7 +146,7 @@ type X_CoMonitoringData struct {
 // If the callback sets an exception, it must return -1. Otherwise
 // it should return 0.
 //
-// llgo:type C
+//llgo:cdecl
 type CodeWatchCallback = func(_llcppg_param1 CodeEvent, _llcppg_param2 *CodeObject) c.Int
 type CodeAddressRange = X_lineOffsets
 
@@ -172,12 +172,12 @@ func CodeNewEmpty(filename *c.Char, funcname *c.Char, firstlineno c.Int) *CodeOb
 // in this code object.  If you just need the line number of a frame,
 // use PyFrame_GetLineNumber() instead.
 //
-// llgo:link (*CodeObject).Addr2Line C.PyCode_Addr2Line
+//llgo:link (*CodeObject).Addr2Line C.PyCode_Addr2Line
 func (self *CodeObject) Addr2Line(_llcppg_param2 c.Int) c.Int {
 	return 0
 }
 
-// llgo:link (*CodeObject).Addr2Location C.PyCode_Addr2Location
+//llgo:link (*CodeObject).Addr2Location C.PyCode_Addr2Location
 func (self *CodeObject) Addr2Location(_llcppg_param2 c.Int, _llcppg_param3 *c.Int, _llcppg_param4 *c.Int, _llcppg_param5 *c.Int, _llcppg_param6 *c.Int) c.Int {
 	return 0
 }
@@ -215,7 +215,7 @@ func X_CodeCheckLineNumber(lasti c.Int, bounds *CodeAddressRange) c.Int
 //go:linkname X_CodeConstantKey C._PyCode_ConstantKey
 func X_CodeConstantKey(obj *Object) *Object
 
-// llgo:link (*CodeObject).Optimize C.PyCode_Optimize
+//llgo:link (*CodeObject).Optimize C.PyCode_Optimize
 func (self *CodeObject) Optimize(consts *Object, names *Object, lnotab *Object) *Object {
 	return nil
 }
@@ -231,28 +231,28 @@ func UnstableCodeSetExtra(code *Object, index SsizeT, extra unsafe.Pointer) c.In
 // Equivalent to getattr(code, 'co_code') in Python.
 // Returns a strong reference to a bytes object.
 //
-// llgo:link (*CodeObject).Get C.PyCode_GetCode
+//llgo:link (*CodeObject).Get C.PyCode_GetCode
 func (self *CodeObject) Get() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_varnames') in Python.
 //
-// llgo:link (*CodeObject).Varnames C.PyCode_GetVarnames
+//llgo:link (*CodeObject).Varnames C.PyCode_GetVarnames
 func (self *CodeObject) Varnames() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_cellvars') in Python.
 //
-// llgo:link (*CodeObject).Cellvars C.PyCode_GetCellvars
+//llgo:link (*CodeObject).Cellvars C.PyCode_GetCellvars
 func (self *CodeObject) Cellvars() *Object {
 	return nil
 }
 
 // Equivalent to getattr(code, 'co_freevars') in Python.
 //
-// llgo:link (*CodeObject).Freevars C.PyCode_GetFreevars
+//llgo:link (*CodeObject).Freevars C.PyCode_GetFreevars
 func (self *CodeObject) Freevars() *Object {
 	return nil
 }

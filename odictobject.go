@@ -29,12 +29,12 @@ var ODictValuesType TypeObject
 //go:linkname ODictNew C.PyODict_New
 func ODictNew() *Object
 
-// llgo:link (*Object).ODictSetItem C.PyODict_SetItem
+//llgo:link (*Object).ODictSetItem C.PyODict_SetItem
 func (self *Object) ODictSetItem(key *Object, item *Object) c.Int {
 	return 0
 }
 
-// llgo:link (*Object).ODictDelItem C.PyODict_DelItem
+//llgo:link (*Object).ODictDelItem C.PyODict_DelItem
 func (self *Object) ODictDelItem(key *Object) c.Int {
 	return 0
 }

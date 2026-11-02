@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-// llgo:type C
+//llgo:cdecl
 type CapsuleDestructor = func(_llcppg_param1 *Object)
 
 //go:linkname CapsuleType C.PyCapsule_Type

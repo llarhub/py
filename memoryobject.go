@@ -51,7 +51,7 @@ type MemoryViewObject struct {
 //go:linkname MemoryViewType C.PyMemoryView_Type
 var MemoryViewType TypeObject
 
-// llgo:link (*Object).AsMemoryView C.PyMemoryView_FromObject
+//llgo:link (*Object).AsMemoryView C.PyMemoryView_FromObject
 func (self *Object) AsMemoryView() *MemoryViewObject {
 	return nil
 }
@@ -62,7 +62,7 @@ func MemoryViewFromMemory(mem *c.Char, size SsizeT, flags c.Int) *MemoryViewObje
 //go:linkname MemoryViewFromBuffer C.PyMemoryView_FromBuffer
 func MemoryViewFromBuffer(info *Buffer) *MemoryViewObject
 
-// llgo:link (*MemoryViewObject).Contiguous C.PyMemoryView_GetContiguous
+//llgo:link (*MemoryViewObject).Contiguous C.PyMemoryView_GetContiguous
 func (self *MemoryViewObject) Contiguous(buffertype c.Int, order c.Char) *Object {
 	return nil
 }
